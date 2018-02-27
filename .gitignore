@@ -467,3 +467,9 @@ atlassian-ide-plugin.xml
 crashlytics.properties
 crashlytics-build.properties
 fabric.properties
+
+gradle/wrapper/gradle-wrapper\.properties
+
+gradlew
+
+gradlew\.bat
