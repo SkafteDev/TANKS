@@ -22,13 +22,16 @@ public final class ExampleActivator
         throws Exception
     {
         System.out.println( "STARTING dk.grp1.tanks.core" );
+        ServiceLoader serviceLoader = new ServiceLoader(bc);
+        Game game = new Game(serviceLoader);
+
         LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
         cfg.title = "Tanks";
         cfg.width = 1800;
         cfg.height = 1000;
         cfg.useGL30 = false;
         cfg.resizable = false;
-        app = new LwjglApplication(new Game(bc), cfg);
+        app = new LwjglApplication(game, cfg);
 
     }
 
