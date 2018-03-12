@@ -3,6 +3,7 @@ package dk.grp1.tanks.player.internal;
 import java.util.Dictionary;
 import java.util.Properties;
 
+import dk.grp1.tanks.common.services.IEntityProcessingService;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
@@ -20,6 +21,10 @@ public final class ExampleActivator
         throws Exception
     {
         System.out.println( "STARTING dk.grp1.tanks.player" );
+
+        Dictionary props = new Properties();
+
+        bc.registerService(IEntityProcessingService.class.getName(),new PlayerProcessingSystem(),null);
 
     }
 

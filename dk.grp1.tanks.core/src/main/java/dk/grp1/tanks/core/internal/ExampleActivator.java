@@ -7,8 +7,6 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
-import java.util.Dictionary;
-import java.util.Properties;
 
 /**
  * Extension of the default OSGi bundle activator
@@ -30,7 +28,7 @@ public final class ExampleActivator
         cfg.height = 1000;
         cfg.useGL30 = false;
         cfg.resizable = false;
-        app = new LwjglApplication(new Game(), cfg);
+        app = new LwjglApplication(new Game(bc), cfg);
 
     }
 
