@@ -11,6 +11,8 @@
   <properties>
     <org.osgi.service.http.port>8080</org.osgi.service.http.port>
     <org.osgi.service.http.port.secure>8443</org.osgi.service.http.port.secure>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
   </properties>
   <dependencies>
     <dependency>
@@ -56,6 +58,34 @@
       <groupId>dk.grp1.tanks</groupId>
       <artifactId>dk.grp1.tanks.OSGiLibGDX</artifactId>
       <version>1.0-SNAPSHOT</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>dk.grp1.tanks</groupId>
+      <artifactId>dk.grp1.tanks.player</artifactId>
+      <version>1.0-SNAPSHOT</version>
+      <type>bundle</type>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>dk.grp1.tanks</groupId>
+      <artifactId>dk.grp1.tanks.enemy</artifactId>
+      <version>1.0-SNAPSHOT</version>
+      <type>bundle</type>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>dk.grp1.tanks</groupId>
+      <artifactId>dk.grp1.tanks.collision</artifactId>
+      <version>1.0-SNAPSHOT</version>
+      <type>bundle</type>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>dk.grp1.tanks</groupId>
+      <artifactId>dk.grp1.tanks.gamemap</artifactId>
+      <version>1.0-SNAPSHOT</version>
+      <type>bundle</type>
       <scope>provided</scope>
     </dependency>
   </dependencies>

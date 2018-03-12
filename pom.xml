@@ -35,6 +35,8 @@
   <description>Generated using Pax-Construct</description>
 
   <properties>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
     <!--
      | some example OSGi runtime properties
     -->

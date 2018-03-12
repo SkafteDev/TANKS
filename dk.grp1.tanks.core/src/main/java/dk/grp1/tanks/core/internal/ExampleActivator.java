@@ -3,7 +3,7 @@ package dk.grp1.tanks.core.internal;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import dk.grp1.tanks.common.ExampleService;
+
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
@@ -24,15 +24,6 @@ public final class ExampleActivator
         throws Exception
     {
         System.out.println( "STARTING dk.grp1.tanks.core" );
-
-        Dictionary props = new Properties();
-        // add specific service properties here...
-
-        System.out.println( "REGISTER dk.grp1.tanks.core.ExampleService" );
-
-        // Register our example service implementation in the OSGi service registry
-        bc.registerService( ExampleService.class.getName(), new ExampleServiceImpl(), props );
-
         LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
         cfg.title = "Tanks";
         cfg.width = 1800;
