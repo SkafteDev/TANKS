@@ -22,7 +22,7 @@ public class MovementPart implements IEntityPart {
      * @return
      */
     public float getCurrentSpeed(){
-        return velocity.getLength();
+        return velocity.length();
     }
 
     /**
@@ -39,7 +39,7 @@ public class MovementPart implements IEntityPart {
      * @param y change in vertical position in m/s
      */
     public void setVelocity(float x, float y){
-        setVelocity( Vector2D(x,y));
+        setVelocity(new Vector2D(x,y));
     }
 
     /**
@@ -47,8 +47,8 @@ public class MovementPart implements IEntityPart {
      * @param velocity vector containing the change in horizontal and vertical position in m/s
      */
     public void setVelocity(Vector2D velocity) {
-        if(velocity.getLength() > getMaxSpeed()){
-            double ratio = velocity.getLength() / getMaxSpeed();
+        if(velocity.length() > getMaxSpeed()){
+            float ratio = velocity.length() / getMaxSpeed();
             velocity.setX(velocity.getX()/ratio);
             velocity.setY(velocity.getY()/ratio);
         }

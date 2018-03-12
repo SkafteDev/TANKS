@@ -1,4 +1,4 @@
-package dk.grp1.tanks.common.Utils;
+package dk.grp1.tanks.common.utils;
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -32,6 +32,7 @@ public class Vector2D {
     public void setX(float x) {
         this.x = x;
     }
+
 
     public void setY(float y) {
         this.y = y;

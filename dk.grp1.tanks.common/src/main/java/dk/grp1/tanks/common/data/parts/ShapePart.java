@@ -1,6 +1,6 @@
 package dk.grp1.tanks.common.data.parts;
 
-import dk.grp1.tanks.common.Utils.Vector2D;
+import dk.grp1.tanks.common.utils.Vector2D;
 import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.data.GameData;
 

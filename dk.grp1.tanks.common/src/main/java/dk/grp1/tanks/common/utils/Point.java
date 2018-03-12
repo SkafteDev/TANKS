@@ -1,4 +1,4 @@
-package dk.grp1.tanks.common.Utils;
+package dk.grp1.tanks.common.utils;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
