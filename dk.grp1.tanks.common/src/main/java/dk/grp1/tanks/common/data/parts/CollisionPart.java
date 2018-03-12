@@ -13,6 +13,11 @@ public class CollisionPart implements IEntityPart {
     private float timeSinceLastCollision;
     private float minTimeBetweenCollision;
 
+    /**
+     * Creates a collision part for an entity
+     * @param canCollide
+     * @param minTimeBetweenCollision
+     */
     public CollisionPart(boolean canCollide, float minTimeBetweenCollision) {
         this.canCollide = canCollide;
         this.minTimeBetweenCollision = minTimeBetweenCollision;
@@ -20,18 +25,34 @@ public class CollisionPart implements IEntityPart {
         this.timeSinceLastCollision = 0;
     }
 
-    public boolean isCanCollide() {
+    /**
+     * returns if the entity can collide
+     * @return boolean
+     */
+    public boolean canCollide() {
         return canCollide;
     }
 
+    /**
+     * Sets if the entity can collide
+     * @param canCollide boolean
+     */
     public void setCanCollide(boolean canCollide) {
         this.canCollide = canCollide;
     }
 
+    /**
+     * returns if the entity is hit
+     * @return
+     */
     public boolean isHit() {
         return isHit;
     }
 
+    /**
+     * sets if the entity is hit
+     * @param hit
+     */
     public void setHit(boolean hit) {
         isHit = hit;
     }
