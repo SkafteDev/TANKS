@@ -4,17 +4,19 @@ import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.utils.Vector2D;
 
+import javax.naming.ldap.Control;
+
 /**
  * Created by danie on 12-03-2018.
  */
 public class MovementPart implements IEntityPart {
 
     private Vector2D velocity;
-    private Vector2D acceleration;
+    private float acceleration;
     private float deceleration;
     private float maxSpeed;
 
-    public MovementPart(Vector2D velocity, Vector2D acceleration, float maxSpeed, float deceleration) {
+    public MovementPart(Vector2D velocity, float acceleration, float maxSpeed, float deceleration) {
 
         this.velocity = velocity;
         this.acceleration = acceleration;
@@ -22,9 +24,9 @@ public class MovementPart implements IEntityPart {
         this.deceleration = deceleration;
     }
 
-    public MovementPart(float maxSpeed, float deceleration) {
+    public MovementPart(float acceleration, float maxSpeed, float deceleration) {
 
-        this(new Vector2D(0, 0), new Vector2D(0, 0), maxSpeed, deceleration);
+        this(new Vector2D(0, 0), acceleration, maxSpeed, deceleration);
     }
 
     public void processPart(Entity entity, GameData gameData) {
@@ -32,8 +34,23 @@ public class MovementPart implements IEntityPart {
 
         // get pos
         PositionPart position = entity.getPart(PositionPart.class);
-        if (position == null)
+        if (position == null) {
             return;
+        }
+
+        ControlPart controls = entity.getPart(ControlPart.class);
+        if (controls != null) {
+            // set acceleration
+            if (controls.left()) {
+                // accelerate left
+                float change = acceleration* dt;
+                addVelocity(new Vector2D(change, 0));
+            } else if (controls.right()) {
+                // accelerate right
+                float change = -1 * acceleration* dt;
+                addVelocity(new Vector2D(change, 0));
+            }
+        }
 
         // get grav from physics
         PhysicsPart physicsPart = entity.getPart(PhysicsPart.class);
@@ -42,7 +59,9 @@ public class MovementPart implements IEntityPart {
         if (physicsPart != null) {
             addVelocity(new Vector2D(0, physicsPart.getGravity()));
         }
-        addVelocity(getAcceleration());
+
+
+
 
         // Decelerate
         float speed = getVelocity().length();
@@ -57,7 +76,6 @@ public class MovementPart implements IEntityPart {
         // update pos with velo
         position.setX(position.getX() + getVelocity().getX() * dt);
         position.setY(position.getY() + getVelocity().getY() * dt);
-
 
 
     }
@@ -115,29 +133,22 @@ public class MovementPart implements IEntityPart {
     /**
      * Returns the acceleration
      *
-     * @return vector containing the change in horizontal and vertical velocity in (m/s)/s
+     * @return  the max change in horizontal and vertical velocity in (m/s)/s
      */
-    public Vector2D getAcceleration() {
+    public float getAcceleration() {
         return acceleration;
     }
 
-    /**
-     * Sets the acceleration
-     *
-     * @param acceleration vector containing the change in horizontal and vertical velocity in (m/s)/s
-     */
-    public void setAcceleration(Vector2D acceleration) {
-        this.acceleration = acceleration;
-    }
+
 
     /**
      * Sets the acceleration
      *
-     * @param x change in horizontal velocity in (m/s)/s
-     * @param y change in vertical velocity in (m/s)/s
+     * @param acceleration max change in velocity in (m/s)/s
+     *
      */
-    public void setAcceleration(float x, float y) {
-        this.acceleration = new Vector2D(x, y);
+    public void setAcceleration(float acceleration) {
+        this.acceleration = acceleration;
     }
 
     /**
