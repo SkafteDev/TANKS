@@ -67,7 +67,7 @@ public class Game implements ApplicationListener {
         for (Entity entity: world.getEntities()) {
             shapeRenderer.setColor(1,1,1,1);
 
-            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
             CirclePart cp = entity.getPart(CirclePart.class);
             if (cp != null) {
