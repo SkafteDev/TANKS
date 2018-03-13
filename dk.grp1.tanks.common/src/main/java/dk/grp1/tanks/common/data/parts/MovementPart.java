@@ -11,22 +11,75 @@ public class MovementPart implements IEntityPart {
 
     private Vector2D velocity;
     private Vector2D acceleration;
+    private float deceleration;
     private float maxSpeed;
 
-    public void processPart(Entity entity, GameData gameData) {
+    public MovementPart(Vector2D velocity, Vector2D acceleration, float maxSpeed, float deceleration) {
 
+        this.velocity = velocity;
+        this.acceleration = acceleration;
+        this.maxSpeed = maxSpeed;
+        this.deceleration = deceleration;
+    }
+
+    public MovementPart(float maxSpeed, float deceleration) {
+
+        this(new Vector2D(0, 0), new Vector2D(0, 0), maxSpeed, deceleration);
+    }
+
+    public void processPart(Entity entity, GameData gameData) {
+        float dt = gameData.getDelta();
+
+        // get pos
+        PositionPart position = entity.getPart(PositionPart.class);
+        if (position == null)
+            return;
+
+        // get grav from physics
+        PhysicsPart physicsPart = entity.getPart(PhysicsPart.class);
+
+        // update velocity with accel and grav
+        if (physicsPart != null) {
+            addVelocity(new Vector2D(0, physicsPart.getGravity()));
+        }
+        addVelocity(getAcceleration());
+
+        // Decelerate
+        float speed = getVelocity().length();
+        if (speed > 0) {
+            float changeX = -1 * (getVelocity().getX() / speed) * deceleration * dt;
+            float changeY = -1 * (getVelocity().getY() / speed) * deceleration * dt;
+            addVelocity(
+                    new Vector2D(changeX, changeY)
+            );
+        }
+
+        // update pos with velo
+        position.setX(position.getX() + getVelocity().getX() * dt);
+        position.setY(position.getY() + getVelocity().getY() * dt);
+
+
+
+    }
+
+    private void addVelocity(Vector2D velocity) {
+        Vector2D prevVelocity = getVelocity();
+        prevVelocity.add(velocity);
+        this.setVelocity(prevVelocity);
     }
 
     /**
      * Returns the current speed in m/s
+     *
      * @return
      */
-    public float getCurrentSpeed(){
+    public float getCurrentSpeed() {
         return velocity.length();
     }
 
     /**
      * Returns the velocity (directional speed) as a Vector
+     *
      * @return
      */
     public Vector2D getVelocity() {
@@ -35,22 +88,14 @@ public class MovementPart implements IEntityPart {
 
     /**
      * Sets the velocity
-     * @param x change in horizontal position in m/s
-     * @param y change in vertical position in m/s
-     */
-    public void setVelocity(float x, float y){
-        setVelocity(new Vector2D(x,y));
-    }
-
-    /**
-     * Sets the velocity
+     *
      * @param velocity vector containing the change in horizontal and vertical position in m/s
      */
     public void setVelocity(Vector2D velocity) {
-        if(velocity.length() > getMaxSpeed()){
+        if (velocity.length() > getMaxSpeed()) {
             float ratio = velocity.length() / getMaxSpeed();
-            velocity.setX(velocity.getX()/ratio);
-            velocity.setY(velocity.getY()/ratio);
+            velocity.setX(velocity.getX() / ratio);
+            velocity.setY(velocity.getY() / ratio);
         }
         this.velocity = velocity;
 
@@ -58,7 +103,18 @@ public class MovementPart implements IEntityPart {
     }
 
     /**
+     * Sets the velocity
+     *
+     * @param x change in horizontal position in m/s
+     * @param y change in vertical position in m/s
+     */
+    public void setVelocity(float x, float y) {
+        setVelocity(new Vector2D(x, y));
+    }
+
+    /**
      * Returns the acceleration
+     *
      * @return vector containing the change in horizontal and vertical velocity in (m/s)/s
      */
     public Vector2D getAcceleration() {
@@ -67,15 +123,7 @@ public class MovementPart implements IEntityPart {
 
     /**
      * Sets the acceleration
-     * @param x change in horizontal velocity in (m/s)/s
-     * @param y change in vertical velocity in (m/s)/s
-     */
-    public void setAcceleration(float x, float y){
-        this.acceleration = new Vector2D(x,y);
-    }
-
-    /**
-     * Sets the acceleration
+     *
      * @param acceleration vector containing the change in horizontal and vertical velocity in (m/s)/s
      */
     public void setAcceleration(Vector2D acceleration) {
@@ -83,7 +131,18 @@ public class MovementPart implements IEntityPart {
     }
 
     /**
+     * Sets the acceleration
+     *
+     * @param x change in horizontal velocity in (m/s)/s
+     * @param y change in vertical velocity in (m/s)/s
+     */
+    public void setAcceleration(float x, float y) {
+        this.acceleration = new Vector2D(x, y);
+    }
+
+    /**
      * Get the maximum allowed speed
+     *
      * @return
      */
     public float getMaxSpeed() {
@@ -92,6 +151,7 @@ public class MovementPart implements IEntityPart {
 
     /**
      * Sets the maximum allowed speed
+     *
      * @param maxSpeed
      */
     public void setMaxSpeed(float maxSpeed) {
