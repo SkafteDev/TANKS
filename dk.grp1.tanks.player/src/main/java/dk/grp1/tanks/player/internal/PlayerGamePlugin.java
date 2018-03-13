@@ -5,9 +5,7 @@ import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.services.IGamePluginService;
 
-/**
- * Created by danie on 12-03-2018.
- */
+
 public class PlayerGamePlugin implements IGamePluginService {
 
     @Override

@@ -24,7 +24,7 @@ public final class PlayerActivator
 
         Dictionary props = new Properties();
 
-        bc.registerService(IEntityProcessingService.class.getName(),new PlayerProcessingSystem(),null);
+       // bc.registerService(IEntityProcessingService.class.getName(),new PlayerProcessingSystem(),null);
 
     }
 
