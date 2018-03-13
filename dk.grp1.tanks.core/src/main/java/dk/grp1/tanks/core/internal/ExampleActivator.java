@@ -4,6 +4,7 @@ package dk.grp1.tanks.core.internal;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
+import dk.grp1.tanks.common.services.IGamePluginService;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceEvent;
@@ -16,8 +17,10 @@ import java.util.Arrays;
  * Extension of the default OSGi bundle activator
  */
 public final class ExampleActivator
-    implements BundleActivator//,ServiceListener
+    implements BundleActivator,ServiceListener
 {
+    private BundleContext bc;
+    private Game game;
     LwjglApplication app;
     /**
      * Called whenever the OSGi framework starts our bundle
@@ -25,10 +28,11 @@ public final class ExampleActivator
     public void start( BundleContext bc )
         throws Exception
     {
-       // bc.addServiceListener(this);
+        this.bc = bc;
+        bc.addServiceListener(this);
         System.out.println( "STARTING dk.grp1.tanks.core" );
         ServiceLoader serviceLoader = new ServiceLoader(bc);
-        Game game = new Game(serviceLoader);
+        game = new Game(serviceLoader);
 
         LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
         cfg.title = "Tanks";
@@ -46,7 +50,7 @@ public final class ExampleActivator
     public void stop( BundleContext bc )
         throws Exception
     {
-    //    bc.removeServiceListener(this);
+        bc.removeServiceListener(this);
         System.out.println( "STOPPING dk.grp1.tanks.core" );
         app.stop();
         app.exit();
@@ -55,14 +59,20 @@ public final class ExampleActivator
         // no need to unregister our service - the OSGi framework handles it for us
     }
 
-/*    @Override
+    /**
+     * Detects changes in registered services
+     * @param serviceEvent
+     */
+    @Override
     public void serviceChanged(ServiceEvent serviceEvent) {
         String[] objectClass = (String[]) serviceEvent.getServiceReference().getProperty("objectClass");
-        System.out.println(Arrays.toString(objectClass));
 
         if(serviceEvent.getType() == ServiceEvent.REGISTERED){
-            //objectClass[0]
+            if (objectClass[0].equalsIgnoreCase(IGamePluginService.class.getCanonicalName())){
+                IGamePluginService plugin = (IGamePluginService)bc.getService(serviceEvent.getServiceReference());
+                plugin.start(game.getWorld(), game.getGameData());
+            }
         }
-    }*/
+    }
 }
 

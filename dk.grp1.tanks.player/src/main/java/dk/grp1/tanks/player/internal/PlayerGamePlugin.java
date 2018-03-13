@@ -21,7 +21,8 @@ public class PlayerGamePlugin implements IGamePluginService {
 
     private Entity createPlayer(GameData gameData) {
         Player player = new Player();
-        player.add(new CirclePart(gameData.getDisplayWidth()/2, gameData.getDisplayHeight()/2, playerRadius));
+        //player.add(new CirclePart(gameData.getDisplayWidth()/2, gameData.getDisplayHeight()/2, playerRadius));
+        player.add(new CirclePart(400, 300, playerRadius));
         return player;
     }
 

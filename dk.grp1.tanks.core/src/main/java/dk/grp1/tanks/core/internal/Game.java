@@ -39,10 +39,10 @@ public class Game implements ApplicationListener {
 
         shapeRenderer = new ShapeRenderer();
 
-        for (IGamePluginService pluginService: serviceLoader.getGamePluginServices()){
+/*        for (IGamePluginService pluginService: serviceLoader.getGamePluginServices()){
             System.out.println("SERVICE: " + pluginService);
             pluginService.start(world,gameData);
-        }
+        }*/
 
     }
 
@@ -89,5 +89,13 @@ public class Game implements ApplicationListener {
 
     public void dispose() {
 
+    }
+
+    public World getWorld() {
+        return world;
+    }
+
+    public GameData getGameData() {
+        return gameData;
     }
 }
