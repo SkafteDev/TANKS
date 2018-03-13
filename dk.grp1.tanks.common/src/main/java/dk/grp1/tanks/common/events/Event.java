@@ -9,7 +9,7 @@ import java.io.Serializable;
  *
  * @author Mads
  */
-public class Event implements Serializable{
+public abstract class Event implements Serializable{
     private final Entity source;
 
     public Event(Entity source) {

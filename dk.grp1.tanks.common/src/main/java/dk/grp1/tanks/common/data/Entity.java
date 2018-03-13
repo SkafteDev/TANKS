@@ -8,7 +8,7 @@ import java.util.UUID;
 /**
  * Created by danie on 12-03-2018.
  */
-public class Entity {
+public abstract class Entity {
     private final UUID ID = UUID.randomUUID();
     private Map<Class, IEntityPart> parts;
 
