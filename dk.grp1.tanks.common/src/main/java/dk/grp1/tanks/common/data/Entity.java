@@ -2,6 +2,7 @@ package dk.grp1.tanks.common.data;
 
 import dk.grp1.tanks.common.data.parts.IEntityPart;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -10,7 +11,7 @@ import java.util.UUID;
  */
 public abstract class Entity {
     private final UUID ID = UUID.randomUUID();
-    private Map<Class, IEntityPart> parts;
+    private Map<Class, IEntityPart> parts = new HashMap<>();
 
     public void add(IEntityPart part) {
         parts.put(part.getClass(), part);

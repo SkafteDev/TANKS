@@ -4,6 +4,7 @@ import java.util.Dictionary;
 import java.util.Properties;
 
 import dk.grp1.tanks.common.services.IEntityProcessingService;
+import dk.grp1.tanks.common.services.IGamePluginService;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
@@ -24,7 +25,8 @@ public final class PlayerActivator
 
         Dictionary props = new Properties();
 
-        bc.registerService(IEntityProcessingService.class.getName(),new PlayerProcessingSystem(),null);
+        bc.registerService(IEntityProcessingService.class.getName(), new PlayerProcessingSystem(),null);
+        bc.registerService(IGamePluginService.class.getName(), new PlayerGamePlugin(),null);
 
     }
 
