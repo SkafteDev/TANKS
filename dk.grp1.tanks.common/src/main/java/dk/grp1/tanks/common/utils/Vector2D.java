@@ -46,6 +46,7 @@ public class Vector2D {
         return hash;
     }
 
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -105,6 +106,22 @@ public class Vector2D {
         float dot = a.getX() * b.getX() + a.getY() * b.getY();
 
         return dot;
+    }
+
+
+    /**
+     * '
+     * Returns the list of vertices as a float array
+     *
+     * @return float[]
+     */
+    public static float[] getVerticesAsFloatArray(Vector2D[] vertices) {
+        float[] floatVertices = new float[vertices.length * 2];
+        for (int i = 0; i < vertices.length; i++) {
+            floatVertices[i*2] = vertices[i].getX();
+            floatVertices[i*2+1] = vertices[i].getY();
+        }
+        return floatVertices;
     }
 
     public static List<Vector2D> getVectors(float[] shapex, float[] shapey) {
