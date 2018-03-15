@@ -25,9 +25,9 @@ public class GameMapPlugin implements IGamePluginService {
     private GameMap createNewGameMap(GameData gameData) {
         List<Vector2D> vertices = new ArrayList<>();
         vertices.add(new Vector2D(0,0));
-        vertices.add(new Vector2D(0,gameData.getDisplayHeight()/2));
-        vertices.add(new Vector2D(gameData.getDisplayWidth(),gameData.getDisplayHeight()/2));
-        vertices.add(new Vector2D(gameData.getDisplayWidth(),0));
+        vertices.add(new Vector2D(0,gameData.getGameHeight()/3));
+        vertices.add(new Vector2D(gameData.getGameWidth(),gameData.getGameHeight()/3));
+        vertices.add(new Vector2D(gameData.getGameWidth(),0));
         GameMap map = new GameMap();
         map.setVertices(vertices);
         return map;

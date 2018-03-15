@@ -47,7 +47,7 @@ public final class ExampleActivator
         cfg.width = WIDTH;
         cfg.height = HEIGHT;
         cfg.useGL30 = false;
-        cfg.resizable = false;
+        cfg.resizable = true;
         app = new LwjglApplication(game, cfg);
         bc.addServiceListener(this);
     }
