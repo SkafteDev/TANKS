@@ -11,9 +11,12 @@ import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.GameMap;
 import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.data.parts.CirclePart;
+import dk.grp1.tanks.common.data.parts.PositionPart;
 import dk.grp1.tanks.common.services.IEntityProcessingService;
 import dk.grp1.tanks.common.utils.Vector2D;
 import dk.grp1.tanks.common.services.IGamePluginService;
+import dk.grp1.tanks.core.internal.managers.GameInputProcessor;
+import javafx.geometry.Pos;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +42,11 @@ public class Game implements ApplicationListener {
     }
 
     private void setupGame(){
+
+        Gdx.input.setInputProcessor(
+                new GameInputProcessor(gameData)
+        );
+
         gameData.setDisplayHeight(Gdx.graphics.getHeight());
         gameData.setDisplayWidth(Gdx.graphics.getWidth());
 
@@ -95,8 +103,10 @@ public class Game implements ApplicationListener {
 
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             CirclePart cp = entity.getPart(CirclePart.class);
+            PositionPart pos = entity.getPart(PositionPart.class);
             if (cp != null) {
-                shapeRenderer.circle(cp.getCentreX(), cp.getCentreY(), cp.getRadius());
+              //  shapeRenderer.circle(cp.getCentreX(), cp.getCentreY(), cp.getRadius());
+                shapeRenderer.circle(pos.getX(), pos.getY(), cp.getRadius());
             }
 
             shapeRenderer.end();

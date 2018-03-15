@@ -34,6 +34,7 @@ public class MovementPart implements IEntityPart {
 
         // get pos
         PositionPart position = entity.getPart(PositionPart.class);
+        //System.out.println(position.getX() + "   " + position.getY());
         if (position == null) {
             return;
         }
