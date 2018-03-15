@@ -41,14 +41,17 @@ public class MovementPart implements IEntityPart {
         ControlPart controls = entity.getPart(ControlPart.class);
         if (controls != null) {
             // set acceleration
-            if (controls.left()) {
-                // accelerate left
+            if (controls.right()) {
+                // accelerate right
                 float change = acceleration* dt;
                 addVelocity(new Vector2D(change, 0));
-            } else if (controls.right()) {
-                // accelerate right
+            } else if (controls.left()) {
+                // accelerate left
+
                 float change = -1 * acceleration* dt;
                 addVelocity(new Vector2D(change, 0));
+            } else {
+                setVelocity(0,0);
             }
         }
 
@@ -64,6 +67,16 @@ public class MovementPart implements IEntityPart {
 
 
         // Decelerate
+        decelerate(deceleration, dt);
+
+        // update pos with velo
+        position.setX(position.getX() + getVelocity().getX() * dt);
+        position.setY(position.getY() + getVelocity().getY() * dt);
+
+
+    }
+
+    private void decelerate(float deceleration, float dt) {
         float speed = getVelocity().length();
         if (speed > 0) {
             float changeX = -1 * (getVelocity().getX() / speed) * deceleration * dt;
@@ -72,12 +85,6 @@ public class MovementPart implements IEntityPart {
                     new Vector2D(changeX, changeY)
             );
         }
-
-        // update pos with velo
-        position.setX(position.getX() + getVelocity().getX() * dt);
-        position.setY(position.getY() + getVelocity().getY() * dt);
-
-
     }
 
     private void addVelocity(Vector2D velocity) {

@@ -11,9 +11,12 @@ import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.GameMap;
 import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.data.parts.CirclePart;
+import dk.grp1.tanks.common.data.parts.PositionPart;
 import dk.grp1.tanks.common.services.IEntityProcessingService;
 import dk.grp1.tanks.common.utils.Vector2D;
 import dk.grp1.tanks.common.services.IGamePluginService;
+import dk.grp1.tanks.core.internal.managers.GameInputProcessor;
+import javafx.geometry.Pos;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +42,12 @@ public class Game implements ApplicationListener {
     }
 
     private void setupGame(){
+
+        Gdx.input.setInputProcessor(
+                new GameInputProcessor(gameData)
+        );
+
+
         camera = new OrthographicCamera(gameData.getDisplayWidth(),gameData.getDisplayHeight());
         camera.translate(gameData.getDisplayWidth()/2,gameData.getDisplayHeight()/2);
         camera.update();
@@ -54,12 +63,22 @@ public class Game implements ApplicationListener {
         Gdx.gl.glClearColor(0, 0,0 ,1 );
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        for (IEntityProcessingService processingService: serviceLoader.getEntityProcessingServices()) {
-            processingService.process(world,gameData);
-        }
+        gameData.setDelta(Gdx.graphics.getDeltaTime());
+
+
+        update();
+
+
 
         draw();
     }
+
+    private void update() {
+        for (IEntityProcessingService processingService: serviceLoader.getEntityProcessingServices()) {
+            processingService.process(world,gameData);
+        }
+    }
+
     private void renderGameMap(){
         shapeRenderer.setColor(Color.RED);
 
@@ -86,8 +105,10 @@ public class Game implements ApplicationListener {
 
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             CirclePart cp = entity.getPart(CirclePart.class);
+            PositionPart pos = entity.getPart(PositionPart.class);
             if (cp != null) {
-                shapeRenderer.circle(cp.getCentreX(), cp.getCentreY(), cp.getRadius());
+              //  shapeRenderer.circle(cp.getCentreX(), cp.getCentreY(), cp.getRadius());
+                shapeRenderer.circle(pos.getX(), pos.getY(), cp.getRadius());
             }
 
             shapeRenderer.end();
