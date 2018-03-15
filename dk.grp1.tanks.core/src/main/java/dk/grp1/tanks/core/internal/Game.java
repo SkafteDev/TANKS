@@ -58,6 +58,12 @@ public class Game implements ApplicationListener {
         Gdx.input.setInputProcessor(
                 new GameInputProcessor(gameData)
         );
+
+
+        //camera = new OrthographicCamera(gameData.getDisplayWidth(),gameData.getDisplayHeight());
+        //camera = new OrthographicCamera(200,100);
+        camera = new OrthographicCamera(gameData.getGameWidth(),gameData.getGameHeight());
+        camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
         camera.update();
 
         this.shapeRenderer = new ShapeRenderer();
@@ -131,8 +137,9 @@ public class Game implements ApplicationListener {
 
     private void draw() {
         renderGameMap();
-        for (Entity entity : world.getEntities()) {
-            shapeRenderer.setColor(1, 1, 1, 1);
+        for (Entity entity: world.getEntities()) {
+            shapeRenderer.setProjectionMatrix(camera.combined);
+            shapeRenderer.setColor(1,1,1,1);
 
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             CirclePart cp = entity.getPart(CirclePart.class);

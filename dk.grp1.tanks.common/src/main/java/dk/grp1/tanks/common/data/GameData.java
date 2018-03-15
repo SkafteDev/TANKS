@@ -11,6 +11,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class GameData {
 
+        private final int GAMEWIDTH = 160;
+        private final int GAMEHEIGHT = 90;
+
         private float delta;
         private int displayWidth;
         private int displayHeight;
@@ -45,17 +48,21 @@ public class GameData {
             this.displayWidth = width;
         }
 
-        public int getDisplayWidth() {
-            return displayWidth;
-        }
+        public float getGameWidth() { return GAMEWIDTH; }
+
+        public float getGameHeight() {return GAMEHEIGHT;}
+
+//        public int getDisplayWidth() {
+//            return displayWidth;
+//        }
 
         public void setDisplayHeight(int height) {
             this.displayHeight = height;
         }
 
-        public int getDisplayHeight() {
-            return displayHeight;
-        }
+//        public int getDisplayHeight() {
+//            return displayHeight;
+//        }
 
         public <E extends Event> List<Event> getEvents(Class<E> type, String sourceID) {
             List<Event> r = new ArrayList();
@@ -67,6 +74,17 @@ public class GameData {
 
             return r;
         }
+
+    public <E extends Event> List<Event> getEvents(Class<E> type) {
+        List<Event> r = new ArrayList();
+        for (Event event : events) {
+            if (event.getClass().equals(type)) {
+                r.add(event);
+            }
+        }
+
+        return r;
+    }
     }
 
 
