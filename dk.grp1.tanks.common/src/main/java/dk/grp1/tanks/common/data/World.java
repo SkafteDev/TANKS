@@ -11,6 +11,23 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class World   {
     private final Map<String, Entity> entityMap = new ConcurrentHashMap<>();
+    private GameMap gameMap;
+
+    /**
+     * Gets the game map
+     * @return The game map as type GameMap
+     */
+    public GameMap getGameMap() {
+        return gameMap;
+    }
+
+    /**
+     * Sets the game map.
+     * @param gameMap
+     */
+    public void setGameMap(GameMap gameMap) {
+        this.gameMap = gameMap;
+    }
 
     public String addEntity(Entity entity) {
         entityMap.put(entity.getID(), entity);

@@ -167,6 +167,12 @@ public class Vector2D {
 
         return minMax;
     }
+
+    public void add(Vector2D otherVector) {
+        this.setX(this.getX() + otherVector.getX());
+        this.setY(this.getY() + otherVector.getY());
+
+    }
 }
 
 

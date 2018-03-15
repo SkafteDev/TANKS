@@ -1,20 +1,23 @@
 package dk.grp1.tanks.core.internal;
 
 import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.Gdx;
-import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.data.GameData;
+import dk.grp1.tanks.common.data.GameMap;
 import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.data.parts.CirclePart;
 import dk.grp1.tanks.common.services.IEntityProcessingService;
+import dk.grp1.tanks.common.utils.Vector2D;
 import dk.grp1.tanks.common.services.IGamePluginService;
 
-/**
- * Created by danie on 05-03-2018.
- */
+import java.util.ArrayList;
+import java.util.List;
+
+
 public class Game implements ApplicationListener {
     private ServiceLoader serviceLoader;
     private World world;
@@ -26,24 +29,23 @@ public class Game implements ApplicationListener {
         this.serviceLoader = serviceLoader;
         this.gameData = new GameData();
         this.world = new World();
+
     }
 
 
     public void create() {
-        gameData.setDisplayWidth(800);
-        gameData.setDisplayHeight(600);
+       setupGame();
+    }
+    
+    private void setupGame(){
+        gameData.setDisplayHeight(Gdx.graphics.getHeight());
+        gameData.setDisplayWidth(Gdx.graphics.getWidth());
 
-        camera = new OrthographicCamera(gameData.getDisplayWidth(), gameData.getDisplayHeight());
-        camera.translate(gameData.getDisplayWidth()/2, gameData.getDisplayHeight()/2);
+        camera = new OrthographicCamera(gameData.getDisplayWidth(),gameData.getDisplayHeight());
+        camera.translate(gameData.getDisplayWidth()/2,gameData.getDisplayHeight()/2);
         camera.update();
 
-        shapeRenderer = new ShapeRenderer();
-
-/*        for (IGamePluginService pluginService: serviceLoader.getGamePluginServices()){
-            System.out.println("SERVICE: " + pluginService);
-            pluginService.start(world,gameData);
-        }*/
-
+        this.shapeRenderer = new ShapeRenderer();
     }
 
     public void resize(int i, int i1) {
@@ -54,6 +56,7 @@ public class Game implements ApplicationListener {
         Gdx.gl.glClearColor(0, 0,0 ,1 );
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        renderGameMap();
         for (IEntityProcessingService processingService: serviceLoader.getEntityProcessingServices()) {
             processingService.process(world,gameData);
         }
@@ -62,10 +65,26 @@ public class Game implements ApplicationListener {
 
         draw();
     }
+    private void renderGameMap(){
+        shapeRenderer.setColor(Color.RED);
 
+        GameMap gameMap = world.getGameMap();
+        if(gameMap == null){
+            return;
+        }
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        for (int i = 0, j = gameMap.getVertices().size()-1;
+             i < gameMap.getVertices().size(); j = i++) {
+                Vector2D vector1 = gameMap.getVertices().get(i);
+                Vector2D vector2 = gameMap.getVertices().get(j);
     private void draw() {
         for (Entity entity: world.getEntities()) {
             shapeRenderer.setColor(1,1,1,1);
+
+                shapeRenderer.line(vector1.getX(),vector1.getY(),vector2.getX(),vector2.getY());
+        }
+        shapeRenderer.end();
+    }
 
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
