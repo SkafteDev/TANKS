@@ -88,7 +88,7 @@ public class Game implements ApplicationListener {
 
         GameMap gameMap = world.getGameMap();
         if (gameMap == null) {
-            System.out.println("Game map is null");
+
             return;
         }
 
