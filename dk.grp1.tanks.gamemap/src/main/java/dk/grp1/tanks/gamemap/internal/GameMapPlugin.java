@@ -13,6 +13,7 @@ public class GameMapPlugin implements IGamePluginService {
     @Override
     public void start(World world, GameData gameData) {
         world.setGameMap(createNewGameMap(gameData));
+        System.out.println("Created a new game map");
     }
 
 

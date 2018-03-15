@@ -4,6 +4,7 @@ package dk.grp1.tanks.core.internal;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
+import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.services.IGamePluginService;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -19,6 +20,9 @@ import java.util.Arrays;
 public final class ExampleActivator
     implements BundleActivator,ServiceListener
 {
+    private final int WIDTH =800;
+    private final int HEIGHT =600;
+
     private BundleContext bc;
     private Game game;
     LwjglApplication app;
@@ -29,19 +33,23 @@ public final class ExampleActivator
         throws Exception
     {
         this.bc = bc;
-        bc.addServiceListener(this);
+
         System.out.println( "STARTING dk.grp1.tanks.core" );
         ServiceLoader serviceLoader = new ServiceLoader(bc);
-        game = new Game(serviceLoader);
+        GameData gameData = new GameData();
+        gameData.setDisplayWidth(WIDTH);
+        gameData.setDisplayHeight(HEIGHT);
+        game = new Game(serviceLoader,gameData);
+
 
         LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
         cfg.title = "Tanks";
-        cfg.width = 800;
-        cfg.height = 600;
+        cfg.width = WIDTH;
+        cfg.height = HEIGHT;
         cfg.useGL30 = false;
         cfg.resizable = false;
         app = new LwjglApplication(game, cfg);
-
+        bc.addServiceListener(this);
     }
 
     /**

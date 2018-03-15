@@ -1,8 +1,8 @@
 package dk.grp1.tanks.gamemap.internal;
 
-import java.util.Dictionary;
-import java.util.Properties;
 
+
+import dk.grp1.tanks.common.services.IGamePluginService;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
@@ -19,7 +19,7 @@ public final class ExampleActivator
         throws Exception
     {
         System.out.println( "STARTING dk.grp1.tanks.gamemap" );
-
+        bc.registerService(IGamePluginService.class.getName(),new GameMapPlugin(),null);
 
     }
 

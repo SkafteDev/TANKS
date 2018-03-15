@@ -26,10 +26,10 @@ public class Game implements ApplicationListener {
     private ShapeRenderer shapeRenderer;
     private OrthographicCamera camera;
 
-    public Game(ServiceLoader serviceLoader) {
+    public Game(ServiceLoader serviceLoader, GameData gameData) {
         this.serviceLoader = serviceLoader;
-        this.gameData = new GameData();
         this.world = new World();
+        this.gameData = gameData;
 
     }
 
@@ -39,9 +39,6 @@ public class Game implements ApplicationListener {
     }
 
     private void setupGame(){
-        gameData.setDisplayHeight(Gdx.graphics.getHeight());
-        gameData.setDisplayWidth(Gdx.graphics.getWidth());
-
         camera = new OrthographicCamera(gameData.getDisplayWidth(),gameData.getDisplayHeight());
         camera.translate(gameData.getDisplayWidth()/2,gameData.getDisplayHeight()/2);
         camera.update();
@@ -57,12 +54,9 @@ public class Game implements ApplicationListener {
         Gdx.gl.glClearColor(0, 0,0 ,1 );
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        renderGameMap();
         for (IEntityProcessingService processingService: serviceLoader.getEntityProcessingServices()) {
             processingService.process(world,gameData);
         }
-
-
 
         draw();
     }
@@ -71,6 +65,7 @@ public class Game implements ApplicationListener {
 
         GameMap gameMap = world.getGameMap();
         if(gameMap == null){
+            System.out.println("Game map is null");
             return;
         }
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
@@ -78,18 +73,14 @@ public class Game implements ApplicationListener {
              i < gameMap.getVertices().size(); j = i++) {
                 Vector2D vector1 = gameMap.getVertices().get(i);
                 Vector2D vector2 = gameMap.getVertices().get(j);
-
-
-
-
-
-                    shapeRenderer.line(vector1.getX(),vector1.getY(),vector2.getX(),vector2.getY());
+                shapeRenderer.line(vector1.getX(),vector1.getY(),vector2.getX(),vector2.getY());
                 }
                 shapeRenderer.end();
             }
 
 
     private void draw() {
+        renderGameMap();
         for (Entity entity: world.getEntities()) {
             shapeRenderer.setColor(1,1,1,1);
 
