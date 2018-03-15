@@ -13,6 +13,9 @@ import dk.grp1.tanks.common.services.IEntityProcessingService;
  * Created by danie on 12-03-2018.
  */
 public class PlayerProcessingSystem implements IEntityProcessingService {
+
+    private float timeSinceLastShot;
+
     @Override
     public void process(World world, GameData gameData) {
 
@@ -26,9 +29,12 @@ public class PlayerProcessingSystem implements IEntityProcessingService {
             ctrlPart.setLeft(gameData.getKeys().isDown(GameKeys.LEFT));
             ctrlPart.setRight(gameData.getKeys().isDown(GameKeys.RIGHT));
 
-            if(gameData.getKeys().isPressed(GameKeys.SPACE)){
+            if(gameData.getKeys().isPressed(GameKeys.SPACE) && timeSinceLastShot
+                    > 1){
                 gameData.addEvent(new ShootingEvent(player));
+                timeSinceLastShot = 0;
             }
+            timeSinceLastShot += gameData.getDelta();
 
             movePart.processPart(player, gameData);
 
