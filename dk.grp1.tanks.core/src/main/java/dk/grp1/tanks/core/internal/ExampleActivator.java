@@ -81,6 +81,13 @@ public final class ExampleActivator
                 plugin.start(game.getWorld(), game.getGameData());
             }
         }
+
+        if(serviceEvent.getType() == ServiceEvent.UNREGISTERING){
+            if (objectClass[0].equalsIgnoreCase(IGamePluginService.class.getCanonicalName())){
+                IGamePluginService plugin = (IGamePluginService)bc.getService(serviceEvent.getServiceReference());
+                plugin.stop(game.getWorld(), game.getGameData());
+            }
+        }
     }
 }
 
