@@ -56,6 +56,7 @@
     <module>dk.grp1.tanks.enemy</module>
     <module>dk.grp1.tanks.collision</module>
     <module>dk.grp1.tanks.gamemap</module>
+    <module>dk.grp1.tanks.weapon</module>
   </modules>
 
   <build>

@@ -48,7 +48,8 @@ public class Game implements ApplicationListener {
         );
 
 
-        camera = new OrthographicCamera(gameData.getDisplayWidth(),gameData.getDisplayHeight());
+        //camera = new OrthographicCamera(gameData.getDisplayWidth(),gameData.getDisplayHeight());
+        camera = new OrthographicCamera(gameData.getDisplayWidth()*100,gameData.getDisplayHeight()*100);
         camera.translate(gameData.getDisplayWidth()/2,gameData.getDisplayHeight()/2);
         camera.update();
 

@@ -23,8 +23,6 @@ public final class PlayerActivator
     {
         System.out.println( "STARTING dk.grp1.tanks.player" );
 
-        Dictionary props = new Properties();
-
         bc.registerService(IEntityProcessingService.class.getName(), new PlayerProcessingSystem(),null);
         bc.registerService(IGamePluginService.class.getName(), new PlayerGamePlugin(),null);
 
