@@ -17,7 +17,7 @@ public class WeaponProcessingSystem implements IEntityProcessingService {
 
         for (Event ev: gameData.getEvents(ShootingEvent.class)
              ) {
-            world.addEntity(wepFac.create());
+            world.addEntity(wepFac.create(ev,gameData));
             gameData.removeEvent(ev);
 
 

@@ -53,13 +53,9 @@ public class Game implements ApplicationListener {
 
     private void setupGame() {
         setupMapDrawingConfig();
-        camera = new OrthographicCamera(gameData.getDisplayWidth(), gameData.getDisplayHeight());
-        camera.translate(gameData.getDisplayWidth() / 2, gameData.getDisplayHeight() / 2);
         Gdx.input.setInputProcessor(
                 new GameInputProcessor(gameData)
         );
-
-
         //camera = new OrthographicCamera(gameData.getDisplayWidth(),gameData.getDisplayHeight());
         //camera = new OrthographicCamera(200,100);
         camera = new OrthographicCamera(gameData.getGameWidth(),gameData.getGameHeight());
@@ -120,6 +116,7 @@ public class Game implements ApplicationListener {
 
 
         gameMapPolySprite = new PolygonSprite(convertGameMapToPolyRegion(gameMap));
+        polySpriteBatch.setProjectionMatrix(camera.combined);
         polySpriteBatch.begin();
         gameMapPolySprite.draw(polySpriteBatch);
         polySpriteBatch.end();

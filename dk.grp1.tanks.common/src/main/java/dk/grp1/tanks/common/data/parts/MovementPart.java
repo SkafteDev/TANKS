@@ -43,7 +43,7 @@ public class MovementPart implements IEntityPart {
             // set acceleration
             if (controls.right()) {
                 // accelerate right
-                float change = acceleration* dt;
+                float change = acceleration * dt;
                 addVelocity(new Vector2D(change, 0));
             } else if (controls.left()) {
                 // accelerate left
