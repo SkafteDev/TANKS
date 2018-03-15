@@ -20,8 +20,8 @@ import java.util.Arrays;
 public final class ExampleActivator
     implements BundleActivator,ServiceListener
 {
-    private final int WIDTH =800;
-    private final int HEIGHT =600;
+    private final int WIDTH = 800;
+    private final int HEIGHT = 600;
 
     private BundleContext bc;
     private Game game;
