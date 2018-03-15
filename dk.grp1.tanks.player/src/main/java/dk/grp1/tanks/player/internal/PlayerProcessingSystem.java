@@ -18,15 +18,15 @@ public class PlayerProcessingSystem implements IEntityProcessingService {
         for (Entity player: world.getEntities(Player.class)
              ) {
 
-            MovementPart movePart =  player.getPart(MovementPart.class);
-            ControlPart ctrlPart = player.getPart(ControlPart.class);
+           // MovementPart movePart =  player.getPart(MovementPart.class);
+           // ControlPart ctrlPart = player.getPart(ControlPart.class);
 
-            ctrlPart.setLeft(gameData.getKeys().isDown(GameKeys.LEFT));
-            ctrlPart.setRight(gameData.getKeys().isDown(GameKeys.RIGHT));
+           // ctrlPart.setLeft(gameData.getKeys().isDown(GameKeys.LEFT));
+           // ctrlPart.setRight(gameData.getKeys().isDown(GameKeys.RIGHT));
 
 
 
-            movePart.processPart(player, gameData);
+           // movePart.processPart(player, gameData);
 
         }
     }

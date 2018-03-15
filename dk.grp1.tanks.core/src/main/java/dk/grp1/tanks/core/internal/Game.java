@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.GameMap;
 import dk.grp1.tanks.common.data.World;
@@ -36,7 +37,7 @@ public class Game implements ApplicationListener {
     public void create() {
        setupGame();
     }
-    
+
     private void setupGame(){
         gameData.setDisplayHeight(Gdx.graphics.getHeight());
         gameData.setDisplayWidth(Gdx.graphics.getWidth());
@@ -77,17 +78,22 @@ public class Game implements ApplicationListener {
              i < gameMap.getVertices().size(); j = i++) {
                 Vector2D vector1 = gameMap.getVertices().get(i);
                 Vector2D vector2 = gameMap.getVertices().get(j);
+
+
+
+
+
+                    shapeRenderer.line(vector1.getX(),vector1.getY(),vector2.getX(),vector2.getY());
+                }
+                shapeRenderer.end();
+            }
+
+
     private void draw() {
         for (Entity entity: world.getEntities()) {
             shapeRenderer.setColor(1,1,1,1);
 
-                shapeRenderer.line(vector1.getX(),vector1.getY(),vector2.getX(),vector2.getY());
-        }
-        shapeRenderer.end();
-    }
-
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-
             CirclePart cp = entity.getPart(CirclePart.class);
             if (cp != null) {
                 shapeRenderer.circle(cp.getCentreX(), cp.getCentreY(), cp.getRadius());
