@@ -20,8 +20,8 @@ import java.util.Arrays;
 public final class ExampleActivator
     implements BundleActivator,ServiceListener
 {
-    private final int WIDTH =800;
-    private final int HEIGHT =600;
+    private final int WIDTH = 800;
+    private final int HEIGHT = 600;
 
     private BundleContext bc;
     private Game game;
@@ -79,6 +79,13 @@ public final class ExampleActivator
             if (objectClass[0].equalsIgnoreCase(IGamePluginService.class.getCanonicalName())){
                 IGamePluginService plugin = (IGamePluginService)bc.getService(serviceEvent.getServiceReference());
                 plugin.start(game.getWorld(), game.getGameData());
+            }
+        }
+
+        if(serviceEvent.getType() == ServiceEvent.UNREGISTERING){
+            if (objectClass[0].equalsIgnoreCase(IGamePluginService.class.getCanonicalName())){
+                IGamePluginService plugin = (IGamePluginService)bc.getService(serviceEvent.getServiceReference());
+                plugin.stop(game.getWorld(), game.getGameData());
             }
         }
     }

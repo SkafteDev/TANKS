@@ -2,10 +2,12 @@ package dk.grp1.tanks.core.internal;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.EarClippingTriangulator;
+import com.badlogic.gdx.utils.FloatArray;
+import com.badlogic.gdx.utils.ShortArray;
 import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.GameMap;
@@ -26,6 +28,13 @@ public class Game implements ApplicationListener {
     private ShapeRenderer shapeRenderer;
     private OrthographicCamera camera;
 
+
+    //Variables for drawing the game map
+    private Texture gameMapTexture;
+    private PolygonSprite gameMapPolySprite;
+    private PolygonSpriteBatch polySpriteBatch;
+    private TextureRegion textureRegion;
+
     public Game(ServiceLoader serviceLoader, GameData gameData) {
         this.serviceLoader = serviceLoader;
         this.world = new World();
@@ -35,15 +44,28 @@ public class Game implements ApplicationListener {
 
 
     public void create() {
-       setupGame();
+        setupGame();
     }
 
-    private void setupGame(){
-        camera = new OrthographicCamera(gameData.getDisplayWidth(),gameData.getDisplayHeight());
-        camera.translate(gameData.getDisplayWidth()/2,gameData.getDisplayHeight()/2);
+    private void setupGame() {
+        setupMapDrawingConfig();
+        camera = new OrthographicCamera(gameData.getDisplayWidth(), gameData.getDisplayHeight());
+        camera.translate(gameData.getDisplayWidth() / 2, gameData.getDisplayHeight() / 2);
         camera.update();
 
         this.shapeRenderer = new ShapeRenderer();
+    }
+
+    private void setupMapDrawingConfig() {
+        polySpriteBatch = new PolygonSpriteBatch();
+
+        Pixmap pix = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+        pix.setColor(Color.RED);
+        pix.fill();
+
+        gameMapTexture = new Texture(pix);
+
+        textureRegion = new TextureRegion(gameMapTexture);
     }
 
     public void resize(int i, int i1) {
@@ -51,38 +73,46 @@ public class Game implements ApplicationListener {
     }
 
     public void render() {
-        Gdx.gl.glClearColor(0, 0,0 ,1 );
+        Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        for (IEntityProcessingService processingService: serviceLoader.getEntityProcessingServices()) {
-            processingService.process(world,gameData);
+        for (IEntityProcessingService processingService : serviceLoader.getEntityProcessingServices()) {
+            processingService.process(world, gameData);
         }
 
         draw();
     }
-    private void renderGameMap(){
+
+    private void renderGameMap() {
         shapeRenderer.setColor(Color.RED);
 
         GameMap gameMap = world.getGameMap();
-        if(gameMap == null){
-            System.out.println("Game map is null");
+        if (gameMap == null) {
+
             return;
         }
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        for (int i = 0, j = gameMap.getVertices().size()-1;
-             i < gameMap.getVertices().size(); j = i++) {
-                Vector2D vector1 = gameMap.getVertices().get(i);
-                Vector2D vector2 = gameMap.getVertices().get(j);
-                shapeRenderer.line(vector1.getX(),vector1.getY(),vector2.getX(),vector2.getY());
-                }
-                shapeRenderer.end();
-            }
+
+
+        gameMapPolySprite = new PolygonSprite(convertGameMapToPolyRegion(gameMap));
+        polySpriteBatch.begin();
+        gameMapPolySprite.draw(polySpriteBatch);
+        polySpriteBatch.end();
+
+    }
+
+    private PolygonRegion convertGameMapToPolyRegion(GameMap gameMap) {
+        FloatArray vertices = new FloatArray(gameMap.getVerticesAsFloats());
+        EarClippingTriangulator triangulator = new EarClippingTriangulator();
+        ShortArray triangleIndices = triangulator.computeTriangles(vertices);
+        PolygonRegion polygonRegion = new PolygonRegion(textureRegion,vertices.toArray(),triangleIndices.toArray());
+        return polygonRegion;
+    }
 
 
     private void draw() {
         renderGameMap();
-        for (Entity entity: world.getEntities()) {
-            shapeRenderer.setColor(1,1,1,1);
+        for (Entity entity : world.getEntities()) {
+            shapeRenderer.setColor(1, 1, 1, 1);
 
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             CirclePart cp = entity.getPart(CirclePart.class);

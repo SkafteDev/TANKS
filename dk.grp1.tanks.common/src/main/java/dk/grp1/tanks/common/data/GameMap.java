@@ -23,6 +23,22 @@ public class GameMap {
         return vertices;
     }
 
+    /**'
+     * Returns the list of vertices as a float array
+     * @return float[]
+     */
+    public float[] getVerticesAsFloats(){
+        float[] floatVertices = new float[getVertices().size()*2];
+        int i = 0;
+        for (Vector2D vertex : vertices) {
+            floatVertices[i] = vertex.getX();
+            i++;
+            floatVertices[i] = vertex.getY();
+            i++;
+        }
+        return floatVertices;
+    }
+
     /**
      * Sets all vertices in the map, as a list containing Vector2D
      * @param vertices
