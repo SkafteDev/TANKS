@@ -329,3 +329,7 @@ runner/felix/cache/
 tanks\.iml
 
 *.iml
+
+runner/deploy-pom\.xml
+
+runner/felix/config\.ini

@@ -4,6 +4,7 @@ import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.data.parts.CirclePart;
+import dk.grp1.tanks.common.data.parts.*;
 import dk.grp1.tanks.common.services.IGamePluginService;
 
 
@@ -21,6 +22,12 @@ public class PlayerGamePlugin implements IGamePluginService {
         Player player = new Player();
         //player.add(new CirclePart(gameData.getDisplayWidth()/2, gameData.getDisplayHeight()/2, playerRadius));
         player.add(new CirclePart(400, 300, playerRadius));
+        player.add(new PhysicsPart(5000f,9.82f));
+        player.add(new ControlPart());
+        player.add(new LifePart());
+        player.add(new PositionPart());
+        player.add(new ShapePart());
+        player.add(new MovementPart(50,10,10));
         return player;
     }
 
