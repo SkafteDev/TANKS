@@ -9,7 +9,8 @@ import dk.grp1.tanks.common.data.GameData;
 public class CollisionPart implements IEntityPart {
 
     private boolean canCollide;
-    private boolean isHit;
+    private boolean isHitEntity;
+    private boolean isHitGameMap;
     private float timeSinceLastCollision;
     private float minTimeBetweenCollision;
 
@@ -21,8 +22,17 @@ public class CollisionPart implements IEntityPart {
     public CollisionPart(boolean canCollide, float minTimeBetweenCollision) {
         this.canCollide = canCollide;
         this.minTimeBetweenCollision = minTimeBetweenCollision;
-        this.isHit = false;
+        this.isHitEntity = false;
+        this.isHitGameMap = false;
         this.timeSinceLastCollision = 0;
+    }
+
+    public boolean isHitGameMap() {
+        return isHitGameMap;
+    }
+
+    public void setHitGameMap(boolean hitGameMap) {
+        isHitGameMap = hitGameMap;
     }
 
     /**
@@ -45,16 +55,16 @@ public class CollisionPart implements IEntityPart {
      * returns if the entity is hit
      * @return
      */
-    public boolean isHit() {
-        return isHit;
+    public boolean isHitEntity() {
+        return isHitEntity;
     }
 
     /**
-     * sets if the entity is hit
-     * @param hit
+     * sets if the entity is hitEntity
+     * @param hitEntity
      */
-    public void setHit(boolean hit) {
-        isHit = hit;
+    public void setHitEntity(boolean hitEntity) {
+        isHitEntity = hitEntity;
     }
 
     public void processPart(Entity entity, GameData gameData) {

@@ -4,6 +4,7 @@ import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.GameKeys;
 import dk.grp1.tanks.common.data.World;
+import dk.grp1.tanks.common.data.parts.CollisionPart;
 import dk.grp1.tanks.common.data.parts.ControlPart;
 import dk.grp1.tanks.common.data.parts.MovementPart;
 import dk.grp1.tanks.common.services.IEntityProcessingService;
@@ -20,6 +21,7 @@ public class PlayerProcessingSystem implements IEntityProcessingService {
 
             MovementPart movePart =  player.getPart(MovementPart.class);
             ControlPart ctrlPart = player.getPart(ControlPart.class);
+            CollisionPart collisionPart = player.getPart(CollisionPart.class);
 
             ctrlPart.setLeft(gameData.getKeys().isDown(GameKeys.LEFT));
             ctrlPart.setRight(gameData.getKeys().isDown(GameKeys.RIGHT));

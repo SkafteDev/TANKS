@@ -55,13 +55,19 @@ public class MovementPart implements IEntityPart {
             }
         }
 
-        // get grav from physics
-        PhysicsPart physicsPart = entity.getPart(PhysicsPart.class);
+        CollisionPart collisionPart = entity.getPart(CollisionPart.class);
+        if(collisionPart != null && !collisionPart.isHitGameMap()){
+            // get grav from physics
+            PhysicsPart physicsPart = entity.getPart(PhysicsPart.class);
 
-        // update velocity with accel and grav
-        if (physicsPart != null) {
-            addVelocity(new Vector2D(0, physicsPart.getGravity()));
+            // update velocity with accel and grav
+            if (physicsPart != null) {
+                addVelocity(new Vector2D(0, physicsPart.getGravity()));
+            }
+        } else if(collisionPart != null){
+            collisionPart.setHitGameMap(false);
         }
+
 
 
 
