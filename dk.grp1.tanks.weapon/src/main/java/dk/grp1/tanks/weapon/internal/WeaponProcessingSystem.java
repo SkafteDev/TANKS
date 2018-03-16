@@ -17,16 +17,12 @@ public class WeaponProcessingSystem implements IEntityProcessingService {
     @Override
     public void process(World world, GameData gameData) {
 
-        for (Event ev: gameData.getEvents(ShootingEvent.class)
-             ) {
+        for (Event ev: gameData.getEvents(ShootingEvent.class)) {
             world.addEntity(wepFac.create(ev,gameData));
             gameData.removeEvent(ev);
-
-
         }
 
-        for (Entity bullet : world.getEntities(Bullet.class)
-                ) {
+        for (Entity bullet : world.getEntities(Bullet.class)) {
             MovementPart movePart =  bullet.getPart(MovementPart.class);
             PhysicsPart physicsPart = bullet.getPart(PhysicsPart.class);
             CollisionPart collisionPart = bullet.getPart(CollisionPart.class);

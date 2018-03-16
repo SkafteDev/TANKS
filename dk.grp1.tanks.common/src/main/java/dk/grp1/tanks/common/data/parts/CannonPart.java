@@ -14,6 +14,7 @@ public class CannonPart implements IEntityPart{
     private float jointY;
     private Vector2D[] vertices;
     private float direction;
+    private Vector2D directionVector;
     private float length;
     private float width;
 
@@ -64,17 +65,14 @@ public class CannonPart implements IEntityPart{
         vertices[2] = c;
         vertices[3] = d;
 
+        // Update the direction vector of the cannon
+        directionVector = Vector2D.subtractVectors(d, a).unitVector();
 
     }
 
     @Override
     public void processPart(Entity entity, GameData gameData) {
         this.updateShape();
-    }
-
-
-    public Vector2D getCannonCentre(){
-        return new Vector2D(jointX+length/2,jointY+length/2);
     }
 
     /**
@@ -119,6 +117,10 @@ public class CannonPart implements IEntityPart{
 
     public float getDirection() {
         return direction;
+    }
+
+    public Vector2D getDirectionVector() {
+        return this.directionVector;
     }
 
     public void setDirection(float direction) {
