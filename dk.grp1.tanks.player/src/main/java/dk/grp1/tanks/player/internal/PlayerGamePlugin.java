@@ -23,12 +23,12 @@ public class PlayerGamePlugin implements IGamePluginService {
         //player.add(new CirclePart(gameData.getDisplayWidth()/2, gameData.getDisplayHeight()/2, playerRadius));
         player.add(new CirclePart(40, 30, playerRadius));
         player.add(new PhysicsPart(5000f,-9.82f));
-        player.add(new ControlPart());
+        player.add(new ControlPart(200));
         player.add(new LifePart());
         player.add(new PositionPart(200f,gameData.getGameHeight()/2+50, 0));
         player.add(new ShapePart());
         player.add(new CollisionPart(true,0));
-        player.add(new MovementPart(50,100,20));
+        player.add(new MovementPart(100,100));
         return player;
     }
 
