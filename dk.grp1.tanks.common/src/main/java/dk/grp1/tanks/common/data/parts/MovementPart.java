@@ -77,7 +77,7 @@ public class MovementPart implements IEntityPart {
     private void decelerate(float deceleration, float dt) {
         float speed = getVelocity().length();
 
-        if (speed > 10) {
+        if (speed > 20) {
             float changeX = -1 * (getVelocity().getX() / speed) * deceleration * dt;
             float changeY = -1 * (getVelocity().getY() / speed) * deceleration * dt;
             addVelocity(
