@@ -1,10 +1,9 @@
-package dk.grp1.tanks.player.internal;
+package dk.grp1.tanks.mapcollision.internal;
 
 import java.util.Dictionary;
 import java.util.Properties;
 
-import dk.grp1.tanks.common.services.IEntityProcessingService;
-import dk.grp1.tanks.common.services.IGamePluginService;
+import dk.grp1.tanks.common.services.IPostEntityProcessingService;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
@@ -12,7 +11,7 @@ import org.osgi.framework.BundleContext;
 /**
  * Extension of the default OSGi bundle activator
  */
-public final class PlayerActivator
+public final class MapCollisionActivator
     implements BundleActivator
 {
     /**
@@ -21,10 +20,14 @@ public final class PlayerActivator
     public void start( BundleContext bc )
         throws Exception
     {
-        System.out.println( "STARTING dk.grp1.tanks.player" );
+        System.out.println( "STARTING dk.grp1.tanks.mapcollision" );
 
-        bc.registerService(IEntityProcessingService.class.getName(), new PlayerProcessingSystem(),null);
-        bc.registerService(IGamePluginService.class.getName(), new PlayerGamePlugin(),null);
+
+        System.out.println( "REGISTER dk.grp1.tanks.mapcollision.ExampleService" );
+
+        // Register our example service implementation in the OSGi service registry
+        bc.registerService(IPostEntityProcessingService.class.getName(),new MapCollisionProcessing(),null);
+
 
     }
 
@@ -34,7 +37,7 @@ public final class PlayerActivator
     public void stop( BundleContext bc )
         throws Exception
     {
-        System.out.println( "STOPPING dk.grp1.tanks.player" );
+        System.out.println( "STOPPING dk.grp1.tanks.mapcollision" );
 
         // no need to unregister our service - the OSGi framework handles it for us
     }

@@ -54,8 +54,9 @@
     <module>dk.grp1.tanks.OSGiLibGDX</module>
     <module>dk.grp1.tanks.player</module>
     <module>dk.grp1.tanks.enemy</module>
-    <module>dk.grp1.tanks.collision</module>
     <module>dk.grp1.tanks.gamemap</module>
+    <module>dk.grp1.tanks.weapon</module>
+    <module>dk.grp1.tanks.mapcollision</module>
   </modules>
 
   <build>

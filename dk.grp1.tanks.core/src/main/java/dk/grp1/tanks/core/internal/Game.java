@@ -16,6 +16,7 @@ import dk.grp1.tanks.common.data.parts.CannonPart;
 import dk.grp1.tanks.common.data.parts.CirclePart;
 import dk.grp1.tanks.common.data.parts.PositionPart;
 import dk.grp1.tanks.common.services.IEntityProcessingService;
+import dk.grp1.tanks.common.services.IPostEntityProcessingService;
 import dk.grp1.tanks.common.utils.Vector2D;
 import dk.grp1.tanks.common.services.IGamePluginService;
 import dk.grp1.tanks.core.internal.managers.GameInputProcessor;
@@ -53,11 +54,16 @@ public class Game implements ApplicationListener {
 
     private void setupGame() {
         setupMapDrawingConfig();
-        camera = new OrthographicCamera(gameData.getDisplayWidth(), gameData.getDisplayHeight());
-        camera.translate(gameData.getDisplayWidth() / 2, gameData.getDisplayHeight() / 2);
+
         Gdx.input.setInputProcessor(
                 new GameInputProcessor(gameData)
         );
+
+
+        //camera = new OrthographicCamera(gameData.getDisplayWidth(),gameData.getDisplayHeight());
+        //camera = new OrthographicCamera(200,100);
+        camera = new OrthographicCamera(gameData.getGameWidth(),gameData.getGameHeight());
+        camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
         camera.update();
 
         this.shapeRenderer = new ShapeRenderer();
@@ -96,6 +102,10 @@ public class Game implements ApplicationListener {
         for (IEntityProcessingService processingService : serviceLoader.getEntityProcessingServices()) {
             processingService.process(world, gameData);
         }
+        for(IPostEntityProcessingService postEntityProcessingService: serviceLoader.getPostEntityProcessingServices()){
+
+            postEntityProcessingService.postProcess(world,gameData);
+        }
     }
 
     private void renderGameMap() {
@@ -109,7 +119,9 @@ public class Game implements ApplicationListener {
 
 
         gameMapPolySprite = new PolygonSprite(convertGameMapToPolyRegion(gameMap));
+        polySpriteBatch.setProjectionMatrix(camera.combined);
         polySpriteBatch.begin();
+        polySpriteBatch.setProjectionMatrix(camera.combined);
         gameMapPolySprite.draw(polySpriteBatch);
         polySpriteBatch.end();
 
@@ -126,8 +138,9 @@ public class Game implements ApplicationListener {
 
     private void draw() {
         renderGameMap();
-        for (Entity entity : world.getEntities()) {
-            shapeRenderer.setColor(1, 1, 1, 1);
+        for (Entity entity: world.getEntities()) {
+            shapeRenderer.setProjectionMatrix(camera.combined);
+            shapeRenderer.setColor(1,1,1,1);
 
             CirclePart cp = entity.getPart(CirclePart.class);
             PositionPart pos = entity.getPart(PositionPart.class);

@@ -24,7 +24,6 @@ public class GameMap {
         return vertices;
     }
 
-
     /**
      * '
      * Returns the list of vertices as a float array
@@ -50,5 +49,12 @@ public class GameMap {
      */
     public void setVertices(List<Vector2D> vertices) {
         this.vertices = vertices;
+    }
+
+    public Vector2D getDirectionVector(float xCoordinate, GameData gameData) {
+        float y = (gameData.getGameHeight() * 0.5f) * (float) Math.sin(((double) xCoordinate) / 128);
+        float y2 = (gameData.getGameHeight() * 0.5f) * (float) Math.sin(((double) xCoordinate + 1) / 128);
+        Vector2D vector = new Vector2D((xCoordinate + 1) - xCoordinate, y2 - y);
+        return vector;
     }
 }
