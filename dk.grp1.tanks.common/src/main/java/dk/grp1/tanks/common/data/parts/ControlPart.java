@@ -22,24 +22,27 @@ public class ControlPart implements IEntityPart {
 
     @Override
     public void processPart(Entity entity, GameData gameData) {
-        controlVector = new Vector2D(0,0);
+        controlVector = new Vector2D(rotation.getX(),rotation.getY());
         float dt = gameData.getDelta();
         if (right()) {
             // accelerate right
-            float change = acceleration * dt;
-            controlVector.add(new Vector2D(change, 0));
+            float change = acceleration;
+            controlVector.multiplyWithConstant(change);
         }
         if (left()) {
             // accelerate left
 
-            float change = -1 * acceleration* dt;
-            controlVector.add(new Vector2D(change, 0));
+            float change = -1 * acceleration;
+            controlVector.multiplyWithConstant(change);
+        }
+        if (!left() && !right()){
+            controlVector = new Vector2D(0,0);
         }
     }
 
 
     public void setRotation(Vector2D rotation) {
-        this.rotation = rotation;
+        this.rotation = rotation.unitVector();
     }
 
     public boolean left() {

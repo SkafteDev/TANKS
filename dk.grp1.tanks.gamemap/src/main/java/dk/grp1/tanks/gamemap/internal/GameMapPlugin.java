@@ -30,6 +30,7 @@ public class GameMapPlugin implements IGamePluginService {
         //vertices.addAll(generateRandomMapFromFunction(gameData));
         GameMap map = new GameMap(gameData.getGameWidth(),gameData.getGameHeight());
         IGameMapFunction gameMapFunction = new GameMapSin(150f,(1/66f),0,gameData.getGameHeight()/2,0,gameData.getGameWidth());
+        //IGameMapFunction gameMapFunction = new GameMapSin(0.01f,(1/66f),0,gameData.getGameHeight()/2,0,gameData.getGameWidth());
         map.addGameMapFunction(gameMapFunction);
         //map.setVertices(vertices);
         return map;
