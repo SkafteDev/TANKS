@@ -38,12 +38,12 @@ public class GameMapPlugin implements IGamePluginService {
     private Collection<? extends Vector2D> generateRandomMap(GameData gameData) {
         List<Vector2D> vertices = new ArrayList<>();
 
-        for (int x = 0; x <= gameData.getDisplayWidth(); x += gameData.getDisplayWidth() / 1) {
-            vertices.add(new Vector2D(x, (float) (0.95 * (gameData.getDisplayHeight() / 2))));
+        for (int x = 0; x <= gameData.getGameWidth(); x += gameData.getGameWidth() / 1) {
+            vertices.add(new Vector2D(x, (float) (0.95 * (gameData.getGameHeight() / 2))));
 //            vertices.add(new Vector2D(x, (float) (Math.random() * (gameData.getDisplayHeight() / 2))));
 
         }
-        vertices.add(new Vector2D(gameData.getDisplayWidth(), 0));
+        vertices.add(new Vector2D(gameData.getGameWidth(), 0));
         vertices.add(new Vector2D(0, 0));
         return vertices;
     }

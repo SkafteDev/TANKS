@@ -115,6 +115,7 @@ public class Game implements ApplicationListener {
 
         gameMapPolySprite = new PolygonSprite(convertGameMapToPolyRegion(gameMap));
         polySpriteBatch.begin();
+        polySpriteBatch.setProjectionMatrix(camera.combined);
         gameMapPolySprite.draw(polySpriteBatch);
         polySpriteBatch.end();
 
