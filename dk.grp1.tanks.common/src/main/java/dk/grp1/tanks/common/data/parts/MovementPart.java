@@ -43,7 +43,7 @@ public class MovementPart implements IEntityPart {
             // set acceleration
             if (controls.right()) {
                 // accelerate right
-                float change = acceleration* dt;
+                float change = acceleration * dt;
                 addVelocity(new Vector2D(change, 0));
             } else if (controls.left()) {
                 // accelerate left
@@ -55,13 +55,27 @@ public class MovementPart implements IEntityPart {
             }
         }
 
-        // get grav from physics
-        PhysicsPart physicsPart = entity.getPart(PhysicsPart.class);
+        CollisionPart collisionPart = entity.getPart(CollisionPart.class);
+        if(collisionPart != null && !collisionPart.isHitGameMap()){
+            // get grav from physics
+            PhysicsPart physicsPart = entity.getPart(PhysicsPart.class);
 
-        // update velocity with accel and grav
-        if (physicsPart != null) {
-            addVelocity(new Vector2D(0, physicsPart.getGravity()* dt));
+            // update velocity with accel and grav
+            if (physicsPart != null) {
+                addVelocity(new Vector2D(0, physicsPart.getGravity()));
+            }
+        } else if(collisionPart != null){
+            collisionPart.setHitGameMap(false);
+        } else if(collisionPart == null){
+            // get grav from physics
+            PhysicsPart physicsPart = entity.getPart(PhysicsPart.class);
+
+            // update velocity with accel and grav
+            if (physicsPart != null) {
+                addVelocity(new Vector2D(0, physicsPart.getGravity()));
+            }
         }
+
 
 
 
