@@ -10,7 +10,7 @@ import dk.grp1.tanks.common.services.IGamePluginService;
 
 public class PlayerGamePlugin implements IGamePluginService {
 
-    private float playerRadius = 10;
+    private float playerRadius = 1.3f;
 
     @Override
     public void start(World world, GameData gameData) {
@@ -21,11 +21,11 @@ public class PlayerGamePlugin implements IGamePluginService {
     private Entity createPlayer(GameData gameData) {
         Player player = new Player();
         //player.add(new CirclePart(gameData.getDisplayWidth()/2, gameData.getDisplayHeight()/2, playerRadius));
-        player.add(new CirclePart(400, 300, playerRadius));
+        player.add(new CirclePart(40, 30, playerRadius));
         player.add(new PhysicsPart(5000f,-0f));
         player.add(new ControlPart());
         player.add(new LifePart());
-        player.add(new PositionPart(300f,300f, 0));
+        player.add(new PositionPart(30f,gameData.getGameHeight()/3+1, 0));
         player.add(new ShapePart());
         player.add(new MovementPart(50,100,20));
         return player;

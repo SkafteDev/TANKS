@@ -60,7 +60,7 @@ public class MovementPart implements IEntityPart {
 
         // update velocity with accel and grav
         if (physicsPart != null) {
-            addVelocity(new Vector2D(0, physicsPart.getGravity()));
+            addVelocity(new Vector2D(0, physicsPart.getGravity()* dt));
         }
 
 
