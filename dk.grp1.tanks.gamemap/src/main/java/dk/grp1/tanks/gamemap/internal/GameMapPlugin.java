@@ -2,6 +2,7 @@ package dk.grp1.tanks.gamemap.internal;
 
 import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.GameMap;
+import dk.grp1.tanks.common.data.IGameMapFunction;
 import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.services.IGamePluginService;
 import dk.grp1.tanks.common.utils.Vector2D;
@@ -25,10 +26,12 @@ public class GameMapPlugin implements IGamePluginService {
      * @return
      */
     private GameMap createNewGameMap(GameData gameData) {
-        List<Vector2D> vertices = new ArrayList<>();
-        vertices.addAll(generateRandomMapFromFunction(gameData));
-        GameMap map = new GameMap();
-        map.setVertices(vertices);
+        //List<Vector2D> vertices = new ArrayList<>();
+        //vertices.addAll(generateRandomMapFromFunction(gameData));
+        GameMap map = new GameMap(gameData.getGameWidth(),gameData.getGameHeight());
+        IGameMapFunction gameMapFunction = new GameMapSin(150f,(1/66f),0,gameData.getGameHeight()/2,0,gameData.getGameWidth());
+        map.addGameMapFunction(gameMapFunction);
+        //map.setVertices(vertices);
         return map;
     }
 
@@ -47,6 +50,8 @@ public class GameMapPlugin implements IGamePluginService {
 
     private Collection<? extends Vector2D> generateRandomMapFromFunction(GameData gameData) {
         List<Vector2D> vertices = new ArrayList<>();
+
+
 
         for (float x = 0; x <= gameData.getGameWidth(); x += gameData.getGameWidth() / 256) {
             vertices.add(new Vector2D(x,(gameData.getGameHeight()*0.5f)*(float)Math.sin(((double)x)/128)));

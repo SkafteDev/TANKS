@@ -72,7 +72,7 @@ public class Game implements ApplicationListener {
         polySpriteBatch = new PolygonSpriteBatch();
 
         Pixmap pix = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
-        pix.setColor(Color.RED);
+        pix.setColor(Color.BLUE);
         pix.fill();
 
         gameMapTexture = new Texture(pix);
@@ -119,7 +119,6 @@ public class Game implements ApplicationListener {
 
 
         gameMapPolySprite = new PolygonSprite(convertGameMapToPolyRegion(gameMap));
-        polySpriteBatch.setProjectionMatrix(camera.combined);
         polySpriteBatch.begin();
         polySpriteBatch.setProjectionMatrix(camera.combined);
         gameMapPolySprite.draw(polySpriteBatch);
@@ -128,7 +127,7 @@ public class Game implements ApplicationListener {
     }
 
     private PolygonRegion convertGameMapToPolyRegion(GameMap gameMap) {
-        FloatArray vertices = new FloatArray(gameMap.getVerticesAsFloats());
+        FloatArray vertices = new FloatArray(gameMap.getVerticesAsFloats(0,gameData.getGameWidth(),256));
         EarClippingTriangulator triangulator = new EarClippingTriangulator();
         ShortArray triangleIndices = triangulator.computeTriangles(vertices);
         PolygonRegion polygonRegion = new PolygonRegion(textureRegion,vertices.toArray(),triangleIndices.toArray());
