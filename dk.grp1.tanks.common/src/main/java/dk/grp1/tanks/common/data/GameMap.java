@@ -46,4 +46,6 @@ public class GameMap {
     public void setVertices(List<Vector2D> vertices) {
         this.vertices = vertices;
     }
+
+  
 }

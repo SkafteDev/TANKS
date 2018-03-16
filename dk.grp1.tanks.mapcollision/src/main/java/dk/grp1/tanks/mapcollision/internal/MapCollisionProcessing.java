@@ -17,13 +17,13 @@ public class MapCollisionProcessing implements IPostEntityProcessingService {
         for (Entity entity : world.getEntities()) {
             CollisionPart collisionPart = entity.getPart(CollisionPart.class);
             if (collisionPart != null && collisionPart.canCollide()) {
-                squareMapCollision(gameMap, entity);
+                squareMapCollision(gameMap, entity,gameData);
             }
         }
 
     }
 
-    private void squareMapCollision(GameMap gameMap, Entity entity) {
+    private void squareMapCollision(GameMap gameMap, Entity entity,GameData gameData) {
         PositionPart positionPart = entity.getPart(PositionPart.class);
         CollisionPart collisionPart = entity.getPart(CollisionPart.class);
         CirclePart circlePart = entity.getPart(CirclePart.class);
@@ -31,7 +31,7 @@ public class MapCollisionProcessing implements IPostEntityProcessingService {
         if(positionPart != null && collisionPart != null && circlePart != null){
             float y = positionPart.getY() - circlePart.getRadius();
             //Get height of map
-            float height = gameMap.getVertices().get(0).getY();
+            float height = (gameData.getGameHeight()*0.5f)*(float)Math.sin(((double)positionPart.getX())/128);
             if(y <= height){
                 collisionPart.setHitGameMap(true);
             }

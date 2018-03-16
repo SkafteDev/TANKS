@@ -25,7 +25,7 @@ public class PlayerGamePlugin implements IGamePluginService {
         player.add(new PhysicsPart(5000f,-9.82f));
         player.add(new ControlPart(200));
         player.add(new LifePart());
-        player.add(new PositionPart(30f,gameData.getGameHeight()/2+50, 0));
+        player.add(new PositionPart(200f,gameData.getGameHeight()/2+50, 0));
         player.add(new ShapePart());
         player.add(new CollisionPart(true,0));
         player.add(new MovementPart(100,100));
