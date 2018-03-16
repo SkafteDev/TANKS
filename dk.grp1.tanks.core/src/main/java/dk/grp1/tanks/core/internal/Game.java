@@ -12,6 +12,7 @@ import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.GameMap;
 import dk.grp1.tanks.common.data.World;
+import dk.grp1.tanks.common.data.parts.CannonPart;
 import dk.grp1.tanks.common.data.parts.CirclePart;
 import dk.grp1.tanks.common.data.parts.PositionPart;
 import dk.grp1.tanks.common.services.IEntityProcessingService;
@@ -94,13 +95,12 @@ public class Game implements ApplicationListener {
         update();
 
 
-
         draw();
     }
 
     private void update() {
-        for (IEntityProcessingService processingService: serviceLoader.getEntityProcessingServices()) {
-            processingService.process(world,gameData);
+        for (IEntityProcessingService processingService : serviceLoader.getEntityProcessingServices()) {
+            processingService.process(world, gameData);
         }
         for(IPostEntityProcessingService postEntityProcessingService: serviceLoader.getPostEntityProcessingServices()){
 
@@ -108,7 +108,7 @@ public class Game implements ApplicationListener {
         }
     }
 
-    private void renderGameMap(){
+    private void renderGameMap() {
         shapeRenderer.setColor(Color.RED);
 
         GameMap gameMap = world.getGameMap();
@@ -130,7 +130,7 @@ public class Game implements ApplicationListener {
         FloatArray vertices = new FloatArray(gameMap.getVerticesAsFloats(0,gameData.getGameWidth(),256));
         EarClippingTriangulator triangulator = new EarClippingTriangulator();
         ShortArray triangleIndices = triangulator.computeTriangles(vertices);
-        PolygonRegion polygonRegion = new PolygonRegion(textureRegion,vertices.toArray(),triangleIndices.toArray());
+        PolygonRegion polygonRegion = new PolygonRegion(textureRegion, vertices.toArray(), triangleIndices.toArray());
         return polygonRegion;
     }
 
@@ -141,15 +141,24 @@ public class Game implements ApplicationListener {
             shapeRenderer.setProjectionMatrix(camera.combined);
             shapeRenderer.setColor(1,1,1,1);
 
-            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             CirclePart cp = entity.getPart(CirclePart.class);
             PositionPart pos = entity.getPart(PositionPart.class);
             if (cp != null) {
-              //  shapeRenderer.circle(cp.getCentreX(), cp.getCentreY(), cp.getRadius());
+                shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
                 shapeRenderer.circle(pos.getX(), pos.getY(), cp.getRadius());
+                shapeRenderer.end();
             }
 
-            shapeRenderer.end();
+            //Draws the cannon if it exists
+            CannonPart cannonPart = entity.getPart(CannonPart.class);
+
+            if (cannonPart != null) {
+
+                shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+                shapeRenderer.polygon(Vector2D.getVerticesAsFloatArray(cannonPart.getVertices()));
+                shapeRenderer.end();
+            }
+
         }
     }
 

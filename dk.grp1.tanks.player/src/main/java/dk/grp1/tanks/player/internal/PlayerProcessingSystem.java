@@ -4,10 +4,9 @@ import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.GameKeys;
 import dk.grp1.tanks.common.data.World;
-import dk.grp1.tanks.common.data.parts.CollisionPart;
-import dk.grp1.tanks.common.data.parts.ControlPart;
-import dk.grp1.tanks.common.data.parts.MovementPart;
+import dk.grp1.tanks.common.data.parts.*;
 import dk.grp1.tanks.common.events.ShootingEvent;
+import dk.grp1.tanks.common.data.parts.PositionPart;
 import dk.grp1.tanks.common.services.IEntityProcessingService;
 
 /**
@@ -23,13 +22,17 @@ public class PlayerProcessingSystem implements IEntityProcessingService {
         for (Entity player : world.getEntities(Player.class)
                 ) {
 
-            MovementPart movePart = player.getPart(MovementPart.class);
+            CannonPart cannonPart = player.getPart(CannonPart.class);
+            MovementPart movePart =  player.getPart(MovementPart.class);
             ControlPart ctrlPart = player.getPart(ControlPart.class);
+            PositionPart positionPart = player.getPart(PositionPart.class);
             CollisionPart collisionPart = player.getPart(CollisionPart.class);
+            PhysicsPart physicsPart = player.getPart(PhysicsPart.class);
 
 
             ctrlPart.setLeft(gameData.getKeys().isDown(GameKeys.LEFT));
             ctrlPart.setRight(gameData.getKeys().isDown(GameKeys.RIGHT));
+            ctrlPart.setRotation(world.getGameMap().getDirectionVector(positionPart.getX(), gameData));
 
             if (gameData.getKeys().isPressed(GameKeys.SPACE) && timeSinceLastShot
                     > 1) {
@@ -39,6 +42,13 @@ public class PlayerProcessingSystem implements IEntityProcessingService {
             timeSinceLastShot += gameData.getDelta();
 
             movePart.processPart(player, gameData);
+            cannonPart.setJointX(positionPart.getX());
+            cannonPart.setJointY(positionPart.getY());
+            ctrlPart.processPart(player,gameData);
+            physicsPart.processPart(player,gameData);
+            collisionPart.processPart(player,gameData);
+            cannonPart.processPart(player, gameData);
+
 
         }
     }

@@ -46,6 +46,7 @@ public class Vector2D {
         return hash;
     }
 
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -107,6 +108,22 @@ public class Vector2D {
         return dot;
     }
 
+
+    /**
+     * '
+     * Returns the list of vertices as a float array
+     *
+     * @return float[]
+     */
+    public static float[] getVerticesAsFloatArray(Vector2D[] vertices) {
+        float[] floatVertices = new float[vertices.length * 2];
+        for (int i = 0; i < vertices.length; i++) {
+            floatVertices[i*2] = vertices[i].getX();
+            floatVertices[i*2+1] = vertices[i].getY();
+        }
+        return floatVertices;
+    }
+
     public static List<Vector2D> getVectors(float[] shapex, float[] shapey) {
         List<Vector2D> vectors = new ArrayList<>();
 
@@ -118,6 +135,13 @@ public class Vector2D {
         }
 
         return vectors;
+    }
+
+
+
+    @Override
+    public String toString(){
+        return "x: " + this.getX() + ", y: " + getY();
     }
 
     public static List<Vector2D> getOriginVectors(float[] shapex, float[] shapey) {
@@ -168,10 +192,29 @@ public class Vector2D {
         return minMax;
     }
 
+    public static Vector2D subtractVectors(Vector2D a, Vector2D b){
+        return new Vector2D(a.getX()-b.getX(), a.getY()-b.getY());
+    }
+
+    public void subtract(Vector2D otherVector){
+        Vector2D newVector = subtractVectors(this, otherVector);
+        this.x = newVector.getX();
+        this.y = newVector.getY();
+    }
+
     public void add(Vector2D otherVector) {
         this.setX(this.getX() + otherVector.getX());
         this.setY(this.getY() + otherVector.getY());
 
+    }
+
+    public static Vector2D sumVectors(Vector2D a, Vector2D b){
+        return new Vector2D(a.getX()+b.getX(), a.getY()+b.getY());
+    }
+
+    public void multiplyWithConstant(float f){
+        this.x *= f;
+        this.y *= f;
     }
 }
 
