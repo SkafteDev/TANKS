@@ -15,6 +15,7 @@ import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.data.parts.CirclePart;
 import dk.grp1.tanks.common.data.parts.PositionPart;
 import dk.grp1.tanks.common.services.IEntityProcessingService;
+import dk.grp1.tanks.common.services.IPostEntityProcessingService;
 import dk.grp1.tanks.common.utils.Vector2D;
 import dk.grp1.tanks.common.services.IGamePluginService;
 import dk.grp1.tanks.core.internal.managers.GameInputProcessor;
@@ -101,6 +102,10 @@ public class Game implements ApplicationListener {
         for (IEntityProcessingService processingService: serviceLoader.getEntityProcessingServices()) {
             processingService.process(world,gameData);
         }
+        for(IPostEntityProcessingService postEntityProcessingService: serviceLoader.getPostEntityProcessingServices()){
+
+            postEntityProcessingService.postProcess(world,gameData);
+        }
     }
 
     private void renderGameMap(){
@@ -114,6 +119,7 @@ public class Game implements ApplicationListener {
 
 
         gameMapPolySprite = new PolygonSprite(convertGameMapToPolyRegion(gameMap));
+        polySpriteBatch.setProjectionMatrix(camera.combined);
         polySpriteBatch.begin();
         polySpriteBatch.setProjectionMatrix(camera.combined);
         gameMapPolySprite.draw(polySpriteBatch);

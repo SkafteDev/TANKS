@@ -11,8 +11,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class GameData {
 
-        private final int GAMEWIDTH = 160;
-        private final int GAMEHEIGHT = 90;
+        private final int GAMEWIDTH = 400;
+        private final int GAMEHEIGHT = 300;
 
         private float delta;
         private int displayWidth;
