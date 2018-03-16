@@ -38,6 +38,9 @@ public class CollisionPart implements IEntityPart {
             PhysicsPart phys = entity.getPart(PhysicsPart.class);
             float grav = phys.getGravity();
             this.collisionVector = new Vector2D(0, -1 * grav * gameData.getDelta());
+
+            PositionPart pos = entity.getPart(PositionPart.class);
+            pos.setY(pos.getY()+ 1);
         }else {
             this.collisionVector = new Vector2D(0, 0);
 

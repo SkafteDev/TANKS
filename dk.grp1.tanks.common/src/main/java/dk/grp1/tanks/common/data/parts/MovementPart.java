@@ -54,7 +54,7 @@ public class MovementPart implements IEntityPart {
             }
             change.add(collisionPart.getCollisionVector());
 
-            setVelocity(getVelocity().getX(), 0);
+            //setVelocity(getVelocity().getX(), 0);
             // Decelerate
             decelerate(deceleration, dt);
 
@@ -77,7 +77,7 @@ public class MovementPart implements IEntityPart {
     private void decelerate(float deceleration, float dt) {
         float speed = getVelocity().length();
 
-        if (speed > 1) {
+        if (speed > 10) {
             float changeX = -1 * (getVelocity().getX() / speed) * deceleration * dt;
             float changeY = -1 * (getVelocity().getY() / speed) * deceleration * dt;
             addVelocity(
