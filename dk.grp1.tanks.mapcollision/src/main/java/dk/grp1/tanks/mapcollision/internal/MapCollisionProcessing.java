@@ -34,6 +34,8 @@ public class MapCollisionProcessing implements IPostEntityProcessingService {
             float height = (gameData.getGameHeight()*0.5f)*(float)Math.sin(((double)positionPart.getX())/128);
             if(y <= height){
                 collisionPart.setHitGameMap(true);
+            } else {
+                collisionPart.setHitGameMap(false);
             }
         }
 

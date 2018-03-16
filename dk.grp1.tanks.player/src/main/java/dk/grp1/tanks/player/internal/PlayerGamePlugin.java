@@ -28,13 +28,13 @@ public class PlayerGamePlugin implements IGamePluginService {
         float cannonLength = playerRadius*2;
         player.add(new CirclePart(centreX, centreY, playerRadius));
         player.add(new PhysicsPart(5000f,-9.82f));
-        player.add(new ControlPart());
+        player.add(new ControlPart(200));
         player.add(new LifePart());
         player.add(positionPart);
         player.add(new CannonPart(positionPart.getX(), positionPart.getY(), cannonDirection, cannonWidth, cannonLength));
         player.add(new ShapePart());
         player.add(new CollisionPart(true,0));
-        player.add(new MovementPart(50,100,20));
+        player.add(new MovementPart(50,100));
         return player;
     }
 

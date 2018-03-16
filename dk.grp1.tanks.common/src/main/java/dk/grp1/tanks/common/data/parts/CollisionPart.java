@@ -2,6 +2,9 @@ package dk.grp1.tanks.common.data.parts;
 
 import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.data.GameData;
+import dk.grp1.tanks.common.utils.Vector2D;
+import javafx.geometry.Pos;
+import sun.font.CompositeStrike;
 
 /**
  * Created by danie on 12-03-2018.
@@ -13,6 +16,9 @@ public class CollisionPart implements IEntityPart {
     private boolean isHitGameMap;
     private float timeSinceLastCollision;
     private float minTimeBetweenCollision;
+
+
+    private Vector2D collisionVector;
 
     /**
      * Creates a collision part for an entity
@@ -26,6 +32,19 @@ public class CollisionPart implements IEntityPart {
         this.isHitGameMap = false;
         this.timeSinceLastCollision = 0;
     }
+
+    public void processPart(Entity entity, GameData gameData) {
+        if(isHitGameMap) {
+            PhysicsPart phys = entity.getPart(PhysicsPart.class);
+            float grav = phys.getGravity();
+            this.collisionVector = new Vector2D(0, -1 * grav * gameData.getDelta());
+        }else {
+            this.collisionVector = new Vector2D(0, 0);
+
+        }
+
+    }
+
 
     public boolean isHitGameMap() {
         return isHitGameMap;
@@ -67,7 +86,10 @@ public class CollisionPart implements IEntityPart {
         isHitEntity = hitEntity;
     }
 
-    public void processPart(Entity entity, GameData gameData) {
 
+
+    public Vector2D getCollisionVector() {
+        return collisionVector;
     }
+
 }
