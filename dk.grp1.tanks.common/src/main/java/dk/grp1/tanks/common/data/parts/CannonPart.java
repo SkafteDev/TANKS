@@ -32,26 +32,46 @@ public class CannonPart implements IEntityPart{
     private void updateShape(){
         float pi = 3.1415f;
 
-        Vector2D a = new Vector2D((((float) Math.cos(direction) + (float) Math.cos(pi/2))) * width/2 + jointX
-                ,(((float) Math.sin(direction) + (float )Math.cos(pi/2))) * width/2 + jointY);
+        //Position of the cannon's connection to the player's body
+        Vector2D jointPoint = new Vector2D(jointX,jointY);
 
-        Vector2D b = new Vector2D((((float) Math.cos(direction) - (float) Math.cos(pi/2))) * width/2 + jointX
-                ,(((float) Math.sin(direction) - (float )Math.cos(pi/2))) * width/2 + jointY);
+        //Directions to the corners of the bottom of the cannon, before attaching to the player's body
 
-        Vector2D c = new Vector2D(a.getX()+length, a.getY()+length);
+        Vector2D a = new Vector2D((float) Math.cos(direction-(pi/2)), (float) (Math.sin(direction-(pi/2))));
+        Vector2D b = new Vector2D((float) Math.cos(direction+(pi/2)), (float) (Math.sin(direction+(pi/2))));
 
-        Vector2D d = new Vector2D(b.getX()+length, b.getY()+length);
+        //Actual length of the corners of the bottom of the cannon from the jointPoint, before attaching to the player's body
+        a.multiplyWithConstant(width/2);
+        b.multiplyWithConstant(width/2);
 
+
+        //Formula to calculate the direction and distance to the top of the cannon
+        Vector2D aNormal = a.rotate90degrees();
+        aNormal = aNormal.unitVector();
+        aNormal.multiplyWithConstant(length);
+
+        //Actual vectors to the corners of the bottom of the cannon
+        a.add(jointPoint);
+        b.add(jointPoint);
+
+        //Actual vectors to the corners of the top of the cannon
+        Vector2D c = Vector2D.sumVectors(aNormal,b);
+        Vector2D d = Vector2D.sumVectors(aNormal,a);
+
+        //Save the 4 corners of the cannon from bottom-right to top-right
         vertices[0] = a;
         vertices[1] = b;
         vertices[2] = c;
         vertices[3] = d;
+
+
     }
 
     @Override
     public void processPart(Entity entity, GameData gameData) {
         this.updateShape();
     }
+
 
     public Vector2D getCannonCentre(){
         return new Vector2D(jointX+length/2,jointY+length/2);
@@ -62,7 +82,19 @@ public class CannonPart implements IEntityPart{
      * @return
      */
     public Vector2D getMuzzleFaceCentre(){
-        return new Vector2D(jointX + length, jointY + length);
+
+        if (vertices[2] == null || vertices[3] == null) {
+            throw new NullPointerException("Cannon's shape has not been processed yet and is therefore NULL");
+        }
+
+        //Calculates the face of the muzzle
+        Vector2D centre = Vector2D.subtractVectors(vertices[2], vertices[3]);
+
+        //Defines the centre of the muzzle
+        centre.multiplyWithConstant(0.5f);
+        centre.add(vertices[3]);
+        return centre;
+
     }
 
     public float getJointX() {

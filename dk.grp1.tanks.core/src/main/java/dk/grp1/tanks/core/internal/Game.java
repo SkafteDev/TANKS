@@ -145,29 +145,21 @@ public class Game implements ApplicationListener {
             CirclePart cp = entity.getPart(CirclePart.class);
             PositionPart pos = entity.getPart(PositionPart.class);
             if (cp != null) {
-                shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-                //  shapeRenderer.circle(cp.getCentreX(), cp.getCentreY(), cp.getRadius());
+                shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
                 shapeRenderer.circle(pos.getX(), pos.getY(), cp.getRadius());
                 shapeRenderer.end();
             }
 
+            //Draws the cannon if it exists
             CannonPart cannonPart = entity.getPart(CannonPart.class);
 
             if (cannonPart != null) {
-                for (int i = 0; i < cannonPart.getVertices().length; i++) {
-                    System.out.println("VERTICES: ");
-                    System.out.println(cannonPart.getVertices()[i].getX());
-                    System.out.println(cannonPart.getVertices()[i].getY());
-                }
 
-                //System.out.println("NULL TEST: " + cannonPart.getVertices()[0].getY());
-                //System.out.println(Vector2D.getVerticesAsFloatArray(cannonPart.getVertices()));
                 shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-                shapeRenderer.polyline(Vector2D.getVerticesAsFloatArray(cannonPart.getVertices()));
+                shapeRenderer.polygon(Vector2D.getVerticesAsFloatArray(cannonPart.getVertices()));
                 shapeRenderer.end();
             }
 
-            //shapeRenderer.end();
         }
     }
 

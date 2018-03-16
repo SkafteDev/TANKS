@@ -137,6 +137,13 @@ public class Vector2D {
         return vectors;
     }
 
+
+
+    @Override
+    public String toString(){
+        return "x: " + this.getX() + ", y: " + getY();
+    }
+
     public static List<Vector2D> getOriginVectors(float[] shapex, float[] shapey) {
         List<Vector2D> vectors = new ArrayList<>();
 
@@ -185,10 +192,29 @@ public class Vector2D {
         return minMax;
     }
 
+    public static Vector2D subtractVectors(Vector2D a, Vector2D b){
+        return new Vector2D(a.getX()-b.getX(), a.getY()-b.getY());
+    }
+
+    public void subtract(Vector2D otherVector){
+        Vector2D newVector = subtractVectors(this, otherVector);
+        this.x = newVector.getX();
+        this.y = newVector.getY();
+    }
+
     public void add(Vector2D otherVector) {
         this.setX(this.getX() + otherVector.getX());
         this.setY(this.getY() + otherVector.getY());
 
+    }
+
+    public static Vector2D sumVectors(Vector2D a, Vector2D b){
+        return new Vector2D(a.getX()+b.getX(), a.getY()+b.getY());
+    }
+
+    public void multiplyWithConstant(float f){
+        this.x *= f;
+        this.y *= f;
     }
 }
 

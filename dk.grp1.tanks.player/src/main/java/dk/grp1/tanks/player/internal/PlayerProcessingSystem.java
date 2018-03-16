@@ -9,6 +9,7 @@ import dk.grp1.tanks.common.data.parts.CollisionPart;
 import dk.grp1.tanks.common.data.parts.ControlPart;
 import dk.grp1.tanks.common.data.parts.MovementPart;
 import dk.grp1.tanks.common.events.ShootingEvent;
+import dk.grp1.tanks.common.data.parts.PositionPart;
 import dk.grp1.tanks.common.services.IEntityProcessingService;
 
 /**
@@ -27,6 +28,7 @@ public class PlayerProcessingSystem implements IEntityProcessingService {
             CannonPart cannonPart = player.getPart(CannonPart.class);
             MovementPart movePart =  player.getPart(MovementPart.class);
             ControlPart ctrlPart = player.getPart(ControlPart.class);
+            PositionPart positionPart = player.getPart(PositionPart.class);
             CollisionPart collisionPart = player.getPart(CollisionPart.class);
 
 
@@ -40,8 +42,10 @@ public class PlayerProcessingSystem implements IEntityProcessingService {
             }
             timeSinceLastShot += gameData.getDelta();
 
-            cannonPart.processPart(player, gameData);
             movePart.processPart(player, gameData);
+            cannonPart.setJointX(positionPart.getX());
+            cannonPart.setJointY(positionPart.getY());
+            cannonPart.processPart(player, gameData);
 
         }
     }

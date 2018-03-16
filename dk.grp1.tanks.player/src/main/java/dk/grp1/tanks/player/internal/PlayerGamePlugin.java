@@ -23,7 +23,7 @@ public class PlayerGamePlugin implements IGamePluginService {
         float centreX = gameData.getDisplayWidth()/2;
         float centreY = gameData.getDisplayHeight()/2;
         PositionPart positionPart = new PositionPart(centreX,centreY, 0);
-        float cannonDirection = 3.1415f/4;
+        float cannonDirection = 3.1415f/2;
         float cannonWidth = playerRadius/2;
         float cannonLength = playerRadius*2;
         player.add(new CirclePart(centreX, centreY, playerRadius));
