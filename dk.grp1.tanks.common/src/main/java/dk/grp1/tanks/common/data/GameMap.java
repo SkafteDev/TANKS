@@ -46,4 +46,20 @@ public class GameMap {
     public void setVertices(List<Vector2D> vertices) {
         this.vertices = vertices;
     }
+
+    public Vector2D getNormalVector(float xCoordinate){
+        Vector2D closestVector;
+        Vector2D secondClosestVector;
+        for (Vector2D vector2D : getVertices()) {
+
+
+        }
+
+        //Find the two nearest vertices
+
+        //Find the vector between the two points
+
+        //return the normal vector
+        return null;
+    }
 }
