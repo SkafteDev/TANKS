@@ -28,7 +28,6 @@ public class PlayerProcessingSystem implements IEntityProcessingService {
             PositionPart positionPart = player.getPart(PositionPart.class);
             CollisionPart collisionPart = player.getPart(CollisionPart.class);
             PhysicsPart physicsPart = player.getPart(PhysicsPart.class);
-            PositionPart positionPart = player.getPart(PositionPart.class);
 
 
             ctrlPart.setLeft(gameData.getKeys().isDown(GameKeys.LEFT));

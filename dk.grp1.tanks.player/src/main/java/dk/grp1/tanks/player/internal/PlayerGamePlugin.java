@@ -20,8 +20,8 @@ public class PlayerGamePlugin implements IGamePluginService {
 
     private Entity createPlayer(GameData gameData) {
         Player player = new Player();
-        float centreX = gameData.getDisplayWidth()/2;
-        float centreY = gameData.getDisplayHeight()/2;
+        float centreX = gameData.getGameWidth()/2;
+        float centreY = gameData.getGameHeight()/2;
         PositionPart positionPart = new PositionPart(centreX,centreY, 0);
         float cannonDirection = 3.1415f/2;
         float cannonWidth = playerRadius/2;
