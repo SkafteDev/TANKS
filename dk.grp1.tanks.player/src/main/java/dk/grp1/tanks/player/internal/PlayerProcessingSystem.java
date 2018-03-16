@@ -41,12 +41,12 @@ public class PlayerProcessingSystem implements IEntityProcessingService {
             }
             timeSinceLastShot += gameData.getDelta();
 
-            movePart.processPart(player, gameData);
-            cannonPart.setJointX(positionPart.getX());
-            cannonPart.setJointY(positionPart.getY());
-            ctrlPart.processPart(player,gameData);
             physicsPart.processPart(player,gameData);
+            ctrlPart.processPart(player,gameData);
             collisionPart.processPart(player,gameData);
+            movePart.processPart(player, gameData);
+            cannonPart.setJointY(positionPart.getY());
+            cannonPart.setJointX(positionPart.getX());
             cannonPart.processPart(player, gameData);
 
 
