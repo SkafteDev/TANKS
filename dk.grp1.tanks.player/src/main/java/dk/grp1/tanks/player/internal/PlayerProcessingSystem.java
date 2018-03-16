@@ -32,7 +32,13 @@ public class PlayerProcessingSystem implements IEntityProcessingService {
 
             ctrlPart.setLeft(gameData.getKeys().isDown(GameKeys.LEFT));
             ctrlPart.setRight(gameData.getKeys().isDown(GameKeys.RIGHT));
-            ctrlPart.setRotation(world.getGameMap().getDirectionVector(positionPart.getX(), gameData));
+            ctrlPart.setRotation(world.getGameMap().getDirectionVector(positionPart.getX()));
+
+            if (gameData.getKeys().isDown(GameKeys.UP)){
+                cannonPart.setDirection(cannonPart.getDirection()+0.02f);
+            } else if (gameData.getKeys().isDown(GameKeys.DOWN)){
+                cannonPart.setDirection(cannonPart.getDirection()-0.02f);
+            }
 
             if (gameData.getKeys().isPressed(GameKeys.SPACE) && timeSinceLastShot
                     > 1) {
