@@ -26,7 +26,7 @@ public class GameMapPlugin implements IGamePluginService {
      */
     private GameMap createNewGameMap(GameData gameData) {
         List<Vector2D> vertices = new ArrayList<>();
-        vertices.addAll(generateRandomMap(gameData));
+        vertices.addAll(generateRandomMapFromFunction(gameData));
         GameMap map = new GameMap();
         map.setVertices(vertices);
         return map;
@@ -37,6 +37,19 @@ public class GameMapPlugin implements IGamePluginService {
 
         for (int x = 0; x <= gameData.getGameWidth(); x += gameData.getGameWidth() / 1) {
             vertices.add(new Vector2D(x, (float) (0.8f *(gameData.getGameHeight() / 2))));
+//            vertices.add(new Vector2D(x, (float) (Math.random() * (gameData.getDisplayHeight() / 2))));
+
+        }
+        vertices.add(new Vector2D(gameData.getGameWidth(), 0));
+        vertices.add(new Vector2D(0, 0));
+        return vertices;
+    }
+
+    private Collection<? extends Vector2D> generateRandomMapFromFunction(GameData gameData) {
+        List<Vector2D> vertices = new ArrayList<>();
+
+        for (float x = 0; x <= gameData.getGameWidth(); x += gameData.getGameWidth() / 256) {
+            vertices.add(new Vector2D(x,(gameData.getGameHeight()*0.5f)*(float)Math.sin(((double)x)/128)));
 //            vertices.add(new Vector2D(x, (float) (Math.random() * (gameData.getDisplayHeight() / 2))));
 
         }
