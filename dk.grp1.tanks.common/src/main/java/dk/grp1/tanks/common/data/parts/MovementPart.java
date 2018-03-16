@@ -57,6 +57,8 @@ public class MovementPart implements IEntityPart {
             setVelocity(getVelocity().getX(), 0);
             // Decelerate
             decelerate(deceleration, dt);
+
+            //collisionPart.setHitGameMap(false);
         }
 
 

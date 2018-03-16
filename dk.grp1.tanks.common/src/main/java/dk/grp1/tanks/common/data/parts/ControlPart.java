@@ -2,6 +2,7 @@ package dk.grp1.tanks.common.data.parts;
 
 import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.data.GameData;
+import dk.grp1.tanks.common.data.GameMap;
 import dk.grp1.tanks.common.utils.Vector2D;
 
 import javax.naming.ldap.Control;
@@ -11,13 +12,14 @@ public class ControlPart implements IEntityPart {
     private boolean left, right;
     private Vector2D controlVector;
     private float acceleration;
+    private Vector2D rotation;
 
 
 
     public ControlPart(float acceleration){
         this.acceleration = acceleration;
-
     }
+
     @Override
     public void processPart(Entity entity, GameData gameData) {
         controlVector = new Vector2D(0,0);
@@ -35,6 +37,10 @@ public class ControlPart implements IEntityPart {
         }
     }
 
+
+    public void setRotation(Vector2D rotation) {
+        this.rotation = rotation;
+    }
 
     public boolean left() {
         return left;
