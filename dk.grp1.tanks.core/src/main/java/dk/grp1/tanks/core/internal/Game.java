@@ -15,15 +15,14 @@ import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.data.parts.CannonPart;
 import dk.grp1.tanks.common.data.parts.CirclePart;
 import dk.grp1.tanks.common.data.parts.PositionPart;
+import dk.grp1.tanks.common.data.parts.TexturePart;
 import dk.grp1.tanks.common.services.IEntityProcessingService;
 import dk.grp1.tanks.common.services.IPostEntityProcessingService;
 import dk.grp1.tanks.common.utils.Vector2D;
-import dk.grp1.tanks.common.services.IGamePluginService;
 import dk.grp1.tanks.core.internal.managers.GameInputProcessor;
-import javafx.geometry.Pos;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class Game implements ApplicationListener {
@@ -32,6 +31,7 @@ public class Game implements ApplicationListener {
     private GameData gameData;
     private ShapeRenderer shapeRenderer;
     private OrthographicCamera camera;
+    private Map<String, Texture> textureMap;
 
 
     //Variables for drawing the game map
@@ -44,7 +44,7 @@ public class Game implements ApplicationListener {
         this.serviceLoader = serviceLoader;
         this.world = new World();
         this.gameData = gameData;
-
+        this.textureMap = new HashMap<>();
     }
 
 
@@ -62,7 +62,7 @@ public class Game implements ApplicationListener {
 
         //camera = new OrthographicCamera(gameData.getDisplayWidth(),gameData.getDisplayHeight());
         //camera = new OrthographicCamera(200,100);
-        camera = new OrthographicCamera(gameData.getGameWidth(),gameData.getGameHeight());
+        camera = new OrthographicCamera(gameData.getGameWidth(), gameData.getGameHeight());
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
         camera.update();
 
@@ -96,15 +96,16 @@ public class Game implements ApplicationListener {
 
 
         draw();
+        //drawTextures();
     }
 
     private void update() {
         for (IEntityProcessingService processingService : serviceLoader.getEntityProcessingServices()) {
             processingService.process(world, gameData);
         }
-        for(IPostEntityProcessingService postEntityProcessingService: serviceLoader.getPostEntityProcessingServices()){
+        for (IPostEntityProcessingService postEntityProcessingService : serviceLoader.getPostEntityProcessingServices()) {
 
-            postEntityProcessingService.postProcess(world,gameData);
+            postEntityProcessingService.postProcess(world, gameData);
         }
     }
 
@@ -127,7 +128,7 @@ public class Game implements ApplicationListener {
     }
 
     private PolygonRegion convertGameMapToPolyRegion(GameMap gameMap) {
-        FloatArray vertices = new FloatArray(gameMap.getVerticesAsFloats(0,gameData.getGameWidth(),256));
+        FloatArray vertices = new FloatArray(gameMap.getVerticesAsFloats(0, gameData.getGameWidth(), 256));
         EarClippingTriangulator triangulator = new EarClippingTriangulator();
         ShortArray triangleIndices = triangulator.computeTriangles(vertices);
         PolygonRegion polygonRegion = new PolygonRegion(textureRegion, vertices.toArray(), triangleIndices.toArray());
@@ -137,9 +138,9 @@ public class Game implements ApplicationListener {
 
     private void draw() {
         renderGameMap();
-        for (Entity entity: world.getEntities()) {
+        for (Entity entity : world.getEntities()) {
             shapeRenderer.setProjectionMatrix(camera.combined);
-            shapeRenderer.setColor(1,1,1,1);
+            shapeRenderer.setColor(1, 1, 1, 1);
 
             CirclePart cp = entity.getPart(CirclePart.class);
             PositionPart pos = entity.getPart(PositionPart.class);
@@ -162,24 +163,46 @@ public class Game implements ApplicationListener {
         }
     }
 
+    private void drawTextures() {
+        SpriteBatch spriteBatch = new SpriteBatch();
+        spriteBatch.begin();
+        spriteBatch.setProjectionMatrix(camera.combined);
+        for (Entity e : world.getEntities()) {
+            TexturePart tp = e.getPart(TexturePart.class);
+            PositionPart pp = e.getPart(PositionPart.class);
+            CirclePart cp = e.getPart(CirclePart.class);
+            if (tp != null && pp != null && cp != null) {
+                Texture texture = textureMap.get(tp.getSrcPath());
 
-    public void pause() {
-
+                if (texture == null) {
+                    texture = new Texture(tp.getSrcPath());
+                    textureMap.put(tp.getSrcPath(), texture);
+                }
+                //Sprite sprite = new Sprite(texture);
+                spriteBatch.draw(texture, pp.getX() - cp.getRadius(), pp.getY() -cp.getRadius(), cp.getRadius() * 2, cp.getRadius() * 2);
+            }
+        }
+        spriteBatch.end();
     }
 
-    public void resume() {
 
+        public void pause () {
+
+        }
+
+        public void resume () {
+
+        }
+
+        public void dispose () {
+
+        }
+
+        public World getWorld () {
+            return world;
+        }
+
+        public GameData getGameData () {
+            return gameData;
+        }
     }
-
-    public void dispose() {
-
-    }
-
-    public World getWorld() {
-        return world;
-    }
-
-    public GameData getGameData() {
-        return gameData;
-    }
-}
