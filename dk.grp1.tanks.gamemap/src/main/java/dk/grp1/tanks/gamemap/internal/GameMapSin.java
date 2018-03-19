@@ -1,6 +1,7 @@
 package dk.grp1.tanks.gamemap.internal;
 
 import dk.grp1.tanks.common.data.IGameMapFunction;
+import dk.grp1.tanks.common.utils.Vector2D;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,5 +58,10 @@ public class GameMapSin implements IGameMapFunction {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public List<Vector2D> intersectionWithCircle(Vector2D centerOfCircle, float radius) {
+        return null;
     }
 }

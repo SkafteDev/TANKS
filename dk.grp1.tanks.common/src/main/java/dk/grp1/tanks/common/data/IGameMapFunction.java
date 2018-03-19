@@ -1,5 +1,7 @@
 package dk.grp1.tanks.common.data;
 
+import dk.grp1.tanks.common.utils.Vector2D;
+
 import java.util.List;
 
 /**
@@ -39,4 +41,12 @@ public interface IGameMapFunction {
      * @return
      */
     boolean isWithin(float x);
+
+    /**
+     * Calculate the intersection points with the given circle
+     * @param centerOfCircle
+     * @param radius
+     * @return
+     */
+    List<Vector2D> intersectionWithCircle(Vector2D centerOfCircle, float radius);
 }

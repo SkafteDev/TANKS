@@ -42,6 +42,11 @@
       <artifactId>osgi_R4_compendium</artifactId>
       <optional>true</optional>
     </dependency>
+    <dependency>
+      <groupId>dk.grp1.tanks</groupId>
+      <artifactId>dk.grp1.tanks.OSGimxparser</artifactId>
+      <version>1.0-SNAPSHOT</version>
+    </dependency>
       <dependency>
         <groupId>dk.grp1.tanks</groupId>
         <artifactId>dk.grp1.tanks.common</artifactId>
