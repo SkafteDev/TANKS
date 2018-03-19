@@ -14,7 +14,7 @@ public class WeaponFactory {
         e.add(new PositionPart(30,30, (float) (Math.PI/4)));
         e.add(new ShapePart());
         e.add(new CirclePart(30,30,1));
-        e.add(new PhysicsPart(30, -90000.82f));
+        e.add(new PhysicsPart(30, -9.82f));
         e.add(new TexturePart("fakePath.png"));
         return e;
     }
@@ -28,11 +28,11 @@ public class WeaponFactory {
         e.add(new PositionPart(cannonCentre.getX(),cannonCentre.getY(), cannonPart.getDirection()));
         Vector2D accelerationVector = cannonPart.getDirectionVector();
         accelerationVector.multiplyWithConstant(shootingEvent.getFirepower());
-        e.add( new MovementPart(accelerationVector, 10000, 10));
+        e.add( new MovementPart(accelerationVector, 10000));
 
         e.add(new ShapePart());
         e.add(new CirclePart(30,30,1));
-        e.add(new PhysicsPart(30, -9.82f));
+        e.add(new PhysicsPart(30, -90.82f));
         e.add(new CollisionPart(true,0));
         e.add(new TexturePart("fakePath.png"));
         return e;
