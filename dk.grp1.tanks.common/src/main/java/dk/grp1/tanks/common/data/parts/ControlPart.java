@@ -2,44 +2,40 @@ package dk.grp1.tanks.common.data.parts;
 
 import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.data.GameData;
-import dk.grp1.tanks.common.data.GameMap;
 import dk.grp1.tanks.common.utils.Vector2D;
-
-import javax.naming.ldap.Control;
 
 public class ControlPart implements IEntityPart {
 
     private boolean left, right;
     private Vector2D controlVector;
-    private float acceleration;
+    private float speed;
     private Vector2D rotation;
 
 
 
-    public ControlPart(float acceleration){
-        this.acceleration = acceleration;
+    public ControlPart(float speed){
+        this.speed = speed;
     }
 
     @Override
     public void processPart(Entity entity, GameData gameData) {
-        controlVector = new Vector2D(0,0);
-        float dt = gameData.getDelta();
+        controlVector = new Vector2D(rotation.getX(),rotation.getY());
         if (right()) {
-            // accelerate right
-            float change = acceleration * dt;
-            controlVector.add(new Vector2D(change, 0));
+            // go right
+            controlVector.multiplyWithConstant(speed);
         }
         if (left()) {
-            // accelerate left
-
-            float change = -1 * acceleration* dt;
-            controlVector.add(new Vector2D(change, 0));
+            // go left
+            controlVector.multiplyWithConstant(-1*speed);
+        }
+        if (!left() && !right()){
+            controlVector = new Vector2D(0,0);
         }
     }
 
 
     public void setRotation(Vector2D rotation) {
-        this.rotation = rotation;
+        this.rotation = rotation.unitVector();
     }
 
     public boolean left() {
@@ -59,24 +55,24 @@ public class ControlPart implements IEntityPart {
     }
 
     /**
-     * Returns the acceleration
+     * Returns the speed
      *
      * @return  the max change in horizontal and vertical velocity in (m/s)/s
      */
-    public float getAcceleration() {
-        return acceleration;
+    public float getSpeed() {
+        return speed;
     }
 
 
 
     /**
-     * Sets the acceleration
+     * Sets the speed
      *
-     * @param acceleration max change in velocity in (m/s)/s
+     * @param speed max change in velocity in (m/s)/s
      *
      */
-    public void setAcceleration(float acceleration) {
-        this.acceleration = acceleration;
+    public void setSpeed(float speed) {
+        this.speed = speed;
     }
 
 
