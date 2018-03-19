@@ -12,19 +12,17 @@ import javax.naming.ldap.Control;
 public class MovementPart implements IEntityPart {
 
     private Vector2D velocity;
-    private float deceleration;
     private float maxSpeed;
 
-    public MovementPart(Vector2D velocity, float maxSpeed, float deceleration) {
+    public MovementPart(Vector2D velocity, float maxSpeed) {
 
         this.velocity = velocity;
         this.maxSpeed = maxSpeed;
-        this.deceleration = deceleration;
     }
 
-    public MovementPart(float maxSpeed, float deceleration) {
+    public MovementPart(float maxSpeed) {
 
-        this(new Vector2D(0, 0), maxSpeed, deceleration);
+        this(new Vector2D(0, 0), maxSpeed);
     }
 
     /**

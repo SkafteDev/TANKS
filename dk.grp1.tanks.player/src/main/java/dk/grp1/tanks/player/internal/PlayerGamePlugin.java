@@ -34,7 +34,7 @@ public class PlayerGamePlugin implements IGamePluginService {
         player.add(new CannonPart(positionPart.getX(), positionPart.getY(), cannonDirection, cannonWidth, cannonLength));
         player.add(new ShapePart());
         player.add(new CollisionPart(true,0));
-        player.add(new MovementPart(50,10));
+        player.add(new MovementPart(50));
         return player;
     }
 
