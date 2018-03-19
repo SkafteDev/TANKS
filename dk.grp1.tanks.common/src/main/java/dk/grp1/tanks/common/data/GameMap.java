@@ -20,14 +20,26 @@ public class GameMap {
         this.GAMEWIDTH = gameWidth;
     }
 
+    /**
+     * Gets all game map functions
+     * @return A List of game map functions
+     */
     public List<IGameMapFunction> getGameMapFunctions() {
         return gameMapFunctions;
     }
 
+    /**
+     * Sets the list of game map functions
+     * @param gameMapFunctions A list of game map functions
+     */
     public void setGameMapFunctions(List<IGameMapFunction> gameMapFunctions) {
         this.gameMapFunctions = gameMapFunctions;
     }
 
+    /**
+     * Adds a gamemap function to the map
+     * @param gameMapFunction A game map function
+     */
     public void addGameMapFunction(IGameMapFunction gameMapFunction) {
         this.gameMapFunctions.add(gameMapFunction);
     }
@@ -74,6 +86,11 @@ public class GameMap {
         return floatVertices;
     }
 
+    /**
+     * Gets the direction at the given x coordinate, as a vector
+     * @param xCoordinate
+     * @return a unit vector of the direction
+     */
     public Vector2D getDirectionVector(float xCoordinate) {
         float y = getHeight(xCoordinate);
         float y2 = getHeight(xCoordinate + 0.1f);
@@ -81,6 +98,11 @@ public class GameMap {
         return vector.unitVector();
     }
 
+    /**
+     * Gets the height of the map at the given xcoordinate
+     * @param x
+     * @return The height of the game map, or -1 if outside of the game map
+     */
     public float getHeight(float x) {
         for (IGameMapFunction gameMapFunction : gameMapFunctions) {
             if(gameMapFunction.isWithin(x)){
