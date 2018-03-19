@@ -33,6 +33,7 @@ public class WeaponFactory {
         e.add(new PhysicsPart(30, -9.82f));
         e.add(new CollisionPart(true,0));
         e.add(new TexturePart("fakePath.png"));
+        e.add(new DamagePart(20,1));
         return e;
     }
 }
