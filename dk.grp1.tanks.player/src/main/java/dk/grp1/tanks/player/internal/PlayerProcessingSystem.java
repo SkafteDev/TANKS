@@ -15,6 +15,8 @@ import dk.grp1.tanks.common.services.IEntityProcessingService;
 public class PlayerProcessingSystem implements IEntityProcessingService {
 
     private float timeSinceLastShot;
+    float firepower = 0;
+    private boolean isReadyToShoot = false;
 
     @Override
     public void process(World world, GameData gameData) {
@@ -23,7 +25,7 @@ public class PlayerProcessingSystem implements IEntityProcessingService {
                 ) {
 
             CannonPart cannonPart = player.getPart(CannonPart.class);
-            MovementPart movePart =  player.getPart(MovementPart.class);
+            MovementPart movePart = player.getPart(MovementPart.class);
             ControlPart ctrlPart = player.getPart(ControlPart.class);
             PositionPart positionPart = player.getPart(PositionPart.class);
             CollisionPart collisionPart = player.getPart(CollisionPart.class);
@@ -34,25 +36,36 @@ public class PlayerProcessingSystem implements IEntityProcessingService {
             ctrlPart.setRight(gameData.getKeys().isDown(GameKeys.RIGHT));
             ctrlPart.setRotation(world.getGameMap().getDirectionVector(positionPart.getX()));
 
+            //Cannon movement
             if (gameData.getKeys().isDown(GameKeys.UP)){
                 cannonPart.setDirection(cannonPart.getDirection()+0.02f);
             } else if (gameData.getKeys().isDown(GameKeys.DOWN)){
                 cannonPart.setDirection(cannonPart.getDirection()-0.02f);
             }
 
-            if (gameData.getKeys().isPressed(GameKeys.SPACE) && timeSinceLastShot
-                    > 1) {
-                gameData.addEvent(new ShootingEvent(player));
-                timeSinceLastShot = 0;
+            //Cannon fire cooldown
+            if (gameData.getKeys().isDown(GameKeys.SPACE)
+                    //&& timeSinceLastShot> 1
+            ) {
+                firepower = cannonPart.calculateFirepower(gameData);
+                //timeSinceLastShot = 0;
+                isReadyToShoot = true;
             }
-            timeSinceLastShot += gameData.getDelta();
 
+            if (isReadyToShoot && !gameData.getKeys().isDown(GameKeys.SPACE)) {
+                gameData.addEvent(new ShootingEvent(player, firepower));
+                cannonPart.setFirepower(0);
+                //timeSinceLastShot += gameData.getDelta();
+                isReadyToShoot = false;
+            }
+
+
+            physicsPart.processPart(player, gameData);
+            ctrlPart.processPart(player, gameData);
+            collisionPart.processPart(player, gameData);
             movePart.processPart(player, gameData);
-            cannonPart.setJointX(positionPart.getX());
             cannonPart.setJointY(positionPart.getY());
-            ctrlPart.processPart(player,gameData);
-            physicsPart.processPart(player,gameData);
-            collisionPart.processPart(player,gameData);
+            cannonPart.setJointX(positionPart.getX());
             cannonPart.processPart(player, gameData);
 
 

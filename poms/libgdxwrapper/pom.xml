@@ -34,7 +34,7 @@
             <Import-Package>!com.apple.eio,!com.sun.*,!org.objectweb.*,*</Import-Package>
             <Embed-Dependency>*</Embed-Dependency>
             <Embed-Transitive>true</Embed-Transitive>
-            <_include>-osgi.bnd</_include>
+            <_include>osgi.bnd</_include>
           </instructions>
         </configuration>
       </plugin>
