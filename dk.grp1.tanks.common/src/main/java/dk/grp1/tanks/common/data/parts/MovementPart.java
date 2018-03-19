@@ -53,6 +53,8 @@ public class MovementPart implements IEntityPart {
             if (controls != null) {
                 // set velocity the amount specified by the controlpart
                 setVelocity(controls.getControlVector());
+            } else {
+                setVelocity(getVelocity().getX(),0);
             }
 
 
