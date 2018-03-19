@@ -17,9 +17,7 @@ public class CollisionPart implements IEntityPart {
     private float timeSinceLastCollision;
     private float minTimeBetweenCollision;
 
-
-    private Vector2D collisionVector;
-
+    
     /**
      * Creates a collision part for an entity
      * @param canCollide
@@ -34,16 +32,6 @@ public class CollisionPart implements IEntityPart {
     }
 
     public void processPart(Entity entity, GameData gameData) {
-        if(isHitGameMap) {
-            PhysicsPart phys = entity.getPart(PhysicsPart.class);
-            float grav = phys.getGravity();
-            this.collisionVector = new Vector2D(0, -1 * grav * gameData.getDelta());
-
-        }else {
-            this.collisionVector = new Vector2D(0, 0);
-
-        }
-
     }
 
 
@@ -89,8 +77,5 @@ public class CollisionPart implements IEntityPart {
 
 
 
-    public Vector2D getCollisionVector() {
-        return collisionVector;
-    }
 
 }
