@@ -3,7 +3,13 @@ package dk.grp1.tanks.common.events;
 import dk.grp1.tanks.common.data.Entity;
 
 public class ShootingEvent extends Event {
-    public ShootingEvent(Entity source) {
+    private float firepower;
+    public ShootingEvent(Entity source, float firepower) {
         super(source);
+        this.firepower = firepower;
+    }
+
+    public float getFirepower(){
+        return this.firepower;
     }
 }
