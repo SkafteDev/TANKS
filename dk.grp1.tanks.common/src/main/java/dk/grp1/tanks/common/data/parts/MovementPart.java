@@ -41,7 +41,7 @@ public class MovementPart implements IEntityPart {
 
         // update velocity with accel and grav
         if (physicsPart != null) {
-            change.add(physicsPart.getGravityVector());
+            addVelocity(physicsPart.getGravityVector());
         }
 
 
@@ -50,9 +50,10 @@ public class MovementPart implements IEntityPart {
             ControlPart controls = entity.getPart(ControlPart.class);
             if (controls != null) {
                 // set acceleration
-                change.add(controls.getControlVector());
+                //change.add(controls.getControlVector());
+                setVelocity(controls.getControlVector());
             }
-            change.add(collisionPart.getCollisionVector());
+            //change.add(collisionPart.getCollisionVector());
 
             //setVelocity(getVelocity().getX(), 0);
             // Decelerate
@@ -63,7 +64,7 @@ public class MovementPart implements IEntityPart {
 
 
 
-        addVelocity(change);
+        //addVelocity(change);
 
 
 
