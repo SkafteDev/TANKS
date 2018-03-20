@@ -18,7 +18,9 @@ public class OutOfBoundsProcessingSystem implements IPostEntityProcessingService
         for (Entity entity: world.getEntities()) {
             PositionPart positionPart = entity.getPart(PositionPart.class);
 
-            if (positionPart.getX() < 0 || positionPart.getX() > gameData.getGameWidth()){
+            if (positionPart.getY() > gameData.getGameHeight() * 2
+                    || positionPart.getX() < 0
+                    || positionPart.getX() > gameData.getGameWidth()){
                 entitiesToRemove.add(entity);
             }
         }
