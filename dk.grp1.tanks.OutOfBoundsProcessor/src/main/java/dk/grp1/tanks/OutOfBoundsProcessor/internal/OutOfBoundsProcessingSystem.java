@@ -19,14 +19,12 @@ public class OutOfBoundsProcessingSystem implements IPostEntityProcessingService
             PositionPart positionPart = entity.getPart(PositionPart.class);
 
             if (positionPart.getX() < 0 || positionPart.getX() > gameData.getGameWidth()){
-                System.out.println("REMOVING ENTITY: " + entity.getID());
                 entitiesToRemove.add(entity);
             }
         }
 
         //Remove the marked entities
         for (Entity entity: entitiesToRemove) {
-            System.out.println("REMOVED ENTITY: " + entity.getID());
             world.removeEntity(entity.getID());
         }
 

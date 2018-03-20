@@ -79,7 +79,7 @@ public class CannonPart implements IEntityPart{
         if (1 < firepower/maxFirepower) { //percentage of max firepower
             firepower = maxFirepower;
         }
-        System.out.println(firepower);
+
         return this.firepower;
     }
 
