@@ -35,6 +35,7 @@ public class EnemyGamePlugin implements IGamePluginService {
         enemy.add(new ShapePart());
         enemy.add(new CollisionPart(true,0));
         enemy.add(new MovementPart(50));
+        enemy.add(new TexturePart("enemy.png"));
         return enemy;
     }
 
