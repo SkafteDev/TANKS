@@ -1,0 +1,37 @@
+package dk.grp1.tanks.OutOfBoundsProcessor.internal;
+
+import dk.grp1.tanks.common.data.Entity;
+import dk.grp1.tanks.common.data.GameData;
+import dk.grp1.tanks.common.data.World;
+import dk.grp1.tanks.common.data.parts.PositionPart;
+import dk.grp1.tanks.common.services.IPostEntityProcessingService;
+
+import java.util.HashSet;
+
+public class OutOfBoundsProcessingSystem implements IPostEntityProcessingService {
+
+    private HashSet<Entity> entitiesToRemove = new HashSet<>();
+    @Override
+    public void postProcess(World world, GameData gameData) {
+
+        //Mark the entities to be removed
+        for (Entity entity: world.getEntities()) {
+            PositionPart positionPart = entity.getPart(PositionPart.class);
+
+            if (positionPart.getX() < 0 || positionPart.getX() > gameData.getGameWidth()){
+                System.out.println("REMOVING ENTITY: " + entity.getID());
+                entitiesToRemove.add(entity);
+            }
+        }
+
+        //Remove the marked entities
+        for (Entity entity: entitiesToRemove) {
+            System.out.println("REMOVED ENTITY: " + entity.getID());
+            world.removeEntity(entity.getID());
+        }
+
+        //Clear the list of removed entities
+        entitiesToRemove.clear();
+
+    }
+}
