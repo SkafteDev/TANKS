@@ -12,6 +12,8 @@ import java.util.List;
 public class GameMapLinear implements IGameMapFunction {
 
     private Function linearFunction;
+    private float a;
+    private float b;
     private float startX;
     private float endX;
 
@@ -23,18 +25,21 @@ public class GameMapLinear implements IGameMapFunction {
      * @param endX
      */
     public GameMapLinear(float a, float b, float startX, float endX) {
-        this.linearFunction = new Function("f(x) = "+a+"*x+"+b);
 
+        this.a = a;
+        this.b = b;
         this.startX = startX;
         this.endX = endX;
     }
 
     public GameMapLinear(float a, float startX, float endX, IGameMapFunction sucessorFn) {
         float y = sucessorFn.getYValue(sucessorFn.getEndX());
+
         //Calculate b value
         float b = y - a * startX;
-        //this.linearFunction = new Function("f(x) = "+a+"*x+"+b);
-        this.linearFunction = new Function("f(x)=2*x+5");
+
+        this.a = a;
+        this.b = b;
         this.startX = startX;
         this.endX = endX;
     }
@@ -46,13 +51,7 @@ public class GameMapLinear implements IGameMapFunction {
 
     @Override
     public float getYValue(float xValue) {
-        double x = (double) xValue;
-        System.out.println("X casted to double: " +x);
-        System.out.println(linearFunction.checkSyntax());
-       // Expression e = new Expression()
-        double y = linearFunction.calculate(xValue);
-        System.out.println("Linear Value for y: "+y);
-        return (float)y;
+        return a * xValue + b;
     }
 
     @Override
@@ -78,7 +77,13 @@ public class GameMapLinear implements IGameMapFunction {
     }
 
     @Override
-    public List<Vector2D> intersectionWithCircle(Vector2D centerOfCircle, float radius) {
-        return null;
+    public void setEndX(float value) {
+        this.endX = value;
     }
+
+    @Override
+    public void setStartX(float value) {
+        this.startX = value;
+    }
+
 }

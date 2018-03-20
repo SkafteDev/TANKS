@@ -1,31 +1,23 @@
 package dk.grp1.tanks.gamemap.internal;
 
 import dk.grp1.tanks.common.data.IGameMapFunction;
-import dk.grp1.tanks.common.utils.Vector2D;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class GameMapSin implements IGameMapFunction {
-    private double amplitude;
-    private double angularFrequency;
-    private float phaseShift;
-    private float shiftConstant;
-
+public class GameMapNegativeHalfCircle implements IGameMapFunction {
     private float startX;
     private float endX;
+    private float centerX;
+    private float centerY;
+    private float radius;
 
-    public GameMapSin(float startX, float endX) {
-        this(1,1,0,0,startX,endX);
-    }
-
-    public GameMapSin(double amplitude, double angularFrequency, float phaseShift, float shiftConstant, float startX, float endX) {
-        this.amplitude = amplitude;
-        this.angularFrequency = angularFrequency;
-        this.phaseShift = phaseShift;
-        this.shiftConstant = shiftConstant;
+    public GameMapNegativeHalfCircle(float startX, float endX, float centerX, float centerY, float radius) {
         this.startX = startX;
         this.endX = endX;
+        this.centerX = centerX;
+        this.centerY = centerY;
+        this.radius = radius;
     }
 
     @Override
@@ -35,7 +27,7 @@ public class GameMapSin implements IGameMapFunction {
 
     @Override
     public float getYValue(float xValue) {
-        return (float) (amplitude * Math.sin((angularFrequency * xValue + phaseShift)) + shiftConstant);
+        return (float) (centerY - Math.sqrt(-(Math.pow(centerX,2))+ 2 * xValue * centerX + Math.pow(radius,2) - Math.pow(xValue,2)));
     }
 
     @Override
@@ -69,5 +61,6 @@ public class GameMapSin implements IGameMapFunction {
     public void setStartX(float value) {
         this.startX = value;
     }
+
 
 }

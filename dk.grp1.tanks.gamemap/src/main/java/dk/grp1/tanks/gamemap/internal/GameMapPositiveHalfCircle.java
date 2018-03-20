@@ -6,16 +6,20 @@ import dk.grp1.tanks.common.utils.Vector2D;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GameMapHalfCircle implements IGameMapFunction {
+public class GameMapPositiveHalfCircle implements IGameMapFunction {
     private float startX;
     private float endX;
     private float centerX;
     private float centerY;
     private float radius;
 
-
-
-
+    public GameMapPositiveHalfCircle(float startX, float endX, float centerX, float centerY, float radius) {
+        this.startX = startX;
+        this.endX = endX;
+        this.centerX = centerX;
+        this.centerY = centerY;
+        this.radius = radius;
+    }
 
     @Override
     public float getStartX() {
@@ -24,7 +28,7 @@ public class GameMapHalfCircle implements IGameMapFunction {
 
     @Override
     public float getYValue(float xValue) {
-        return 0;
+        return (float) (centerY + Math.sqrt(-(Math.pow(centerX,2))+ 2 * xValue * centerX + Math.pow(radius,2) - Math.pow(xValue,2)));
     }
 
     @Override
@@ -50,7 +54,14 @@ public class GameMapHalfCircle implements IGameMapFunction {
     }
 
     @Override
-    public List<Vector2D> intersectionWithCircle(Vector2D centerOfCircle, float radius) {
-        return null;
+    public void setEndX(float value) {
+        this.endX = value;
     }
+
+    @Override
+    public void setStartX(float value) {
+        this.startX = value;
+    }
+
+
 }

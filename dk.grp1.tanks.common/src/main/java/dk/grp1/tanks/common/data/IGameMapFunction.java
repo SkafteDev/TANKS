@@ -42,11 +42,8 @@ public interface IGameMapFunction {
      */
     boolean isWithin(float x);
 
-    /**
-     * Calculate the intersection points with the given circle
-     * @param centerOfCircle
-     * @param radius
-     * @return
-     */
-    List<Vector2D> intersectionWithCircle(Vector2D centerOfCircle, float radius);
+    void setEndX(float value);
+
+    void setStartX(float value);
+
 }
