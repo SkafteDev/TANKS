@@ -21,7 +21,7 @@ public final class OutOfBoundsActivator
     {
         System.out.println( "STARTING dk.grp1.tanks.OutOfBoundsProcessor" );
 
-        bc.registerService(IPostEntityProcessingService.class.getName(), new OutOfBoundsProcessingSystem() ,null);
+        bc.registerService(IPostEntityProcessingService.class.getName(), new OutOfBoundsProcessingSystem(), null);
 
     }
 

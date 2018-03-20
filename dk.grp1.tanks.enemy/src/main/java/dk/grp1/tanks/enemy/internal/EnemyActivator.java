@@ -3,6 +3,8 @@ package dk.grp1.tanks.enemy.internal;
 import java.util.Dictionary;
 import java.util.Properties;
 
+import dk.grp1.tanks.common.services.IEntityProcessingService;
+import dk.grp1.tanks.common.services.IGamePluginService;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
@@ -20,6 +22,8 @@ public final class EnemyActivator
         throws Exception
     {
         System.out.println( "STARTING dk.grp1.tanks.enemy" );
+        bc.registerService(IGamePluginService.class.getName(), new EnemyGamePlugin(), null);
+        bc.registerService(IEntityProcessingService.class.getName(), new EnemyProcessingSystem(), null);
 
     }
 
