@@ -102,7 +102,7 @@ public class Game implements ApplicationListener {
     }
 
     private void drawBackGround() {
-        String path = "background.png";
+        String path = "lone.png";
 
         if (!textureMap.containsKey(path)) {
 
