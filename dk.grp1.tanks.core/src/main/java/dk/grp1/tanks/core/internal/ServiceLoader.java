@@ -2,6 +2,7 @@ package dk.grp1.tanks.core.internal;
 
 import dk.grp1.tanks.common.services.IEntityProcessingService;
 import dk.grp1.tanks.common.services.IGamePluginService;
+import dk.grp1.tanks.common.services.INonEntityProcessingService;
 import dk.grp1.tanks.common.services.IPostEntityProcessingService;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
@@ -64,6 +65,22 @@ public class ServiceLoader  {
         if(serviceReferences != null) {
             for (ServiceReference s : serviceReferences) {
                 processingServices.add((IPostEntityProcessingService) bundleContext.getService(s));
+            }
+        }
+        return processingServices;
+    }
+
+    public List<INonEntityProcessingService> getNonEntityProcessingServices() {
+        ArrayList<INonEntityProcessingService> processingServices = new ArrayList<>();
+        ServiceReference[] serviceReferences = new ServiceReference[5];
+        try {
+            serviceReferences = bundleContext.getAllServiceReferences(INonEntityProcessingService.class.getName(),null);
+        } catch (InvalidSyntaxException e) {
+            e.printStackTrace();
+        }
+        if(serviceReferences != null) {
+            for (ServiceReference s : serviceReferences) {
+                processingServices.add((INonEntityProcessingService) bundleContext.getService(s));
             }
         }
         return processingServices;

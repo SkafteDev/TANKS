@@ -1,6 +1,7 @@
 package dk.grp1.tanks.common.data;
 
 import dk.grp1.tanks.common.utils.Vector2D;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +42,7 @@ public class GameMap {
      * @param gameMapFunction A game map function
      */
     public void addGameMapFunction(IGameMapFunction gameMapFunction) {
+        //TODO Add the game map based on range
         this.gameMapFunctions.add(gameMapFunction);
     }
 
@@ -111,4 +113,6 @@ public class GameMap {
         }
         return -1f;
     }
+
+
 }

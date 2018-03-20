@@ -16,6 +16,7 @@ import dk.grp1.tanks.common.data.parts.CannonPart;
 import dk.grp1.tanks.common.data.parts.CirclePart;
 import dk.grp1.tanks.common.data.parts.PositionPart;
 import dk.grp1.tanks.common.services.IEntityProcessingService;
+import dk.grp1.tanks.common.services.INonEntityProcessingService;
 import dk.grp1.tanks.common.services.IPostEntityProcessingService;
 import dk.grp1.tanks.common.utils.Vector2D;
 import dk.grp1.tanks.common.services.IGamePluginService;
@@ -102,6 +103,9 @@ public class Game implements ApplicationListener {
         for (IEntityProcessingService processingService : serviceLoader.getEntityProcessingServices()) {
             processingService.process(world, gameData);
         }
+        for (INonEntityProcessingService iNonEntityProcessingService : serviceLoader.getNonEntityProcessingServices()) {
+            iNonEntityProcessingService.process(world,gameData);
+        }
         for(IPostEntityProcessingService postEntityProcessingService: serviceLoader.getPostEntityProcessingServices()){
 
             postEntityProcessingService.postProcess(world,gameData);
@@ -127,7 +131,7 @@ public class Game implements ApplicationListener {
     }
 
     private PolygonRegion convertGameMapToPolyRegion(GameMap gameMap) {
-        FloatArray vertices = new FloatArray(gameMap.getVerticesAsFloats(0,gameData.getGameWidth(),256));
+        FloatArray vertices = new FloatArray(gameMap.getVerticesAsFloats(0,gameData.getGameWidth(),1024));
         EarClippingTriangulator triangulator = new EarClippingTriangulator();
         ShortArray triangleIndices = triangulator.computeTriangles(vertices);
         PolygonRegion polygonRegion = new PolygonRegion(textureRegion, vertices.toArray(), triangleIndices.toArray());
