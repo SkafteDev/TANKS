@@ -14,6 +14,7 @@ import java.util.List;
 public class GameMapProcessing implements INonEntityProcessingService {
     @Override
     public void process(World world, GameData gameData) {
+<<<<<<< Updated upstream
 
 
     }
@@ -87,6 +88,9 @@ public class GameMapProcessing implements INonEntityProcessingService {
         }
 
         return intersectionPoints;
+=======
+        
+>>>>>>> Stashed changes
     }
 
 
