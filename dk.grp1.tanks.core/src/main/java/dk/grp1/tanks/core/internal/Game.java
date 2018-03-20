@@ -21,6 +21,8 @@ import dk.grp1.tanks.common.services.IPostEntityProcessingService;
 import dk.grp1.tanks.common.utils.Vector2D;
 import dk.grp1.tanks.core.internal.managers.GameInputProcessor;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -96,7 +98,7 @@ public class Game implements ApplicationListener {
 
 
         draw();
-        //drawTextures();
+        drawTextures();
     }
 
     private void update() {
@@ -175,8 +177,21 @@ public class Game implements ApplicationListener {
                 Texture texture = textureMap.get(tp.getSrcPath());
 
                 if (texture == null) {
-                    texture = new Texture(tp.getSrcPath());
-                    textureMap.put(tp.getSrcPath(), texture);
+                    InputStream is = e.getClass().getClassLoader().getResourceAsStream(
+                            tp.getSrcPath()
+                    );
+                    try {
+                        Gdx2DPixmap gmp = new Gdx2DPixmap(is,Gdx2DPixmap.GDX2D_FORMAT_RGBA8888);
+                        Pixmap pix = new Pixmap(gmp);
+                        texture = new Texture(pix);
+                        textureMap.put(tp.getSrcPath(), texture);
+                        pix.dispose();
+                        gmp.dispose();
+
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+
                 }
                 //Sprite sprite = new Sprite(texture);
                 spriteBatch.draw(texture, pp.getX() - cp.getRadius(), pp.getY() -cp.getRadius(), cp.getRadius() * 2, cp.getRadius() * 2);
