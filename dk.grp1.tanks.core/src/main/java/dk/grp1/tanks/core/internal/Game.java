@@ -186,7 +186,6 @@ public class Game implements ApplicationListener {
                         texture = new Texture(pix);
                         textureMap.put(tp.getSrcPath(), texture);
                         pix.dispose();
-                        gmp.dispose();
 
                     } catch (IOException e1) {
                         e1.printStackTrace();
