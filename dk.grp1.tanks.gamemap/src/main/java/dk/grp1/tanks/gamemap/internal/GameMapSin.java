@@ -70,4 +70,12 @@ public class GameMapSin implements IGameMapFunction {
         this.startX = value;
     }
 
+    @Override
+    public List<IGameMapFunction> splitInTwoWithNewRanges(float rangeOneStartX, float rangeOneEndX, float rangeTwoStartX, float rangeTwoEndX) {
+        List<IGameMapFunction> splitGameMapFunctions = new ArrayList<>();
+        splitGameMapFunctions.add(new GameMapSin(this.amplitude,this.angularFrequency,this.phaseShift,this.shiftConstant,rangeOneStartX,rangeOneEndX));
+        splitGameMapFunctions.add(new GameMapSin(this.amplitude,this.angularFrequency,this.phaseShift,this.shiftConstant,rangeTwoStartX,rangeTwoEndX));
+        return splitGameMapFunctions;
+    }
+
 }

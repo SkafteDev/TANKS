@@ -63,5 +63,14 @@ public class GameMapPositiveHalfCircle implements IGameMapFunction {
         this.startX = value;
     }
 
+    @Override
+    public List<IGameMapFunction> splitInTwoWithNewRanges(float rangeOneStartX, float rangeOneEndX, float rangeTwoStartX, float rangeTwoEndX) {
+        List<IGameMapFunction> splitGameMapFunctions = new ArrayList<>();
+        splitGameMapFunctions.add(new GameMapPositiveHalfCircle(rangeOneStartX,rangeOneEndX,this.centerX,this.centerY,this.radius));
+        splitGameMapFunctions.add(new GameMapPositiveHalfCircle(rangeTwoStartX,rangeTwoEndX,this.centerX,this.centerY,this.radius));
+        return splitGameMapFunctions;
+
+    }
+
 
 }

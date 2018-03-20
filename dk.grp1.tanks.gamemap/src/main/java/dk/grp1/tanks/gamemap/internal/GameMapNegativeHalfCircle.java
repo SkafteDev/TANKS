@@ -62,5 +62,13 @@ public class GameMapNegativeHalfCircle implements IGameMapFunction {
         this.startX = value;
     }
 
+    @Override
+    public List<IGameMapFunction> splitInTwoWithNewRanges(float rangeOneStartX, float rangeOneEndX, float rangeTwoStartX, float rangeTwoEndX) {
+        List<IGameMapFunction> splitGameMapFunctions = new ArrayList<>();
+        splitGameMapFunctions.add(new GameMapNegativeHalfCircle(rangeOneStartX,rangeOneEndX,this.centerX,this.centerY,this.radius));
+        splitGameMapFunctions.add(new GameMapNegativeHalfCircle(rangeTwoStartX,rangeTwoEndX,this.centerX,this.centerY,this.radius));
+        return splitGameMapFunctions;
+    }
+
 
 }

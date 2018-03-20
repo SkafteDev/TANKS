@@ -86,4 +86,12 @@ public class GameMapLinear implements IGameMapFunction {
         this.startX = value;
     }
 
+    @Override
+    public List<IGameMapFunction> splitInTwoWithNewRanges(float rangeOneStartX, float rangeOneEndX, float rangeTwoStartX, float rangeTwoEndX) {
+        List<IGameMapFunction> splitGameMapFunctions = new ArrayList<>();
+        splitGameMapFunctions.add(new GameMapLinear(this.a,this.b,rangeOneStartX,rangeOneEndX));
+        splitGameMapFunctions.add(new GameMapLinear(this.a,this.b,rangeTwoStartX,rangeTwoEndX));
+        return splitGameMapFunctions;
+    }
+
 }

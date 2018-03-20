@@ -33,6 +33,7 @@ public class Game implements ApplicationListener {
     private GameData gameData;
     private ShapeRenderer shapeRenderer;
     private OrthographicCamera camera;
+    private final boolean DEBUG = true;
 
 
     //Variables for drawing the game map
@@ -121,13 +122,25 @@ public class Game implements ApplicationListener {
             return;
         }
 
-
-        gameMapPolySprite = new PolygonSprite(convertGameMapToPolyRegion(gameMap));
-        polySpriteBatch.begin();
-        polySpriteBatch.setProjectionMatrix(camera.combined);
-        gameMapPolySprite.draw(polySpriteBatch);
-        polySpriteBatch.end();
-
+        if(!DEBUG) {
+            gameMapPolySprite = new PolygonSprite(convertGameMapToPolyRegion(gameMap));
+            polySpriteBatch.begin();
+            polySpriteBatch.setProjectionMatrix(camera.combined);
+            gameMapPolySprite.draw(polySpriteBatch);
+            polySpriteBatch.end();
+        } else {
+            shapeRenderer.setProjectionMatrix(camera.combined);
+            shapeRenderer.setColor(Color.RED);
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+            List<Vector2D> vertices = gameMap.getVertices(0, gameData.getGameWidth(), 1024);
+            for (int i = 0, j = vertices.size() - 1;
+                 i < vertices.size(); j = i++) {
+                Vector2D vector1 = vertices.get(i);
+                Vector2D vector2 = vertices.get(j);
+                shapeRenderer.line(vector1.getX(),vector1.getY(),vector2.getX(),vector2.getY());
+            }
+            shapeRenderer.end();
+        }
     }
 
     private PolygonRegion convertGameMapToPolyRegion(GameMap gameMap) {
