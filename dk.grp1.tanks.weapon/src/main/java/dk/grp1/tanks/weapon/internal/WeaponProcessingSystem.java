@@ -36,6 +36,7 @@ public class WeaponProcessingSystem implements IEntityProcessingService {
                 if(collisionPart.isHitGameMap() && positionPart != null && damagePart != null){
                     Event explosionEvent = new ExplosionEvent(bullet,new Vector2D(positionPart.getX(),positionPart.getY()),damagePart.getExplosionRadius());
                     gameData.addEvent(explosionEvent);
+                    world.removeEntity(bullet);
                 }
             }
 
