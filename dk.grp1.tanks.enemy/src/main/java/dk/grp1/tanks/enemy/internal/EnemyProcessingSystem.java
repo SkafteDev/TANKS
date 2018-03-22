@@ -75,7 +75,6 @@ public class EnemyProcessingSystem implements IEntityProcessingService {
                 } else {
                     cannonPart.setDirection(3 * 3.1415f / 4);
                 }
-                System.out.println(cannonPart.getDirection() + " " + enemyPositionPart.getX() + " " +otherEntityPositionPart.getX());
 
                 //TODO fix me
                 firepower = initialVelocity(cannonPart, otherEntityPositionPart, 90.82f, cannonPart.getDirection());
@@ -89,9 +88,7 @@ public class EnemyProcessingSystem implements IEntityProcessingService {
         float velocity;
         float distanceX = Math.abs(myPosition.getMuzzleFaceCentre().getX() - otherPosition.getX());
         float distanceY = otherPosition.getY() - myPosition.getMuzzleFaceCentre().getY() ;
-        System.out.println("DistX: " +distanceX + " DistY: " + distanceY);
         velocity = (float) (10*gravity*distanceX/Math.sqrt((100*gravity*distanceX-100*gravity*distanceY)));
-        System.out.println("VELOCITY: " + velocity);
         return velocity;
     }
 
