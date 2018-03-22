@@ -6,6 +6,7 @@ import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.data.parts.CirclePart;
 import dk.grp1.tanks.common.data.parts.*;
 import dk.grp1.tanks.common.services.IGamePluginService;
+import javafx.geometry.Pos;
 
 
 public class PlayerGamePlugin implements IGamePluginService {
@@ -21,7 +22,7 @@ public class PlayerGamePlugin implements IGamePluginService {
     private Entity createPlayer(GameData gameData) {
         Player player = new Player();
         float centreX = gameData.getGameWidth()/4f * 3f;
-        float centreY = gameData.getGameHeight();
+        float centreY = 81;
         PositionPart positionPart = new PositionPart(centreX,centreY, 0);
         float cannonDirection = 3.1415f/2;
         float cannonWidth = playerRadius/2;
