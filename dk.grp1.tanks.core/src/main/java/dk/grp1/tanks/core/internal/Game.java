@@ -132,6 +132,8 @@ public class Game implements ApplicationListener {
 
             postEntityProcessingService.postProcess(world, gameData);
         }
+
+        gameData.getKeys().update();
     }
 
     private void renderGameMap() {
