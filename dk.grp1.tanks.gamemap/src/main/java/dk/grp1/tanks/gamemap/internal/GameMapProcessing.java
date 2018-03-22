@@ -46,7 +46,10 @@ public class GameMapProcessing implements INonEntityProcessingService {
         fixFunctionsAroundCircle(world, firstPoint, secondPoint);
         removeFunctionsWithinCircle(world, centerX, radius);
         List<IGameMapFunction> functionsToAdd = generateCirclesToInsert(firstPoint, secondPoint, centerX, centerY, radius);
-        world.getGameMap().getGameMapFunctions().addAll(functionsToAdd);
+        for (IGameMapFunction gameMapFunction : functionsToAdd) {
+            world.getGameMap().addGameMapFunction(gameMapFunction);
+        }
+        
 
     }
 

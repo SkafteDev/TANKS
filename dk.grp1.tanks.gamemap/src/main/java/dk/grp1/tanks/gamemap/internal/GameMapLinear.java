@@ -103,15 +103,15 @@ public class GameMapLinear implements IGameMapFunction {
             return -1;
         }
         if(this.getStartX() < other.getStartX()){
-            return 1;
+            return -1;
         }
         if(this.getStartX() == other.getStartX()){
             if(this.getEndX() < other.getEndX()){
-                return 1;
+                return -1;
             }else if(this.getEndX() == other.getEndX()){
                 return 0;
             }
         }
-        return -1;
+        return 1;
     }
 }
