@@ -47,11 +47,11 @@ public class GameMapLinear implements IGameMapFunction {
     @Override
     public float getYValue(float xValue) {
         double x = (double) xValue;
-        System.out.println("X casted to double: " +x);
-        System.out.println(linearFunction.checkSyntax());
+        //System.out.println("X casted to double: " +x);
+        //System.out.println(linearFunction.checkSyntax());
        // Expression e = new Expression()
         double y = linearFunction.calculate(xValue);
-        System.out.println("Linear Value for y: "+y);
+        //System.out.println("Linear Value for y: "+y);
         return (float)y;
     }
 
