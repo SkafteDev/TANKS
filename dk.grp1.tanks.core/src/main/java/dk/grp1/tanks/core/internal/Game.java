@@ -98,11 +98,10 @@ public class Game implements ApplicationListener {
 
         drawBackGround();
         draw();
-        drawTextures();
     }
 
     private void drawBackGround() {
-        String path = "lone.png";
+        String path = "background.png";
 
         if (!textureMap.containsKey(path)) {
 
@@ -164,6 +163,11 @@ public class Game implements ApplicationListener {
 
     private void draw() {
         renderGameMap();
+        //drawShapes();
+        drawTextures();
+    }
+
+    private void drawShapes(){
         for (Entity entity : world.getEntities()) {
             shapeRenderer.setProjectionMatrix(camera.combined);
             shapeRenderer.setColor(1, 1, 1, 1);
@@ -193,34 +197,63 @@ public class Game implements ApplicationListener {
         SpriteBatch spriteBatch = new SpriteBatch();
         spriteBatch.begin();
         spriteBatch.setProjectionMatrix(camera.combined);
+
+
         for (Entity e : world.getEntities()) {
             TexturePart tp = e.getPart(TexturePart.class);
             PositionPart pp = e.getPart(PositionPart.class);
             CirclePart cp = e.getPart(CirclePart.class);
+
+            CannonPart cannonPart = e.getPart(CannonPart.class);
+            if (cannonPart != null && pp != null && cp != null){
+                TextureRegion textureRegion = new TextureRegion(checkGetTexture(e, cannonPart.getTexturePath()));
+                drawCannon(spriteBatch, textureRegion, cannonPart);
+            }
+
             if (tp != null && pp != null && cp != null) {
-                Texture texture = textureMap.get(tp.getSrcPath());
-
-                if (texture == null) {
-                    InputStream is = e.getClass().getClassLoader().getResourceAsStream(
-                            tp.getSrcPath()
-                    );
-                    try {
-                        Gdx2DPixmap gmp = new Gdx2DPixmap(is, Gdx2DPixmap.GDX2D_FORMAT_RGBA8888);
-                        Pixmap pix = new Pixmap(gmp);
-                        texture = new Texture(pix);
-                        textureMap.put(tp.getSrcPath(), texture);
-                        pix.dispose();
-
-                    } catch (IOException e1) {
-                        e1.printStackTrace();
-                    }
-
-                }
+                Texture texture = checkGetTexture(e, tp.getSrcPath());
                 //Sprite sprite = new Sprite(texture);
                 spriteBatch.draw(texture, pp.getX() - cp.getRadius(), pp.getY() - cp.getRadius(), cp.getRadius() * 2, cp.getRadius() * 2);
             }
+
+
         }
         spriteBatch.end();
+    }
+
+    private void drawCannon(SpriteBatch spriteBatch, TextureRegion textureRegion, CannonPart cannonPart){
+        float x = cannonPart.getVertices()[1].getX();
+        float y = cannonPart.getVertices()[1].getY();
+        float originX = 0; //(cannonPart.getVertices()[0].getX()-cannonPart.getVertices()[1].getX())/2;
+        float originY = 0; //(cannonPart.getVertices()[0].getY()-cannonPart.getVertices()[1].getY())/2;
+        float width = cannonPart.getWidth();
+        float height = cannonPart.getLength();
+        float scaleX = 1; // scale is 100%. 50% is equal to 0.5
+        float scaleY = 1; // scale is 100%
+        float rotation = (float) Math.toDegrees(cannonPart.getDirection()) -90;
+        spriteBatch.draw(textureRegion, x, y, originX, originY, width, height, scaleX, scaleY, rotation);
+    }
+
+    private Texture checkGetTexture(Entity e, String path){
+        Texture texture = textureMap.get(path);
+
+        if (texture == null) {
+            InputStream is = e.getClass().getClassLoader().getResourceAsStream(
+                    path
+            );
+            try {
+                Gdx2DPixmap gmp = new Gdx2DPixmap(is, Gdx2DPixmap.GDX2D_FORMAT_RGBA8888);
+                Pixmap pix = new Pixmap(gmp);
+                texture = new Texture(pix);
+                textureMap.put(path, texture);
+                pix.dispose();
+
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
+
+        return texture;
     }
 
 

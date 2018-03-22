@@ -31,7 +31,7 @@ public class EnemyGamePlugin implements IGamePluginService {
         enemy.add(new ControlPart(200));
         enemy.add(new LifePart());
         enemy.add(positionPart);
-        enemy.add(new CannonPart(positionPart.getX(), positionPart.getY(), cannonDirection, cannonWidth, cannonLength));
+        enemy.add(new CannonPart(positionPart.getX(), positionPart.getY(), cannonDirection, cannonWidth, cannonLength, "enemyCanon.png"));
         enemy.add(new ShapePart());
         enemy.add(new CollisionPart(true,0));
         enemy.add(new MovementPart(50));
