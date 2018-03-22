@@ -6,6 +6,7 @@ import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.data.parts.CirclePart;
 import dk.grp1.tanks.common.data.parts.*;
 import dk.grp1.tanks.common.services.IGamePluginService;
+import javafx.geometry.Pos;
 
 
 public class PlayerGamePlugin implements IGamePluginService {

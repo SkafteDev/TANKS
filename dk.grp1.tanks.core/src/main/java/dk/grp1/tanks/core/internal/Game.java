@@ -96,9 +96,33 @@ public class Game implements ApplicationListener {
 
         update();
 
-
+        drawBackGround();
         draw();
         drawTextures();
+    }
+
+    private void drawBackGround() {
+        String path = "lone.png";
+
+        if (!textureMap.containsKey(path)) {
+
+            InputStream is = this.getClass().getClassLoader().getResourceAsStream(path);
+            try {
+                Gdx2DPixmap gmp = new Gdx2DPixmap(is, Gdx2DPixmap.GDX2D_FORMAT_RGBA8888);
+                Pixmap pix = new Pixmap(gmp);
+                textureMap.put(path, new Texture(pix));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        SpriteBatch spriteBatch = new SpriteBatch();
+        spriteBatch.begin();
+        spriteBatch.setProjectionMatrix(camera.combined);
+        Texture t = textureMap.get(path);
+
+        spriteBatch.draw(t,0,0,gameData.getGameWidth(),gameData.getGameHeight());
+        spriteBatch.end();
     }
 
     private void update() {
@@ -109,6 +133,8 @@ public class Game implements ApplicationListener {
 
             postEntityProcessingService.postProcess(world, gameData);
         }
+
+        gameData.getKeys().update();
     }
 
     private void renderGameMap() {
@@ -181,7 +207,7 @@ public class Game implements ApplicationListener {
                             tp.getSrcPath()
                     );
                     try {
-                        Gdx2DPixmap gmp = new Gdx2DPixmap(is,Gdx2DPixmap.GDX2D_FORMAT_RGBA8888);
+                        Gdx2DPixmap gmp = new Gdx2DPixmap(is, Gdx2DPixmap.GDX2D_FORMAT_RGBA8888);
                         Pixmap pix = new Pixmap(gmp);
                         texture = new Texture(pix);
                         textureMap.put(tp.getSrcPath(), texture);
@@ -193,30 +219,30 @@ public class Game implements ApplicationListener {
 
                 }
                 //Sprite sprite = new Sprite(texture);
-                spriteBatch.draw(texture, pp.getX() - cp.getRadius(), pp.getY() -cp.getRadius(), cp.getRadius() * 2, cp.getRadius() * 2);
+                spriteBatch.draw(texture, pp.getX() - cp.getRadius(), pp.getY() - cp.getRadius(), cp.getRadius() * 2, cp.getRadius() * 2);
             }
         }
         spriteBatch.end();
     }
 
 
-        public void pause () {
+    public void pause() {
 
-        }
-
-        public void resume () {
-
-        }
-
-        public void dispose () {
-
-        }
-
-        public World getWorld () {
-            return world;
-        }
-
-        public GameData getGameData () {
-            return gameData;
-        }
     }
+
+    public void resume() {
+
+    }
+
+    public void dispose() {
+
+    }
+
+    public World getWorld() {
+        return world;
+    }
+
+    public GameData getGameData() {
+        return gameData;
+    }
+}
