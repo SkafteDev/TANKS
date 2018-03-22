@@ -49,11 +49,13 @@ public class EnemyProcessingSystem implements IEntityProcessingService {
             movePart.processPart(enemy, gameData);
             cannonPart.setJointY(positionPart.getY());
             cannonPart.setJointX(positionPart.getX());
-            cannonPart.processPart(enemy, gameData);
 
             if (gameData.getKeys().isPressed(GameKeys.SHIFT)) {
                 aiShoot(gameData, world, cannonPart, enemy);
             }
+
+            cannonPart.processPart(enemy, gameData);
+
 
 
         }
@@ -73,6 +75,7 @@ public class EnemyProcessingSystem implements IEntityProcessingService {
                 } else {
                     cannonPart.setDirection(3 * 3.1415f / 4);
                 }
+                System.out.println(cannonPart.getDirection() + " " + enemyPositionPart.getX() + " " +otherEntityPositionPart.getX());
 
                 //TODO fix me
                 firepower = initialVelocity(cannonPart, otherEntityPositionPart, 90.82f, cannonPart.getDirection());
