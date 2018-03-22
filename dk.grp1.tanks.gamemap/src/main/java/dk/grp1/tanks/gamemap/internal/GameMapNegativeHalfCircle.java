@@ -63,6 +63,11 @@ public class GameMapNegativeHalfCircle implements IGameMapFunction {
     }
 
     @Override
+    public boolean existsOnlyWithinRange(float startX, float endX) {
+        return (this.startX > startX && this.endX < endX);
+    }
+
+    @Override
     public List<IGameMapFunction> splitInTwoWithNewRanges(float rangeOneStartX, float rangeOneEndX, float rangeTwoStartX, float rangeTwoEndX) {
         List<IGameMapFunction> splitGameMapFunctions = new ArrayList<>();
         splitGameMapFunctions.add(new GameMapNegativeHalfCircle(rangeOneStartX,rangeOneEndX,this.centerX,this.centerY,this.radius));
@@ -71,4 +76,22 @@ public class GameMapNegativeHalfCircle implements IGameMapFunction {
     }
 
 
+    @Override
+    public int compareTo(Object o) {
+        IGameMapFunction other = (IGameMapFunction) o;
+        if(other == null){
+            return -1;
+        }
+        if(this.getStartX() < other.getStartX()){
+            return 1;
+        }
+        if(this.getStartX() == other.getStartX()){
+            if(this.getEndX() < other.getEndX()){
+                return 1;
+            }else if(this.getEndX() == other.getEndX()){
+                return 0;
+            }
+        }
+        return -1;
+    }
 }

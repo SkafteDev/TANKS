@@ -2,16 +2,13 @@ package dk.grp1.tanks.gamemap.internal;
 
 import dk.grp1.tanks.common.data.IGameMapFunction;
 import dk.grp1.tanks.common.utils.Vector2D;
-import org.mariuszgromada.math.mxparser.Argument;
-import org.mariuszgromada.math.mxparser.Expression;
-import org.mariuszgromada.math.mxparser.Function;
+
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class GameMapLinear implements IGameMapFunction {
 
-    private Function linearFunction;
     private float a;
     private float b;
     private float startX;
@@ -87,6 +84,11 @@ public class GameMapLinear implements IGameMapFunction {
     }
 
     @Override
+    public boolean existsOnlyWithinRange(float startX, float endX) {
+        return (this.startX > startX && this.endX < endX);
+    }
+
+    @Override
     public List<IGameMapFunction> splitInTwoWithNewRanges(float rangeOneStartX, float rangeOneEndX, float rangeTwoStartX, float rangeTwoEndX) {
         List<IGameMapFunction> splitGameMapFunctions = new ArrayList<>();
         splitGameMapFunctions.add(new GameMapLinear(this.a,this.b,rangeOneStartX,rangeOneEndX));
@@ -94,4 +96,22 @@ public class GameMapLinear implements IGameMapFunction {
         return splitGameMapFunctions;
     }
 
+    @Override
+    public int compareTo(Object o) {
+        IGameMapFunction other = (IGameMapFunction) o;
+        if(other == null){
+            return -1;
+        }
+        if(this.getStartX() < other.getStartX()){
+            return 1;
+        }
+        if(this.getStartX() == other.getStartX()){
+            if(this.getEndX() < other.getEndX()){
+                return 1;
+            }else if(this.getEndX() == other.getEndX()){
+                return 0;
+            }
+        }
+        return -1;
+    }
 }

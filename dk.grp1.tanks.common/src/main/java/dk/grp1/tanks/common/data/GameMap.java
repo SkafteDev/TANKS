@@ -4,6 +4,7 @@ import dk.grp1.tanks.common.utils.Vector2D;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class GameMap {
@@ -42,8 +43,8 @@ public class GameMap {
      * @param gameMapFunction A game map function
      */
     public void addGameMapFunction(IGameMapFunction gameMapFunction) {
-        //TODO Add the game map based on range
         this.gameMapFunctions.add(gameMapFunction);
+        Collections.sort(gameMapFunctions);
     }
 
     /**
@@ -53,8 +54,9 @@ public class GameMap {
      */
     public List<Vector2D> getVertices(float startX, float endX, int amountOfVertices) {
         List<Vector2D> vertices = new ArrayList<>();
+        for (IGameMapFunction gameMapFunction : gameMapFunctions) {
         for (float x = startX; x <= endX; x+=(endX-startX)/amountOfVertices) {
-            for (IGameMapFunction gameMapFunction : gameMapFunctions) {
+
                 if(gameMapFunction.isWithin(x)){
                     float y = gameMapFunction.getYValue(x);
                     vertices.add(new Vector2D(x,y));
@@ -62,8 +64,6 @@ public class GameMap {
             }
 
         }
-
-
         vertices.add(new Vector2D(GAMEWIDTH,0));
         vertices.add(new Vector2D(0,0));
         return vertices;
