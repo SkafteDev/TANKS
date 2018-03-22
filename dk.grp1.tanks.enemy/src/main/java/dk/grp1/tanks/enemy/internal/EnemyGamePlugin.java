@@ -20,8 +20,8 @@ public class EnemyGamePlugin implements IGamePluginService {
 
     private Entity createEnemy(GameData gameData) {
         Enemy enemy = new Enemy();
-        float centreX = gameData.getGameWidth() * 0.8f;
-        float centreY = gameData.getGameHeight();
+        float centreX = gameData.getGameWidth() * 0.25f;
+        float centreY = 81;
         PositionPart positionPart = new PositionPart(centreX,centreY, 0);
         float cannonDirection = 3.1415f/2;
         float cannonWidth = enemyRadius /2;
