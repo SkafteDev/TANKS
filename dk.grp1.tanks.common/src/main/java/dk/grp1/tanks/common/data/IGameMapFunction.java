@@ -8,7 +8,7 @@ import java.util.List;
  * A GameMapFunction is part of what makes up the game map. the game map consists of potentially several functions defining the map structure
  * The functions covers from the startX value to the endX value of the map.
  */
-public interface IGameMapFunction extends Comparable {
+public interface IGameMapFunction {
     /**
      * Get the StartX value. Which is the value from where the function starts
      * @return float StartX
