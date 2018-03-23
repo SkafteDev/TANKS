@@ -49,7 +49,7 @@ public class GameMapProcessing implements INonEntityProcessingService {
         for (IGameMapFunction gameMapFunction : functionsToAdd) {
             world.getGameMap().addGameMapFunction(gameMapFunction);
         }
-        
+
 
     }
 
@@ -165,7 +165,6 @@ public class GameMapProcessing implements INonEntityProcessingService {
 
         float resultLeftHalf = -1;
         for (IGameMapFunction mapFunction : world.getGameMap().getGameMapFunctions()) {
-
             resultLeftHalf = intersect(mapFunction, negativeHalf, acceptInterval, centerX - radius, centerX);
             if (resultLeftHalf != -1) {
                 intersectionXValuesNegative.add(resultLeftHalf);
@@ -173,16 +172,15 @@ public class GameMapProcessing implements INonEntityProcessingService {
             }
         }
 
-        if (resultLeftHalf == -1) {
+        //if (resultLeftHalf == -1) {
             for (IGameMapFunction mapFunction : world.getGameMap().getGameMapFunctions()) {
-
                 resultLeftHalf = intersect(mapFunction, positiveHalf, acceptInterval, centerX - radius, centerX);
                 if (resultLeftHalf != -1) {
                     intersectionXValuesPositive.add(resultLeftHalf);
                     break;
                 }
             }
-        }
+        //}
 
 
         float resultRightHalf = -1;
@@ -195,7 +193,7 @@ public class GameMapProcessing implements INonEntityProcessingService {
             }
         }
 
-        if (resultRightHalf == -1) {
+        //if (resultRightHalf == -1) {
             for (IGameMapFunction mapFunction : world.getGameMap().getGameMapFunctions()) {
 
                 resultRightHalf = intersect(mapFunction, positiveHalf, acceptInterval, centerX, centerX + radius);
@@ -204,8 +202,11 @@ public class GameMapProcessing implements INonEntityProcessingService {
                     break;
                 }
             }
+       // }
+        if(intersectionXValuesNegative.size() + intersectionXValuesPositive.size() > 2){
+            System.out.println("Breakpoint!");
         }
-        //System.out.println("Amount of intersection points negative x: " +intersectionXValuesNegative.size() + " Amount of intersection points Positive x: "+ intersectionXValuesPositive.size());
+        System.out.println("Amount of intersection points negative x: " +intersectionXValuesNegative.size() + " Amount of intersection points Positive x: "+ intersectionXValuesPositive.size());
         if (intersectionXValuesNegative.size() + intersectionXValuesPositive.size() == 2) {
             for (Float xValue : intersectionXValuesNegative) {
                 intersectionPoints.add(new Vector2D(xValue, negativeHalf.getYValue(xValue)));

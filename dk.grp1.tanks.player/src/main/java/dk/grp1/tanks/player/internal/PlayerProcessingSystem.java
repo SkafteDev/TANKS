@@ -8,6 +8,7 @@ import dk.grp1.tanks.common.data.parts.*;
 import dk.grp1.tanks.common.events.ShootingEvent;
 import dk.grp1.tanks.common.data.parts.PositionPart;
 import dk.grp1.tanks.common.services.IEntityProcessingService;
+import dk.grp1.tanks.common.utils.Vector2D;
 
 /**
  * Created by danie on 12-03-2018.
@@ -34,7 +35,7 @@ public class PlayerProcessingSystem implements IEntityProcessingService {
 
             ctrlPart.setLeft(gameData.getKeys().isDown(GameKeys.LEFT));
             ctrlPart.setRight(gameData.getKeys().isDown(GameKeys.RIGHT));
-            ctrlPart.setRotation(world.getGameMap().getDirectionVector(positionPart.getX()));
+            ctrlPart.setRotation(world.getGameMap().getDirectionVector(new Vector2D(positionPart.getX(),positionPart.getY())));
 
             //Cannon movement
             if (gameData.getKeys().isDown(GameKeys.UP)){

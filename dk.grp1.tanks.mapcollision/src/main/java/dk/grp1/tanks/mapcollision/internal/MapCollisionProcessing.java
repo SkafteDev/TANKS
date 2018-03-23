@@ -8,6 +8,7 @@ import dk.grp1.tanks.common.data.parts.CirclePart;
 import dk.grp1.tanks.common.data.parts.CollisionPart;
 import dk.grp1.tanks.common.data.parts.PositionPart;
 import dk.grp1.tanks.common.services.IPostEntityProcessingService;
+import dk.grp1.tanks.common.utils.Vector2D;
 
 public class MapCollisionProcessing implements IPostEntityProcessingService {
     @Override
@@ -31,7 +32,7 @@ public class MapCollisionProcessing implements IPostEntityProcessingService {
         if(positionPart != null && collisionPart != null && circlePart != null){
             float y = positionPart.getY() - circlePart.getRadius();
             //Get height of map
-            float height = gameMap.getHeight(positionPart.getX());
+            float height = gameMap.getHeight(new Vector2D(positionPart.getX(),positionPart.getY()));
             if(y <= height){
                 collisionPart.setHitGameMap(true);
             } else {

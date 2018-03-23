@@ -90,28 +90,39 @@ public class GameMap {
 
     /**
      * Gets the direction at the given x coordinate, as a vector
-     * @param xCoordinate
+     * @param ownPosition
      * @return a unit vector of the direction
      */
-    public Vector2D getDirectionVector(float xCoordinate) {
-        float y = getHeight(xCoordinate);
-        float y2 = getHeight(xCoordinate + 0.1f);
-        Vector2D vector = new Vector2D((xCoordinate + 0.1f) - xCoordinate, y2 - y);
+    public Vector2D getDirectionVector(Vector2D ownPosition) {
+        float y = getHeight(ownPosition);
+        Vector2D nearbyPoint = new Vector2D(ownPosition.getX()+0.1f,ownPosition.getY());
+        float y2 = getHeight(nearbyPoint);
+        Vector2D vector = new Vector2D(nearbyPoint.getX() - ownPosition.getX(), y2 - y);
         return vector.unitVector();
     }
 
     /**
      * Gets the height of the map at the given xcoordinate
-     * @param x
+     * @param ownPosition
      * @return The height of the game map, or -1 if outside of the game map
      */
-    public float getHeight(float x) {
+    public float getHeight(Vector2D ownPosition) {
+        List<Float>  yValues = new ArrayList<>();
         for (IGameMapFunction gameMapFunction : gameMapFunctions) {
-            if(gameMapFunction.isWithin(x)){
-                return gameMapFunction.getYValue(x);
+            if(gameMapFunction.isWithin(ownPosition.getX())){
+                yValues.add(gameMapFunction.getYValue(ownPosition.getX()));
             }
         }
-        return -1f;
+
+        float minDifference = ownPosition.getY();
+        float y = -1f;
+        for (Float yValue : yValues) {
+            if(minDifference > Math.abs(ownPosition.getY() - yValue)){
+                minDifference = Math.abs(ownPosition.getY() - yValue);
+                y = yValue;
+            }
+        }
+        return y;
     }
 
 
