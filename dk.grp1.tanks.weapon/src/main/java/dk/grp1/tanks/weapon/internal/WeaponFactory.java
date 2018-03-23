@@ -31,11 +31,11 @@ public class WeaponFactory {
         e.add( new MovementPart(accelerationVector, 10000));
 
         e.add(new ShapePart());
-        e.add(new CirclePart(30,30,1));
+        e.add(new CirclePart(30,30,4));
         e.add(new PhysicsPart(30, -90.82f));
         e.add(new CollisionPart(true,0));
-        e.add(new TexturePart("bullet.png"));
         e.add(new DamagePart(20,1));
+        e.add(new TexturePart("mario_red_mushroom.png"));
         return e;
     }
 }

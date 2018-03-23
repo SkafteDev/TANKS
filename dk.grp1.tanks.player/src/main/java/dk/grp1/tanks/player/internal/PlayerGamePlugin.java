@@ -11,7 +11,7 @@ import javafx.geometry.Pos;
 
 public class PlayerGamePlugin implements IGamePluginService {
 
-    private float playerRadius = 5f;
+    private float playerRadius = 10f;
 
     @Override
     public void start(World world, GameData gameData) {
@@ -25,18 +25,18 @@ public class PlayerGamePlugin implements IGamePluginService {
         float centreY = gameData.getGameHeight();
         PositionPart positionPart = new PositionPart(centreX,centreY, 0);
         float cannonDirection = 3.1415f/2;
-        float cannonWidth = playerRadius/2;
-        float cannonLength = playerRadius*2;
+        float cannonWidth = (playerRadius/2)*2;
+        float cannonLength = (playerRadius/2)*4;
         player.add(new CirclePart(centreX, centreY, playerRadius));
         player.add(new PhysicsPart(5000f,-62f));
         player.add(new ControlPart(200));
         player.add(new LifePart());
         player.add(positionPart);
-        player.add(new CannonPart(positionPart.getX(), positionPart.getY(), cannonDirection, cannonWidth, cannonLength));
+        player.add(new CannonPart(positionPart.getX(), positionPart.getY(), cannonDirection, cannonWidth, cannonLength, "Mario_pipe.png"));
         player.add(new ShapePart());
         player.add(new CollisionPart(true,0));
         player.add(new MovementPart(50));
-        player.add(new TexturePart("player.png"));
+        player.add(new TexturePart("Mario_Head.png"));
         return player;
     }
 

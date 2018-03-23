@@ -19,21 +19,24 @@ public class CannonPart implements IEntityPart{
     private float width;
     private float firepower;
     private float maxFirepower = 250;
+    private String texturePath;
+    private float pi = 3.1415f;
 
-    public CannonPart(float jointX, float jointY, float direction, float width, float length) {
+    public CannonPart(float jointX, float jointY, float direction, float width, float length, String texturePath) {
         this.jointX = jointX;
         this.jointY = jointY;
         this.vertices = new Vector2D[4];
-        this.direction = direction;
+        setDirection(direction);
         this.length = length;
         this.width = width;
+        this.texturePath = texturePath;
     }
 
     /**
      * Calculates the coordinates of the cannon's vertices.
      */
     private void updateShape(){
-        float pi = 3.1415f;
+
 
         //Position of the cannon's connection to the player's body
         Vector2D jointPoint = new Vector2D(jointX,jointY);
@@ -137,7 +140,7 @@ public class CannonPart implements IEntityPart{
     }
 
     public void setDirection(float direction) {
-        this.direction = direction;
+        this.direction = direction%(pi*2);
     }
 
     public float getLength() {
@@ -154,5 +157,13 @@ public class CannonPart implements IEntityPart{
 
     public void setFirepower(float firepower) {
         this.firepower = firepower;
+    }
+
+    public String getTexturePath() {
+        return texturePath;
+    }
+
+    public void setTexturePath(String texturePath) {
+        this.texturePath = texturePath;
     }
 }

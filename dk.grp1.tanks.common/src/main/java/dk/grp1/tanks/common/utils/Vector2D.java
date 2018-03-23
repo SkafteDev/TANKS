@@ -79,6 +79,16 @@ public class Vector2D {
         return length;
     }
 
+    public float getAngle(){
+        Vector2D i = new Vector2D(1,0);
+
+        float v = dot()/(this.length()*i.length());
+
+        float radians = (float) Math.acos(v);
+
+        return radians;
+    }
+
     public Vector2D unitVector() {
         float length = length();
 
@@ -106,6 +116,10 @@ public class Vector2D {
         float dot = a.getX() * b.getX() + a.getY() * b.getY();
 
         return dot;
+    }
+
+    public float dot(){
+        return dot(this, new Vector2D(1,0));
     }
 
 
