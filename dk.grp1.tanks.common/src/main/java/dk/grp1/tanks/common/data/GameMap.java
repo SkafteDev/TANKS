@@ -1,5 +1,6 @@
 package dk.grp1.tanks.common.data;
 
+import dk.grp1.tanks.common.utils.GameMapFunctionComparator;
 import dk.grp1.tanks.common.utils.Vector2D;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
@@ -11,6 +12,7 @@ public class GameMap {
     private List<IGameMapFunction> gameMapFunctions;
     private float GAMEWIDTH;
     private float GAMEHEIGHT;
+    private GameMapFunctionComparator comparator;
 
 
     /**
@@ -20,6 +22,7 @@ public class GameMap {
         gameMapFunctions = new ArrayList<>();
         this.GAMEHEIGHT = gameHeight;
         this.GAMEWIDTH = gameWidth;
+        this.comparator = new GameMapFunctionComparator();
     }
 
     /**
@@ -44,7 +47,7 @@ public class GameMap {
      */
     public void addGameMapFunction(IGameMapFunction gameMapFunction) {
         this.gameMapFunctions.add(gameMapFunction);
-        Collections.sort(gameMapFunctions);
+        Collections.sort(gameMapFunctions, this.comparator);
     }
 
     /**
