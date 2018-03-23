@@ -6,27 +6,16 @@ import dk.grp1.tanks.common.utils.Vector2D;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GameMapSin implements IGameMapFunction {
-    private double amplitude;
-    private double angularFrequency;
-    private float phaseShift;
-    private float shiftConstant;
-
+public class GameMapHalfCircle implements IGameMapFunction {
     private float startX;
     private float endX;
+    private float centerX;
+    private float centerY;
+    private float radius;
 
-    public GameMapSin(float startX, float endX) {
-        this(1,1,0,0,startX,endX);
-    }
 
-    public GameMapSin(double amplitude, double angularFrequency, float phaseShift, float shiftConstant, float startX, float endX) {
-        this.amplitude = amplitude;
-        this.angularFrequency = angularFrequency;
-        this.phaseShift = phaseShift;
-        this.shiftConstant = shiftConstant;
-        this.startX = startX;
-        this.endX = endX;
-    }
+
+
 
     @Override
     public float getStartX() {
@@ -35,7 +24,7 @@ public class GameMapSin implements IGameMapFunction {
 
     @Override
     public float getYValue(float xValue) {
-        return (float) (amplitude * Math.sin((angularFrequency * xValue + phaseShift)) + shiftConstant);
+        return 0;
     }
 
     @Override

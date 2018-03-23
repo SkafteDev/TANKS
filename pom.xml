@@ -57,7 +57,9 @@
     <module>dk.grp1.tanks.gamemap</module>
     <module>dk.grp1.tanks.weapon</module>
     <module>dk.grp1.tanks.mapcollision</module>
+    <module>dk.grp1.tanks.OSGimxparser</module>
     <module>dk.grp1.tanks.OutOfBoundsProcessor</module>
+    <module>dk.grp1.tanks.explosionsystem</module>
   </modules>
 
   <build>

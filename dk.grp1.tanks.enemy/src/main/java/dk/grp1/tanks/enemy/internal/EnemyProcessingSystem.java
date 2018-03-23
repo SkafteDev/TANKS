@@ -34,7 +34,11 @@ public class EnemyProcessingSystem implements IEntityProcessingService {
             PositionPart positionPart = enemy.getPart(PositionPart.class);
             CollisionPart collisionPart = enemy.getPart(CollisionPart.class);
             PhysicsPart physicsPart = enemy.getPart(PhysicsPart.class);
+            LifePart lifePart = enemy.getPart(LifePart.class);
 
+            if(lifePart.getCurrentHP() <= 0){
+                world.removeEntity(enemy);
+            }
 
             ctrlPart.setLeft(gameData.getKeys().isDown(GameKeys.A));
             ctrlPart.setRight(gameData.getKeys().isDown(GameKeys.D));

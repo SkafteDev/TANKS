@@ -9,13 +9,13 @@
   </parent>
 
   <properties>
-    <bundle.symbolicName>dk.grp1.tanks.gamemap</bundle.symbolicName>
-    <bundle.namespace>dk.grp1.tanks.gamemap</bundle.namespace>
+    <bundle.symbolicName>dk.grp1.tanks.explosionsystem</bundle.symbolicName>
+    <bundle.namespace>dk.grp1.tanks.explosionsystem</bundle.namespace>
   </properties>
 
   <modelVersion>4.0.0</modelVersion>
   <groupId>dk.grp1.tanks</groupId>
-  <artifactId>dk.grp1.tanks.gamemap</artifactId>
+  <artifactId>dk.grp1.tanks.explosionsystem</artifactId>
   <version>1.0-SNAPSHOT</version>
 
   <name>${bundle.symbolicName}</name>
@@ -42,15 +42,10 @@
       <artifactId>osgi_R4_compendium</artifactId>
       <optional>true</optional>
     </dependency>
-    <dependency>
-      <groupId>dk.grp1.tanks</groupId>
-      <artifactId>dk.grp1.tanks.OSGimxparser</artifactId>
-      <version>1.0-SNAPSHOT</version>
-    </dependency>
       <dependency>
-        <groupId>dk.grp1.tanks</groupId>
-        <artifactId>dk.grp1.tanks.common</artifactId>
-        <version>1.0-SNAPSHOT</version>
+          <groupId>dk.grp1.tanks</groupId>
+          <artifactId>dk.grp1.tanks.common</artifactId>
+          <version>1.0-SNAPSHOT</version>
       </dependency>
   </dependencies>
 

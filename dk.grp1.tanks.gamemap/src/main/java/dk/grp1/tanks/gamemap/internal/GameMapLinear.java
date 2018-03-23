@@ -1,15 +1,17 @@
 package dk.grp1.tanks.gamemap.internal;
 
 import dk.grp1.tanks.common.data.IGameMapFunction;
+import dk.grp1.tanks.common.utils.Vector2D;
+import org.mariuszgromada.math.mxparser.Argument;
+import org.mariuszgromada.math.mxparser.Expression;
+import org.mariuszgromada.math.mxparser.Function;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class GameMapLinear implements IGameMapFunction {
 
-
-    private float a;
-    private float b;
+    private Function linearFunction;
     private float startX;
     private float endX;
 
@@ -21,8 +23,8 @@ public class GameMapLinear implements IGameMapFunction {
      * @param endX
      */
     public GameMapLinear(float a, float b, float startX, float endX) {
-        this.a = a;
-        this.b = b;
+        this.linearFunction = new Function("f(x) = "+a+"*x+"+b);
+
         this.startX = startX;
         this.endX = endX;
     }
@@ -31,8 +33,8 @@ public class GameMapLinear implements IGameMapFunction {
         float y = sucessorFn.getYValue(sucessorFn.getEndX());
         //Calculate b value
         float b = y - a * startX;
-        this.a = a;
-        this.b = b;
+        //this.linearFunction = new Function("f(x) = "+a+"*x+"+b);
+        this.linearFunction = new Function("f(x)=2*x+5");
         this.startX = startX;
         this.endX = endX;
     }
@@ -44,7 +46,13 @@ public class GameMapLinear implements IGameMapFunction {
 
     @Override
     public float getYValue(float xValue) {
-        return a * xValue + b;
+        double x = (double) xValue;
+        //System.out.println("X casted to double: " +x);
+        //System.out.println(linearFunction.checkSyntax());
+       // Expression e = new Expression()
+        double y = linearFunction.calculate(xValue);
+        //System.out.println("Linear Value for y: "+y);
+        return (float)y;
     }
 
     @Override
@@ -67,5 +75,10 @@ public class GameMapLinear implements IGameMapFunction {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public List<Vector2D> intersectionWithCircle(Vector2D centerOfCircle, float radius) {
+        return null;
     }
 }
