@@ -1,11 +1,11 @@
-package dk.grp1.tanks.weapon.internal;
+package dk.grp1.tanks.SingleShot.internal;
 
 import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.services.IGamePluginService;
 
-public class WeaponPlugin implements IGamePluginService {
+public class SingleShotPlugin implements IGamePluginService {
     @Override
     public void start(World world, GameData gameData) {
 
@@ -13,11 +13,8 @@ public class WeaponPlugin implements IGamePluginService {
 
     @Override
     public void stop(World world, GameData gameData) {
-
-        for (Entity e: world.getEntities(Projectile.class)
-             ) {
+        for (Entity e : world.getEntities(SingleShot.class)) {
             world.removeEntity(e);
-
         }
     }
 }

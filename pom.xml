@@ -60,6 +60,7 @@
     <module>dk.grp1.tanks.OSGimxparser</module>
     <module>dk.grp1.tanks.OutOfBoundsProcessor</module>
     <module>dk.grp1.tanks.explosionsystem</module>
+    <module>dk.grp1.tanks.SingleShot</module>
   </modules>
 
   <build>

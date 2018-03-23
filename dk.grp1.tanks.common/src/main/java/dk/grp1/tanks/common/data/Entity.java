@@ -2,9 +2,7 @@ package dk.grp1.tanks.common.data;
 
 import dk.grp1.tanks.common.data.parts.IEntityPart;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by danie on 12-03-2018.
