@@ -4,6 +4,8 @@ import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.data.parts.CirclePart;
+import dk.grp1.tanks.common.data.parts.DamagePart;
+import dk.grp1.tanks.common.data.parts.LifePart;
 import dk.grp1.tanks.common.data.parts.PositionPart;
 import dk.grp1.tanks.common.events.Event;
 import dk.grp1.tanks.common.events.ExplosionEvent;
@@ -17,7 +19,11 @@ public class ExplosionPostProcessingSystem implements IPostEntityProcessingServi
 
             for (Entity ent: world.getEntities()) {
                 if(isInExplosion(evnt, ent)){
-                    System.out.println("COLLSION");
+                    LifePart lp = ent.getPart(LifePart.class);
+                    if(lp != null) {
+                        lp.removeHP(((DamagePart) evnt.getSource().getPart(DamagePart.class)).getDamage());
+                        System.out.println(lp.getCurrentHP());
+                    }
                 }
 
             }

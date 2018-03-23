@@ -30,7 +30,10 @@ public class PlayerGamePlugin implements IGamePluginService {
         player.add(new CirclePart(centreX, centreY, playerRadius));
         player.add(new PhysicsPart(5000f,-62f));
         player.add(new ControlPart(200));
-        player.add(new LifePart());
+        LifePart lifePart = new LifePart();
+        lifePart.setMaxHP(5);
+        lifePart.setCurrentHP(5);
+        player.add(lifePart);
         player.add(positionPart);
         player.add(new CannonPart(positionPart.getX(), positionPart.getY(), cannonDirection, cannonWidth, cannonLength, "Mario_pipe.png"));
         player.add(new ShapePart());
