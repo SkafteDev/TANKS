@@ -21,16 +21,21 @@ public class GameMapProcessing implements INonEntityProcessingService {
         }
     }
 
+    /**
+     *
+     * @param intersectionPoints
+     * @param world
+     * @param event
+     */
     private void replacePartsOfMapWithCircles(List<Vector2D> intersectionPoints, World world, Event event) {
         //Setup Part of the function
         if (intersectionPoints.size() != 2) {
-            //System.out.println("List of intersection points size: " + intersectionPoints.size());
             return;
         }
-        //From left to right
+        //From left to right. The firstPoint needs to have the lowest x value. Therefore swap if it has somehow been mixed up.
         Vector2D firstPoint = intersectionPoints.get(0);
         Vector2D secondPoint = intersectionPoints.get(1);
-        if(firstPoint.getX() > secondPoint.getX()){
+        if (firstPoint.getX() > secondPoint.getX()) {
             Vector2D tmp = firstPoint;
             firstPoint = secondPoint;
             secondPoint = tmp;
@@ -42,8 +47,7 @@ public class GameMapProcessing implements INonEntityProcessingService {
         float centerY = mapDestructionEvent.getPointOfCollision().getY();
         float radius = mapDestructionEvent.getExplosionRadius();
         //Setup done
-
-        fixFunctionsAroundCircle(world, firstPoint, secondPoint);
+        fixFunctionsAroundCircle(world, centerX, centerY, radius, firstPoint, secondPoint);
         removeFunctionsWithinCircle(world, centerX, radius);
         List<IGameMapFunction> functionsToAdd = generateCirclesToInsert(firstPoint, secondPoint, centerX, centerY, radius);
         for (IGameMapFunction gameMapFunction : functionsToAdd) {
@@ -53,57 +57,38 @@ public class GameMapProcessing implements INonEntityProcessingService {
 
     }
 
+    /**
+     *
+     * @param firstPoint
+     * @param secondPoint
+     * @param centerX
+     * @param centerY
+     * @param radius
+     * @return
+     */
     private List<IGameMapFunction> generateCirclesToInsert(Vector2D firstPoint, Vector2D secondPoint, float centerX, float centerY, float radius) {
         List<IGameMapFunction> functionsToInsert = new ArrayList<>();
-        IGameMapFunction negativeHalf = new GameMapNegativeHalfCircle(centerX - radius, centerX + radius, centerX, centerY, radius);
-        IGameMapFunction positiveHalf = new GameMapPositiveHalfCircle(centerX - radius, centerX + radius, centerX, centerY, radius);
-
-        //If it is above center Y it need to take the positive half circle from centerX-Radius to intersectionpoint.X
-        //If it is below center Y it needs to take the  negative half circle from intersectionpoint.X to either intersectionpoint2.X or centerX+Radius depending on whether intersectionpoint2.Y is below or below centerY
-        if (firstPoint.getY() > centerY) {
-            //The circle needs to be at the correct point in the list of gamemap functions. Make method in gameMap to insert based on range.
-            if (secondPoint.getY() <= centerY) {
-                positiveHalf.setStartX(centerX - radius);
-                positiveHalf.setEndX(firstPoint.getX());
-                negativeHalf.setStartX(centerX - radius);
-                negativeHalf.setEndX(secondPoint.getX());
-                functionsToInsert.add(negativeHalf);
-                functionsToInsert.add(positiveHalf);
-            } else {
-                //Generate 2 new positive half circles
-                List<IGameMapFunction> positiveHalves = positiveHalf.splitInTwoWithNewRanges(centerX-radius,firstPoint.getX(),secondPoint.getX(),centerX+radius);
-                negativeHalf.setStartX(centerX-radius);
-                negativeHalf.setEndX(centerX+radius);
-                functionsToInsert.add(negativeHalf);
-                for (IGameMapFunction gameMapFunction : positiveHalves) {
-                    functionsToInsert.add(gameMapFunction);
-                }
-            }
-
-        }
-        if (firstPoint.getY() <= centerY) {
-            if (secondPoint.getY() > centerY) {
-                negativeHalf.setStartX(firstPoint.getX());
-                negativeHalf.setEndX(centerX + radius);
-                positiveHalf.setStartX(secondPoint.getX());
-                positiveHalf.setEndX(centerX + radius);
-            } else {
-                negativeHalf.setStartX(firstPoint.getX());
-                negativeHalf.setEndX(secondPoint.getX());
-                positiveHalf.setStartX(0f);
-                positiveHalf.setEndX(0f);
-
-            }
-            functionsToInsert.add(negativeHalf);
-            functionsToInsert.add(positiveHalf);
-
-        }
-
+        //We don't care if it is ascending or descending. we Insert a negative half circle that is slightly smaller in radius than the actual "explosion radius"
+        //TODO: Though we don't want the y value for our circle to exceed the function that it should connect to. That means both functions. End and start.
+        //We then add two linear functions to either end to fix the ends. This is already done in fix functions around circle.
+        float newRadius = radius - (radius/5);
+        IGameMapFunction negativeHalf = new GameMapNegativeHalfCircle(centerX - newRadius, centerX + newRadius,centerX,centerY,newRadius);
+        functionsToInsert.add(negativeHalf);
         return functionsToInsert;
     }
 
-    private void fixFunctionsAroundCircle(World world, Vector2D firstPoint, Vector2D secondPoint) {
-        IGameMapFunction startFunc = null; IGameMapFunction endFunc = null;
+    /**
+     * Fixes the functions that overlap where the circle is to be inserted.
+     * @param world the world
+     * @param centerX The center x value of the circle
+     * @param centerY The center y value of the circle
+     * @param radius The radius of the circle
+     * @param firstPoint The first intersection point
+     * @param secondPoint The second intersection point
+     */
+    private void fixFunctionsAroundCircle(World world, float centerX, float centerY, float radius, Vector2D firstPoint, Vector2D secondPoint) {
+        IGameMapFunction startFunc = null;
+        IGameMapFunction endFunc = null;
         //Find the function before the start of the circle and the function after the end of the circle.
         for (IGameMapFunction gameMapFunction : world.getGameMap().getGameMapFunctions()) {
             if (gameMapFunction.isWithin(firstPoint.getX())) {
@@ -113,31 +98,65 @@ public class GameMapProcessing implements INonEntityProcessingService {
                 endFunc = gameMapFunction;
             }
         }
-
+        float rangeOneStartX, rangeOneEndX, rangeTwoStartX, rangeTwoEndX;
+        float buffer = radius / 5;
+        rangeOneStartX = startFunc.getStartX();
+        rangeOneEndX = centerX - radius - buffer;
+        rangeTwoStartX = centerX + radius + buffer;
+        rangeTwoEndX = endFunc.getEndX();
 
         //If the start and end functions are 2 separate functions. Then just change where they end and start.
         if (!startFunc.equals(endFunc)) {
-            if (startFunc != null) {
-                startFunc.setEndX(firstPoint.getX());
-            }
-            if (endFunc != null) {
-                endFunc.setStartX(secondPoint.getX());
-            }
+            startFunc.setStartX(rangeOneStartX);
+            startFunc.setEndX(rangeOneEndX);
+            endFunc.setStartX(rangeTwoStartX);
+            endFunc.setEndX(rangeTwoEndX);
         } else {
             //If the start and end is the same function, then split the function into two new identical functions with different ranges.
             // Call splitInTwoWithNewRanges(range1startx,range1endx,range2startx,range2endx) on the function.
-            List<IGameMapFunction> splitMapFunctions = startFunc.splitInTwoWithNewRanges(startFunc.getStartX(), firstPoint.getX(), secondPoint.getX(), endFunc.getEndX());
+            List<IGameMapFunction> splitMapFunctions = startFunc.splitInTwoWithNewRanges(rangeOneStartX, rangeOneEndX, rangeTwoStartX, rangeTwoEndX);
             world.getGameMap().getGameMapFunctions().remove(startFunc);
             for (IGameMapFunction splitMapFunction : splitMapFunctions) {
                 world.getGameMap().addGameMapFunction(splitMapFunction);
             }
         }
+
+
+        float newRadius = radius - (radius/5);
+
+            //Second point calculated from endFunc
+        Vector2D rightFirstPointLinear = new Vector2D(centerX + newRadius, centerY);
+        Vector2D rightSecondPointLinear = new Vector2D(rangeTwoStartX, endFunc.getYValue(rangeTwoStartX));
+            //First point calculated from startFunc
+        Vector2D leftFirstPointLinear = new Vector2D(rangeOneEndX, startFunc.getYValue(rangeOneEndX));
+        Vector2D leftSecondPointLinear = new Vector2D(centerX - newRadius, centerY);
+
+        List<IGameMapFunction> linearFunctions = generateLinearFunctionToInsert(leftFirstPointLinear, leftSecondPointLinear,rightFirstPointLinear,rightSecondPointLinear);
+        for (IGameMapFunction linearFunctionToInsert : linearFunctions) {
+            world.getGameMap().addGameMapFunction(linearFunctionToInsert);
+        }
+
+
+    }
+
+    private List<IGameMapFunction> generateLinearFunctionToInsert(Vector2D leftFirstPointLinear, Vector2D leftSecondPointLinear, Vector2D rightFirstPointLinear, Vector2D rightSecondPointLinear) {
+        List<IGameMapFunction> linearMapFunctions = new ArrayList<>();
+
+        float a1 = (leftSecondPointLinear.getY() - leftFirstPointLinear.getY()) / (leftSecondPointLinear.getX() - leftFirstPointLinear.getX());
+        float b1 = leftFirstPointLinear.getY() - a1 * leftFirstPointLinear.getX();
+        linearMapFunctions.add(new GameMapLinear(a1, b1, leftFirstPointLinear.getX(), leftSecondPointLinear.getX()));
+
+        float a2 = (rightSecondPointLinear.getY() - rightFirstPointLinear.getY()) / (rightSecondPointLinear.getX() - rightFirstPointLinear.getX());
+        float b2 = rightFirstPointLinear.getY() - a2 * rightFirstPointLinear.getX();
+        linearMapFunctions.add(new GameMapLinear(a2, b2, rightFirstPointLinear.getX(), rightSecondPointLinear.getX()));
+
+        return linearMapFunctions;
     }
 
     private void removeFunctionsWithinCircle(World world, float centerX, float radius) {
         List<IGameMapFunction> gameMapFunctionsToRemove = new ArrayList<>();
         for (IGameMapFunction gameMapFunction : world.getGameMap().getGameMapFunctions()) {
-            if(gameMapFunction.existsOnlyWithinRange(centerX-radius,centerX+radius)){
+            if (gameMapFunction.existsOnlyWithinRange((centerX - radius)-(radius/5), (centerX + radius)+(radius/5))) {
                 gameMapFunctionsToRemove.add(gameMapFunction);
             }
         }
@@ -155,12 +174,14 @@ public class GameMapProcessing implements INonEntityProcessingService {
         float centerY = mapDestructionEvent.getPointOfCollision().getY();
         float radius = mapDestructionEvent.getExplosionRadius();
         //System.out.println("Center of circle: " + centerX + ", " + centerY + " Radius: " + radius);
-
+        //Setup the intersection circles. It can intersect with either negative or positive.
         IGameMapFunction negativeHalf = new GameMapNegativeHalfCircle(centerX - radius, centerX + radius, centerX, centerY, radius);
         IGameMapFunction positiveHalf = new GameMapPositiveHalfCircle(centerX - radius, centerX + radius, centerX, centerY, radius);
 
         List<Float> intersectionXValuesPositive = new ArrayList<>();
         List<Float> intersectionXValuesNegative = new ArrayList<>();
+        //The acceptinterval defines how much of a difference in y-values is accepted as an intersection.
+        //The lower it is the better, but if it is too low the increments in the intersect method must be changed
         float acceptInterval = 0.2f;
 
         float resultLeftHalf = -1;
@@ -172,7 +193,7 @@ public class GameMapProcessing implements INonEntityProcessingService {
             }
         }
 
-        //if (resultLeftHalf == -1) {
+        if (resultLeftHalf == -1) {
             for (IGameMapFunction mapFunction : world.getGameMap().getGameMapFunctions()) {
                 resultLeftHalf = intersect(mapFunction, positiveHalf, acceptInterval, centerX - radius, centerX);
                 if (resultLeftHalf != -1) {
@@ -180,7 +201,7 @@ public class GameMapProcessing implements INonEntityProcessingService {
                     break;
                 }
             }
-        //}
+        }
 
 
         float resultRightHalf = -1;
@@ -193,7 +214,7 @@ public class GameMapProcessing implements INonEntityProcessingService {
             }
         }
 
-        //if (resultRightHalf == -1) {
+        if (resultRightHalf == -1) {
             for (IGameMapFunction mapFunction : world.getGameMap().getGameMapFunctions()) {
 
                 resultRightHalf = intersect(mapFunction, positiveHalf, acceptInterval, centerX, centerX + radius);
@@ -202,11 +223,8 @@ public class GameMapProcessing implements INonEntityProcessingService {
                     break;
                 }
             }
-       // }
-        if(intersectionXValuesNegative.size() + intersectionXValuesPositive.size() > 2){
-            System.out.println("Breakpoint!");
         }
-        System.out.println("Amount of intersection points negative x: " +intersectionXValuesNegative.size() + " Amount of intersection points Positive x: "+ intersectionXValuesPositive.size());
+        //If exactly 2 intersections are found it is considered a valid shot.
         if (intersectionXValuesNegative.size() + intersectionXValuesPositive.size() == 2) {
             for (Float xValue : intersectionXValuesNegative) {
                 intersectionPoints.add(new Vector2D(xValue, negativeHalf.getYValue(xValue)));
@@ -216,7 +234,7 @@ public class GameMapProcessing implements INonEntityProcessingService {
                 intersectionPoints.add(new Vector2D(xValue, positiveHalf.getYValue(xValue)));
             }
         }
-        //System.out.println("Intersection points size: " + intersectionPoints.size() );
+
         return intersectionPoints;
     }
 

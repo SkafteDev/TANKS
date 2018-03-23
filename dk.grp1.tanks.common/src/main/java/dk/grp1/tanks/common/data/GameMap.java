@@ -58,7 +58,7 @@ public class GameMap {
     public List<Vector2D> getVertices(float startX, float endX, int amountOfVertices) {
         List<Vector2D> vertices = new ArrayList<>();
         for (IGameMapFunction gameMapFunction : gameMapFunctions) {
-        for (float x = startX; x <= endX; x+=(endX-startX)/amountOfVertices) {
+            for (float x = startX; x <= endX; x+=(endX-startX)/amountOfVertices) {
 
                 if(gameMapFunction.isWithin(x)){
                     float y = gameMapFunction.getYValue(x);
