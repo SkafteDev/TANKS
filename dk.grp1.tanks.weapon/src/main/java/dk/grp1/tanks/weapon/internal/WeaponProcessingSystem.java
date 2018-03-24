@@ -10,6 +10,9 @@ import dk.grp1.tanks.common.services.IEntityProcessingService;
 import dk.grp1.tanks.common.utils.Vector2D;
 import dk.grp1.tanks.weapon.Projectile;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class WeaponProcessingSystem implements IEntityProcessingService {
 
     private WeaponFactory wepFac = new WeaponFactory();
@@ -44,6 +47,16 @@ public class WeaponProcessingSystem implements IEntityProcessingService {
                 movePart.processPart(bullet, gameData);
             }
 
+            List<IEntityPart> partsLeft = new ArrayList<>(bullet.getParts());
+            partsLeft.remove(movePart);
+            partsLeft.remove(physicsPart);
+            partsLeft.remove(collisionPart);
+            partsLeft.remove(positionPart);
+            partsLeft.remove(damagePart);
+
+            for (IEntityPart part : partsLeft) {
+                part.processPart(bullet, gameData);
+            }
         }
     }
 }

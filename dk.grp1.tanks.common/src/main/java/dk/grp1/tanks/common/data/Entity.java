@@ -23,6 +23,10 @@ public abstract class Entity {
         return (E) parts.get(partClass);
     }
 
+    public Collection<IEntityPart> getParts(){
+        return parts.values();
+    }
+
     public String getID() {
         return ID.toString();
     }
