@@ -61,7 +61,7 @@ public class PlayerProcessingSystem implements IEntityProcessingService {
             if (isReadyToShoot && !gameData.getKeys().isDown(GameKeys.SPACE) && inventoryPart.getCurrentWeapon() != null) {
                 //gameData.addEvent(new ShootingEvent(player, firepower));
                 inventoryPart.getCurrentWeapon().shoot(player, firepower, world);
-                inventoryPart.decreaseAmmo();
+                //inventoryPart.decreaseAmmo();
                 cannonPart.setFirepower(0);
                 //timeSinceLastShot += gameData.getDelta();
                 isReadyToShoot = false;

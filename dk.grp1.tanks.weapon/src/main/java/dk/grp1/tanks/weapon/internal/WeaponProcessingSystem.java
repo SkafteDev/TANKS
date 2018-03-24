@@ -8,6 +8,7 @@ import dk.grp1.tanks.common.events.Event;
 import dk.grp1.tanks.common.events.ExplosionEvent;
 import dk.grp1.tanks.common.services.IEntityProcessingService;
 import dk.grp1.tanks.common.utils.Vector2D;
+import dk.grp1.tanks.weapon.Projectile;
 
 public class WeaponProcessingSystem implements IEntityProcessingService {
 
@@ -17,11 +18,16 @@ public class WeaponProcessingSystem implements IEntityProcessingService {
     public void process(World world, GameData gameData) {
 
         for (Entity bullet : world.getEntities(Projectile.class)) {
+
+
+
             MovementPart movePart =  bullet.getPart(MovementPart.class);
             PhysicsPart physicsPart = bullet.getPart(PhysicsPart.class);
             CollisionPart collisionPart = bullet.getPart(CollisionPart.class);
             PositionPart positionPart = bullet.getPart(PositionPart.class);
             DamagePart damagePart = bullet.getPart(DamagePart.class);
+
+
             if(physicsPart != null) {
                 physicsPart.processPart(bullet, gameData);
             }

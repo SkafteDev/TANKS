@@ -67,6 +67,7 @@ public class EnemyProcessingSystem implements IEntityProcessingService {
 
     private void aiShoot(GameData gameData, World world, CannonPart cannonPart, Entity enemy){
         PositionPart enemyPositionPart = enemy.getPart(PositionPart.class);
+        InventoryPart inventoryPart = enemy.getPart(InventoryPart.class);
 
         for (Entity entity: world.getEntities()) {
 
@@ -82,7 +83,8 @@ public class EnemyProcessingSystem implements IEntityProcessingService {
 
                 //TODO fix me
                 firepower = initialVelocity(cannonPart, otherEntityPositionPart, 90.82f, cannonPart.getDirection());
-                gameData.addEvent(new ShootingEvent(enemy, firepower));
+                inventoryPart.getCurrentWeapon().shoot(enemy, firepower, world);
+                //gameData.addEvent(new ShootingEvent(enemy, firepower));
             }
         }
     }

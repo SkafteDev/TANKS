@@ -8,13 +8,13 @@ import java.util.*;
 
 public class InventoryPart implements IEntityPart {
 
-    private Set<IWeapon> weapons;
+    private List<IWeapon> weapons;
     private Map<IWeapon, Integer> weaponAmmo;
     private IWeapon currentWeapon;
 
 
     public InventoryPart() {
-        weapons = new HashSet<>();
+        weapons = new ArrayList<>();
         weaponAmmo = new HashMap<>();
     }
 
@@ -44,6 +44,15 @@ public class InventoryPart implements IEntityPart {
                 }
             }
         }
+    }
+
+    public void setWeapons(List<IWeapon> weapons){
+        this.weapons = weapons;
+
+        if (!this.weapons.isEmpty()) {
+            this.currentWeapon = this.weapons.get(0);
+        }
+        //TODO: Ammo handling
     }
 
     /**

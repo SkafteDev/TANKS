@@ -10,7 +10,7 @@ public class SingleShotWeapon implements IWeapon {
 
     private final String name = "Single Shot";
     private final String description = "Fires a single shot";
-    private final String iconPath = "singleshoticon.png";
+    private final String iconPath = "singleshot.png";
     private final String texturePath = "singleshot.png";
 
     @Override
@@ -37,8 +37,7 @@ public class SingleShotWeapon implements IWeapon {
         ss.add(new PositionPart(cannonCentre.getX(),cannonCentre.getY(), cannonPart.getDirection()));
         Vector2D accelerationVector = cannonPart.getDirectionVector();
         accelerationVector.multiplyWithConstant(firePower);
-        ss.add( new MovementPart(accelerationVector, 10000));
-
+        ss.add(new MovementPart(accelerationVector, 10000));
         ss.add(new ShapePart());
         ss.add(new CirclePart(30,30,4));
         ss.add(new PhysicsPart(30, -90.82f));

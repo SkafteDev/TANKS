@@ -1,4 +1,4 @@
-package dk.grp1.tanks.weapon.internal;
+package dk.grp1.tanks.weapon;
 
 import dk.grp1.tanks.common.data.Entity;
 
