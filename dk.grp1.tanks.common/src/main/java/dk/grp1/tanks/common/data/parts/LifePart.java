@@ -10,10 +10,17 @@ public class LifePart implements IEntityPart {
 
     private float maxHP;
     private float currentHP;
-    private float remainingLifeTime;
 
     public void processPart(Entity entity, GameData gameData) {
 
+    }
+
+    /**
+     * Returns ratio between entity's current and max hp
+     * @return
+     */
+    public float getHealthRatio(){
+        return this.currentHP / this.maxHP;
     }
 
     /**
@@ -76,23 +83,4 @@ public class LifePart implements IEntityPart {
 
     }
 
-    /**
-     * returns the remaining time until expiration
-     * @return
-     */
-    public float getRemainingLifeTime() {
-        return remainingLifeTime;
-    }
-
-    /**
-     * set the remaining time until expiration
-     * Prevents it from falling below 0
-     * @param remainingLifeTime
-     */
-    public void setRemainingLifeTime(float remainingLifeTime) {
-        this.remainingLifeTime = remainingLifeTime;
-        if (this.remainingLifeTime < 0){
-            this.remainingLifeTime = 0;
-        }
-    }
 }

@@ -12,18 +12,20 @@ import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.GameMap;
 import dk.grp1.tanks.common.data.World;
-import dk.grp1.tanks.common.data.parts.CannonPart;
-import dk.grp1.tanks.common.data.parts.CirclePart;
-import dk.grp1.tanks.common.data.parts.PositionPart;
-import dk.grp1.tanks.common.data.parts.TexturePart;
+import dk.grp1.tanks.common.data.parts.*;
 import dk.grp1.tanks.common.services.IEntityProcessingService;
 import dk.grp1.tanks.common.services.IPostEntityProcessingService;
 import dk.grp1.tanks.common.utils.Vector2D;
+import dk.grp1.tanks.core.internal.GUI.HealthBarGUI;
+import dk.grp1.tanks.core.internal.GUI.IGuiProcessingService;
+import dk.grp1.tanks.core.internal.GUI.OnScreenText;
 import dk.grp1.tanks.core.internal.managers.GameInputProcessor;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -34,6 +36,7 @@ public class Game implements ApplicationListener {
     private ShapeRenderer shapeRenderer;
     private OrthographicCamera camera;
     private Map<String, Texture> textureMap;
+    private List<IGuiProcessingService> drawImplementations;
 
 
     //Variables for drawing the game map
@@ -47,6 +50,7 @@ public class Game implements ApplicationListener {
         this.world = new World();
         this.gameData = gameData;
         this.textureMap = new HashMap<>();
+        this.drawImplementations = new ArrayList<>();
     }
 
 
@@ -57,18 +61,17 @@ public class Game implements ApplicationListener {
     private void setupGame() {
         setupMapDrawingConfig();
 
-        Gdx.input.setInputProcessor(
-                new GameInputProcessor(gameData)
-        );
+        Gdx.input.setInputProcessor(new GameInputProcessor(gameData));
 
-
-        //camera = new OrthographicCamera(gameData.getDisplayWidth(),gameData.getDisplayHeight());
-        //camera = new OrthographicCamera(200,100);
         camera = new OrthographicCamera(gameData.getGameWidth(), gameData.getGameHeight());
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
         camera.update();
 
         this.shapeRenderer = new ShapeRenderer();
+
+        drawImplementations.add(new HealthBarGUI());
+        drawImplementations.add(new OnScreenText());
+
     }
 
     private void setupMapDrawingConfig() {
@@ -81,6 +84,7 @@ public class Game implements ApplicationListener {
         gameMapTexture = new Texture(pix);
 
         textureRegion = new TextureRegion(gameMapTexture);
+        pix.dispose(); //TODO Might need to dispose?
     }
 
     public void resize(int i, int i1) {
@@ -95,10 +99,11 @@ public class Game implements ApplicationListener {
 
 
         update();
-
         drawBackGround();
         draw();
     }
+
+
 
     private void drawBackGround() {
         String path = "background.png";
@@ -167,6 +172,13 @@ public class Game implements ApplicationListener {
         renderGameMap();
         //drawShapes();
         drawTextures();
+        drawUI();
+    }
+
+    private void drawUI(){
+        for (IGuiProcessingService gui: drawImplementations){
+            gui.draw(camera, world, gameData);
+        }
     }
 
     private void drawShapes(){
@@ -191,6 +203,9 @@ public class Game implements ApplicationListener {
                 shapeRenderer.polygon(Vector2D.getVerticesAsFloatArray(cannonPart.getVertices()));
                 shapeRenderer.end();
             }
+
+
+
 
         }
     }
