@@ -68,8 +68,10 @@ public class DeadWeightMovementPart extends MovementPart {
 
         for (Entity target : targets) {
             PositionPart targetPos = target.getPart(PositionPart.class);
-            if (Math.abs(positionPart.getX() - targetPos.getX()) < 1 && Math.abs(positionPart.getX() - targetPos.getX()) > -1) {
-                setVelocity(0, 0);
+            if (Math.abs(positionPart.getX() - targetPos.getX()) < 2) {
+                setVelocity(0, -100);
+                PhysicsPart physicsPart = target.getPart(PhysicsPart.class);
+                physicsPart.setGravity(-1000f);
                 overTarget = true;
             }
         }

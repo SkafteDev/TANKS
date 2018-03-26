@@ -31,6 +31,7 @@ public class CannonPart implements IEntityPart{
         this.length = length;
         this.width = width;
         this.texturePath = texturePath;
+        this.updateShape(); // Updates the shape of the cannon. Otherwise the cannon's vertices is null.
     }
 
     /**
