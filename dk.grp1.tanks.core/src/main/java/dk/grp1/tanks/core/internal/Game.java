@@ -15,6 +15,7 @@ import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.data.parts.*;
 import dk.grp1.tanks.common.services.IEntityProcessingService;
 import dk.grp1.tanks.common.services.IPostEntityProcessingService;
+import dk.grp1.tanks.common.services.IWeapon;
 import dk.grp1.tanks.common.utils.Vector2D;
 import dk.grp1.tanks.core.internal.GUI.HealthBarGUI;
 import dk.grp1.tanks.core.internal.GUI.IGuiProcessingService;
@@ -23,10 +24,7 @@ import dk.grp1.tanks.core.internal.managers.GameInputProcessor;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 public class Game implements ApplicationListener {
@@ -125,7 +123,7 @@ public class Game implements ApplicationListener {
         spriteBatch.setProjectionMatrix(camera.combined);
         Texture t = textureMap.get(path);
 
-        spriteBatch.draw(t,0,0,gameData.getGameWidth(),gameData.getGameHeight());
+        spriteBatch.draw(t, 0, 0, gameData.getGameWidth(), gameData.getGameHeight());
         spriteBatch.end();
     }
 
@@ -222,7 +220,7 @@ public class Game implements ApplicationListener {
             CirclePart cp = e.getPart(CirclePart.class);
 
             CannonPart cannonPart = e.getPart(CannonPart.class);
-            if (cannonPart != null && pp != null && cp != null){
+            if (cannonPart != null && pp != null && cp != null) {
                 TextureRegion textureRegion = new TextureRegion(checkGetTexture(e, cannonPart.getTexturePath()));
                 drawCannon(spriteBatch, textureRegion, cannonPart);
             }
@@ -238,7 +236,7 @@ public class Game implements ApplicationListener {
         spriteBatch.end();
     }
 
-    private void drawCannon(SpriteBatch spriteBatch, TextureRegion textureRegion, CannonPart cannonPart){
+    private void drawCannon(SpriteBatch spriteBatch, TextureRegion textureRegion, CannonPart cannonPart) {
         float x = cannonPart.getVertices()[1].getX();
         float y = cannonPart.getVertices()[1].getY();
         float originX = 0; //(cannonPart.getVertices()[0].getX()-cannonPart.getVertices()[1].getX())/2;
@@ -247,11 +245,11 @@ public class Game implements ApplicationListener {
         float height = cannonPart.getLength();
         float scaleX = 1; // scale is 100%. 50% is equal to 0.5
         float scaleY = 1; // scale is 100%
-        float rotation = (float) Math.toDegrees(cannonPart.getDirection()) -90;
+        float rotation = (float) Math.toDegrees(cannonPart.getDirection()) - 90;
         spriteBatch.draw(textureRegion, x, y, originX, originY, width, height, scaleX, scaleY, rotation);
     }
 
-    private Texture checkGetTexture(Entity e, String path){
+    private Texture checkGetTexture(Entity e, String path) {
         Texture texture = textureMap.get(path);
 
         if (texture == null) {

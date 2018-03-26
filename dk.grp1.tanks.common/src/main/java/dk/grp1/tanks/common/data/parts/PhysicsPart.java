@@ -2,6 +2,7 @@ package dk.grp1.tanks.common.data.parts;
 
 import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.data.GameData;
+import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.utils.Vector2D;
 
 public class PhysicsPart implements IEntityPart {
@@ -23,7 +24,7 @@ public class PhysicsPart implements IEntityPart {
     }
 
     @Override
-    public void processPart(Entity entity, GameData gameData) {
+    public void processPart(Entity entity, GameData gameData, World world) {
         this.gravityVector = new Vector2D(0, getGravity() * gameData.getDelta());
 
     }

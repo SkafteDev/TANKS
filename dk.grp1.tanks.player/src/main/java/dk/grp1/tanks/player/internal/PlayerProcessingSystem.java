@@ -31,6 +31,8 @@ public class PlayerProcessingSystem implements IEntityProcessingService {
             CollisionPart collisionPart = player.getPart(CollisionPart.class);
             PhysicsPart physicsPart = player.getPart(PhysicsPart.class);
             LifePart lifePart = player.getPart(LifePart.class);
+            InventoryPart inventoryPart = player.getPart(InventoryPart.class);
+            inventoryPart.processPart(player, gameData, world);
 
             if(lifePart.getCurrentHP() <= 0){
                 world.removeEntity(player);
@@ -57,21 +59,29 @@ public class PlayerProcessingSystem implements IEntityProcessingService {
                 isReadyToShoot = true;
             }
 
-            if (isReadyToShoot && !gameData.getKeys().isDown(GameKeys.SPACE)) {
-                gameData.addEvent(new ShootingEvent(player, firepower));
+            if (gameData.getKeys().isPressed(GameKeys.N_1)){
+                inventoryPart.nextWeapon();
+            } else if (gameData.getKeys().isPressed(GameKeys.N_2)){
+                inventoryPart.previousWeapon();
+            }
+
+            if (isReadyToShoot && !gameData.getKeys().isDown(GameKeys.SPACE) && inventoryPart.getCurrentWeapon() != null) {
+                //gameData.addEvent(new ShootingEvent(player, firepower));
+                inventoryPart.getCurrentWeapon().shoot(player, firepower, world);
+                //inventoryPart.decreaseAmmo();
                 cannonPart.setFirepower(0);
                 //timeSinceLastShot += gameData.getDelta();
                 isReadyToShoot = false;
             }
 
 
-            physicsPart.processPart(player, gameData);
-            ctrlPart.processPart(player, gameData);
-            collisionPart.processPart(player, gameData);
-            movePart.processPart(player, gameData);
+            physicsPart.processPart(player, gameData, world);
+            ctrlPart.processPart(player, gameData, world);
+            collisionPart.processPart(player, gameData, world);
+            movePart.processPart(player, gameData, world);
             cannonPart.setJointY(positionPart.getY());
             cannonPart.setJointX(positionPart.getX());
-            cannonPart.processPart(player, gameData);
+            cannonPart.processPart(player, gameData, world);
 
 
         }

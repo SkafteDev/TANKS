@@ -2,6 +2,7 @@ package dk.grp1.tanks.common.data.parts;
 
 import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.data.GameData;
+import dk.grp1.tanks.common.data.World;
 
 /**
  * CirclePart defines the shape and size of a given entity
@@ -19,7 +20,7 @@ public class CirclePart implements IEntityPart {
     }
 
     @Override
-    public void processPart(Entity entity, GameData gameData) {
+    public void processPart(Entity entity, GameData gameData, World world) {
 
     }
 

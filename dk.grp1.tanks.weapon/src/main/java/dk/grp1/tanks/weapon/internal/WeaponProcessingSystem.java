@@ -4,11 +4,12 @@ import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.data.parts.*;
-import dk.grp1.tanks.common.events.Event;
-import dk.grp1.tanks.common.events.ExplosionEvent;
-import dk.grp1.tanks.common.events.ShootingEvent;
 import dk.grp1.tanks.common.services.IEntityProcessingService;
-import dk.grp1.tanks.common.utils.Vector2D;
+import dk.grp1.tanks.common.utils.PriorityWrapperComparator;
+import dk.grp1.tanks.common.utils.PriorityWrapper;
+import dk.grp1.tanks.weapon.Projectile;
+
+import java.util.*;
 
 public class WeaponProcessingSystem implements IEntityProcessingService {
 
@@ -17,33 +18,19 @@ public class WeaponProcessingSystem implements IEntityProcessingService {
     @Override
     public void process(World world, GameData gameData) {
 
-        for (Event ev: gameData.getEvents(ShootingEvent.class)) {
-            world.addEntity(wepFac.create(ev,gameData));
-            gameData.removeEvent(ev);
-        }
+        for (Entity bullet : world.getEntities(Projectile.class)) {
 
-        for (Entity bullet : world.getEntities(Bullet.class)) {
-            MovementPart movePart =  bullet.getPart(MovementPart.class);
-            PhysicsPart physicsPart = bullet.getPart(PhysicsPart.class);
-            CollisionPart collisionPart = bullet.getPart(CollisionPart.class);
-            PositionPart positionPart = bullet.getPart(PositionPart.class);
-            DamagePart damagePart = bullet.getPart(DamagePart.class);
-            if(physicsPart != null) {
-                physicsPart.processPart(bullet, gameData);
+            List<PriorityWrapper<IEntityPart>> partPriorities = new ArrayList<>();
+
+            for (IEntityPart part : bullet.getParts()) {
+                partPriorities.add(WeaponEntityPartPriority.getPriorityWrapper(part));
             }
 
-            if(collisionPart != null){
-                if(collisionPart.isHitGameMap() && positionPart != null && damagePart != null){
-                    Event explosionEvent = new ExplosionEvent(bullet,new Vector2D(positionPart.getX(),positionPart.getY()),damagePart.getExplosionRadius());
-                    gameData.addEvent(explosionEvent);
-                    world.removeEntity(bullet);
-                }
-            }
+            Collections.sort(partPriorities, new PriorityWrapperComparator());
 
-            if(movePart != null) {
-                movePart.processPart(bullet, gameData);
+            for (PriorityWrapper<IEntityPart> part : partPriorities) {
+                part.getType().processPart(bullet, gameData, world);
             }
-
         }
     }
 }

@@ -75,11 +75,13 @@ public class GameData {
             return r;
         }
 
-    public <E extends Event> List<Event> getEvents(Class<E> type) {
+    public <E extends Event> List<Event> getEvents(Class<E>... types) {
         List<Event> r = new ArrayList();
         for (Event event : events) {
-            if (event.getClass().equals(type)) {
-                r.add(event);
+            for (Class<E> eventType: types) {
+                if (eventType.isInstance(event)) {
+                    r.add(event);
+                }
             }
         }
 
