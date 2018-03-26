@@ -25,6 +25,7 @@ import dk.grp1.tanks.core.internal.managers.GameInputProcessor;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -131,8 +132,9 @@ public class Game implements ApplicationListener {
             processingService.process(world, gameData);
         }
         for (INonEntityProcessingService iNonEntityProcessingService : serviceLoader.getNonEntityProcessingServices()) {
-        }
             iNonEntityProcessingService.process(world,gameData);
+        }
+
         for (IPostEntityProcessingService postEntityProcessingService : serviceLoader.getPostEntityProcessingServices()) {
 
             postEntityProcessingService.postProcess(world, gameData);

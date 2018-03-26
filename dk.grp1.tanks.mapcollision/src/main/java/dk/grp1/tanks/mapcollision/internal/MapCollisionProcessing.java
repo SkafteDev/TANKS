@@ -56,7 +56,7 @@ public class MapCollisionProcessing implements IPostEntityProcessingService {
             float x = positionPart.getX();
             float y = positionPart.getY();
             float radius = circlePart.getRadius();
-            float gameMapHeight = gameMap.getHeight(positionPart.getX());
+            float gameMapHeight = gameMap.getHeight(new Vector2D(positionPart.getX(),positionPart.getY()));
 
             ArrayList<Float> xCordinates = new ArrayList<>();
             xCordinates.add(0f);

@@ -34,7 +34,7 @@ public class WeaponFactory {
         e.add(new CirclePart(30,30,4));
         e.add(new PhysicsPart(30, -90.82f));
         e.add(new CollisionPart(true,0));
-        e.add(new DamagePart(20,1));
+        e.add(new DamagePart(5,1));
         e.add(new TexturePart("mario_red_mushroom.png"));
         return e;
     }

@@ -7,6 +7,7 @@ import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.data.parts.*;
 import dk.grp1.tanks.common.events.ShootingEvent;
 import dk.grp1.tanks.common.services.IEntityProcessingService;
+import dk.grp1.tanks.common.utils.Vector2D;
 
 public class EnemyProcessingSystem implements IEntityProcessingService {
 
@@ -42,7 +43,7 @@ public class EnemyProcessingSystem implements IEntityProcessingService {
 
             ctrlPart.setLeft(gameData.getKeys().isDown(GameKeys.A));
             ctrlPart.setRight(gameData.getKeys().isDown(GameKeys.D));
-            ctrlPart.setRotation(world.getGameMap().getDirectionVector(positionPart.getX()));
+            ctrlPart.setRotation(world.getGameMap().getDirectionVector(new Vector2D(positionPart.getX(),positionPart.getY())));
 
             //shootWithKeys(gameData, cannonPart, enemy);
 

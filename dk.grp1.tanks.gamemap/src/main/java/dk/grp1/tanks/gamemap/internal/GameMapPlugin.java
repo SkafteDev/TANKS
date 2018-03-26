@@ -32,8 +32,8 @@ public class GameMapPlugin implements IGamePluginService {
         map.addGameMapFunction(gameMapFunction3);
         map.addGameMapFunction(gameMapFunction2);
 
-        IGameMapFunction function = new GameMapLinear(0,100,0,gameData.getGameWidth());
-        map.addGameMapFunction(function);
+        //IGameMapFunction function = new GameMapLinear(0,100,0,gameData.getGameWidth());
+        //map.addGameMapFunction(function);
         return map;
     }
 
