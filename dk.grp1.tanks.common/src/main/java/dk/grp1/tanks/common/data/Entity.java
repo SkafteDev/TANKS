@@ -20,10 +20,19 @@ public abstract class Entity {
     }
 
     public <E extends IEntityPart> E getPart(Class partClass) {
-        return (E) parts.get(partClass);
+
+        for (IEntityPart part : parts.values()) {
+            if (partClass.isInstance(part)) {
+
+                return (E) part;
+            }
+
+        }
+
+        return null;
     }
 
-    public Collection<IEntityPart> getParts(){
+    public Collection<IEntityPart> getParts() {
         return parts.values();
     }
 

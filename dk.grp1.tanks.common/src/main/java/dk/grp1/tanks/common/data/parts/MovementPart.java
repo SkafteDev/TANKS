@@ -2,6 +2,7 @@ package dk.grp1.tanks.common.data.parts;
 
 import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.data.GameData;
+import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.utils.Vector2D;
 
 import javax.naming.ldap.Control;
@@ -31,7 +32,7 @@ public class MovementPart implements IEntityPart {
      * @param entity the entity to move
      * @param gameData game data
      */
-    public void processPart(Entity entity, GameData gameData) {
+    public void processPart(Entity entity, GameData gameData, World world) {
         // Get time since last process
         float dt = gameData.getDelta();
 

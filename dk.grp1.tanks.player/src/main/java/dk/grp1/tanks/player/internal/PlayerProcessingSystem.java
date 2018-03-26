@@ -68,13 +68,13 @@ public class PlayerProcessingSystem implements IEntityProcessingService {
             }
 
 
-            physicsPart.processPart(player, gameData);
-            ctrlPart.processPart(player, gameData);
-            collisionPart.processPart(player, gameData);
-            movePart.processPart(player, gameData);
+            physicsPart.processPart(player, gameData, world);
+            ctrlPart.processPart(player, gameData, world);
+            collisionPart.processPart(player, gameData, world);
+            movePart.processPart(player, gameData, world);
             cannonPart.setJointY(positionPart.getY());
             cannonPart.setJointX(positionPart.getX());
-            cannonPart.processPart(player, gameData);
+            cannonPart.processPart(player, gameData, world);
 
 
         }

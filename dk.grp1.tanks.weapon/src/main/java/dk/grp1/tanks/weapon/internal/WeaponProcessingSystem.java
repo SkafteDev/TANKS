@@ -12,6 +12,7 @@ import dk.grp1.tanks.weapon.Projectile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeMap;
 
 public class WeaponProcessingSystem implements IEntityProcessingService {
 
@@ -23,39 +24,23 @@ public class WeaponProcessingSystem implements IEntityProcessingService {
         for (Entity bullet : world.getEntities(Projectile.class)) {
 
 
-
-            MovementPart movePart =  bullet.getPart(MovementPart.class);
+            MovementPart movePart = bullet.getPart(MovementPart.class);
             PhysicsPart physicsPart = bullet.getPart(PhysicsPart.class);
             CollisionPart collisionPart = bullet.getPart(CollisionPart.class);
             PositionPart positionPart = bullet.getPart(PositionPart.class);
             DamagePart damagePart = bullet.getPart(DamagePart.class);
 
 
-            if(physicsPart != null) {
-                physicsPart.processPart(bullet, gameData);
+            if (physicsPart != null) {
+                physicsPart.processPart(bullet, gameData, world);
             }
 
-            if(collisionPart != null){
-                if(collisionPart.isHitGameMap() && positionPart != null && damagePart != null){
-                    Event explosionEvent = new ExplosionEvent(bullet,new Vector2D(positionPart.getX(),positionPart.getY()),damagePart.getExplosionRadius());
-                    gameData.addEvent(explosionEvent);
-                    world.removeEntity(bullet);
-                }
+            if (collisionPart != null) {
+                collisionPart.processPart(bullet, gameData, world);
             }
 
-            if(movePart != null) {
-                movePart.processPart(bullet, gameData);
-            }
-
-            List<IEntityPart> partsLeft = new ArrayList<>(bullet.getParts());
-            partsLeft.remove(movePart);
-            partsLeft.remove(physicsPart);
-            partsLeft.remove(collisionPart);
-            partsLeft.remove(positionPart);
-            partsLeft.remove(damagePart);
-
-            for (IEntityPart part : partsLeft) {
-                part.processPart(bullet, gameData);
+            if (movePart != null) {
+                movePart.processPart(bullet, gameData, world);
             }
         }
     }

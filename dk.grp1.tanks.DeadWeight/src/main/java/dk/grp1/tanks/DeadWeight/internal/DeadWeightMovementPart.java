@@ -2,6 +2,7 @@ package dk.grp1.tanks.DeadWeight.internal;
 
 import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.data.GameData;
+import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.data.parts.*;
 import dk.grp1.tanks.common.utils.Vector2D;
 
@@ -12,6 +13,7 @@ public class DeadWeightMovementPart extends MovementPart {
     private Vector2D velocity;
     private float maxSpeed;
     private ArrayList<Entity> targets;
+    private boolean overTarget;
 
     public DeadWeightMovementPart(Vector2D velocity, float maxSpeed, ArrayList<Entity> targets) {
         super(velocity, maxSpeed);
@@ -20,7 +22,7 @@ public class DeadWeightMovementPart extends MovementPart {
         this.maxSpeed = maxSpeed;
     }
 
-    public void processPart(Entity entity, GameData gameData) {
+    public void processPart(Entity entity, GameData gameData, World world) {
         // Get time since last process
         float dt = gameData.getDelta();
 
@@ -30,7 +32,9 @@ public class DeadWeightMovementPart extends MovementPart {
             return; // IF no pos, we cant move
         }
 
-        checkForTarget(entity);
+        if (!overTarget){
+            checkForTarget(entity);
+        }
 
 
         PhysicsPart physicsPart = entity.getPart(PhysicsPart.class);
@@ -65,7 +69,8 @@ public class DeadWeightMovementPart extends MovementPart {
         for (Entity target : targets) {
             PositionPart targetPos = target.getPart(PositionPart.class);
             if (Math.abs(positionPart.getX() - targetPos.getX()) < 1 && Math.abs(positionPart.getX() - targetPos.getX()) > -1) {
-                setVelocity(0, getVelocity().getY());
+                setVelocity(0, 0);
+                overTarget = true;
             }
         }
     }

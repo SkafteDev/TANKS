@@ -2,6 +2,9 @@ package dk.grp1.tanks.common.data.parts;
 
 import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.data.GameData;
+import dk.grp1.tanks.common.data.World;
+import dk.grp1.tanks.common.events.Event;
+import dk.grp1.tanks.common.events.ExplosionEvent;
 import dk.grp1.tanks.common.utils.Vector2D;
 import javafx.geometry.Pos;
 import sun.font.CompositeStrike;
@@ -31,7 +34,15 @@ public class CollisionPart implements IEntityPart {
         this.timeSinceLastCollision = 0;
     }
 
-    public void processPart(Entity entity, GameData gameData) {
+    public void processPart(Entity entity, GameData gameData, World world) {
+        PositionPart positionPart = entity.getPart(PositionPart.class);
+        DamagePart damagePart = entity.getPart(DamagePart.class);
+
+        if (this.isHitGameMap() && positionPart != null && damagePart != null) {
+            Event explosionEvent = new ExplosionEvent(entity, new Vector2D(positionPart.getX(), positionPart.getY()), damagePart.getExplosionRadius());
+            gameData.addEvent(explosionEvent);
+            world.removeEntity(entity);
+        }
     }
 
 

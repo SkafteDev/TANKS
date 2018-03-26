@@ -2,6 +2,7 @@ package dk.grp1.tanks.common.data.parts;
 
 import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.data.GameData;
+import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.services.IWeapon;
 
 import java.util.*;
@@ -19,7 +20,7 @@ public class InventoryPart implements IEntityPart {
     }
 
     @Override
-    public void processPart(Entity entity, GameData gameData) {
+    public void processPart(Entity entity, GameData gameData, World world) {
 
     }
 

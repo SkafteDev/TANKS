@@ -47,10 +47,10 @@ public class EnemyProcessingSystem implements IEntityProcessingService {
             //shootWithKeys(gameData, cannonPart, enemy);
 
 
-            physicsPart.processPart(enemy, gameData);
-            ctrlPart.processPart(enemy, gameData);
-            collisionPart.processPart(enemy, gameData);
-            movePart.processPart(enemy, gameData);
+            physicsPart.processPart(enemy, gameData, world);
+            ctrlPart.processPart(enemy, gameData, world);
+            collisionPart.processPart(enemy, gameData, world);
+            movePart.processPart(enemy, gameData, world);
             cannonPart.setJointY(positionPart.getY());
             cannonPart.setJointX(positionPart.getX());
 
@@ -58,7 +58,7 @@ public class EnemyProcessingSystem implements IEntityProcessingService {
                 aiShoot(gameData, world, cannonPart, enemy);
             }
 
-            cannonPart.processPart(enemy, gameData);
+            cannonPart.processPart(enemy, gameData, world);
 
 
 
