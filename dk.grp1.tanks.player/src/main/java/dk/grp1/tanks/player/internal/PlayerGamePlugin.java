@@ -39,7 +39,11 @@ public class PlayerGamePlugin implements IGamePluginService {
         player.add(new ShapePart());
         player.add(new CollisionPart(true,0));
         player.add(new MovementPart(50));
-        player.add(new TexturePart("tank.png"));
+        player.add(new TexturePart("Mario_Head.png"));
+
+        InventoryPart inventoryPart = new InventoryPart(gameData.getWeapons());
+        gameData.addWeaponListener(inventoryPart);
+        player.add(inventoryPart);
         return player;
     }
 

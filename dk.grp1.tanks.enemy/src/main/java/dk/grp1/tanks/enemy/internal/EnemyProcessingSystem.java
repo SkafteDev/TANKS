@@ -48,10 +48,10 @@ public class EnemyProcessingSystem implements IEntityProcessingService {
             //shootWithKeys(gameData, cannonPart, enemy);
 
 
-            physicsPart.processPart(enemy, gameData);
-            ctrlPart.processPart(enemy, gameData);
-            collisionPart.processPart(enemy, gameData);
-            movePart.processPart(enemy, gameData);
+            physicsPart.processPart(enemy, gameData, world);
+            ctrlPart.processPart(enemy, gameData, world);
+            collisionPart.processPart(enemy, gameData, world);
+            movePart.processPart(enemy, gameData, world);
             cannonPart.setJointY(positionPart.getY());
             cannonPart.setJointX(positionPart.getX());
 
@@ -59,7 +59,7 @@ public class EnemyProcessingSystem implements IEntityProcessingService {
                 aiShoot(gameData, world, cannonPart, enemy);
             }
 
-            cannonPart.processPart(enemy, gameData);
+            cannonPart.processPart(enemy, gameData, world);
 
 
 
@@ -68,6 +68,8 @@ public class EnemyProcessingSystem implements IEntityProcessingService {
 
     private void aiShoot(GameData gameData, World world, CannonPart cannonPart, Entity enemy){
         PositionPart enemyPositionPart = enemy.getPart(PositionPart.class);
+        InventoryPart inventoryPart = enemy.getPart(InventoryPart.class);
+        inventoryPart.processPart(enemy, gameData, world);
 
         for (Entity entity: world.getEntities()) {
 
@@ -83,7 +85,8 @@ public class EnemyProcessingSystem implements IEntityProcessingService {
 
                 //TODO fix me
                 firepower = initialVelocity(cannonPart, otherEntityPositionPart, 90.82f, cannonPart.getDirection());
-                gameData.addEvent(new ShootingEvent(enemy, firepower));
+                inventoryPart.getCurrentWeapon().shoot(enemy, firepower, world);
+                //gameData.addEvent(new ShootingEvent(enemy, firepower));
             }
         }
     }

@@ -4,6 +4,7 @@ import dk.grp1.tanks.common.services.IEntityProcessingService;
 import dk.grp1.tanks.common.services.IGamePluginService;
 import dk.grp1.tanks.common.services.INonEntityProcessingService;
 import dk.grp1.tanks.common.services.IPostEntityProcessingService;
+import dk.grp1.tanks.common.services.IWeapon;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
@@ -68,6 +69,23 @@ public class ServiceLoader  {
             }
         }
         return processingServices;
+    }
+
+    public List<IWeapon> getIWeaponServices() {
+        ArrayList<IWeapon> weapons = new ArrayList<>();
+        ServiceReference[] serviceReferences = new ServiceReference[5];
+        try {
+            serviceReferences = bundleContext.getAllServiceReferences(IWeapon.class.getName(), null);
+        } catch (InvalidSyntaxException e) {
+            e.printStackTrace();
+        }
+
+        if(serviceReferences != null) {
+            for (ServiceReference s : serviceReferences) {
+                weapons.add((IWeapon) bundleContext.getService(s));
+            }
+        }
+        return weapons;
     }
 
     public List<INonEntityProcessingService> getNonEntityProcessingServices() {

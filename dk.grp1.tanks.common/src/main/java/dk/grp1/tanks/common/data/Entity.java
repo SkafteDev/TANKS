@@ -2,9 +2,7 @@ package dk.grp1.tanks.common.data;
 
 import dk.grp1.tanks.common.data.parts.IEntityPart;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by danie on 12-03-2018.
@@ -22,7 +20,20 @@ public abstract class Entity {
     }
 
     public <E extends IEntityPart> E getPart(Class partClass) {
-        return (E) parts.get(partClass);
+
+        for (IEntityPart part : parts.values()) {
+            if (partClass.isInstance(part)) {
+
+                return (E) part;
+            }
+
+        }
+
+        return null;
+    }
+
+    public Collection<IEntityPart> getParts() {
+        return parts.values();
     }
 
     public String getID() {
