@@ -46,6 +46,13 @@ public class GameMap {
      * @param gameMapFunction A game map function
      */
     public void addGameMapFunction(IGameMapFunction gameMapFunction) {
+        for (IGameMapFunction mapFunction : gameMapFunctions) {
+            if(mapFunction.isWithin(gameMapFunction.getStartX())){
+                mapFunction.setEndX(gameMapFunction.getStartX());
+            } else if(mapFunction.isWithin(gameMapFunction.getEndX())){
+                mapFunction.setStartX(gameMapFunction.getEndX());
+            }
+        }
         this.gameMapFunctions.add(gameMapFunction);
         Collections.sort(gameMapFunctions, this.comparator);
     }

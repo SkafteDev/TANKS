@@ -1,6 +1,7 @@
 package dk.grp1.tanks.gamemap.internal;
 
 import dk.grp1.tanks.common.data.IGameMapFunction;
+import dk.grp1.tanks.common.utils.Vector2D;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,10 @@ public class GameMapNegativeHalfCircle implements IGameMapFunction {
         this.centerY = centerY;
         this.radius = radius;
     }
+    public GameMapNegativeHalfCircle(float startX, float endX, Vector2D center, float radius) {
+        this(startX,endX,center.getX(),center.getY(),radius);
+    }
+
 
     @Override
     public float getStartX() {
@@ -27,7 +32,8 @@ public class GameMapNegativeHalfCircle implements IGameMapFunction {
 
     @Override
     public float getYValue(float xValue) {
-        return (float) (centerY - Math.sqrt(-(Math.pow(centerX,2))+ 2 * xValue * centerX + Math.pow(radius,2) - Math.pow(xValue,2)));
+        float toSqrt = (-(centerX*centerX)+ 2 * xValue * centerX + (radius*radius) - (xValue*xValue));
+        return (float) (centerY - Math.sqrt(toSqrt));
     }
 
     @Override
