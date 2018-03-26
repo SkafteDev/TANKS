@@ -15,16 +15,17 @@ import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.data.parts.CannonPart;
 import dk.grp1.tanks.common.data.parts.CirclePart;
 import dk.grp1.tanks.common.data.parts.PositionPart;
+import dk.grp1.tanks.common.data.parts.TexturePart;
 import dk.grp1.tanks.common.services.IEntityProcessingService;
 import dk.grp1.tanks.common.services.INonEntityProcessingService;
 import dk.grp1.tanks.common.services.IPostEntityProcessingService;
 import dk.grp1.tanks.common.utils.Vector2D;
-import dk.grp1.tanks.common.services.IGamePluginService;
 import dk.grp1.tanks.core.internal.managers.GameInputProcessor;
-import javafx.geometry.Pos;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class Game implements ApplicationListener {
@@ -34,6 +35,7 @@ public class Game implements ApplicationListener {
     private ShapeRenderer shapeRenderer;
     private OrthographicCamera camera;
     private final boolean DEBUG = false;
+    private Map<String, Texture> textureMap;
 
 
     //Variables for drawing the game map
@@ -46,7 +48,7 @@ public class Game implements ApplicationListener {
         this.serviceLoader = serviceLoader;
         this.world = new World();
         this.gameData = gameData;
-
+        this.textureMap = new HashMap<>();
     }
 
 
@@ -64,7 +66,7 @@ public class Game implements ApplicationListener {
 
         //camera = new OrthographicCamera(gameData.getDisplayWidth(),gameData.getDisplayHeight());
         //camera = new OrthographicCamera(200,100);
-        camera = new OrthographicCamera(gameData.getGameWidth(),gameData.getGameHeight());
+        camera = new OrthographicCamera(gameData.getGameWidth(), gameData.getGameHeight());
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
         camera.update();
 
@@ -96,8 +98,32 @@ public class Game implements ApplicationListener {
 
         update();
 
-
+        drawBackGround();
         draw();
+    }
+
+    private void drawBackGround() {
+        String path = "background.png";
+
+        if (!textureMap.containsKey(path)) {
+
+            InputStream is = this.getClass().getClassLoader().getResourceAsStream(path);
+            try {
+                Gdx2DPixmap gmp = new Gdx2DPixmap(is, Gdx2DPixmap.GDX2D_FORMAT_RGBA8888);
+                Pixmap pix = new Pixmap(gmp);
+                textureMap.put(path, new Texture(pix));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        SpriteBatch spriteBatch = new SpriteBatch();
+        spriteBatch.begin();
+        spriteBatch.setProjectionMatrix(camera.combined);
+        Texture t = textureMap.get(path);
+
+        spriteBatch.draw(t,0,0,gameData.getGameWidth(),gameData.getGameHeight());
+        spriteBatch.end();
     }
 
     private void update() {
@@ -105,12 +131,14 @@ public class Game implements ApplicationListener {
             processingService.process(world, gameData);
         }
         for (INonEntityProcessingService iNonEntityProcessingService : serviceLoader.getNonEntityProcessingServices()) {
+        }
             iNonEntityProcessingService.process(world,gameData);
-        }
-        for(IPostEntityProcessingService postEntityProcessingService: serviceLoader.getPostEntityProcessingServices()){
+        for (IPostEntityProcessingService postEntityProcessingService : serviceLoader.getPostEntityProcessingServices()) {
 
-            postEntityProcessingService.postProcess(world,gameData);
+            postEntityProcessingService.postProcess(world, gameData);
         }
+
+        gameData.getKeys().update();
     }
 
     private void renderGameMap() {
@@ -154,9 +182,14 @@ public class Game implements ApplicationListener {
 
     private void draw() {
         renderGameMap();
-        for (Entity entity: world.getEntities()) {
+        //drawShapes();
+        drawTextures();
+    }
+
+    private void drawShapes(){
+        for (Entity entity : world.getEntities()) {
             shapeRenderer.setProjectionMatrix(camera.combined);
-            shapeRenderer.setColor(1,1,1,1);
+            shapeRenderer.setColor(1, 1, 1, 1);
 
             CirclePart cp = entity.getPart(CirclePart.class);
             PositionPart pos = entity.getPart(PositionPart.class);
@@ -177,6 +210,69 @@ public class Game implements ApplicationListener {
             }
 
         }
+    }
+
+    private void drawTextures() {
+        SpriteBatch spriteBatch = new SpriteBatch();
+        spriteBatch.begin();
+        spriteBatch.setProjectionMatrix(camera.combined);
+
+
+        for (Entity e : world.getEntities()) {
+            TexturePart tp = e.getPart(TexturePart.class);
+            PositionPart pp = e.getPart(PositionPart.class);
+            CirclePart cp = e.getPart(CirclePart.class);
+
+            CannonPart cannonPart = e.getPart(CannonPart.class);
+            if (cannonPart != null && pp != null && cp != null){
+                TextureRegion textureRegion = new TextureRegion(checkGetTexture(e, cannonPart.getTexturePath()));
+                drawCannon(spriteBatch, textureRegion, cannonPart);
+            }
+
+            if (tp != null && pp != null && cp != null) {
+                Texture texture = checkGetTexture(e, tp.getSrcPath());
+                //Sprite sprite = new Sprite(texture);
+                spriteBatch.draw(texture, pp.getX() - cp.getRadius(), pp.getY() - cp.getRadius(), cp.getRadius() * 2, cp.getRadius() * 2);
+            }
+
+
+        }
+        spriteBatch.end();
+    }
+
+    private void drawCannon(SpriteBatch spriteBatch, TextureRegion textureRegion, CannonPart cannonPart){
+        float x = cannonPart.getVertices()[1].getX();
+        float y = cannonPart.getVertices()[1].getY();
+        float originX = 0; //(cannonPart.getVertices()[0].getX()-cannonPart.getVertices()[1].getX())/2;
+        float originY = 0; //(cannonPart.getVertices()[0].getY()-cannonPart.getVertices()[1].getY())/2;
+        float width = cannonPart.getWidth();
+        float height = cannonPart.getLength();
+        float scaleX = 1; // scale is 100%. 50% is equal to 0.5
+        float scaleY = 1; // scale is 100%
+        float rotation = (float) Math.toDegrees(cannonPart.getDirection()) -90;
+        spriteBatch.draw(textureRegion, x, y, originX, originY, width, height, scaleX, scaleY, rotation);
+    }
+
+    private Texture checkGetTexture(Entity e, String path){
+        Texture texture = textureMap.get(path);
+
+        if (texture == null) {
+            InputStream is = e.getClass().getClassLoader().getResourceAsStream(
+                    path
+            );
+            try {
+                Gdx2DPixmap gmp = new Gdx2DPixmap(is, Gdx2DPixmap.GDX2D_FORMAT_RGBA8888);
+                Pixmap pix = new Pixmap(gmp);
+                texture = new Texture(pix);
+                textureMap.put(path, texture);
+                pix.dispose();
+
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
+
+        return texture;
     }
 
 

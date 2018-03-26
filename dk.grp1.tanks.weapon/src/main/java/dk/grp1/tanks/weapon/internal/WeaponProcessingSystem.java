@@ -5,6 +5,7 @@ import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.data.parts.*;
 import dk.grp1.tanks.common.events.Event;
+import dk.grp1.tanks.common.events.ExplosionEvent;
 import dk.grp1.tanks.common.events.MapDestructionEvent;
 import dk.grp1.tanks.common.events.ShootingEvent;
 import dk.grp1.tanks.common.services.IEntityProcessingService;
@@ -33,10 +34,11 @@ public class WeaponProcessingSystem implements IEntityProcessingService {
             }
 
             if(collisionPart != null){
-                collisionPart.processPart(bullet,gameData);
-                if(collisionPart.isHitGameMap() && positionPart != null){
-                    Event explosionEvent = new MapDestructionEvent(bullet,new Vector2D(positionPart.getX(),positionPart.getY()),damagePart.getExplosionRadius());
+                if(collisionPart.isHitGameMap() && positionPart != null && damagePart != null){
+                    Event explosionEvent = new ExplosionEvent(bullet,new Vector2D(positionPart.getX(),positionPart.getY()),damagePart.getExplosionRadius());
+                    Event mapDestructionEvent = new MapDestructionEvent(bullet,new Vector2D(positionPart.getX(),positionPart.getY()),damagePart.getExplosionRadius());
                     gameData.addEvent(explosionEvent);
+                    gameData.addEvent(mapDestructionEvent);
                     world.removeEntity(bullet);
                 }
             }

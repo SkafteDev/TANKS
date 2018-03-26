@@ -13,9 +13,9 @@ public class WeaponFactory {
         e.add( new MovementPart(new Vector2D(25, 22), 10000));
         e.add(new PositionPart(30,30, (float) (Math.PI/4)));
         e.add(new ShapePart());
-        e.add(new CirclePart(30,30,1));
+        e.add(new CirclePart(30,30,10));
         e.add(new PhysicsPart(30, -9.82f));
-        e.add(new TexturePart("fakePath.png"));
+        //e.add(new TexturePart("C:\\Users\\Vedsted\\Desktop\\balls\\basketball_PNG1096.png"));
         return e;
     }
 
@@ -31,11 +31,11 @@ public class WeaponFactory {
         e.add( new MovementPart(accelerationVector, 10000));
 
         e.add(new ShapePart());
-        e.add(new CirclePart(30,30,1));
+        e.add(new CirclePart(30,30,4));
         e.add(new PhysicsPart(30, -90.82f));
         e.add(new CollisionPart(true,0));
-        e.add(new TexturePart("fakePath.png"));
-        e.add(new DamagePart(5,1));
+        e.add(new DamagePart(20,1));
+        e.add(new TexturePart("mario_red_mushroom.png"));
         return e;
     }
 }

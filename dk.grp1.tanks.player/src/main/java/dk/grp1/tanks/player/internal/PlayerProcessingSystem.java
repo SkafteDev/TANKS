@@ -31,6 +31,11 @@ public class PlayerProcessingSystem implements IEntityProcessingService {
             PositionPart positionPart = player.getPart(PositionPart.class);
             CollisionPart collisionPart = player.getPart(CollisionPart.class);
             PhysicsPart physicsPart = player.getPart(PhysicsPart.class);
+            LifePart lifePart = player.getPart(LifePart.class);
+
+            if(lifePart.getCurrentHP() <= 0){
+                world.removeEntity(player);
+            }
 
 
             ctrlPart.setLeft(gameData.getKeys().isDown(GameKeys.LEFT));
