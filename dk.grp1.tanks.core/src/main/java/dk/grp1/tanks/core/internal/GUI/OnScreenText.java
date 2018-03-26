@@ -3,27 +3,62 @@ package dk.grp1.tanks.core.internal.GUI;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.World;
+import dk.grp1.tanks.common.data.parts.CirclePart;
+import dk.grp1.tanks.common.data.parts.InventoryPart;
+import dk.grp1.tanks.common.data.parts.PositionPart;
+import javafx.geometry.Pos;
 
 public class OnScreenText implements IGuiProcessingService{
 
     private SpriteBatch batch;
     private BitmapFont font;
+    private OrthographicCamera camera;
 
     @Override
-    public void draw(OrthographicCamera camera, World world, GameData gameData) {
-        renderText(gameData);
+    public void draw(World world, GameData gameData) {
+        turnText(gameData);
+        for (Entity entity: world.getEntities()) {
+            InventoryPart inventoryPart = entity.getPart(InventoryPart.class);
+            if (inventoryPart != null){
+                weaponText(entity, inventoryPart);
+            }
+        }
+    }
+
+    @Override
+    public void setCam(OrthographicCamera camera) {
+        this.camera = camera;
+    }
+
+    private void weaponText(Entity entity, InventoryPart inventoryPart) {
+        batch = new SpriteBatch();
+        String weaponText;
+        try {
+            weaponText = inventoryPart.getCurrentWeapon().getName();
+        } catch (NullPointerException e){
+            weaponText = "None";
+        }
+        font = new BitmapFont();
+        batch.setProjectionMatrix(camera.combined);
+        batch.begin();
+        CirclePart circlePart = entity.getPart(CirclePart.class);
+        font.draw(batch, weaponText, circlePart.getCentreX()-30, circlePart.getCentreY()-10);
+        batch.end();
+        font.dispose();
     }
 
 
-
-    private void renderText(GameData gameData) {
+    private void turnText(GameData gameData) {
         batch = new SpriteBatch();
-        String text = "Turn: ";
+        String turnText = "Turn: ";
         font = new BitmapFont();
+        batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        font.draw(batch, text, 10, gameData.getGameHeight()*2-10);
+        font.draw(batch, turnText, 10, gameData.getGameHeight()-10);
         batch.end();
+        font.dispose();
     }
 }

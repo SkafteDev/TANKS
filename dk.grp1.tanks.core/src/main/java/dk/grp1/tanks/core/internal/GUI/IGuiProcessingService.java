@@ -6,5 +6,7 @@ import dk.grp1.tanks.common.data.World;
 
 public interface IGuiProcessingService {
 
-    public void draw(OrthographicCamera camera, World world, GameData gameData);
+    public void draw(World world, GameData gameData);
+
+    public void setCam(OrthographicCamera camera);
 }

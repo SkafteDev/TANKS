@@ -20,6 +20,7 @@ import dk.grp1.tanks.common.utils.Vector2D;
 import dk.grp1.tanks.core.internal.GUI.HealthBarGUI;
 import dk.grp1.tanks.core.internal.GUI.IGuiProcessingService;
 import dk.grp1.tanks.core.internal.GUI.OnScreenText;
+import dk.grp1.tanks.core.internal.GUI.WeaponGUI;
 import dk.grp1.tanks.core.internal.managers.GameInputProcessor;
 
 import java.io.IOException;
@@ -69,6 +70,11 @@ public class Game implements ApplicationListener {
 
         drawImplementations.add(new HealthBarGUI());
         drawImplementations.add(new OnScreenText());
+        drawImplementations.add(new WeaponGUI());
+
+        for (IGuiProcessingService gui: drawImplementations) {
+            gui.setCam(camera);
+        }
 
     }
 

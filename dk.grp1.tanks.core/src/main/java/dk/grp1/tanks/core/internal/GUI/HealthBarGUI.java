@@ -20,8 +20,7 @@ public class HealthBarGUI implements IGuiProcessingService {
     private SpriteBatch batch;
 
     @Override
-    public void draw(OrthographicCamera camera, World world, GameData gameData) {
-        this.camera = camera;
+    public void draw(World world, GameData gameData) {
         for (Entity entity : world.getEntities()) {
             LifePart lifePart = entity.getPart(LifePart.class);
             if (lifePart != null) {
@@ -31,6 +30,11 @@ public class HealthBarGUI implements IGuiProcessingService {
             }
         }
 
+    }
+
+    @Override
+    public void setCam(OrthographicCamera camera) {
+        this.camera = camera;
     }
 
 

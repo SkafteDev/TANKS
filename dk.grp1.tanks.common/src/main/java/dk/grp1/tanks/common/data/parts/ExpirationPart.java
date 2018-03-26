@@ -2,15 +2,12 @@ package dk.grp1.tanks.common.data.parts;
 
 import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.data.GameData;
+import dk.grp1.tanks.common.data.World;
 
 public class ExpirationPart implements IEntityPart{
 
     private float remainingLifeTime;
 
-    @Override
-    public void processPart(Entity entity, GameData gameData) {
-
-    }
 
 
     /**
@@ -31,5 +28,10 @@ public class ExpirationPart implements IEntityPart{
         if (this.remainingLifeTime < 0){
             this.remainingLifeTime = 0;
         }
+    }
+
+    @Override
+    public void processPart(Entity entity, GameData gameData, World world) {
+
     }
 }
