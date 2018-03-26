@@ -1,14 +1,18 @@
 package dk.grp1.tanks.common.data;
 
+import dk.grp1.tanks.common.utils.GameMapFunctionComparator;
 import dk.grp1.tanks.common.utils.Vector2D;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class GameMap {
     private List<IGameMapFunction> gameMapFunctions;
     private float GAMEWIDTH;
     private float GAMEHEIGHT;
+    private GameMapFunctionComparator comparator;
 
 
     /**
@@ -18,6 +22,7 @@ public class GameMap {
         gameMapFunctions = new ArrayList<>();
         this.GAMEHEIGHT = gameHeight;
         this.GAMEWIDTH = gameWidth;
+        this.comparator = new GameMapFunctionComparator();
     }
 
     /**
@@ -41,7 +46,15 @@ public class GameMap {
      * @param gameMapFunction A game map function
      */
     public void addGameMapFunction(IGameMapFunction gameMapFunction) {
+        for (IGameMapFunction mapFunction : gameMapFunctions) {
+            if(mapFunction.isWithin(gameMapFunction.getStartX())){
+                mapFunction.setEndX(gameMapFunction.getStartX());
+            } else if(mapFunction.isWithin(gameMapFunction.getEndX())){
+                mapFunction.setStartX(gameMapFunction.getEndX());
+            }
+        }
         this.gameMapFunctions.add(gameMapFunction);
+        Collections.sort(gameMapFunctions, this.comparator);
     }
 
     /**
@@ -51,8 +64,9 @@ public class GameMap {
      */
     public List<Vector2D> getVertices(float startX, float endX, int amountOfVertices) {
         List<Vector2D> vertices = new ArrayList<>();
-        for (float x = startX; x <= endX; x+=(endX-startX)/amountOfVertices) {
-            for (IGameMapFunction gameMapFunction : gameMapFunctions) {
+        for (IGameMapFunction gameMapFunction : gameMapFunctions) {
+            for (float x = startX; x <= endX; x+=(endX-startX)/amountOfVertices) {
+
                 if(gameMapFunction.isWithin(x)){
                     float y = gameMapFunction.getYValue(x);
                     vertices.add(new Vector2D(x,y));
@@ -60,8 +74,6 @@ public class GameMap {
             }
 
         }
-
-
         vertices.add(new Vector2D(GAMEWIDTH,0));
         vertices.add(new Vector2D(0,0));
         return vertices;
@@ -88,27 +100,40 @@ public class GameMap {
 
     /**
      * Gets the direction at the given x coordinate, as a vector
-     * @param xCoordinate
+     * @param ownPosition
      * @return a unit vector of the direction
      */
-    public Vector2D getDirectionVector(float xCoordinate) {
-        float y = getHeight(xCoordinate);
-        float y2 = getHeight(xCoordinate + 0.1f);
-        Vector2D vector = new Vector2D((xCoordinate + 0.1f) - xCoordinate, y2 - y);
+    public Vector2D getDirectionVector(Vector2D ownPosition) {
+        float y = getHeight(ownPosition);
+        Vector2D nearbyPoint = new Vector2D(ownPosition.getX()+0.1f,ownPosition.getY());
+        float y2 = getHeight(nearbyPoint);
+        Vector2D vector = new Vector2D(nearbyPoint.getX() - ownPosition.getX(), y2 - y);
         return vector.unitVector();
     }
 
     /**
      * Gets the height of the map at the given xcoordinate
-     * @param x
+     * @param ownPosition
      * @return The height of the game map, or -1 if outside of the game map
      */
-    public float getHeight(float x) {
+    public float getHeight(Vector2D ownPosition) {
+        List<Float>  yValues = new ArrayList<>();
         for (IGameMapFunction gameMapFunction : gameMapFunctions) {
-            if(gameMapFunction.isWithin(x)){
-                return gameMapFunction.getYValue(x);
+            if(gameMapFunction.isWithin(ownPosition.getX())){
+                yValues.add(gameMapFunction.getYValue(ownPosition.getX()));
             }
         }
-        return -1f;
+
+        float minDifference = ownPosition.getY();
+        float y = -1f;
+        for (Float yValue : yValues) {
+            if(minDifference > Math.abs(ownPosition.getY() - yValue)){
+                minDifference = Math.abs(ownPosition.getY() - yValue);
+                y = yValue;
+            }
+        }
+        return y;
     }
+
+
 }

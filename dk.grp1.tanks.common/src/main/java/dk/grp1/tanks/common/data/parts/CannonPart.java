@@ -17,6 +17,8 @@ public class CannonPart implements IEntityPart{
     private Vector2D directionVector;
     private float length;
     private float width;
+    private float firepower;
+    private float maxFirepower = 250;
 
     public CannonPart(float jointX, float jointY, float direction, float width, float length) {
         this.jointX = jointX;
@@ -68,6 +70,17 @@ public class CannonPart implements IEntityPart{
         // Update the direction vector of the cannon
         directionVector = Vector2D.subtractVectors(d, a).unitVector();
 
+    }
+
+    public float calculateFirepower(GameData gameData){
+        float time = gameData.getDelta();
+        firepower = firepower + (time * 65/100 * maxFirepower);
+
+        if (1 < firepower/maxFirepower) { //percentage of max firepower
+            firepower = maxFirepower;
+        }
+        //System.out.println(firepower);
+        return this.firepower;
     }
 
     @Override
@@ -133,5 +146,13 @@ public class CannonPart implements IEntityPart{
 
     public float getWidth() {
         return width;
+    }
+
+    public float getFirepower() {
+        return firepower;
+    }
+
+    public void setFirepower(float firepower) {
+        this.firepower = firepower;
     }
 }

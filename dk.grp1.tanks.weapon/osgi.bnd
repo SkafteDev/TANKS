@@ -1,5 +1,2 @@
-#-----------------------------------------------------------------
-# Use this file to add customized Bnd instructions for the bundle
-#-----------------------------------------------------------------
+Bundle-Activator: dk.grp1.tanks.weapon.internal.WeaponActivator
 
-Bundle-Activator: ${bundle.namespace}.internal.WeaponActivator

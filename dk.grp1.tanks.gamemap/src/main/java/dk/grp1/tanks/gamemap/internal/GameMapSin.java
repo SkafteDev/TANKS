@@ -1,6 +1,7 @@
 package dk.grp1.tanks.gamemap.internal;
 
 import dk.grp1.tanks.common.data.IGameMapFunction;
+import dk.grp1.tanks.common.utils.Vector2D;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,4 +59,28 @@ public class GameMapSin implements IGameMapFunction {
         }
         return false;
     }
+
+    @Override
+    public void setEndX(float value) {
+        this.endX = value;
+    }
+
+    @Override
+    public void setStartX(float value) {
+        this.startX = value;
+    }
+
+    @Override
+    public boolean existsOnlyWithinRange(float startX, float endX) {
+        return (this.startX > startX && this.endX < endX);
+    }
+
+    @Override
+    public List<IGameMapFunction> splitInTwoWithNewRanges(float rangeOneStartX, float rangeOneEndX, float rangeTwoStartX, float rangeTwoEndX) {
+        List<IGameMapFunction> splitGameMapFunctions = new ArrayList<>();
+        splitGameMapFunctions.add(new GameMapSin(this.amplitude,this.angularFrequency,this.phaseShift,this.shiftConstant,rangeOneStartX,rangeOneEndX));
+        splitGameMapFunctions.add(new GameMapSin(this.amplitude,this.angularFrequency,this.phaseShift,this.shiftConstant,rangeTwoStartX,rangeTwoEndX));
+        return splitGameMapFunctions;
+    }
+
 }

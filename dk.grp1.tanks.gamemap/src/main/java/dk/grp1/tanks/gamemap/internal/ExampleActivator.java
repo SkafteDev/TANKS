@@ -3,6 +3,7 @@ package dk.grp1.tanks.gamemap.internal;
 
 
 import dk.grp1.tanks.common.services.IGamePluginService;
+import dk.grp1.tanks.common.services.INonEntityProcessingService;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
@@ -20,6 +21,7 @@ public final class ExampleActivator
     {
         System.out.println( "STARTING dk.grp1.tanks.gamemap" );
         bc.registerService(IGamePluginService.class.getName(),new GameMapPlugin(),null);
+        bc.registerService(INonEntityProcessingService.class.getName(), new GameMapProcessing(),null);
 
     }
 

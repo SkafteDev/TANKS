@@ -3,42 +3,22 @@ package dk.grp1.tanks.gamemap.internal;
 import dk.grp1.tanks.common.data.IGameMapFunction;
 import dk.grp1.tanks.common.utils.Vector2D;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
-public class GameMapLinear implements IGameMapFunction {
-
-    private float a;
-    private float b;
+public class GameMapPositiveHalfCircle implements IGameMapFunction {
     private float startX;
     private float endX;
+    private float centerX;
+    private float centerY;
+    private float radius;
 
-    /**
-     *
-     * @param a
-     * @param b
-     * @param startX
-     * @param endX
-     */
-    public GameMapLinear(float a, float b, float startX, float endX) {
-
-        this.a = a;
-        this.b = b;
+    public GameMapPositiveHalfCircle(float startX, float endX, float centerX, float centerY, float radius) {
         this.startX = startX;
         this.endX = endX;
-    }
-
-    public GameMapLinear(float a, float startX, float endX, IGameMapFunction sucessorFn) {
-        float y = sucessorFn.getYValue(sucessorFn.getEndX());
-
-        //Calculate b value
-        float b = y - a * startX;
-
-        this.a = a;
-        this.b = b;
-        this.startX = startX;
-        this.endX = endX;
+        this.centerX = centerX;
+        this.centerY = centerY;
+        this.radius = radius;
     }
 
     @Override
@@ -48,7 +28,7 @@ public class GameMapLinear implements IGameMapFunction {
 
     @Override
     public float getYValue(float xValue) {
-        return a * xValue + b;
+        return (float) (centerY + Math.sqrt(-(Math.pow(centerX,2))+ 2 * xValue * centerX + Math.pow(radius,2) - Math.pow(xValue,2)));
     }
 
     @Override
@@ -91,9 +71,10 @@ public class GameMapLinear implements IGameMapFunction {
     @Override
     public List<IGameMapFunction> splitInTwoWithNewRanges(float rangeOneStartX, float rangeOneEndX, float rangeTwoStartX, float rangeTwoEndX) {
         List<IGameMapFunction> splitGameMapFunctions = new ArrayList<>();
-        splitGameMapFunctions.add(new GameMapLinear(this.a,this.b,rangeOneStartX,rangeOneEndX));
-        splitGameMapFunctions.add(new GameMapLinear(this.a,this.b,rangeTwoStartX,rangeTwoEndX));
+        splitGameMapFunctions.add(new GameMapPositiveHalfCircle(rangeOneStartX,rangeOneEndX,this.centerX,this.centerY,this.radius));
+        splitGameMapFunctions.add(new GameMapPositiveHalfCircle(rangeTwoStartX,rangeTwoEndX,this.centerX,this.centerY,this.radius));
         return splitGameMapFunctions;
+
     }
 
 }

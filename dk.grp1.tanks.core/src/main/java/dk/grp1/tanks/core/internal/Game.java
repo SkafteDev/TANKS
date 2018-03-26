@@ -16,6 +16,7 @@ import dk.grp1.tanks.common.data.parts.CannonPart;
 import dk.grp1.tanks.common.data.parts.CirclePart;
 import dk.grp1.tanks.common.data.parts.PositionPart;
 import dk.grp1.tanks.common.services.IEntityProcessingService;
+import dk.grp1.tanks.common.services.INonEntityProcessingService;
 import dk.grp1.tanks.common.services.IPostEntityProcessingService;
 import dk.grp1.tanks.common.utils.Vector2D;
 import dk.grp1.tanks.common.services.IGamePluginService;
@@ -32,6 +33,7 @@ public class Game implements ApplicationListener {
     private GameData gameData;
     private ShapeRenderer shapeRenderer;
     private OrthographicCamera camera;
+    private final boolean DEBUG = false;
 
 
     //Variables for drawing the game map
@@ -102,6 +104,9 @@ public class Game implements ApplicationListener {
         for (IEntityProcessingService processingService : serviceLoader.getEntityProcessingServices()) {
             processingService.process(world, gameData);
         }
+        for (INonEntityProcessingService iNonEntityProcessingService : serviceLoader.getNonEntityProcessingServices()) {
+            iNonEntityProcessingService.process(world,gameData);
+        }
         for(IPostEntityProcessingService postEntityProcessingService: serviceLoader.getPostEntityProcessingServices()){
 
             postEntityProcessingService.postProcess(world,gameData);
@@ -117,17 +122,29 @@ public class Game implements ApplicationListener {
             return;
         }
 
-
-        gameMapPolySprite = new PolygonSprite(convertGameMapToPolyRegion(gameMap));
-        polySpriteBatch.begin();
-        polySpriteBatch.setProjectionMatrix(camera.combined);
-        gameMapPolySprite.draw(polySpriteBatch);
-        polySpriteBatch.end();
-
+        if(!DEBUG) {
+            gameMapPolySprite = new PolygonSprite(convertGameMapToPolyRegion(gameMap));
+            polySpriteBatch.begin();
+            polySpriteBatch.setProjectionMatrix(camera.combined);
+            gameMapPolySprite.draw(polySpriteBatch);
+            polySpriteBatch.end();
+        } else {
+            shapeRenderer.setProjectionMatrix(camera.combined);
+            shapeRenderer.setColor(Color.RED);
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+            List<Vector2D> vertices = gameMap.getVertices(0, gameData.getGameWidth(), 1024);
+            for (int i = 0, j = vertices.size() - 1;
+                 i < vertices.size(); j = i++) {
+                Vector2D vector1 = vertices.get(i);
+                Vector2D vector2 = vertices.get(j);
+                shapeRenderer.line(vector1.getX(),vector1.getY(),vector2.getX(),vector2.getY());
+            }
+            shapeRenderer.end();
+        }
     }
 
     private PolygonRegion convertGameMapToPolyRegion(GameMap gameMap) {
-        FloatArray vertices = new FloatArray(gameMap.getVerticesAsFloats(0,gameData.getGameWidth(),256));
+        FloatArray vertices = new FloatArray(gameMap.getVerticesAsFloats(0,gameData.getGameWidth(),1024));
         EarClippingTriangulator triangulator = new EarClippingTriangulator();
         ShortArray triangleIndices = triangulator.computeTriangles(vertices);
         PolygonRegion polygonRegion = new PolygonRegion(textureRegion, vertices.toArray(), triangleIndices.toArray());

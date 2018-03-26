@@ -12,83 +12,64 @@ import javax.naming.ldap.Control;
 public class MovementPart implements IEntityPart {
 
     private Vector2D velocity;
-    private float deceleration;
     private float maxSpeed;
 
-    public MovementPart(Vector2D velocity, float maxSpeed, float deceleration) {
+    public MovementPart(Vector2D velocity, float maxSpeed) {
 
         this.velocity = velocity;
         this.maxSpeed = maxSpeed;
-        this.deceleration = deceleration;
     }
 
-    public MovementPart(float maxSpeed, float deceleration) {
+    public MovementPart(float maxSpeed) {
 
-        this(new Vector2D(0, 0), maxSpeed, deceleration);
+        this(new Vector2D(0, 0), maxSpeed);
     }
 
+    /**
+     * changes velocity based on gravity from physicspart and controls
+     * and updates pos based on velocity
+     * @param entity the entity to move
+     * @param gameData game data
+     */
     public void processPart(Entity entity, GameData gameData) {
+        // Get time since last process
         float dt = gameData.getDelta();
-        Vector2D change = new Vector2D(0, 0);
 
         // get pos
         PositionPart position = entity.getPart(PositionPart.class);
         if (position == null) {
-            return;
+            return; // IF no pos, we cant move
         }
 
         PhysicsPart physicsPart = entity.getPart(PhysicsPart.class);
-
-        // update velocity with accel and grav
+        // update velocity with grav
         if (physicsPart != null) {
-            change.add(physicsPart.getGravityVector());
+            addVelocity(physicsPart.getGravityVector());
         }
-
 
         CollisionPart collisionPart = entity.getPart(CollisionPart.class);
-        if (collisionPart != null && collisionPart.isHitGameMap()){
+        if (collisionPart != null && collisionPart.isHitGameMap()){ // If hitting map
             ControlPart controls = entity.getPart(ControlPart.class);
             if (controls != null) {
-                // set acceleration
-                change.add(controls.getControlVector());
+                // set velocity the amount specified by the controlpart
+                setVelocity(controls.getControlVector());
+            } else {
+                setVelocity(getVelocity().getX(),0);
             }
-            change.add(collisionPart.getCollisionVector());
 
-            setVelocity(getVelocity().getX(), 0);
-            // Decelerate
-            decelerate(deceleration, dt);
 
-            //collisionPart.setHitGameMap(false);
         }
-
-
-
-        addVelocity(change);
-
-
 
         // update pos with velo
         position.setX(position.getX() + getVelocity().getX() * dt);
         position.setY(position.getY() + getVelocity().getY() * dt);
 
-
     }
 
-    private void decelerate(float deceleration, float dt) {
-        float speed = getVelocity().length();
-
-        if (speed > 1) {
-            float changeX = -1 * (getVelocity().getX() / speed) * deceleration * dt;
-            float changeY = -1 * (getVelocity().getY() / speed) * deceleration * dt;
-            addVelocity(
-                    new Vector2D(changeX, changeY)
-            );
-        } else {
-            setVelocity(0,0);
-        }
-
-    }
-
+    /**
+     * adds a vector to the velocity vector
+     * @param velocity
+     */
     private void addVelocity(Vector2D velocity) {
         Vector2D prevVelocity = getVelocity();
         prevVelocity.add(velocity);

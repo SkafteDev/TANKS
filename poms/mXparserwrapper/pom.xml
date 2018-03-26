@@ -9,7 +9,7 @@
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>compiled-bundle-settings</artifactId>
+  <artifactId>mXparser-bundle-settings</artifactId>
 
   <name>tanks - bundle instructions</name>
 
@@ -23,38 +23,30 @@
       <!--
        | example additional resource entries, useful when building Eclipse RCP applications
       -->
-      <resource>
-        <directory>.</directory>
-        <includes>
-          <include>plugin.xml</include>
-          <include>plugin.properties</include>
-          <include>icons/**</include>
-        </includes>
-      </resource>
     </resources>
     <plugins>
       <plugin>
-        <!--
-         | the following instructions build a simple set of public/private classes into an OSGi bundle
-        -->
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
+        <version>3.5.0</version>
         <configuration>
           <instructions>
-            <Bundle-SymbolicName>${bundle.symbolicName}</Bundle-SymbolicName>
-            <Bundle-Version>${pom.version}</Bundle-Version>
-            <!--
-             | assume public classes are in the top package, and private classes are under ".internal"
-            -->
-            <Export-Package>!${bundle.namespace}.internal.*,${bundle.namespace}.*;version="${pom.version}"</Export-Package>
-            <Private-Package>${bundle.namespace}.internal.*</Private-Package>
-
-            <!--
-             | each module can override these defaults in their osgi.bnd file
-            -->
+            <Export-Package>org.mariuszgromada.math.*</Export-Package>
+            <Import-Package>!com.apple.eio,!com.sun.*,!org.objectweb.*,!javax.microedition.io,!javax.servlet.*,*</Import-Package>
+            <Embed-Dependency>*</Embed-Dependency>
+            <Embed-Transitive>true</Embed-Transitive>
             <_include>osgi.bnd</_include>
           </instructions>
         </configuration>
+      </plugin>
+      <plugin>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-compiler-plugin</artifactId>
+      <version>2.3.2</version>
+      <configuration>
+        <source>1.8</source>
+        <target>1.8</target>
+      </configuration>
       </plugin>
     </plugins>
   </build>

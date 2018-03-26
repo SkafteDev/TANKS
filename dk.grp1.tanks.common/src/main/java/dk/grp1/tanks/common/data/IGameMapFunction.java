@@ -1,5 +1,7 @@
 package dk.grp1.tanks.common.data;
 
+import dk.grp1.tanks.common.utils.Vector2D;
+
 import java.util.List;
 
 /**
@@ -39,4 +41,26 @@ public interface IGameMapFunction {
      * @return
      */
     boolean isWithin(float x);
+
+    void setEndX(float value);
+
+    void setStartX(float value);
+
+    /**
+     * Checks whether or not the function exists ONLY within the given range.
+     * @param startX the start value for the given range
+     * @param endX the end value for the given range
+     * @return True/false
+     */
+    boolean existsOnlyWithinRange(float startX, float endX);
+
+    /**
+     * Split the function into two new functions that have two new ranges. This is used if a function needs to be split to incorporate a circle in between. Other uses may be for map generation
+     * @param rangeOneStartX
+     * @param rangeOneEndX
+     * @param rangeTwoStartX
+     * @param rangeTwoEndX
+     * @return Returns two new IGameMapFunctions with identical implementation to the parent, only the range have changed. If added to the map. Remember to remove parent function.
+     */
+    List<IGameMapFunction> splitInTwoWithNewRanges(float rangeOneStartX, float rangeOneEndX, float rangeTwoStartX, float rangeTwoEndX);
 }
