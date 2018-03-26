@@ -39,10 +39,10 @@ public class BigShotWeapon implements IWeapon {
         accelerationVector.multiplyWithConstant(firePower);
         bs.add(new MovementPart(accelerationVector, 10000));
         bs.add(new ShapePart());
-        bs.add(new CirclePart(30,30,20));
+        bs.add(new CirclePart(30,30,4));
         bs.add(new PhysicsPart(30, -90.82f));
         bs.add(new CollisionPart(true,0));
-        bs.add(new DamagePart(30,1));
+        bs.add(new DamagePart(10,1));
         bs.add(new TexturePart(this.texturePath));
 
         world.addEntity(bs);

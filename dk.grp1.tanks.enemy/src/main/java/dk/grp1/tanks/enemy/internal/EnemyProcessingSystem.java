@@ -85,7 +85,8 @@ public class EnemyProcessingSystem implements IEntityProcessingService {
 
                 //TODO fix me
                 firepower = initialVelocity(cannonPart, otherEntityPositionPart, 90.82f, cannonPart.getDirection());
-                inventoryPart.getCurrentWeapon().shoot(enemy, firepower, world);
+                inventoryPart.getWeapons().get(0).shoot(enemy, firepower, world);
+                //inventoryPart.getCurrentWeapon().shoot(enemy, firepower, world);
                 //gameData.addEvent(new ShootingEvent(enemy, firepower));
             }
         }

@@ -59,10 +59,10 @@ public class DeadWeightWeapon implements IWeapon {
 
 
         dw.add(new ShapePart());
-        dw.add(new CirclePart(30,30,20));
+        dw.add(new CirclePart(30,30,4));
         dw.add(new PhysicsPart(30, -90.82f));
         dw.add(new CollisionPart(true,0));
-        dw.add(new DamagePart(30,1));
+        dw.add(new DamagePart(5,1));
         dw.add(new TexturePart(this.texturePath));
 
         world.addEntity(dw);

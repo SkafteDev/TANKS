@@ -39,10 +39,10 @@ public class SingleShotWeapon implements IWeapon {
         accelerationVector.multiplyWithConstant(firePower);
         ss.add(new MovementPart(accelerationVector, 10000));
         ss.add(new ShapePart());
-        ss.add(new CirclePart(30,30,4));
+        ss.add(new CirclePart(30,30,2));
         ss.add(new PhysicsPart(30, -90.82f));
         ss.add(new CollisionPart(true,0));
-        ss.add(new DamagePart(20,1));
+        ss.add(new DamagePart(4,1));
         ss.add(new TexturePart(this.texturePath));
 
         world.addEntity(ss);

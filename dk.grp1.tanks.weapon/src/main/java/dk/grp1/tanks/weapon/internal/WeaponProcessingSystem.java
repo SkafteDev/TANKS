@@ -25,7 +25,6 @@ public class WeaponProcessingSystem implements IEntityProcessingService {
 
             for (IEntityPart part : bullet.getParts()) {
                 partPriorities.add(WeaponEntityPartPriority.getPriorityWrapper(part));
-                    Event mapDestructionEvent = new MapDestructionEvent(bullet,new Vector2D(positionPart.getX(),positionPart.getY()),damagePart.getExplosionRadius());
             }
 
             Collections.sort(partPriorities, new PriorityWrapperComparator());

@@ -5,6 +5,7 @@ import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.events.Event;
 import dk.grp1.tanks.common.events.ExplosionEvent;
+import dk.grp1.tanks.common.events.MapDestructionEvent;
 import dk.grp1.tanks.common.utils.Vector2D;
 import javafx.geometry.Pos;
 import sun.font.CompositeStrike;
@@ -40,7 +41,9 @@ public class CollisionPart implements IEntityPart {
 
         if (this.isHitGameMap() && positionPart != null && damagePart != null) {
             Event explosionEvent = new ExplosionEvent(entity, new Vector2D(positionPart.getX(), positionPart.getY()), damagePart.getExplosionRadius());
+            Event mapDestructionEvent = new MapDestructionEvent(entity,new Vector2D(positionPart.getX(),positionPart.getY()),damagePart.getExplosionRadius());
             gameData.addEvent(explosionEvent);
+            gameData.addEvent(mapDestructionEvent);
             world.removeEntity(entity);
         }
     }

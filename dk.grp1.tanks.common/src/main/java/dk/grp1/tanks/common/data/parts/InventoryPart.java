@@ -58,16 +58,17 @@ public class InventoryPart implements IEntityPart, IWeaponListener {
         }
     }
 
+    public List<IWeapon> getWeapons(){
+        return this.weapons;
+    }
+
 
     public IWeapon nextWeapon() {
         if (weapons.size() != 0) {
             int i = weapons.indexOf(this.currentWeapon);
-            System.out.println("before " + i);
             i++;
-            System.out.println("after " + i);
 
             i = Math.floorMod(i, weapons.size());
-            System.out.println("second after " + i);
 
             if (!weapons.isEmpty()) {
                 this.currentWeapon = weapons.get(i);
@@ -77,7 +78,7 @@ public class InventoryPart implements IEntityPart, IWeaponListener {
 
             return this.currentWeapon;
         }
-this.currentWeapon = null;
+        this.currentWeapon = null;
         return this.currentWeapon;
     }
 
@@ -88,6 +89,7 @@ this.currentWeapon = null;
             i--;
 
             i = Math.floorMod(i, weapons.size());
+            System.out.println(i);
 
             if (i == -1) {
                 this.currentWeapon = null;
