@@ -68,6 +68,7 @@ public class EnemyProcessingSystem implements IEntityProcessingService {
     private void aiShoot(GameData gameData, World world, CannonPart cannonPart, Entity enemy){
         PositionPart enemyPositionPart = enemy.getPart(PositionPart.class);
         InventoryPart inventoryPart = enemy.getPart(InventoryPart.class);
+        inventoryPart.processPart(enemy, gameData, world);
 
         for (Entity entity: world.getEntities()) {
 

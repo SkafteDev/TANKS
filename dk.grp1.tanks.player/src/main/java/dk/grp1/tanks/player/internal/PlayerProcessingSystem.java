@@ -32,6 +32,7 @@ public class PlayerProcessingSystem implements IEntityProcessingService {
             PhysicsPart physicsPart = player.getPart(PhysicsPart.class);
             LifePart lifePart = player.getPart(LifePart.class);
             InventoryPart inventoryPart = player.getPart(InventoryPart.class);
+            inventoryPart.processPart(player, gameData, world);
 
             if(lifePart.getCurrentHP() <= 0){
                 world.removeEntity(player);
@@ -56,6 +57,12 @@ public class PlayerProcessingSystem implements IEntityProcessingService {
                 firepower = cannonPart.calculateFirepower(gameData);
                 //timeSinceLastShot = 0;
                 isReadyToShoot = true;
+            }
+
+            if (gameData.getKeys().isPressed(GameKeys.N_1)){
+                inventoryPart.nextWeapon();
+            } else if (gameData.getKeys().isPressed(GameKeys.N_2)){
+                inventoryPart.previousWeapon();
             }
 
             if (isReadyToShoot && !gameData.getKeys().isDown(GameKeys.SPACE) && inventoryPart.getCurrentWeapon() != null) {

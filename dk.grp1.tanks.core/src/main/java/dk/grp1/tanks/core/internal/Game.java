@@ -130,14 +130,6 @@ public class Game implements ApplicationListener {
             postEntityProcessingService.postProcess(world, gameData);
         }
 
-        List<IWeapon> weapons = serviceLoader.getIWeaponServices();
-        for (Entity e : world.getEntities()) {
-            InventoryPart ip = e.getPart(InventoryPart.class);
-            if (ip != null){
-                ip.setWeapons(weapons);
-            }
-        }
-
         gameData.getKeys().update();
     }
 
