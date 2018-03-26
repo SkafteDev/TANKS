@@ -84,12 +84,7 @@ public final class ExampleActivator
 
             } else if (objectClass[0].equalsIgnoreCase(IWeapon.class.getCanonicalName())) {
                 IWeapon weapon = (IWeapon) bc.getService(serviceEvent.getServiceReference());
-                for (Entity e : game.getWorld().getEntities()) {
-                    InventoryPart ip = e.getPart(InventoryPart.class);
-                    if (ip != null) {
-                        ip.addWeapon(weapon);
-                    }
-                }
+                game.getGameData().addWeapon(weapon);
             }
         }
 
@@ -103,12 +98,7 @@ public final class ExampleActivator
 
             }else if (objectClass[0].equalsIgnoreCase(IWeapon.class.getCanonicalName())) {
                 IWeapon weapon = (IWeapon) bc.getService(serviceEvent.getServiceReference());
-                for (Entity e : game.getWorld().getEntities()) {
-                    InventoryPart ip = e.getPart(InventoryPart.class);
-                    if (ip != null) {
-                        ip.removeWeapon(weapon);
-                    }
-                }
+                game.getGameData().removeWeapon(weapon);
             }
         }
     }
