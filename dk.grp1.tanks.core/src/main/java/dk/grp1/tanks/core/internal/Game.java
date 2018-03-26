@@ -33,7 +33,7 @@ public class Game implements ApplicationListener {
     private GameData gameData;
     private ShapeRenderer shapeRenderer;
     private OrthographicCamera camera;
-    private final boolean DEBUG = true;
+    private final boolean DEBUG = false;
 
 
     //Variables for drawing the game map

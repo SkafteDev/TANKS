@@ -65,7 +65,7 @@ public class GameMapProcessing implements INonEntityProcessingService {
             return;
         }
         //Remove Functions that are only within circle radius + buffer
-        float buffer = (explosionRadius / 5);
+        float buffer = (explosionRadius / 2);
         System.out.println("Buffer: " +buffer);
         List<IGameMapFunction> functionsToRemove = new ArrayList<>();
         for (IGameMapFunction gameMapFunction : gameMap.getGameMapFunctions()) {
@@ -117,7 +117,7 @@ public class GameMapProcessing implements INonEntityProcessingService {
         float a1 = (leftCirclePoint.getY() - leftFuncPoint.getY())/(leftCirclePoint.getX() - leftFuncPoint.getX());
         float b1 = leftCirclePoint.getY() - a1 * leftCirclePoint.getX();
         IGameMapFunction leftLinear = new GameMapLinear(a1,b1,rangeOneEndX,negativeHalf.getStartX());
-        float a2 = (rightFuncPoint.getY() - rightCirclePoint.getY())/(rightFuncPoint.getX() - rightCirclePoint.getY());
+        float a2 = (rightFuncPoint.getY() - rightCirclePoint.getY())/(rightFuncPoint.getX() - rightCirclePoint.getX());
         float b2 = rightCirclePoint.getY() - a2 * rightCirclePoint.getX();
         IGameMapFunction rightLinear = new GameMapLinear(a2,b2,negativeHalf.getEndX(),rangeTwoStartX);
         System.out.println("right Linear: A = " + a2 + " B = " + b2 );
