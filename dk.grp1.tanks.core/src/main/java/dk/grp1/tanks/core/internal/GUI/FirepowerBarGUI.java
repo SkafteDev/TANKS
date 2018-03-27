@@ -16,6 +16,10 @@ public class FirepowerBarGUI implements IGuiProcessingService{
     private SpriteBatch batch = new SpriteBatch();
     private Texture firepowerTexture;
     private Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+    private float barHeight = 27;
+    private float barWidth = 5;
+    private float xOffSet = 20;
+    private float yOffSet = -5;
 
     @Override
     public void draw(World world, GameData gameData) {
@@ -34,8 +38,8 @@ public class FirepowerBarGUI implements IGuiProcessingService{
         firepowerTexture = new Texture(pixmap);
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        batch.draw(firepowerTexture, cannonPart.getJointX() + 20, cannonPart.getJointY()-5, 5
-                , 30*cannonPart.getFirepower()/cannonPart.getMaxFirepower());
+        batch.draw(firepowerTexture, cannonPart.getJointX()+xOffSet, cannonPart.getJointY()+yOffSet, barWidth
+                , barHeight*cannonPart.getFirepower()/cannonPart.getMaxFirepower());
         batch.end();
     }
 

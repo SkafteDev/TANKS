@@ -19,6 +19,10 @@ public class HealthBarGUI implements IGuiProcessingService {
     private OrthographicCamera camera;
     private SpriteBatch batch  = new SpriteBatch();
     private Pixmap pix = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+    private float barHeight = 2;
+    private float barWidth = 4;
+    private float xOffSet = 2;
+    private float yOffSet = 2;
 
     @Override
     public void draw(World world, GameData gameData) {
@@ -62,12 +66,12 @@ public class HealthBarGUI implements IGuiProcessingService {
         }
         pix.fill();
         healthBarTexture = new Texture(pix);
-        //pix.dispose();
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        batch.draw(healthBarTexture, x - 2 * radius, y + 2 * radius, radius * 4 * healthValue, 2);
+        batch.draw(healthBarTexture, x - xOffSet * radius, y + yOffSet * radius,
+                radius * barWidth * healthValue, barHeight);
         batch.end();
-        healthBarTexture.dispose();
+        //healthBarTexture.dispose();
     }
 
 }

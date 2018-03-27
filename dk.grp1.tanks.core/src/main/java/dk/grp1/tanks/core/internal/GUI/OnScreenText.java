@@ -17,6 +17,7 @@ public class OnScreenText implements IGuiProcessingService{
     private SpriteBatch batch = new SpriteBatch();
     private BitmapFont font = new BitmapFont();
     private OrthographicCamera camera;
+    private BitmapFont.TextBounds textBounds;
 
     /**
      * Draws various text values on the screen
@@ -38,15 +39,14 @@ public class OnScreenText implements IGuiProcessingService{
 
     private void firepowerText(Entity entity) {
         CannonPart cannonPart = entity.getPart(CannonPart.class);
-        //batch = new SpriteBatch();
         float firepower = cannonPart.getPreviousFirepower();
-        //font = new BitmapFont();
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         String fire = ""+firepower;
-        font.draw(batch, fire, cannonPart.getJointX(), cannonPart.getJointY()-75);
+        textBounds = font.getBounds(fire);
+        font.draw(batch, fire, cannonPart.getJointX()-textBounds.width/2,
+                cannonPart.getJointY()-60);
         batch.end();
-        //font.dispose();
     }
 
     @Override
@@ -56,44 +56,38 @@ public class OnScreenText implements IGuiProcessingService{
 
     private void angleText(Entity entity){
         CannonPart cannonPart = entity.getPart(CannonPart.class);
-        //batch = new SpriteBatch();
         double angle = cannonPart.getPreviousAngle() * 180 / 3.1415f;
         angle = Math.ceil(angle);
-        //font = new BitmapFont();
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         String angleString = ""+angle;
-        font.draw(batch, angleString, cannonPart.getJointX(), cannonPart.getJointY()-25);
+        textBounds = font.getBounds(angleString);
+        font.draw(batch, angleString, cannonPart.getJointX()-textBounds.width/2,
+                cannonPart.getJointY()-25);
         batch.end();
-        //font.dispose();
     }
 
     private void weaponText(Entity entity, InventoryPart inventoryPart) {
-        //batch = new SpriteBatch();
         String weaponText;
         try {
             weaponText = inventoryPart.getCurrentWeapon().getName();
         } catch (NullPointerException e){
             weaponText = "None";
         }
-        //font = new BitmapFont();
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         CirclePart circlePart = entity.getPart(CirclePart.class);
-        font.draw(batch, weaponText, circlePart.getCentreX()-30, circlePart.getCentreY()-10);
+        textBounds = font.getBounds(weaponText);
+        font.draw(batch, weaponText, circlePart.getCentreX()-textBounds.width/2, circlePart.getCentreY()-10);
         batch.end();
-        //font.dispose();
     }
 
 
     private void turnText(GameData gameData) {
-        //batch = new SpriteBatch();
         String turnText = "Turn: ";
-        //font = new BitmapFont();
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         font.draw(batch, turnText, 10, gameData.getGameHeight()-10);
         batch.end();
-        //font.dispose();
     }
 }

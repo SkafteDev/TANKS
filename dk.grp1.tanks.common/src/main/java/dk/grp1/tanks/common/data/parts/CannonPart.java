@@ -81,7 +81,7 @@ public class CannonPart implements IEntityPart{
 
     public float calculateFirepower(GameData gameData){
         float time = gameData.getDelta();
-        firepower = firepower + (time * 65/100 * maxFirepower);
+        firepower = (firepower + (time * 65/100 * maxFirepower)) % maxFirepower;
 
         if (1 < firepower/maxFirepower) { //percentage of max firepower
             firepower = maxFirepower;
