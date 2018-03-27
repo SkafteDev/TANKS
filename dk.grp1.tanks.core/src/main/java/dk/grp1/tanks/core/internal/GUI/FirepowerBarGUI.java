@@ -13,9 +13,9 @@ import dk.grp1.tanks.common.data.parts.CannonPart;
 
 public class FirepowerBarGUI implements IGuiProcessingService{
     private OrthographicCamera camera;
-    private SpriteBatch batch = new SpriteBatch();
+    private SpriteBatch batch;
     private Texture firepowerTexture;
-    private Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+    private Pixmap pixmap;
     private float barHeight = 27;
     private float barWidth = 5;
     private float xOffSet = 20;
@@ -33,6 +33,8 @@ public class FirepowerBarGUI implements IGuiProcessingService{
     }
 
     private void firepowerBar(Entity entity, CannonPart cannonPart){
+        pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+        batch = new SpriteBatch();
         pixmap.setColor(Color.CYAN);
         pixmap.fill();
         firepowerTexture = new Texture(pixmap);
@@ -41,6 +43,8 @@ public class FirepowerBarGUI implements IGuiProcessingService{
         batch.draw(firepowerTexture, cannonPart.getJointX()+xOffSet, cannonPart.getJointY()+yOffSet, barWidth
                 , barHeight*cannonPart.getFirepower()/cannonPart.getMaxFirepower());
         batch.end();
+        batch.dispose();
+        pixmap.dispose();
     }
 
     @Override

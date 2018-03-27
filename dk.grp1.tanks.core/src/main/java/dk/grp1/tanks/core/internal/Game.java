@@ -103,6 +103,7 @@ public class Game implements ApplicationListener {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         gameData.setDelta(Gdx.graphics.getDeltaTime());
+
         update();
         drawBackGround();
         draw();
@@ -120,8 +121,12 @@ public class Game implements ApplicationListener {
                 Gdx2DPixmap gmp = new Gdx2DPixmap(is, Gdx2DPixmap.GDX2D_FORMAT_RGBA8888);
                 Pixmap pix = new Pixmap(gmp);
                 textureMap.put(path, new Texture(pix));
+                pix.dispose();
+                is.close();
             } catch (IOException e) {
                 e.printStackTrace();
+            } finally {
+
             }
         }
 
@@ -258,6 +263,7 @@ public class Game implements ApplicationListener {
 
         }
         spriteBatch.end();
+        spriteBatch.dispose();
     }
 
     private void drawCannon(SpriteBatch spriteBatch, TextureRegion textureRegion, CannonPart cannonPart) {
@@ -287,6 +293,7 @@ public class Game implements ApplicationListener {
                 texture = new Texture(pix);
                 textureMap.put(path, texture);
                 pix.dispose();
+                is.close();
 
             } catch (IOException e1) {
                 e1.printStackTrace();

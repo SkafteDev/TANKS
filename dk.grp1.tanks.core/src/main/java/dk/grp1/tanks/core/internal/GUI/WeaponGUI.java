@@ -41,12 +41,13 @@ public class WeaponGUI implements IGuiProcessingService {
 
             String path = inventoryPart.getCurrentWeapon().getIconPath();
             if (!textureMap.containsKey(path)) {
-
                 InputStream input = inventoryPart.getCurrentWeapon().getClass().getClassLoader().getResourceAsStream(path);
                 try {
                     Gdx2DPixmap gmp = new Gdx2DPixmap(input, Gdx2DPixmap.GDX2D_FORMAT_RGBA8888);
                     Pixmap pixmap = new Pixmap(gmp);
                     textureMap.put(path, new Texture(pixmap));
+                    pixmap.dispose();
+                    input.close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -60,6 +61,7 @@ public class WeaponGUI implements IGuiProcessingService {
             PositionPart positionPart = entity.getPart(PositionPart.class);
             spriteBatch.draw(t, positionPart.getX() - 7.5f, 10, 15, 15);
             spriteBatch.end();
+            spriteBatch.dispose();
             //t.dispose();
 
     }

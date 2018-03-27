@@ -40,6 +40,8 @@ public class OnScreenText implements IGuiProcessingService {
 
     private void firepowerText(Entity entity) {
         font = new BitmapFont();
+        font.getData().scaleX = 0.5f;
+        font.getData().scaleY = 0.5f;
         CannonPart cannonPart = entity.getPart(CannonPart.class);
         int firepower = Math.round(cannonPart.getPreviousFirepower());
         batch.setProjectionMatrix(camera.combined);
@@ -59,6 +61,8 @@ public class OnScreenText implements IGuiProcessingService {
 
     private void angleText(Entity entity){
         font = new BitmapFont();
+        font.getData().scaleX = 0.5f;
+        font.getData().scaleY = 0.5f;
         CannonPart cannonPart = entity.getPart(CannonPart.class);
         double angle = cannonPart.getPreviousAngle() * 180 / 3.1415f;
         angle = Math.ceil(angle);
@@ -94,6 +98,8 @@ public class OnScreenText implements IGuiProcessingService {
 
     private void turnText(GameData gameData) {
         font = new BitmapFont();
+        font.getData().scaleX = 0.5f;
+        font.getData().scaleY = 0.5f;
         String turnText = "Turn: ";
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
