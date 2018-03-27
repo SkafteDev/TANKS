@@ -15,6 +15,6 @@ public class SingleShotActivator implements BundleActivator {
 
     @Override
     public void stop(BundleContext bundleContext) throws Exception {
-
+        System.out.println( "STOPPING dk.grp1.tanks.weapon.SingleShot" );
     }
 }

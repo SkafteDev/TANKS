@@ -74,15 +74,32 @@ public class Vector2D {
         return new Vector2D(-y+0.0f, x);
     }
 
+    public Vector2D rotateClockwise90degrees() {
+        return new Vector2D(y, -x+0.0f);
+    }
+
     public float length() {
         float length = (float)Math.sqrt(getX()*getX()+getY()*getY()); // len = sqrt(x²+y²)
         return length;
     }
 
+    /**
+     * Returns the angle in radians from the unit vector(1, 0). I.e. the angle in the unit circle.
+     * @return
+     */
     public float getAngle(){
-        Vector2D i = new Vector2D(1,0);
+        return getAngle(new Vector2D(1, 0));
+    }
 
-        float v = dot()/(this.length()*i.length());
+    /**
+     * Returns the angle in radians from the given vector.
+     * @param other
+     * @return
+     */
+    public float getAngle(Vector2D other) {
+        Vector2D i = other;
+
+        float v = Vector2D.dot(this, other)/(this.length()*i.length());
 
         float radians = (float) Math.acos(v);
 
