@@ -44,7 +44,14 @@ public class GrenadeCollisionPart extends CollisionPart {
     public void updateBouncingVector(Vector2D vector) {
         //this.bouncingVector = new Vector2D(vector.getX(), vector.getY() * -1 / 2);
 
+        Vector2D d = vector; // quick maths
+        Vector2D n = mapNormalVector; // quick maths
+        float res = Vector2D.dot(d,n) * 2; // quick maths
+        n.multiplyWithConstant(res); // quick maths
+        d.subtract(n); // quick maths
+        d.multiplyWithConstant(0.9f); // slow down boy aka. the bounciness
 
+/*
         float angle = mapNormalVector.getAngle(vector);
         System.out.println(mapNormalVector);
         System.out.println(vector);
@@ -55,7 +62,9 @@ public class GrenadeCollisionPart extends CollisionPart {
         System.out.println(angleVector);
 
         //this.bouncingVector = new Vector2D((vector.getX() + (float)Math.cos(angle)), -(vector.getY() + (float)Math.sin(angle))+0.0f);
-        this.bouncingVector = angleVector;
+        this.bouncingVector = angleVector;*/
+
+        this.bouncingVector = d;
     }
 
 }
