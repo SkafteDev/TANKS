@@ -35,6 +35,8 @@ public class EnemyProcessingSystem implements IEntityProcessingService {
             CollisionPart collisionPart = enemy.getPart(CollisionPart.class);
             PhysicsPart physicsPart = enemy.getPart(PhysicsPart.class);
             LifePart lifePart = enemy.getPart(LifePart.class);
+            InventoryPart inventoryPart = enemy.getPart(InventoryPart.class);
+            inventoryPart.processPart(enemy, gameData, world);
 
             if(lifePart.getCurrentHP() <= 0){
                 world.removeEntity(enemy);
@@ -85,6 +87,8 @@ public class EnemyProcessingSystem implements IEntityProcessingService {
                 //TODO fix me
                 firepower = initialVelocity(cannonPart, otherEntityPositionPart, 90.82f, cannonPart.getDirection());
                 inventoryPart.getCurrentWeapon().shoot(enemy, firepower, world);
+                cannonPart.setPreviousFirepower(firepower);
+                cannonPart.setPreviousAngle(cannonPart.getDirection());
                 //gameData.addEvent(new ShootingEvent(enemy, firepower));
             }
         }

@@ -88,7 +88,8 @@ public class Game implements ApplicationListener {
         gameMapTexture = new Texture(pix);
 
         textureRegion = new TextureRegion(gameMapTexture);
-        pix.dispose(); //TODO Might need to dispose?
+        //pix.dispose();
+        //polySpriteBatch.dispose();
     }
 
     public void resize(int i, int i1) {
@@ -131,6 +132,7 @@ public class Game implements ApplicationListener {
 
         spriteBatch.draw(t, 0, 0, gameData.getGameWidth(), gameData.getGameHeight());
         spriteBatch.end();
+        t.dispose();
     }
 
     private void update() {
@@ -181,7 +183,7 @@ public class Game implements ApplicationListener {
 
     private void drawUI(){
         for (IGuiProcessingService gui: drawImplementations){
-            gui.draw(camera, world, gameData);
+            gui.draw(world, gameData);
         }
     }
 

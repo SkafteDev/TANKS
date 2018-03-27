@@ -67,6 +67,7 @@ public class HealthBarGUI implements IGuiProcessingService {
         batch.begin();
         batch.draw(healthBarTexture, x - 2 * radius, y + 2 * radius, radius * 4 * healthValue, 2);
         batch.end();
+        healthBarTexture.dispose();
     }
 
 }

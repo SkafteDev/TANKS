@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.World;
+import dk.grp1.tanks.common.data.parts.CannonPart;
 import dk.grp1.tanks.common.data.parts.CirclePart;
 import dk.grp1.tanks.common.data.parts.InventoryPart;
 import dk.grp1.tanks.common.data.parts.PositionPart;
@@ -24,6 +25,7 @@ public class OnScreenText implements IGuiProcessingService{
             InventoryPart inventoryPart = entity.getPart(InventoryPart.class);
             if (inventoryPart != null){
                 weaponText(entity, inventoryPart);
+                angleText(entity);
             }
         }
     }
@@ -31,6 +33,20 @@ public class OnScreenText implements IGuiProcessingService{
     @Override
     public void setCam(OrthographicCamera camera) {
         this.camera = camera;
+    }
+
+    private void angleText(Entity entity){
+        CannonPart cannonPart = entity.getPart(CannonPart.class);
+        batch = new SpriteBatch();
+        double angle = cannonPart.getPreviousAngle() * 180 / 3.1415f;
+        angle = Math.ceil(angle);
+        font = new BitmapFont();
+        batch.setProjectionMatrix(camera.combined);
+        batch.begin();
+        String angleString = ""+angle;
+        font.draw(batch, angleString, cannonPart.getJointX(), cannonPart.getJointY()-25);
+        batch.end();
+        font.dispose();
     }
 
     private void weaponText(Entity entity, InventoryPart inventoryPart) {

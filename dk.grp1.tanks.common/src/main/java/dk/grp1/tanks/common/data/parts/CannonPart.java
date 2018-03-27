@@ -22,6 +22,8 @@ public class CannonPart implements IEntityPart{
     private float maxFirepower = 250;
     private String texturePath;
     private float pi = 3.1415f;
+    private float previousFirepower;
+    private float previousAngle;
 
     public CannonPart(float jointX, float jointY, float direction, float width, float length, String texturePath) {
         this.jointX = jointX;
@@ -168,4 +170,12 @@ public class CannonPart implements IEntityPart{
     public void setTexturePath(String texturePath) {
         this.texturePath = texturePath;
     }
+
+    public float getPreviousAngle() { return previousAngle; }
+
+    public float getPreviousFirepower() { return previousFirepower; }
+
+    public void setPreviousAngle(float previousAngle) { this.previousAngle = previousAngle; }
+
+    public void setPreviousFirepower(float previousFirepower) { this.previousFirepower = previousFirepower; }
 }
