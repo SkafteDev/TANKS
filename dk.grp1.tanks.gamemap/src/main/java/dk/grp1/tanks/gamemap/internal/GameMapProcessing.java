@@ -58,8 +58,8 @@ public class GameMapProcessing implements INonEntityProcessingService {
         float rangeOneEndX = explosionCenter.getX() - explosionRadius - buffer;
         float rangeTwoStartX = explosionCenter.getX() + explosionRadius + buffer;
         // Find nearby functions
-        IGameMapFunction leftFunc = getNearbyFunction(gameMap.getGameMapFunctions(),mapDestructionEvent, firstIntersectionPoint, buffer,rangeOneEndX-0.001f);
-        IGameMapFunction rightFunc = getNearbyFunction(gameMap.getGameMapFunctions(),mapDestructionEvent, secondIntersectionPoint, buffer,rangeTwoStartX+0.001f);;
+        IGameMapFunction leftFunc = getNearbyFunction(gameMap.getGameMapFunctions(),rangeOneEndX-0.001f);
+        IGameMapFunction rightFunc = getNearbyFunction(gameMap.getGameMapFunctions(),rangeTwoStartX+0.001f);;
 
 
         // If null, restore and return.
@@ -159,15 +159,7 @@ public class GameMapProcessing implements INonEntityProcessingService {
         }
     }
 
-    private IGameMapFunction getNearbyFunction(List<IGameMapFunction> gameMap, MapDestructionEvent event, Vector2D intersectionPoint, float buffer, float alternativeRange){
-
-
-        for (IGameMapFunction gameMapFunction : gameMap) {
-            if (gameMapFunction.isWithin(intersectionPoint.getX())) {
-                return gameMapFunction;
-            }
-        }
-
+    private IGameMapFunction getNearbyFunction(List<IGameMapFunction> gameMap, float alternativeRange){
         for (IGameMapFunction gameMapFunction : gameMap) {
             if (gameMapFunction.isWithin(alternativeRange)){
                 return gameMapFunction;
@@ -176,8 +168,6 @@ public class GameMapProcessing implements INonEntityProcessingService {
         // if no function is found
         return null;
     }
-
-
 
     private List<Vector2D> calculateIntersectionPointsWithMap(Event event, World world) {
         List<Vector2D> intersectionPoints = new ArrayList<>();
@@ -249,7 +239,6 @@ public class GameMapProcessing implements INonEntityProcessingService {
 
         return intersectionPoints;
     }
-
 
     private float intersect(IGameMapFunction mapFunction, IGameMapFunction halfCircle, float acceptInterval, float rangeStart, float rangeEnd) {
 

@@ -10,9 +10,12 @@ public class MapDestructionEvent extends Event {
 
     public MapDestructionEvent(Entity source, Vector2D pointOfCollision, float explosionRadius) {
         super(source);
+
         this.pointOfCollision = pointOfCollision;
         this.explosionRadius = explosionRadius;
     }
+
+
 
     public Vector2D getPointOfCollision() {
         return pointOfCollision;

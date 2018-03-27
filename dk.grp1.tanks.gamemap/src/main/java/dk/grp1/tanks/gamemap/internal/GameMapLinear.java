@@ -96,4 +96,13 @@ public class GameMapLinear implements IGameMapFunction {
         return splitGameMapFunctions;
     }
 
+    @Override
+    public String toString() {
+        return "GameMapLinear{" +
+                "a= " + a +
+                ", b= " + b +
+                ", startX= " + startX +
+                ", endX= " + endX +
+                '}';
+    }
 }

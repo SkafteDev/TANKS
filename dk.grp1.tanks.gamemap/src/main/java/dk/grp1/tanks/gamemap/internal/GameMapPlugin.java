@@ -24,7 +24,7 @@ public class GameMapPlugin implements IGamePluginService {
         GameMap map = new GameMap(gameData.getGameWidth(), gameData.getGameHeight());
         //Generate map functions
         //TODO: Generate random map, based on given list of random functions.
-       IGameMapFunction gameMapFunction = new GameMapSin(150f, (1 / 66f), 0, gameData.getGameHeight() / 2, 0, gameData.getGameWidth() / 2 + 30);
+       IGameMapFunction gameMapFunction = new GameMapSin(100f, (1 / 66f), 0, gameData.getGameHeight() / 2, 0, gameData.getGameWidth() / 2 + 30);
         IGameMapFunction gameMapFunction2 = new GameMapLinear(0f,gameData.getGameWidth()/2+30,gameData.getGameWidth()/2+130,gameMapFunction);
         IGameMapFunction gameMapFunction3 = new GameMapLinear(2f,gameData.getGameWidth()/2+130,gameData.getGameWidth(),gameMapFunction2);
 
