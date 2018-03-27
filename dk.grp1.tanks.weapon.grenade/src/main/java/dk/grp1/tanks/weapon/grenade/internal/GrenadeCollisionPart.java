@@ -49,7 +49,7 @@ public class GrenadeCollisionPart extends CollisionPart {
         float res = Vector2D.dot(d,n) * 2; // quick maths
         n.multiplyWithConstant(res); // quick maths
         d.subtract(n); // quick maths
-        d.multiplyWithConstant(0.9f); // slow down boy aka. the bounciness
+        d.multiplyWithConstant(0.7f); // slow down boy aka. the bounciness
 
 /*
         float angle = mapNormalVector.getAngle(vector);

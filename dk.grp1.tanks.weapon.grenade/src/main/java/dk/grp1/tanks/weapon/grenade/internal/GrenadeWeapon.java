@@ -37,13 +37,12 @@ public class GrenadeWeapon implements IWeapon {
         Vector2D accelerationVector = cannonPart.getDirectionVector();
         accelerationVector.multiplyWithConstant(firePower);
         grenade.add(new GrenadeMovementPart(accelerationVector, 10000));
-
-
+        grenade.add(new GrenadeExpirationPart(4));
         grenade.add(new ShapePart());
-        grenade.add(new CirclePart(30,30,2));
+        grenade.add(new CirclePart(30,30,5));
         grenade.add(new PhysicsPart(30, -90.82f));
         grenade.add(new GrenadeCollisionPart(true,0));
-        grenade.add(new DamagePart(4,1));
+        grenade.add(new DamagePart(20,1));
         grenade.add(new TexturePart(this.texturePath));
 
         world.addEntity(grenade);
