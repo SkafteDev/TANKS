@@ -17,10 +17,7 @@ import dk.grp1.tanks.common.services.IEntityProcessingService;
 import dk.grp1.tanks.common.services.IPostEntityProcessingService;
 import dk.grp1.tanks.common.services.IWeapon;
 import dk.grp1.tanks.common.utils.Vector2D;
-import dk.grp1.tanks.core.internal.GUI.HealthBarGUI;
-import dk.grp1.tanks.core.internal.GUI.IGuiProcessingService;
-import dk.grp1.tanks.core.internal.GUI.OnScreenText;
-import dk.grp1.tanks.core.internal.GUI.WeaponGUI;
+import dk.grp1.tanks.core.internal.GUI.*;
 import dk.grp1.tanks.core.internal.managers.GameInputProcessor;
 
 import java.io.IOException;
@@ -71,6 +68,7 @@ public class Game implements ApplicationListener {
         drawImplementations.add(new HealthBarGUI());
         drawImplementations.add(new OnScreenText());
         drawImplementations.add(new WeaponGUI());
+        drawImplementations.add(new FirepowerBarGUI());
 
         for (IGuiProcessingService gui: drawImplementations) {
             gui.setCam(camera);
@@ -99,10 +97,7 @@ public class Game implements ApplicationListener {
     public void render() {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
         gameData.setDelta(Gdx.graphics.getDeltaTime());
-
-
         update();
         drawBackGround();
         draw();
@@ -132,7 +127,7 @@ public class Game implements ApplicationListener {
 
         spriteBatch.draw(t, 0, 0, gameData.getGameWidth(), gameData.getGameHeight());
         spriteBatch.end();
-        t.dispose();
+        //t.dispose();
     }
 
     private void update() {

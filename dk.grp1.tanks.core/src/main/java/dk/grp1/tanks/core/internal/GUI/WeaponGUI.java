@@ -13,7 +13,6 @@ import dk.grp1.tanks.common.data.parts.PositionPart;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -25,7 +24,6 @@ public class WeaponGUI implements IGuiProcessingService {
     @Override
     public void draw(World world, GameData gameData) {
         for (Entity entity : world.getEntities()) {
-            //TODO check for inventory part and call drawWeaponIcon
             InventoryPart inventoryPart = entity.getPart(InventoryPart.class);
             if (inventoryPart != null){
                 drawWeaponIcon(entity, inventoryPart);

@@ -8,5 +8,9 @@ public interface IGuiProcessingService {
 
     public void draw(World world, GameData gameData);
 
+    /**
+     * Sets the camera of this UI processor to match the game's
+     * @param camera
+     */
     public void setCam(OrthographicCamera camera);
 }

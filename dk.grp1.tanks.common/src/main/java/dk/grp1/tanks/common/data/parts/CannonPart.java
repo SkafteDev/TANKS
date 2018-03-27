@@ -115,6 +115,8 @@ public class CannonPart implements IEntityPart{
 
     }
 
+    public float getMaxFirepower(){ return this.maxFirepower; }
+
     public float getJointX() {
         return jointX;
     }

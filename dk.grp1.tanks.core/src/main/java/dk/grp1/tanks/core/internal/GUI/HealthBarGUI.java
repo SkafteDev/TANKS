@@ -17,7 +17,8 @@ import dk.grp1.tanks.common.services.IPostEntityProcessingService;
 public class HealthBarGUI implements IGuiProcessingService {
     private Texture healthBarTexture;
     private OrthographicCamera camera;
-    private SpriteBatch batch;
+    private SpriteBatch batch  = new SpriteBatch();
+    private Pixmap pix = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
 
     @Override
     public void draw(World world, GameData gameData) {
@@ -48,7 +49,7 @@ public class HealthBarGUI implements IGuiProcessingService {
      */
     private void makeHealthBar(float x, float y, float radius, float healthValue) {
 
-        Pixmap pix = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+
         //Colour health bar based on health value
         if (healthValue > 0.75) {
             pix.setColor(Color.GREEN);
@@ -60,9 +61,8 @@ public class HealthBarGUI implements IGuiProcessingService {
             pix.setColor(Color.RED);
         }
         pix.fill();
-        batch = new SpriteBatch();
         healthBarTexture = new Texture(pix);
-        pix.dispose();
+        //pix.dispose();
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         batch.draw(healthBarTexture, x - 2 * radius, y + 2 * radius, radius * 4 * healthValue, 2);
