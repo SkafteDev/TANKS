@@ -43,10 +43,10 @@ public class OnScreenText implements IGuiProcessingService {
         int firepower = Math.round(cannonPart.getPreviousFirepower());
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        String fire = "" + firepower;
+        String fire = "Firepower: " + firepower;
         textBounds = font.getBounds(fire);
         font.draw(batch, fire, cannonPart.getJointX() - textBounds.width / 2,
-                cannonPart.getJointY() - 60);
+                cannonPart.getJointY() - 30);
         batch.end();
     }
 
@@ -61,10 +61,10 @@ public class OnScreenText implements IGuiProcessingService {
         angle = Math.ceil(angle);
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        String angleString = "" + angle;
+        String angleString = "Angle: " + angle;
         textBounds = font.getBounds(angleString);
         font.draw(batch, angleString, cannonPart.getJointX() - textBounds.width / 2,
-                cannonPart.getJointY() - 25);
+                cannonPart.getJointY() - 20);
         batch.end();
     }
 
