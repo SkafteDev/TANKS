@@ -58,7 +58,7 @@ public class WeaponGUI implements IGuiProcessingService {
             Texture t = textureMap.get(path);
 
             PositionPart positionPart = entity.getPart(PositionPart.class);
-            spriteBatch.draw(t, positionPart.getX()-7.5f, 10, 15, 15);
+            spriteBatch.draw(t, positionPart.getX() - 7.5f, 10, 15, 15);
             spriteBatch.end();
             //t.dispose();
 

@@ -27,7 +27,7 @@ public class InventoryPart implements IEntityPart, IWeaponListener {
     @Override
     public void processPart(Entity entity, GameData gameData, World world) {
         if (currentWeapon == null && !weapons.isEmpty()) {
-            // currentWeapon = weapons.get(0);
+             currentWeapon = weapons.get(0);
         }
     }
 
