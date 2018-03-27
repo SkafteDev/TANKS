@@ -42,7 +42,7 @@ public class GrenadeWeapon implements IWeapon {
         grenade.add(new CirclePart(30,30,5));
         grenade.add(new PhysicsPart(30, -90.82f));
         grenade.add(new GrenadeCollisionPart(true,0));
-        grenade.add(new DamagePart(20,1));
+        grenade.add(new DamagePart(7,1));
         grenade.add(new TexturePart(this.texturePath));
 
         world.addEntity(grenade);
