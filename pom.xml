@@ -62,6 +62,7 @@
     <module>dk.grp1.tanks.SingleShot</module>
     <module>dk.grp1.tanks.BigShot</module>
     <module>dk.grp1.tanks.DeadWeight</module>
+    <module>dk.grp1.tanks.weapon.grenade</module>
   </modules>
 
   <build>
