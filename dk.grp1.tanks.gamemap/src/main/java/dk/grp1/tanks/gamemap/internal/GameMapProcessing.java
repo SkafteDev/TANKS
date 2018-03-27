@@ -8,6 +8,7 @@ import dk.grp1.tanks.common.events.Event;
 import dk.grp1.tanks.common.events.MapDestructionEvent;
 import dk.grp1.tanks.common.services.INonEntityProcessingService;
 import dk.grp1.tanks.common.utils.Vector2D;
+import javafx.beans.binding.MapExpression;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +34,7 @@ public class GameMapProcessing implements INonEntityProcessingService {
 //            System.out.println("Size of intersection points list: " + intersectionPoints.size());
             return;
         }
-
+        // Check the order of the intersection points
         Vector2D firstIntersectionPoint = intersectionPoints.get(0);
         Vector2D secondIntersectionPoint = intersectionPoints.get(1);
         if (firstIntersectionPoint.getX() > secondIntersectionPoint.getX()) {
@@ -42,72 +43,37 @@ public class GameMapProcessing implements INonEntityProcessingService {
             secondIntersectionPoint = tmp;
         }
 
+        // Get the DestructionEvent and Radius of the explosion
         MapDestructionEvent mapDestructionEvent = (MapDestructionEvent) event;
         Vector2D explosionCenter = mapDestructionEvent.getPointOfCollision();
         float explosionRadius = mapDestructionEvent.getExplosionRadius();
-//        System.out.println("Explosion Center: " + explosionCenter.toString());
-//        System.out.println("Explosion radius: " + explosionRadius);
+
         GameMap gameMap = world.getGameMap();
 
 
         //Remove Functions that are only within circle radius + buffer
         float buffer = (explosionRadius / 2);
-//        System.out.println("Buffer: " + buffer);
-
-        for (IGameMapFunction gameMapFunction : gameMap.getGameMapFunctions()) {
-            if (gameMapFunction.existsOnlyWithinRange(explosionCenter.getX() - explosionRadius - buffer, explosionCenter.getX() + explosionRadius + buffer)) {
-                functionsToRemove.add(gameMapFunction);
-            }
-        }
-        for (IGameMapFunction gameMapFunction : functionsToRemove) {
-            gameMap.getGameMapFunctions().remove(gameMapFunction);
-        }
-
-
-        IGameMapFunction leftFunc = null;
-        IGameMapFunction rightFunc = null;
-        //Find nearby functions
-        for (IGameMapFunction gameMapFunction : gameMap.getGameMapFunctions()) {
-            if (gameMapFunction.isWithin(firstIntersectionPoint.getX())) {
-                leftFunc = gameMapFunction;
-            }
-            if (gameMapFunction.isWithin(secondIntersectionPoint.getX())) {
-                rightFunc = gameMapFunction;
-            }
-        }
-
+        RemoveFunctions(gameMap, mapDestructionEvent, buffer);
 
         float rangeOneEndX = explosionCenter.getX() - explosionRadius - buffer;
         float rangeTwoStartX = explosionCenter.getX() + explosionRadius + buffer;
+        // Find nearby functions
+        IGameMapFunction leftFunc = getNearbyFunction(gameMap.getGameMapFunctions(),mapDestructionEvent, firstIntersectionPoint, buffer,rangeOneEndX-0.001f);
+        IGameMapFunction rightFunc = getNearbyFunction(gameMap.getGameMapFunctions(),mapDestructionEvent, secondIntersectionPoint, buffer,rangeTwoStartX+0.001f);;
 
-        // If there is no nearby function found then we check with the x-values based on center + radius + buffer
-        if (leftFunc == null) {
-            for (IGameMapFunction gameMapFunction : gameMap.getGameMapFunctions()) {
-                if (gameMapFunction.isWithin(rangeOneEndX-0.001f)){
-                    leftFunc = gameMapFunction;
-                }
-            }
-        }
-        if (rightFunc == null) {
-            for (IGameMapFunction gameMapFunction : gameMap.getGameMapFunctions()) {
-                if (gameMapFunction.isWithin(rangeTwoStartX+0.001f)){
-                    rightFunc = gameMapFunction;
-                }
-            }
-        }
-        // If still null, return.
+
+        // If null, restore and return.
         if (rightFunc == null || leftFunc == null){
 //            System.out.println("Right is null: " + (rightFunc == null));
 //            System.out.println("Left is null: " + (leftFunc == null));
+            System.out.println("Restore Map");
             restore(gameMap);
             return;
         }
+
         float rangeOneStartX = leftFunc.getStartX();
         float rangeTwoEndX = rightFunc.getEndX();
-        //Change found functions & Calculate ascending or descending.
-
-        boolean ascending = (leftFunc.getYValue(rangeOneEndX) < rightFunc.getYValue(rangeTwoStartX));
-        //Shorten start and end functions
+        //Change found functions by shorting them
         if (leftFunc.equals(rightFunc)) {
             List<IGameMapFunction> splitFunctions = leftFunc.splitInTwoWithNewRanges(rangeOneStartX, rangeOneEndX, rangeTwoStartX, rangeTwoEndX);
             //Remove original function
@@ -122,53 +88,69 @@ public class GameMapProcessing implements INonEntityProcessingService {
             rightFunc.setStartX(rangeTwoStartX);
         }
 
+        // Create the flat linear function which represent the bottom of the hole created by the explosion.
+        IGameMapFunction flatLinear = createFlatLinear(mapDestructionEvent, firstIntersectionPoint, secondIntersectionPoint, rangeOneEndX, rangeTwoStartX, leftFunc, rightFunc);
+        gameMap.addGameMapFunction(flatLinear);
+
+        //Generate linear functions between function and circle.
+        //Calc y value for end point on startFunc. Calc y value for start point on endFunc.x
+
+        Vector2D leftFuncPoint = new Vector2D(rangeOneEndX, leftFunc.getYValue(rangeOneEndX));
+        Vector2D leftFlatLinearPoint = new Vector2D(flatLinear.getStartX() + 0.01f, flatLinear.getYValue(flatLinear.getStartX() + 0.01f));
+        Vector2D rightFlatLinearPoint = new Vector2D(flatLinear.getEndX() - 0.01f, flatLinear.getYValue(flatLinear.getEndX() - 0.01f));
+        Vector2D rightFuncPoint = new Vector2D(rangeTwoStartX, rightFunc.getYValue(rangeTwoStartX));
+
+        createLinearEdges(gameMap, rangeOneEndX, rangeTwoStartX, flatLinear, leftFuncPoint, leftFlatLinearPoint, rightFlatLinearPoint, rightFuncPoint);
+    }
+
+    private void createLinearEdges(GameMap gameMap, float rangeOneEndX, float rangeTwoStartX, IGameMapFunction flatLinear, Vector2D leftFuncPoint, Vector2D leftFlatLinearPoint, Vector2D rightFlatLinearPoint, Vector2D rightFuncPoint) {
+        float a1 = (leftFlatLinearPoint.getY() - leftFuncPoint.getY()) / (leftFlatLinearPoint.getX() - leftFuncPoint.getX());
+        float b1 = leftFlatLinearPoint.getY() - a1 * leftFlatLinearPoint.getX();
+        IGameMapFunction leftLinear = new GameMapLinear(a1, b1, rangeOneEndX, flatLinear.getStartX());
+        float a2 = (rightFuncPoint.getY() - rightFlatLinearPoint.getY()) / (rightFuncPoint.getX() - rightFlatLinearPoint.getX());
+        float b2 = rightFlatLinearPoint.getY() - a2 * rightFlatLinearPoint.getX();
+        IGameMapFunction rightLinear = new GameMapLinear(a2, b2, flatLinear.getEndX(), rangeTwoStartX);
+        //     System.out.println("right Linear: A = " + a2 + " B = " + b2);
+        //     System.out.println("Left Linear: A = " + a1 + " B = " + b1);
+        gameMap.addGameMapFunction(leftLinear);
+        gameMap.addGameMapFunction(rightLinear);
+    }
+
+    private IGameMapFunction createFlatLinear(MapDestructionEvent mapDestructionEvent, Vector2D firstIntersectionPoint, Vector2D secondIntersectionPoint, float rangeOneEndX, float rangeTwoStartX, IGameMapFunction leftFunc, IGameMapFunction rightFunc) {
         IGameMapFunction flatLinear;
+
+        Vector2D explosionCenter = mapDestructionEvent.getPointOfCollision();
+        float explosionRadius = mapDestructionEvent.getExplosionRadius();
+
         float b = explosionCenter.getY() - explosionRadius;
         if(b < 10f){
             b = 10f;
         }
+        //Calculate ascending or descending.
+        boolean ascending = (leftFunc.getYValue(rangeOneEndX) < rightFunc.getYValue(rangeTwoStartX));
+
         if(ascending){
             flatLinear = new GameMapLinear(0f,b,firstIntersectionPoint.getX(),explosionCenter.getX()+explosionRadius);
         } else {
             flatLinear = new GameMapLinear(0f,b,explosionCenter.getX()-explosionRadius,secondIntersectionPoint.getX());
         }
-        gameMap.addGameMapFunction(flatLinear);
-        /*
-        //Generate smaller negative half
-        IGameMapFunction negativeHalf;
-        if (ascending) {
-            negativeHalf = new GameMapNegativeHalfCircle(firstIntersectionPoint.getX(), explosionCenter.getX() + explosionRadius, explosionCenter, explosionRadius);
-        } else {
-            negativeHalf = new GameMapNegativeHalfCircle(explosionCenter.getX() - explosionRadius, secondIntersectionPoint.getX(), explosionCenter, explosionRadius);
-        }
-        gameMap.addGameMapFunction(negativeHalf);
-        */
-        //Generate linear functions between function and circle.
-        //Calc y value for end point on startFunc. Calc y value for start point on endFunc.x
+        return flatLinear;
+    }
 
-        Vector2D leftFuncPoint = new Vector2D(rangeOneEndX, leftFunc.getYValue(rangeOneEndX));
-        Vector2D leftCirclePoint = new Vector2D(flatLinear.getStartX() + 0.01f, flatLinear.getYValue(flatLinear.getStartX() + 0.01f));
-        Vector2D rightCirclePoint = new Vector2D(flatLinear.getEndX() - 0.01f, flatLinear.getYValue(flatLinear.getEndX() - 0.01f));
-        Vector2D rightFuncPoint = new Vector2D(rangeTwoStartX, rightFunc.getYValue(rangeTwoStartX));
-        if(rightFuncPoint.getY() != rightFuncPoint.getY()  || leftFuncPoint.getY() != leftFuncPoint.getY()){
-     //       System.out.println("BREAK");
-        }
-   //     System.out.println("Left function point: " + leftFuncPoint.toString());
-   //     System.out.println("Left circle point: " + leftCirclePoint.toString());
-   //     System.out.println("Right circle point: " + rightCirclePoint.toString());
-   //     System.out.println("Right function point: " + rightFuncPoint.toString());
+    private void RemoveFunctions(GameMap gameMap, MapDestructionEvent mapDestructionEvent, float buffer) {
 
-        float a1 = (leftCirclePoint.getY() - leftFuncPoint.getY()) / (leftCirclePoint.getX() - leftFuncPoint.getX());
-        float b1 = leftCirclePoint.getY() - a1 * leftCirclePoint.getX();
-        IGameMapFunction leftLinear = new GameMapLinear(a1, b1, rangeOneEndX, flatLinear.getStartX());
-        float a2 = (rightFuncPoint.getY() - rightCirclePoint.getY()) / (rightFuncPoint.getX() - rightCirclePoint.getX());
-        float b2 = rightCirclePoint.getY() - a2 * rightCirclePoint.getX();
-        IGameMapFunction rightLinear = new GameMapLinear(a2, b2, flatLinear.getEndX(), rangeTwoStartX);
-   //     System.out.println("right Linear: A = " + a2 + " B = " + b2);
-   //     System.out.println("Left Linear: A = " + a1 + " B = " + b1);
-        gameMap.addGameMapFunction(leftLinear);
-        gameMap.addGameMapFunction(rightLinear);
         functionsToRemove.clear();
+        Vector2D explosionCenter = mapDestructionEvent.getPointOfCollision();
+        float explosionRadius = mapDestructionEvent.getExplosionRadius();
+
+        for (IGameMapFunction gameMapFunction : gameMap.getGameMapFunctions()) {
+            if (gameMapFunction.existsOnlyWithinRange(explosionCenter.getX() - explosionRadius - buffer, explosionCenter.getX() + explosionRadius + buffer)) {
+                functionsToRemove.add(gameMapFunction);
+            }
+        }
+        for (IGameMapFunction gameMapFunction : functionsToRemove) {
+            gameMap.getGameMapFunctions().remove(gameMapFunction);
+        }
     }
 
     private void restore(GameMap gameMap) {
@@ -176,6 +158,26 @@ public class GameMapProcessing implements INonEntityProcessingService {
             gameMap.addGameMapFunction(gameMapFunction);
         }
     }
+
+    private IGameMapFunction getNearbyFunction(List<IGameMapFunction> gameMap, MapDestructionEvent event, Vector2D intersectionPoint, float buffer, float alternativeRange){
+
+
+        for (IGameMapFunction gameMapFunction : gameMap) {
+            if (gameMapFunction.isWithin(intersectionPoint.getX())) {
+                return gameMapFunction;
+            }
+        }
+
+        for (IGameMapFunction gameMapFunction : gameMap) {
+            if (gameMapFunction.isWithin(alternativeRange)){
+                return gameMapFunction;
+            }
+        }
+        // if no function is found
+        return null;
+    }
+
+
 
     private List<Vector2D> calculateIntersectionPointsWithMap(Event event, World world) {
         List<Vector2D> intersectionPoints = new ArrayList<>();
