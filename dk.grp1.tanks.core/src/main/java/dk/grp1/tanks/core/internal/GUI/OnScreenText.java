@@ -12,7 +12,7 @@ import dk.grp1.tanks.common.data.parts.InventoryPart;
 import dk.grp1.tanks.common.data.parts.PositionPart;
 import javafx.geometry.Pos;
 
-public class OnScreenText implements IGuiProcessingService{
+public class OnScreenText implements IGuiProcessingService {
 
     private SpriteBatch batch = new SpriteBatch();
     private BitmapFont font;
@@ -21,15 +21,16 @@ public class OnScreenText implements IGuiProcessingService{
 
     /**
      * Draws various text values on the screen
+     *
      * @param world
      * @param gameData
      */
     @Override
     public void draw(World world, GameData gameData) {
         turnText(gameData);
-        for (Entity entity: world.getEntities()) {
+        for (Entity entity : world.getEntities()) {
             InventoryPart inventoryPart = entity.getPart(InventoryPart.class);
-            if (inventoryPart != null){
+            if (inventoryPart != null) {
                 weaponText(entity, inventoryPart);
                 angleText(entity);
                 firepowerText(entity);
@@ -43,10 +44,10 @@ public class OnScreenText implements IGuiProcessingService{
         int firepower = Math.round(cannonPart.getPreviousFirepower());
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        String fire = ""+firepower;
+        String fire = "Firepower: " + firepower;
         textBounds = font.getBounds(fire);
-        font.draw(batch, fire, cannonPart.getJointX()-textBounds.width/2,
-                cannonPart.getJointY()-60);
+        font.draw(batch, fire, cannonPart.getJointX() - textBounds.width / 2,
+                cannonPart.getJointY() - 30);
         batch.end();
         font.dispose();
     }
@@ -63,10 +64,10 @@ public class OnScreenText implements IGuiProcessingService{
         angle = Math.ceil(angle);
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        String angleString = ""+angle;
+        String angleString = "Angle: " + angle;
         textBounds = font.getBounds(angleString);
-        font.draw(batch, angleString, cannonPart.getJointX()-textBounds.width/2,
-                cannonPart.getJointY()-25);
+        font.draw(batch, angleString, cannonPart.getJointX() - textBounds.width / 2,
+                cannonPart.getJointY() - 20);
         batch.end();
         font.dispose();
     }
@@ -75,15 +76,17 @@ public class OnScreenText implements IGuiProcessingService{
         String weaponText;
         try {
             weaponText = inventoryPart.getCurrentWeapon().getName();
-        } catch (NullPointerException e){
+        } catch (NullPointerException e) {
             weaponText = "None";
         }
         font = new BitmapFont();
+        font.getData().scaleX = 0.5f;
+        font.getData().scaleY = 0.5f;
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         CirclePart circlePart = entity.getPart(CirclePart.class);
         textBounds = font.getBounds(weaponText);
-        font.draw(batch, weaponText, circlePart.getCentreX()-textBounds.width/2, circlePart.getCentreY()-10);
+        font.draw(batch, weaponText, circlePart.getCentreX() - textBounds.width / 2, circlePart.getCentreY() - 10);
         batch.end();
         font.dispose();
     }
@@ -94,7 +97,7 @@ public class OnScreenText implements IGuiProcessingService{
         String turnText = "Turn: ";
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        font.draw(batch, turnText, 10, gameData.getGameHeight()-10);
+        font.draw(batch, turnText, 10, gameData.getGameHeight() - 10);
         batch.end();
         font.dispose();
     }
