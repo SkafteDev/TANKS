@@ -15,7 +15,7 @@ import javafx.geometry.Pos;
 public class OnScreenText implements IGuiProcessingService {
 
     private SpriteBatch batch = new SpriteBatch();
-    private BitmapFont font = new BitmapFont();
+    private BitmapFont font;
     private OrthographicCamera camera;
     private BitmapFont.TextBounds textBounds;
 
@@ -39,6 +39,7 @@ public class OnScreenText implements IGuiProcessingService {
     }
 
     private void firepowerText(Entity entity) {
+        font = new BitmapFont();
         CannonPart cannonPart = entity.getPart(CannonPart.class);
         int firepower = Math.round(cannonPart.getPreviousFirepower());
         batch.setProjectionMatrix(camera.combined);
@@ -48,6 +49,7 @@ public class OnScreenText implements IGuiProcessingService {
         font.draw(batch, fire, cannonPart.getJointX() - textBounds.width / 2,
                 cannonPart.getJointY() - 30);
         batch.end();
+        font.dispose();
     }
 
     @Override
@@ -55,7 +57,8 @@ public class OnScreenText implements IGuiProcessingService {
         this.camera = camera;
     }
 
-    private void angleText(Entity entity) {
+    private void angleText(Entity entity){
+        font = new BitmapFont();
         CannonPart cannonPart = entity.getPart(CannonPart.class);
         double angle = cannonPart.getPreviousAngle() * 180 / 3.1415f;
         angle = Math.ceil(angle);
@@ -66,6 +69,7 @@ public class OnScreenText implements IGuiProcessingService {
         font.draw(batch, angleString, cannonPart.getJointX() - textBounds.width / 2,
                 cannonPart.getJointY() - 20);
         batch.end();
+        font.dispose();
     }
 
     private void weaponText(Entity entity, InventoryPart inventoryPart) {
@@ -75,6 +79,7 @@ public class OnScreenText implements IGuiProcessingService {
         } catch (NullPointerException e) {
             weaponText = "None";
         }
+        font = new BitmapFont();
         font.getData().scaleX = 0.5f;
         font.getData().scaleY = 0.5f;
         batch.setProjectionMatrix(camera.combined);
@@ -83,14 +88,17 @@ public class OnScreenText implements IGuiProcessingService {
         textBounds = font.getBounds(weaponText);
         font.draw(batch, weaponText, circlePart.getCentreX() - textBounds.width / 2, circlePart.getCentreY() - 10);
         batch.end();
+        font.dispose();
     }
 
 
     private void turnText(GameData gameData) {
+        font = new BitmapFont();
         String turnText = "Turn: ";
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         font.draw(batch, turnText, 10, gameData.getGameHeight() - 10);
         batch.end();
+        font.dispose();
     }
 }
