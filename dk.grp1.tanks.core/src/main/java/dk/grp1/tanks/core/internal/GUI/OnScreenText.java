@@ -39,7 +39,7 @@ public class OnScreenText implements IGuiProcessingService{
 
     private void firepowerText(Entity entity) {
         CannonPart cannonPart = entity.getPart(CannonPart.class);
-        float firepower = cannonPart.getPreviousFirepower();
+        int firepower = Math.round(cannonPart.getPreviousFirepower());
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         String fire = ""+firepower;
