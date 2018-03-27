@@ -18,6 +18,7 @@ import dk.grp1.tanks.common.services.INonEntityProcessingService;
 import dk.grp1.tanks.common.services.IPostEntityProcessingService;
 import dk.grp1.tanks.common.services.IWeapon;
 import dk.grp1.tanks.common.utils.Vector2D;
+import dk.grp1.tanks.core.internal.GUI.*;
 import dk.grp1.tanks.core.internal.managers.GameInputProcessor;
 
 import java.io.IOException;
@@ -35,6 +36,7 @@ public class Game implements ApplicationListener {
     private OrthographicCamera camera;
     private final boolean DEBUG = true;
     private Map<String, Texture> textureMap;
+    private List<IGuiProcessingService> drawImplementations;
 
 
     //Variables for drawing the game map
@@ -48,6 +50,7 @@ public class Game implements ApplicationListener {
         this.world = new World();
         this.gameData = gameData;
         this.textureMap = new HashMap<>();
+        this.drawImplementations = new ArrayList<>();
     }
 
 
@@ -58,18 +61,23 @@ public class Game implements ApplicationListener {
     private void setupGame() {
         setupMapDrawingConfig();
 
-        Gdx.input.setInputProcessor(
-                new GameInputProcessor(gameData)
-        );
+        Gdx.input.setInputProcessor(new GameInputProcessor(gameData));
 
-
-        //camera = new OrthographicCamera(gameData.getDisplayWidth(),gameData.getDisplayHeight());
-        //camera = new OrthographicCamera(200,100);
         camera = new OrthographicCamera(gameData.getGameWidth(), gameData.getGameHeight());
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
         camera.update();
 
         this.shapeRenderer = new ShapeRenderer();
+
+        drawImplementations.add(new HealthBarGUI());
+        drawImplementations.add(new OnScreenText());
+        drawImplementations.add(new WeaponGUI());
+        drawImplementations.add(new FirepowerBarGUI());
+
+        for (IGuiProcessingService gui: drawImplementations) {
+            gui.setCam(camera);
+        }
+
     }
 
     private void setupMapDrawingConfig() {
@@ -82,6 +90,8 @@ public class Game implements ApplicationListener {
         gameMapTexture = new Texture(pix);
 
         textureRegion = new TextureRegion(gameMapTexture);
+        //pix.dispose();
+        //polySpriteBatch.dispose();
     }
 
     public void resize(int i, int i1) {
@@ -91,15 +101,13 @@ public class Game implements ApplicationListener {
     public void render() {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
         gameData.setDelta(Gdx.graphics.getDeltaTime());
-
-
         update();
-
         drawBackGround();
         draw();
     }
+
+
 
     private void drawBackGround() {
         String path = "background.png";
@@ -123,6 +131,7 @@ public class Game implements ApplicationListener {
 
         spriteBatch.draw(t, 0, 0, gameData.getGameWidth(), gameData.getGameHeight());
         spriteBatch.end();
+        //t.dispose();
     }
 
     private void update() {
@@ -184,9 +193,16 @@ public class Game implements ApplicationListener {
         renderGameMap();
         //drawShapes();
         drawTextures();
+        drawUI();
     }
 
-    private void drawShapes() {
+    private void drawUI(){
+        for (IGuiProcessingService gui: drawImplementations){
+            gui.draw(world, gameData);
+        }
+    }
+
+    private void drawShapes(){
         for (Entity entity : world.getEntities()) {
             shapeRenderer.setProjectionMatrix(camera.combined);
             shapeRenderer.setColor(1, 1, 1, 1);
@@ -208,6 +224,9 @@ public class Game implements ApplicationListener {
                 shapeRenderer.polygon(Vector2D.getVerticesAsFloatArray(cannonPart.getVertices()));
                 shapeRenderer.end();
             }
+
+
+
 
         }
     }

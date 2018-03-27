@@ -71,6 +71,8 @@ public class PlayerProcessingSystem implements IEntityProcessingService {
                 inventoryPart.getCurrentWeapon().shoot(player, firepower, world);
                 //inventoryPart.decreaseAmmo();
                 cannonPart.setFirepower(0);
+                cannonPart.setPreviousFirepower(firepower);
+                cannonPart.setPreviousAngle(cannonPart.getDirection());
                 //timeSinceLastShot += gameData.getDelta();
                 isReadyToShoot = false;
             }
