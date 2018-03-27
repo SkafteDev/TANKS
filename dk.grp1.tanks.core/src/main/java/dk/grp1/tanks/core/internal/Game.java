@@ -91,8 +91,8 @@ public class Game implements ApplicationListener {
         gameMapTexture = new Texture(pix);
 
         textureRegion = new TextureRegion(gameMapTexture);
-        //pix.dispose();
-        //polySpriteBatch.dispose();
+        pix.dispose();
+       // polySpriteBatch.dispose();
     }
 
     public void resize(int i, int i1) {
@@ -111,7 +111,7 @@ public class Game implements ApplicationListener {
 
 
     private void drawBackGround() {
-        String path = "background.png";
+        String path = "background1.png";
 
         if (!textureMap.containsKey(path)) {
 
@@ -132,7 +132,7 @@ public class Game implements ApplicationListener {
 
         spriteBatch.draw(t, 0, 0, gameData.getGameWidth(), gameData.getGameHeight());
         spriteBatch.end();
-        //t.dispose();
+        spriteBatch.dispose();
     }
 
     private void update() {
@@ -277,6 +277,7 @@ public class Game implements ApplicationListener {
         Texture texture = textureMap.get(path);
 
         if (texture == null) {
+
             InputStream is = e.getClass().getClassLoader().getResourceAsStream(
                     path
             );
