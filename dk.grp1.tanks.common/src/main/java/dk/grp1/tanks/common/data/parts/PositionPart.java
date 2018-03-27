@@ -76,7 +76,7 @@ public class PositionPart implements IEntityPart {
      * @param directionInRadians
      */
     public void setDirectionInRadians(float directionInRadians) {
-        this.directionInRadians = directionInRadians;
+            this.directionInRadians = directionInRadians;
     }
 
     public void processPart(Entity entity, GameData gameData, World world) {

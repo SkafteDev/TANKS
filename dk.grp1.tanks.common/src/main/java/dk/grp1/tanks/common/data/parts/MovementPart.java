@@ -65,6 +65,7 @@ public class MovementPart implements IEntityPart {
         // update pos with velo
         position.setX(position.getX() + getVelocity().getX() * dt);
         position.setY(position.getY() + getVelocity().getY() * dt);
+        position.setDirectionInRadians(getVelocity().getAngle());
         // and circle centre
         CirclePart circlePart = entity.getPart(CirclePart.class);
         circlePart.setCentreX(position.getX());

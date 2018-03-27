@@ -59,6 +59,7 @@ public class DeadWeightMovementPart extends MovementPart {
         // update pos with velo
         position.setX(position.getX() + getVelocity().getX() * dt);
         position.setY(position.getY() + getVelocity().getY() * dt);
+        position.setDirectionInRadians(getVelocity().getAngle());
 
     }
 
