@@ -20,7 +20,6 @@
     <module>wrappers</module>
     <module>compiled</module>
     <module>libgdxwrapper</module>
-    <module>mXparserwrapper</module>
   </modules>
 
   <build>
