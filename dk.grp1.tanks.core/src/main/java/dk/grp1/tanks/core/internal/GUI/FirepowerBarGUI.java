@@ -40,6 +40,7 @@ public class FirepowerBarGUI implements IGuiProcessingService {
                 , barHeight * cannonPart.getFirepower() / cannonPart.getMaxFirepower());
         batch.end();
         pixmap.dispose();
+        firepowerTexture.dispose();
     }
 
 }
