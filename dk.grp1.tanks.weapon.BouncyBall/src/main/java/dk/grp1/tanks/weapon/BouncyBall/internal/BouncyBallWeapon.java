@@ -40,7 +40,7 @@ public class BouncyBallWeapon implements IWeapon{
         BouncyBall.add(new BouncyBallMovementPart(accelerationVector, 10000));
         BouncyBall.add(new BouncyBallExpirationPart(10));
         BouncyBall.add(new ShapePart());
-        BouncyBall.add(new CirclePart(30,30,5));
+        BouncyBall.add(new CirclePart(cannonCentre.getX(),cannonCentre.getY(),5));
         BouncyBall.add(new PhysicsPart(30, -90.82f));
         BouncyBall.add(new BouncyBallCollisionPart(true,0));
         BouncyBall.add(new DamagePart(3,1));
