@@ -8,7 +8,6 @@ import dk.grp1.tanks.common.events.Event;
 import dk.grp1.tanks.common.events.MapDestructionEvent;
 import dk.grp1.tanks.common.services.INonEntityProcessingService;
 import dk.grp1.tanks.common.utils.Vector2D;
-import javafx.beans.binding.MapExpression;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +18,7 @@ public class GameMapProcessing implements INonEntityProcessingService {
     public void process(World world, GameData gameData) {
         for (Event event : gameData.getEvents(MapDestructionEvent.class)) {
             List<Vector2D> intersectionPoints = calculateIntersectionPointsWithMap(event, world);
-            replacePartsOfMapWithCircles(intersectionPoints, world, event);
+            replacePartsOfMapWithLinearFunctions(intersectionPoints, world, event);
             gameData.removeEvent(event);
         }
     }
@@ -29,7 +28,7 @@ public class GameMapProcessing implements INonEntityProcessingService {
      * @param world
      * @param event
      */
-    private void replacePartsOfMapWithCircles(List<Vector2D> intersectionPoints, World world, Event event) {
+    private void replacePartsOfMapWithLinearFunctions(List<Vector2D> intersectionPoints, World world, Event event) {
         if (intersectionPoints.size() != 2) {
 //            System.out.println("Size of intersection points list: " + intersectionPoints.size());
             return;

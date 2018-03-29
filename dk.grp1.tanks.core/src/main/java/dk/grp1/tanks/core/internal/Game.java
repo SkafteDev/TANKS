@@ -38,7 +38,7 @@ public class Game implements ApplicationListener {
     private final boolean DEBUG = false;
     private Map<String, Texture> textureMap;
     private List<IGuiProcessingService> drawImplementations;
-
+    private SpriteBatch uiSpriteBatch;
 
     //Variables for drawing the game map
     private Texture gameMapTexture;
@@ -70,14 +70,12 @@ public class Game implements ApplicationListener {
 
         this.shapeRenderer = new ShapeRenderer();
 
-        drawImplementations.add(new HealthBarGUI());
-        drawImplementations.add(new OnScreenText());
-        drawImplementations.add(new WeaponGUI());
-        drawImplementations.add(new FirepowerBarGUI());
-
-        for (IGuiProcessingService gui: drawImplementations) {
-            gui.setCam(camera);
-        }
+        uiSpriteBatch = new SpriteBatch();
+        uiSpriteBatch.setProjectionMatrix(camera.combined);
+       drawImplementations.add(new HealthBarGUI());
+       drawImplementations.add(new OnScreenText());
+       drawImplementations.add(new WeaponGUI());
+       drawImplementations.add(new FirepowerBarGUI());
 
     }
 
@@ -204,7 +202,7 @@ public class Game implements ApplicationListener {
 
     private void drawUI(){
         for (IGuiProcessingService gui: drawImplementations){
-            gui.draw(world, gameData);
+            gui.draw(world, gameData, uiSpriteBatch);
         }
     }
 

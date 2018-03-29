@@ -16,8 +16,6 @@ import dk.grp1.tanks.common.services.IPostEntityProcessingService;
 
 public class HealthBarGUI implements IGuiProcessingService {
     private Texture healthBarTexture;
-    private OrthographicCamera camera;
-    private SpriteBatch batch;
     private Pixmap pix;
     private float barHeight = 2;
     private float barWidth = 4;
@@ -25,22 +23,22 @@ public class HealthBarGUI implements IGuiProcessingService {
     private float yOffSet = 2;
 
     @Override
-    public void draw(World world, GameData gameData) {
+    public void draw(World world, GameData gameData, SpriteBatch batch) {
         for (Entity entity : world.getEntities()) {
             LifePart lifePart = entity.getPart(LifePart.class);
             if (lifePart != null) {
                 CirclePart circlePart = entity.getPart(CirclePart.class);
                 makeHealthBar(circlePart.getCentreX(), circlePart.getCentreY(),
-                        circlePart.getRadius(), lifePart.getHealthRatio());
+                        circlePart.getRadius(), lifePart.getHealthRatio(), batch);
             }
         }
 
     }
 
-    @Override
-    public void setCam(OrthographicCamera camera) {
-        this.camera = camera;
-    }
+ //   @Override
+  //  public void setCam(OrthographicCamera camera) {
+  //      this.camera = camera;
+  //  }
 
 
     /**
@@ -51,7 +49,7 @@ public class HealthBarGUI implements IGuiProcessingService {
      * @param radius      of entity
      * @param healthValue current/max ratio
      */
-    private void makeHealthBar(float x, float y, float radius, float healthValue) {
+    private void makeHealthBar(float x, float y, float radius, float healthValue, SpriteBatch batch) {
         pix = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
 
         //Colour health bar based on health value
@@ -65,16 +63,13 @@ public class HealthBarGUI implements IGuiProcessingService {
             pix.setColor(Color.RED);
         }
         pix.fill();
-        batch = new SpriteBatch();
         healthBarTexture = new Texture(pix);
-        batch.setProjectionMatrix(camera.combined);
         batch.begin();
         batch.draw(healthBarTexture, x - xOffSet * radius, y + yOffSet * radius,
                 radius * barWidth * healthValue, barHeight);
         batch.end();
-        batch.dispose();
         pix.dispose();
-        //healthBarTexture.dispose();
+        healthBarTexture.dispose();
     }
 
 }

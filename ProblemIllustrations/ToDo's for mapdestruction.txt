@@ -1,5 +1,0 @@
-TODO: Konverter til map destruction bestående af Lineær - HalvCirkel - Lineær. Start fra bunden af med kun intersection kode. Overvej hvordan man finder de nærliggende funktioner.
-
-TODO: MapCollision / Movement gennem map rykker objektet ned i mappen. 
-
-TODO: Lav punkter baseret på den rigtige retning som det skal tegnes i

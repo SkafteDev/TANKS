@@ -22,22 +22,22 @@ public class WeaponGUI implements IGuiProcessingService {
 
 
     @Override
-    public void draw(World world, GameData gameData) {
+    public void draw(World world, GameData gameData, SpriteBatch batch) {
         for (Entity entity : world.getEntities()) {
             InventoryPart inventoryPart = entity.getPart(InventoryPart.class);
             if (inventoryPart != null){
-                drawWeaponIcon(entity, inventoryPart);
+                drawWeaponIcon(entity, inventoryPart, batch);
             }
         }
     }
 
-    @Override
-    public void setCam(OrthographicCamera camera) {
-        this.camera = camera;
-    }
+ //   @Override
+ //   public void setCam(OrthographicCamera camera) {
+ //       this.camera = camera;
+ //   }
 
 
-    private void drawWeaponIcon(Entity entity, InventoryPart inventoryPart){
+    private void drawWeaponIcon(Entity entity, InventoryPart inventoryPart, SpriteBatch spriteBatch){
 
             String path = inventoryPart.getCurrentWeapon().getIconPath();
             if (!textureMap.containsKey(path)) {
@@ -53,15 +53,13 @@ public class WeaponGUI implements IGuiProcessingService {
                 }
             }
 
-            SpriteBatch spriteBatch = new SpriteBatch();
+
             spriteBatch.begin();
-            spriteBatch.setProjectionMatrix(camera.combined);
             Texture t = textureMap.get(path);
 
             PositionPart positionPart = entity.getPart(PositionPart.class);
             spriteBatch.draw(t, positionPart.getX() - 7.5f, 10, 15, 15);
             spriteBatch.end();
-            spriteBatch.dispose();
             //t.dispose();
 
     }
