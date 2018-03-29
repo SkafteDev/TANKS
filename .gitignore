@@ -401,3 +401,5 @@ classes/run\.osgi/felix-cache/bundle15/version0\.0/revision\.location
 classes/run\.osgi/felix-cache/bundle16/bundle\.info
 
 classes/run\.osgi/felix-cache/bundle16/version0\.0/revision\.location
+
+runner/bundles/downloaded_bundles\.properties
