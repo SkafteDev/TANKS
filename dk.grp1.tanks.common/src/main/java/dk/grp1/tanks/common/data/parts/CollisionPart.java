@@ -39,7 +39,7 @@ public class CollisionPart implements IEntityPart {
         PositionPart positionPart = entity.getPart(PositionPart.class);
         DamagePart damagePart = entity.getPart(DamagePart.class);
 
-        if (this.isHitGameMap() && positionPart != null && damagePart != null) {
+        if ((this.isHitEntity()||this.isHitGameMap()) && positionPart != null && damagePart != null) {
             Event explosionEvent = new ExplosionEvent(entity, new Vector2D(positionPart.getX(), positionPart.getY()), damagePart.getExplosionRadius());
             Event mapDestructionEvent = new MapDestructionEvent(entity,new Vector2D(positionPart.getX(),positionPart.getY()),damagePart.getExplosionRadius());
             gameData.addEvent(explosionEvent);

@@ -3,10 +3,7 @@ package dk.grp1.tanks.weapon.grenade.internal;
 import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.World;
-import dk.grp1.tanks.common.data.parts.CollisionPart;
-import dk.grp1.tanks.common.data.parts.MovementPart;
-import dk.grp1.tanks.common.data.parts.PhysicsPart;
-import dk.grp1.tanks.common.data.parts.PositionPart;
+import dk.grp1.tanks.common.data.parts.*;
 import dk.grp1.tanks.common.utils.Vector2D;
 
 public class GrenadeMovementPart extends MovementPart {
@@ -42,6 +39,12 @@ public class GrenadeMovementPart extends MovementPart {
         // update pos with velo
         position.setX(position.getX() + getVelocity().getX() * dt);
         position.setY(position.getY() + getVelocity().getY() * dt);
+        // update circle part
+        CirclePart circlePart = entity.getPart(CirclePart.class);
+        if (circlePart != null) {
+            circlePart.setCentreX(position.getX());
+            circlePart.setCentreY(position.getY());
+        }
     }
 
     /**
