@@ -39,7 +39,7 @@ public class BigShotWeapon implements IWeapon {
         accelerationVector.multiplyWithConstant(firePower);
         bs.add(new MovementPart(accelerationVector, 10000));
         bs.add(new ShapePart());
-        bs.add(new CirclePart(30,30,4));
+        bs.add(new CirclePart(cannonCentre.getX(),cannonCentre.getY(),4));
         bs.add(new PhysicsPart(30, -90.82f));
         bs.add(new CollisionPart(true,0));
         bs.add(new DamagePart(10,1));

@@ -3,10 +3,7 @@ package dk.grp1.tanks.weapon.BouncyBall.internal;
 import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.World;
-import dk.grp1.tanks.common.data.parts.DamagePart;
-import dk.grp1.tanks.common.data.parts.MovementPart;
-import dk.grp1.tanks.common.data.parts.PhysicsPart;
-import dk.grp1.tanks.common.data.parts.PositionPart;
+import dk.grp1.tanks.common.data.parts.*;
 import dk.grp1.tanks.common.events.Event;
 import dk.grp1.tanks.common.events.ExplosionEvent;
 import dk.grp1.tanks.common.events.MapDestructionEvent;
@@ -59,6 +56,11 @@ public class BouncyBallMovementPart extends MovementPart {
         // update pos with velo
         positionPart.setX(positionPart.getX() + getVelocity().getX() * dt);
         positionPart.setY(positionPart.getY() + getVelocity().getY() * dt);
+        CirclePart circlePart = entity.getPart(CirclePart.class);
+        if (circlePart != null) {
+            circlePart.setCentreX(positionPart.getX());
+            circlePart.setCentreY(positionPart.getY());
+        }
     }
 
     /**
