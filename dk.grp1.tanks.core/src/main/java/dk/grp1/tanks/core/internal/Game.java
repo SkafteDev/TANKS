@@ -2,23 +2,23 @@ package dk.grp1.tanks.core.internal;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.EarClippingTriangulator;
 import com.badlogic.gdx.utils.FloatArray;
 import com.badlogic.gdx.utils.ShortArray;
-import dk.grp1.tanks.common.data.Entity;
-import dk.grp1.tanks.common.data.GameData;
-import dk.grp1.tanks.common.data.GameMap;
-import dk.grp1.tanks.common.data.World;
+import dk.grp1.tanks.common.data.*;
 import dk.grp1.tanks.common.data.parts.*;
+import dk.grp1.tanks.common.events.Event;
+import dk.grp1.tanks.common.events.ShootingEvent;
 import dk.grp1.tanks.common.services.IEntityProcessingService;
 import dk.grp1.tanks.common.services.INonEntityProcessingService;
 import dk.grp1.tanks.common.services.IPostEntityProcessingService;
-import dk.grp1.tanks.common.services.IWeapon;
 import dk.grp1.tanks.common.utils.Vector2D;
 import dk.grp1.tanks.core.internal.GUI.*;
+import dk.grp1.tanks.core.internal.managers.CustomAssetManager;
 import dk.grp1.tanks.core.internal.managers.GameInputProcessor;
 
 import java.io.IOException;
@@ -46,6 +46,8 @@ public class Game implements ApplicationListener {
     private PolygonSpriteBatch polySpriteBatch;
     private TextureRegion textureRegion;
 
+    private CustomAssetManager assetManager;
+
     public Game(ServiceLoader serviceLoader, GameData gameData) {
         this.serviceLoader = serviceLoader;
         this.world = new World();
@@ -54,9 +56,14 @@ public class Game implements ApplicationListener {
         this.drawImplementations = new ArrayList<>();
     }
 
-
     public void create() {
+        setupAssetManager();
         setupGame();
+    }
+
+    private void setupAssetManager() {
+        this.assetManager = new CustomAssetManager(Gdx.files.getLocalStoragePath());
+        this.assetManager.loadSoundAsset(Game.class, "cannon", ".mp3");
     }
 
     private void setupGame() {
@@ -103,11 +110,24 @@ public class Game implements ApplicationListener {
         gameData.setDelta(Gdx.graphics.getDeltaTime());
 
         update();
+
+
+        // Sound
+        List<Event> shootingEvents = gameData.getEvents(ShootingEvent.class);
+        for (Event event : shootingEvents) {
+            Sound sound = assetManager.getSoundAsset("cannon", ".mp3");
+
+            if (sound != null) {
+                System.out.println("Playing sound");
+                float volume = 1.0f;
+                sound.play(volume);
+            }
+            gameData.removeEvent(event);
+        }
+
         drawBackGround();
         draw();
     }
-
-
 
     private void drawBackGround() {
         String path = "background1.png";
