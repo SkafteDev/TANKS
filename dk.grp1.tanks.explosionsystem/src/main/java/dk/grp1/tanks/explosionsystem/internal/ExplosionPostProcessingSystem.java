@@ -22,7 +22,7 @@ public class ExplosionPostProcessingSystem implements IPostEntityProcessingServi
                     LifePart lp = ent.getPart(LifePart.class);
                     if(lp != null) {
                         lp.removeHP(((DamagePart) evnt.getSource().getPart(DamagePart.class)).getDamage());
-                        System.out.println(lp.getCurrentHP());
+                        //System.out.println(lp.getCurrentHP());
                     }
                 }
 

@@ -60,6 +60,11 @@ public class DeadWeightMovementPart extends MovementPart {
         position.setX(position.getX() + getVelocity().getX() * dt);
         position.setY(position.getY() + getVelocity().getY() * dt);
         position.setDirectionInRadians(getVelocity().getAngle());
+        CirclePart circlePart = entity.getPart(CirclePart.class);
+        if (circlePart != null) {
+            circlePart.setCentreX(position.getX());
+            circlePart.setCentreY(position.getY());
+        }
 
     }
 

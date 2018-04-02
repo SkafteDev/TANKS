@@ -39,7 +39,7 @@ public class GrenadeWeapon implements IWeapon {
         grenade.add(new GrenadeMovementPart(accelerationVector, 10000));
         grenade.add(new GrenadeExpirationPart(4));
         grenade.add(new ShapePart());
-        grenade.add(new CirclePart(30,30,5));
+        grenade.add(new CirclePart(cannonCentre.getX(),cannonCentre.getY(),5));
         grenade.add(new PhysicsPart(30, -90.82f));
         grenade.add(new GrenadeCollisionPart(true,0));
         grenade.add(new DamagePart(7,1));
