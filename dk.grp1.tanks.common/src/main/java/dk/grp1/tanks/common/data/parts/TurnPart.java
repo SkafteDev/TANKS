@@ -14,6 +14,7 @@ public class TurnPart implements IEntityPart {
     private float turnDuration = 5f;
     private float turnTimeRemaining = turnDuration;
 
+    private boolean turnEndRequested;
     public TurnPart(){
         myTurnNumber = turnPartCount++;
 
@@ -31,9 +32,10 @@ public class TurnPart implements IEntityPart {
     public void processPart(Entity entity, GameData gameData, World world) {
         if(isMyTurn()) {
             turnTimeRemaining -= gameData.getDelta();
-            if (turnTimeRemaining < 0) {
+            if (turnTimeRemaining < 0 ||turnEndRequested) {
                 gameData.addEvent(new EndTurnEvent(entity));
                 turnTimeRemaining = turnDuration;
+                turnEndRequested = false;
             }
         }
     }
@@ -46,5 +48,9 @@ public class TurnPart implements IEntityPart {
 
     public int getMyTurnNumber() {
         return myTurnNumber;
+    }
+
+    public void endMyTurn(){
+        turnEndRequested = true;
     }
 }

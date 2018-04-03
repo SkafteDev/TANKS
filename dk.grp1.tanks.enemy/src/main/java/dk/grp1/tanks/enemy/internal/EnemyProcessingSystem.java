@@ -70,6 +70,8 @@ public class EnemyProcessingSystem implements IEntityProcessingService {
 
                 if (gameData.getKeys().isPressed(GameKeys.SHIFT) && turnPart.isMyTurn()) {
                     aiShoot(gameData, world, cannonPart, enemy);
+                    turnPart.endMyTurn();
+
                 }
 
 

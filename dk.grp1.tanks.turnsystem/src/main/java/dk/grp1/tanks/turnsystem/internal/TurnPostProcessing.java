@@ -3,6 +3,7 @@ package dk.grp1.tanks.turnsystem.internal;
 import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.World;
+import dk.grp1.tanks.common.data.parts.MovementPart;
 import dk.grp1.tanks.common.data.parts.TurnPart;
 import dk.grp1.tanks.common.events.EndTurnEvent;
 import dk.grp1.tanks.common.events.Event;
@@ -31,14 +32,13 @@ public class TurnPostProcessing implements IPostEntityProcessingService {
 
 
         List<Event> events = gameData.getEvents(EndTurnEvent.class);
-        if(events.size()==0){
+        if(events.size()==0 ){
             return;
         }
         if(events.size() > 1){
             throw new Error("You cant end more than one turn each frame.");
         }
         EndTurnEvent event = (EndTurnEvent) events.get(0);
-        gameData.removeEvent(event);
 
 
         for (Entity entity : world.getEntities()
@@ -50,16 +50,40 @@ public class TurnPostProcessing implements IPostEntityProcessingService {
 
         }
 
+
+
+        if(anythingMoves(world)){
+            TurnPart.setCurrentTurnNumber(-1);
+            return;
+        }
+
+
+
+        // Next turn
         TurnPart eventTurn = event.getSource().getPart(TurnPart.class);
         if(turnParts.last().equals(eventTurn)){
             TurnPart.setCurrentTurnNumber(turnParts.first().getMyTurnNumber());
+            gameData.removeEvent(event);
+
             return;
         }
 
         int nextturn = turnParts.higher(eventTurn).getMyTurnNumber();
 
         TurnPart.setCurrentTurnNumber(nextturn);
+        gameData.removeEvent(event);
+        return;
 
+    }
 
+    private boolean anythingMoves(World world) {
+        for (Entity e:  world.getEntities()
+             ) {
+            MovementPart movPart = e.getPart(MovementPart.class);
+            if(movPart.getCurrentSpeed() > 0f){
+                return true;
+            }
+        }
+        return false;
     }
 }

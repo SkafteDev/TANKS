@@ -83,6 +83,7 @@ public class PlayerProcessingSystem implements IEntityProcessingService {
                 cannonPart.setPreviousAngle(cannonPart.getDirection());
                 //timeSinceLastShot += gameData.getDelta();
                 isReadyToShoot = false;
+                turnPart.endMyTurn();
             }
 
 
