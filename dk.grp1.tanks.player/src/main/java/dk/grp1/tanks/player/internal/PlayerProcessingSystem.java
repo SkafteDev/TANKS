@@ -25,6 +25,7 @@ public class PlayerProcessingSystem implements IEntityProcessingService {
         for (Entity player : world.getEntities(Player.class)
                 ) {
 
+            TurnPart turnPart = player.getPart(TurnPart.class);
             CannonPart cannonPart = player.getPart(CannonPart.class);
             MovementPart movePart = player.getPart(MovementPart.class);
             ControlPart ctrlPart = player.getPart(ControlPart.class);
@@ -40,9 +41,15 @@ public class PlayerProcessingSystem implements IEntityProcessingService {
             }
 
 
-            ctrlPart.setLeft(gameData.getKeys().isDown(GameKeys.LEFT));
-            ctrlPart.setRight(gameData.getKeys().isDown(GameKeys.RIGHT));
-            ctrlPart.setRotation(world.getGameMap().getDirectionVector(new Vector2D(positionPart.getX(),positionPart.getY())));
+            if(turnPart.isMyTurn()) {
+                ctrlPart.setLeft(gameData.getKeys().isDown(GameKeys.LEFT));
+                ctrlPart.setRight(gameData.getKeys().isDown(GameKeys.RIGHT));
+                ctrlPart.setRotation(world.getGameMap().getDirectionVector(new Vector2D(positionPart.getX(), positionPart.getY())));
+            } else{
+                ctrlPart.setLeft(false);
+                ctrlPart.setRight(false);
+                ctrlPart.setRotation(world.getGameMap().getDirectionVector(new Vector2D(positionPart.getX(), positionPart.getY())));
+            }
 
             //Cannon movement
             if (gameData.getKeys().isDown(GameKeys.UP)){
@@ -54,6 +61,7 @@ public class PlayerProcessingSystem implements IEntityProcessingService {
             //Cannon fire cooldown
             if (gameData.getKeys().isDown(GameKeys.SPACE)
                     //&& timeSinceLastShot> 1
+                    && turnPart.isMyTurn()
             ) {
                 firepower = cannonPart.calculateFirepower(gameData);
                 //timeSinceLastShot = 0;
@@ -78,6 +86,7 @@ public class PlayerProcessingSystem implements IEntityProcessingService {
             }
 
 
+            turnPart.processPart(player,gameData,world);
             physicsPart.processPart(player, gameData, world);
             ctrlPart.processPart(player, gameData, world);
             collisionPart.processPart(player, gameData, world);

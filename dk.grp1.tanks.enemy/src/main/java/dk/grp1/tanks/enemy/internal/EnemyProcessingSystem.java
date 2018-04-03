@@ -26,9 +26,10 @@ public class EnemyProcessingSystem implements IEntityProcessingService {
     @Override
     public void process(World world, GameData gameData) {
 
+
         for (Entity enemy : world.getEntities(Enemy.class)
                 ) {
-
+            TurnPart turnPart = enemy.getPart(TurnPart.class);
             CannonPart cannonPart = enemy.getPart(CannonPart.class);
             MovementPart movePart = enemy.getPart(MovementPart.class);
             ControlPart ctrlPart = enemy.getPart(ControlPart.class);
@@ -43,13 +44,21 @@ public class EnemyProcessingSystem implements IEntityProcessingService {
                 world.removeEntity(enemy);
             }
 
-            ctrlPart.setLeft(gameData.getKeys().isDown(GameKeys.A));
-            ctrlPart.setRight(gameData.getKeys().isDown(GameKeys.D));
-            ctrlPart.setRotation(world.getGameMap().getDirectionVector(new Vector2D(positionPart.getX(),positionPart.getY())));
+            if(turnPart.isMyTurn()) {
+
+                ctrlPart.setLeft(gameData.getKeys().isDown(GameKeys.A));
+                ctrlPart.setRight(gameData.getKeys().isDown(GameKeys.D));
+                ctrlPart.setRotation(world.getGameMap().getDirectionVector(new Vector2D(positionPart.getX(), positionPart.getY())));
+
+            } else{
+                ctrlPart.setLeft(false);
+                ctrlPart.setRight(false);
+                ctrlPart.setRotation(world.getGameMap().getDirectionVector(new Vector2D(positionPart.getX(), positionPart.getY())));
+            }
 
             //shootWithKeys(gameData, cannonPart, enemy);
 
-
+            turnPart.processPart(enemy,gameData,world);
             physicsPart.processPart(enemy, gameData, world);
             ctrlPart.processPart(enemy, gameData, world);
             collisionPart.processPart(enemy, gameData, world);
@@ -57,9 +66,12 @@ public class EnemyProcessingSystem implements IEntityProcessingService {
             cannonPart.setJointY(positionPart.getY());
             cannonPart.setJointX(positionPart.getX());
 
-            if (gameData.getKeys().isPressed(GameKeys.SHIFT)) {
-                aiShoot(gameData, world, cannonPart, enemy);
-            }
+
+
+                if (gameData.getKeys().isPressed(GameKeys.SHIFT) && turnPart.isMyTurn()) {
+                    aiShoot(gameData, world, cannonPart, enemy);
+                }
+
 
             cannonPart.processPart(enemy, gameData, world);
 

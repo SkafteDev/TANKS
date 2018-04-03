@@ -39,6 +39,7 @@ public class EnemyGamePlugin implements IGamePluginService {
         enemy.add(new CollisionPart(true,0));
         enemy.add(new MovementPart(50));
         enemy.add(new TexturePart("enemy.png"));
+        enemy.add(new TurnPart());
 
         InventoryPart inventoryPart = new InventoryPart(gameData.getWeapons());
         gameData.addWeaponListener(inventoryPart);
