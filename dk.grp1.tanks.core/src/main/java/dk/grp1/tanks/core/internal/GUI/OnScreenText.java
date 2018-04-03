@@ -6,10 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.World;
-import dk.grp1.tanks.common.data.parts.CannonPart;
-import dk.grp1.tanks.common.data.parts.CirclePart;
-import dk.grp1.tanks.common.data.parts.InventoryPart;
-import dk.grp1.tanks.common.data.parts.PositionPart;
+import dk.grp1.tanks.common.data.parts.*;
 import javafx.geometry.Pos;
 
 public class OnScreenText implements IGuiProcessingService {
@@ -25,7 +22,7 @@ public class OnScreenText implements IGuiProcessingService {
      */
     @Override
     public void draw(World world, GameData gameData, SpriteBatch batch) {
-        turnText(gameData, batch);
+        turnText(world,gameData, batch);
         for (Entity entity : world.getEntities()) {
             InventoryPart inventoryPart = entity.getPart(InventoryPart.class);
             if (inventoryPart != null) {
@@ -87,10 +84,21 @@ public class OnScreenText implements IGuiProcessingService {
     }
 
 
-    private void turnText(GameData gameData, SpriteBatch batch) {
+    private void turnText(World world, GameData gameData, SpriteBatch batch) {
         font.getData().scaleX = 0.5f;
         font.getData().scaleY = 0.5f;
         String turnText = "Turn: ";
+
+        for (Entity e : world.getEntities()
+             ) {
+            TurnPart turn =  e.getPart(TurnPart.class);
+
+            if(turn != null && turn.isMyTurn()){
+                turnText += turn.getMyTurnNumber();
+            }
+
+        }
+
         batch.begin();
         font.draw(batch, turnText, 10, gameData.getGameHeight() - 10);
         batch.end();
