@@ -88,6 +88,7 @@ public class OnScreenText implements IGuiProcessingService {
         font.getData().scaleX = 0.5f;
         font.getData().scaleY = 0.5f;
         String turnText = "Turn: ";
+        String timeText = "Remaining time of turn: ";
 
         for (Entity e : world.getEntities()
              ) {
@@ -95,12 +96,15 @@ public class OnScreenText implements IGuiProcessingService {
 
             if(turn != null && turn.isMyTurn()){
                 turnText += turn.getMyTurnNumber();
+                timeText += Math.floor(turn.getTurnTimeRemaining()*10)/10f;
             }
 
         }
 
         batch.begin();
         font.draw(batch, turnText, 10, gameData.getGameHeight() - 10);
+        font.draw(batch, timeText, 10, gameData.getGameHeight() - 20);
+
         batch.end();
     }
 }

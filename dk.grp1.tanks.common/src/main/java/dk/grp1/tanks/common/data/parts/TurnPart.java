@@ -44,7 +44,9 @@ public class TurnPart implements IEntityPart {
         return currentTurnNumber == myTurnNumber;
     }
 
-
+    public float getTurnTimeRemaining(){
+        return turnTimeRemaining;
+    }
 
     public int getMyTurnNumber() {
         return myTurnNumber;
