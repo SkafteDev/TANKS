@@ -13,6 +13,8 @@ import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.GameMap;
 import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.data.parts.*;
+import dk.grp1.tanks.common.events.Event;
+import dk.grp1.tanks.common.events.ExplosionAnimationEvent;
 import dk.grp1.tanks.common.services.IEntityProcessingService;
 import dk.grp1.tanks.common.services.INonEntityProcessingService;
 import dk.grp1.tanks.common.services.IPostEntityProcessingService;
@@ -27,6 +29,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 public class Game implements ApplicationListener {
@@ -39,6 +42,9 @@ public class Game implements ApplicationListener {
     private Map<String, Texture> textureMap;
     private List<IGuiProcessingService> drawImplementations;
     private SpriteBatch uiSpriteBatch;
+    private SpriteBatch animationSpriteBatch;
+    private SpriteBatch textureSpriteBatch;
+
 
     //Variables for drawing the game map
     private Texture gameMapTexture;
@@ -46,12 +52,20 @@ public class Game implements ApplicationListener {
     private PolygonSpriteBatch polySpriteBatch;
     private TextureRegion textureRegion;
 
+
+
+    private List<AnimationWrapper> animationsToProcess;
+    private Map<String, Animation> animationMap;
+
+
     public Game(ServiceLoader serviceLoader, GameData gameData) {
         this.serviceLoader = serviceLoader;
         this.world = new World();
         this.gameData = gameData;
         this.textureMap = new HashMap<>();
+        this.animationMap = new HashMap<>();
         this.drawImplementations = new ArrayList<>();
+        this.animationsToProcess = new ArrayList<>();
     }
 
 
@@ -72,7 +86,14 @@ public class Game implements ApplicationListener {
 
         uiSpriteBatch = new SpriteBatch();
         uiSpriteBatch.setProjectionMatrix(camera.combined);
-       drawImplementations.add(new HealthBarGUI());
+
+        animationSpriteBatch = new SpriteBatch();
+        animationSpriteBatch.setProjectionMatrix(camera.combined);
+
+        textureSpriteBatch = new SpriteBatch();
+        textureSpriteBatch.setProjectionMatrix(camera.combined);
+
+        drawImplementations.add(new HealthBarGUI());
        drawImplementations.add(new OnScreenText());
        drawImplementations.add(new WeaponGUI());
        drawImplementations.add(new FirepowerBarGUI());
@@ -151,6 +172,19 @@ public class Game implements ApplicationListener {
             postEntityProcessingService.postProcess(world, gameData);
         }
 
+        for (Event event : gameData.getEvents(ExplosionAnimationEvent.class)) {
+            ExplosionAnimationEvent explosionAnimationEvent = (ExplosionAnimationEvent) event;
+            ExplosionTexturePart explosionTexturePart = explosionAnimationEvent.getExplosionTexturePart();
+            AnimationWrapper animationWrapper = new AnimationWrapper(   explosionAnimationEvent.getPointOfExplosion(),
+                                                                        explosionTexturePart.getSrcPath(),
+                                                                        explosionAnimationEvent.getSource(),
+                                                                        explosionTexturePart.getFrameCols(),
+                                                                        explosionTexturePart.getFrameRows(),
+                                                                        explosionAnimationEvent.getExplosionRadius()
+            );
+            animationsToProcess.add(animationWrapper);
+            gameData.removeEvent(event);
+        }
         gameData.getKeys().update();
     }
 
@@ -197,6 +231,7 @@ public class Game implements ApplicationListener {
         renderGameMap();
         //drawShapes();
         drawTextures();
+        drawAnimation();
         drawUI();
     }
 
@@ -228,17 +263,36 @@ public class Game implements ApplicationListener {
                 shapeRenderer.polygon(Vector2D.getVerticesAsFloatArray(cannonPart.getVertices()));
                 shapeRenderer.end();
             }
-
-
-
-
         }
     }
+    private void drawAnimation(){
+        List<AnimationWrapper> animationsToRemove = new ArrayList<>();
+        animationSpriteBatch.begin();
+        for (AnimationWrapper animationWrapper : animationsToProcess) {
+            animationWrapper.updateStateTime(gameData.getDelta());
+            Animation animation = checkGetAnimation(animationWrapper);
+            Vector2D pointOfExplosion = animationWrapper.getPosition();
+            TextureRegion currentFrame = animation.getKeyFrame(animationWrapper.getStateTime(),false);
+            float animationScale = 6f;
+            animationSpriteBatch.draw(currentFrame,
+                                    pointOfExplosion.getX() - (animationWrapper.getExplosionRadius()*(animationScale/2)),
+                                    pointOfExplosion.getY() - (animationWrapper.getExplosionRadius()*(animationScale/2)),
+                                    animationWrapper.getExplosionRadius() * animationScale,
+                                    animationWrapper.getExplosionRadius() * animationScale);
+            if(animation.isAnimationFinished(animationWrapper.getStateTime())){
+                animationsToRemove.add(animationWrapper);
+                System.out.println("Animation Finished");
+            }
+        }
+        for (AnimationWrapper animationWrapper : animationsToRemove) {
+            animationsToProcess.remove(animationWrapper);
+        }
 
+        animationSpriteBatch.end();
+    }
     private void drawTextures() {
-        SpriteBatch spriteBatch = new SpriteBatch();
-        spriteBatch.begin();
-        spriteBatch.setProjectionMatrix(camera.combined);
+
+        textureSpriteBatch.begin();
 
 
         for (Entity e : world.getEntities()) {
@@ -249,19 +303,18 @@ public class Game implements ApplicationListener {
             CannonPart cannonPart = e.getPart(CannonPart.class);
             if (cannonPart != null && pp != null && cp != null) {
                 TextureRegion textureRegion = new TextureRegion(checkGetTexture(e, cannonPart.getTexturePath()));
-                drawCannon(spriteBatch, textureRegion, cannonPart);
+                drawCannon(textureSpriteBatch, textureRegion, cannonPart);
             }
 
             if (tp != null && pp != null && cp != null) {
                 Texture texture = checkGetTexture(e, tp.getSrcPath());
                 //Sprite sprite = new Sprite(texture);
-                spriteBatch.draw(texture, pp.getX() - cp.getRadius(), pp.getY() - cp.getRadius(), cp.getRadius() * 2, cp.getRadius() * 2);
+                textureSpriteBatch.draw(texture, pp.getX() - cp.getRadius(), pp.getY() - cp.getRadius(), cp.getRadius() * 2, cp.getRadius() * 2);
             }
 
 
         }
-        spriteBatch.end();
-        spriteBatch.dispose();
+        textureSpriteBatch.end();
     }
 
     private void drawCannon(SpriteBatch spriteBatch, TextureRegion textureRegion, CannonPart cannonPart) {
@@ -300,6 +353,37 @@ public class Game implements ApplicationListener {
 
         return texture;
     }
+    private Animation checkGetAnimation(AnimationWrapper animationWrapper){
+        Animation animation = animationMap.get(animationWrapper.getPath());
+
+        if(animation == null) {
+            InputStream is = animationWrapper.getOrigin().getClass().getClassLoader().getResourceAsStream(animationWrapper.getPath());
+
+            try {
+                Gdx2DPixmap gmp = new Gdx2DPixmap(is, Gdx2DPixmap.GDX2D_FORMAT_RGBA8888);
+                Pixmap pix = new Pixmap(gmp);
+                Texture texture = new Texture(pix);
+                TextureRegion textureRegion = new TextureRegion(texture);
+                TextureRegion[][] tmp = textureRegion.split(texture.getWidth() / animationWrapper.getFrameCols(), texture.getHeight() / animationWrapper.getFrameRows());
+                TextureRegion[] explosionFrames = new TextureRegion[animationWrapper.getFrameCols() * animationWrapper.getFrameRows()];
+                int index = 0;
+                for (int i = 0; i < animationWrapper.getFrameRows(); i++) {
+                    for (int j = 0; j < animationWrapper.getFrameCols(); j++) {
+                        explosionFrames[index++] = tmp[i][j];
+                    }
+                }
+                animation = new Animation(0.025f, explosionFrames);
+                animation.setPlayMode(Animation.PlayMode.NORMAL);
+                animationMap.put(animationWrapper.getPath(),animation);
+
+            } catch (IOException e1){
+                e1.printStackTrace();
+            }
+
+        }
+
+        return animation;
+    }
 
 
     public void pause() {
@@ -311,7 +395,9 @@ public class Game implements ApplicationListener {
     }
 
     public void dispose() {
-
+        textureSpriteBatch.dispose();
+        animationSpriteBatch.dispose();
+        uiSpriteBatch.dispose();
     }
 
     public World getWorld() {
