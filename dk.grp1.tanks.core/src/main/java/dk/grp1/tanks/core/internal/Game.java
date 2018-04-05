@@ -1,7 +1,9 @@
 package dk.grp1.tanks.core.internal;
 
 import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -110,15 +112,26 @@ public class Game implements ApplicationListener {
 
     private void setupMapDrawingConfig() {
         polySpriteBatch = new PolygonSpriteBatch();
-
-        Pixmap pix = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
-        pix.setColor(Color.BLUE);
-        pix.fill();
+        String path = "mapTexture.png";
+        InputStream is = this.getClass().getClassLoader().getResourceAsStream(path);
+        Gdx2DPixmap gmp = null;
+        try {
+            gmp = new Gdx2DPixmap(is, Gdx2DPixmap.GDX2D_FORMAT_RGBA8888);
+            is.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Pixmap pix = new Pixmap(gmp);
+       // Pixmap pix = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+       // pix.setColor(Color.BLUE);
+       // pix.fill();
 
         gameMapTexture = new Texture(pix);
 
         textureRegion = new TextureRegion(gameMapTexture);
         pix.dispose();
+
+
         // polySpriteBatch.dispose();
     }
 

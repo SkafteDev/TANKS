@@ -12,9 +12,9 @@ public class BigShotWeapon implements IWeapon {
     private final String description = "Fires a single shot";
     private final String iconPath = "bigshot.png";
     private final String texturePath = "bigshot.png";
-    private final String explosionTexturePath = "bsExplosion.png";
-    private final int explosionTextureFrameRows = 3;
-    private final int explosionTextureFrameCols = 5;
+    private final String explosionTexturePath = "explosion.png";
+    private final int explosionTextureFrameRows = 6;
+    private final int explosionTextureFrameCols = 8;
 
     @Override
     public String getName() {
