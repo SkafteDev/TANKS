@@ -89,7 +89,6 @@ public class InventoryPart implements IEntityPart, IWeaponListener {
             i--;
 
             i = Math.floorMod(i, weapons.size());
-            System.out.println(i);
 
             if (i == -1) {
                 this.currentWeapon = null;
