@@ -43,7 +43,6 @@ public class TurnPart implements IEntityPart {
                 turnEndRequested = false;
             }
         }
-        System.out.println(myTurnNumber);
     }
 
     public boolean isMyTurn() {
