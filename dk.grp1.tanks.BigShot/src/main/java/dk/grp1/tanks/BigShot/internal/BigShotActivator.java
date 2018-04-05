@@ -10,7 +10,6 @@ public class BigShotActivator implements BundleActivator {
     @Override
     public void start(BundleContext bundleContext) throws Exception {
         bundleContext.registerService(IGamePluginService.class.getName(), new BigShotPlugin(), null);
-        bundleContext.registerService(IWeapon.class.getName(), new BigShotWeapon(), null);
     }
 
     @Override

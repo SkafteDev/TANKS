@@ -10,7 +10,7 @@ public class DeadWeightActivator implements BundleActivator {
     @Override
     public void start(BundleContext bundleContext) throws Exception {
         bundleContext.registerService(IGamePluginService.class.getName(), new DeadWeightPlugin(), null);
-        bundleContext.registerService(IWeapon.class.getName(), new DeadWeightWeapon(), null);
+        //bundleContext.registerService(IWeapon.class.getName(), new DeadWeightWeapon(), null);
     }
 
     @Override

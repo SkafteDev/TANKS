@@ -15,13 +15,7 @@ public class TurnPostProcessing implements IPostEntityProcessingService {
 
     private TreeSet<TurnPart> turnParts;
 
-    public TurnPostProcessing(){
-       turnParts= new TreeSet<>(new Comparator<TurnPart>() {
-            @Override
-            public int compare(TurnPart o1, TurnPart o2) {
-                return o1.getMyTurnNumber() - o2.getMyTurnNumber();
-            }
-        });
+    public TurnPostProcessing() {
 
 
     }
@@ -29,40 +23,42 @@ public class TurnPostProcessing implements IPostEntityProcessingService {
     @Override
     public void postProcess(World world, GameData gameData) {
 
-
+        turnParts = new TreeSet<>(new Comparator<TurnPart>() {
+            @Override
+            public int compare(TurnPart o1, TurnPart o2) {
+                return o1.getMyTurnNumber() - o2.getMyTurnNumber();
+            }
+        });
 
         List<Event> events = gameData.getEvents(EndTurnEvent.class);
-        if(events.size()==0 ){
+        if (events.size() == 0) {
             return;
         }
-        if(events.size() > 1){
+        if (events.size() > 1) {
             throw new Error("You cant end more than one turn each frame.");
         }
         EndTurnEvent event = (EndTurnEvent) events.get(0);
 
 
         for (Entity entity : world.getEntities()
-             ) {
+                ) {
             TurnPart turnPart = entity.getPart(TurnPart.class);
-            if(turnPart != null){
+            if (turnPart != null) {
                 turnParts.add(turnPart);
             }
 
         }
 
 
-
-
-        if(anythingMoves(world)){
+        if (anythingMoves(world)) {
             TurnPart.setCurrentTurnNumber(-1);
             return;
         }
 
 
-
         // Next turn
         TurnPart eventTurn = event.getSource().getPart(TurnPart.class);
-        if(turnParts.last().equals(eventTurn)){
+        if (turnParts.last().equals(eventTurn)) {
             TurnPart.setCurrentTurnNumber(turnParts.first().getMyTurnNumber());
             gameData.removeEvent(event);
 
@@ -78,10 +74,10 @@ public class TurnPostProcessing implements IPostEntityProcessingService {
     }
 
     private boolean anythingMoves(World world) {
-        for (Entity e:  world.getEntities()
-             ) {
+        for (Entity e : world.getEntities()
+                ) {
             MovementPart movPart = e.getPart(MovementPart.class);
-            if(movPart.getCurrentSpeed() > 0f){
+            if (movPart.getCurrentSpeed() > 0f) {
                 return true;
             }
         }

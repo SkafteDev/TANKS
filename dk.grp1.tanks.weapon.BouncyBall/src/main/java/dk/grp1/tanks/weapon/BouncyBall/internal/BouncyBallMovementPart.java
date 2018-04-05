@@ -5,6 +5,7 @@ import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.data.parts.*;
 import dk.grp1.tanks.common.events.Event;
+import dk.grp1.tanks.common.events.ExplosionAnimationEvent;
 import dk.grp1.tanks.common.events.ExplosionEvent;
 import dk.grp1.tanks.common.events.MapDestructionEvent;
 import dk.grp1.tanks.common.utils.Vector2D;
@@ -43,11 +44,13 @@ public class BouncyBallMovementPart extends MovementPart {
             bouncyBallCollisionPart.setHitGameMap(false);
 
             DamagePart damagePart = entity.getPart(DamagePart.class);
-
-            if (damagePart != null) {
+            ExplosionTexturePart explosionTexturePart = entity.getPart(ExplosionTexturePart.class);
+            if (damagePart != null && explosionTexturePart != null) {
                 Event explosionEvent = new ExplosionEvent(entity, new Vector2D(positionPart.getX(), positionPart.getY()), damagePart.getExplosionRadius());
                 Event mapDestructionEvent = new MapDestructionEvent(entity,new Vector2D(positionPart.getX(),positionPart.getY()),damagePart.getExplosionRadius());
+                Event animationEvent = new ExplosionAnimationEvent(entity,new Vector2D(positionPart.getX(),positionPart.getY()),explosionTexturePart,damagePart.getExplosionRadius());
                 gameData.addEvent(explosionEvent);
+                gameData.addEvent(animationEvent);
                 gameData.addEvent(mapDestructionEvent);
             }
 
