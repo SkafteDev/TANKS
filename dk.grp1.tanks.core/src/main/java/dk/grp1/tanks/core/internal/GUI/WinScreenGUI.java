@@ -18,7 +18,12 @@ public class WinScreenGUI implements IGUIEntityProcessingService  {
         font.getData().scaleY = 2f;
 
         batch.begin();
-        String winner = "Winner: " + entity.toString();
+        String winner;
+        if(entity != null) {
+            winner = "Winner: " + entity.toString();
+        } else {
+            winner = "No one won";
+        }
         textBounds = font.getBounds(winner);
         font.draw(batch, winner, gameData.getGameWidth()/2 - textBounds.width / 2,
                 gameData.getGameHeight()/2-textBounds.height/2);

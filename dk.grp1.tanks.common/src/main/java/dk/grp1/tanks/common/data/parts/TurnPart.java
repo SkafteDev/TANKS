@@ -27,6 +27,11 @@ public class TurnPart implements IEntityPart {
        return currentTurnNumber;
     }
 
+    public static void resetPart(){
+        currentTurnNumber = 0;
+        turnPartCount = 0;
+    }
+
 
     @Override
     public void processPart(Entity entity, GameData gameData, World world) {
@@ -38,6 +43,7 @@ public class TurnPart implements IEntityPart {
                 turnEndRequested = false;
             }
         }
+        System.out.println(myTurnNumber);
     }
 
     public boolean isMyTurn() {

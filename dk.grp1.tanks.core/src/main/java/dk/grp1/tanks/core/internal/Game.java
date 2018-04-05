@@ -2,16 +2,15 @@ package dk.grp1.tanks.core.internal;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
+import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.EarClippingTriangulator;
 import com.badlogic.gdx.utils.FloatArray;
 import com.badlogic.gdx.utils.ShortArray;
-import dk.grp1.tanks.common.data.Entity;
-import dk.grp1.tanks.common.data.GameData;
-import dk.grp1.tanks.common.data.GameMap;
-import dk.grp1.tanks.common.data.World;
+import dk.grp1.tanks.common.data.*;
 import dk.grp1.tanks.common.data.parts.*;
 import dk.grp1.tanks.common.services.*;
 import dk.grp1.tanks.common.events.Event;
@@ -32,6 +31,9 @@ import static com.badlogic.gdx.math.MathUtils.random;
 
 
 public class Game implements ApplicationListener {
+    private final int WIDTH = 800;
+    private final int HEIGHT = 600;
+
     private final boolean DEBUG = false;
     private GameState state;
     private ServiceLoader serviceLoader;
@@ -63,14 +65,18 @@ public class Game implements ApplicationListener {
     private float baseY;
 
 
-    public Game(ServiceLoader serviceLoader, GameData gameData) {
+    public Game(ServiceLoader serviceLoader) {
         this.serviceLoader = serviceLoader;
-        this.world = new World();
-        this.gameData = gameData;
-        this.textureMap = new HashMap<>();
-        this.animationMap = new HashMap<>();
-        this.drawImplementations = new ArrayList<>();
-        this.animationsToProcess = new ArrayList<>();
+        initGame();
+
+
+        LwjglApplicationConfiguration cfg =  new LwjglApplicationConfiguration();
+        cfg.title = "Tanks";
+        cfg.width = WIDTH;
+        cfg.height = HEIGHT;
+        cfg.useGL30 = false;
+        cfg.resizable = true;
+        new LwjglApplication(this, cfg);
     }
 
 
@@ -78,8 +84,38 @@ public class Game implements ApplicationListener {
         setupGame();
     }
 
+    private void restartGame(){
+        initGame();
+        setupGame();
+        for (IGamePluginService plugin: serviceLoader.getGamePluginServices()
+             ) {
+            plugin.stop(world,gameData);
+
+        }
+        for (IGamePluginService plugin: serviceLoader.getGamePluginServices()
+                ) {
+            plugin.start(world, gameData);
+        }
+
+
+    }
+    private void initGame(){
+        this.world = new World();
+        this.gameData = new GameData();
+        gameData.setDisplayHeight(HEIGHT);
+        gameData.setDisplayWidth(WIDTH);
+        this.textureMap = new HashMap<>();
+        this.animationMap = new HashMap<>();
+        this.drawImplementations = new ArrayList<>();
+        this.animationsToProcess = new ArrayList<>();
+        state = GameState.running;
+
+    }
+
     private void setupGame() {
+
         setupMapDrawingConfig();
+
 
         Gdx.input.setInputProcessor(new GameInputProcessor(gameData));
 
@@ -93,7 +129,6 @@ public class Game implements ApplicationListener {
 
         uiSpriteBatch = new SpriteBatch();
         uiSpriteBatch.setProjectionMatrix(camera.combined);
-        state = GameState.running;
 
         animationSpriteBatch = new SpriteBatch();
         animationSpriteBatch.setProjectionMatrix(camera.combined);
@@ -134,7 +169,7 @@ public class Game implements ApplicationListener {
 
         switch (state) {
             case running:
-  shakeCamera();
+                shakeCamera();
                 update();
                 drawBackGround();
                 draw();
@@ -142,8 +177,11 @@ public class Game implements ApplicationListener {
             case notRunning:
                 drawBackGround();
                 drawWinScreen();
+                if(gameData.getKeys().isPressed(GameKeys.RESTART)){
+                    restartGame();
+                }
         }
-      
+
     }
 
     private void shakeCamera() {
@@ -157,7 +195,8 @@ public class Game implements ApplicationListener {
         cameraShakeUpdate(gameData.getDelta(), camera);
         camera.update();
     }
-        private void drawWinScreen() {
+
+    private void drawWinScreen() {
         IGUIEntityProcessingService winDrawer = new WinScreenGUI();
 
         for (IRoundEndService service : serviceLoader.getRoundEndServices()
@@ -221,7 +260,7 @@ public class Game implements ApplicationListener {
                     explosionTexturePart.getFrameRows(),
                     explosionAnimationEvent.getExplosionRadius()
             );
-            shakeConfig(explosionAnimationEvent.getExplosionRadius() * 5,1000f);
+            shakeConfig(explosionAnimationEvent.getExplosionRadius() * 5, 1000f);
             animationsToProcess.add(animationWrapper);
             gameData.removeEvent(event);
         }
