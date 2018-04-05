@@ -397,7 +397,7 @@ public class Game implements ApplicationListener {
                     animationWrapper.getExplosionRadius() * animationScale);
             if (animation.isAnimationFinished(animationWrapper.getStateTime())) {
                 animationsToRemove.add(animationWrapper);
-                System.out.println("Animation Finished");
+
             }
         }
         for (AnimationWrapper animationWrapper : animationsToRemove) {

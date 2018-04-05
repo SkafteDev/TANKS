@@ -41,9 +41,9 @@ public class CollisionPart implements IEntityPart {
         PositionPart positionPart = entity.getPart(PositionPart.class);
         DamagePart damagePart = entity.getPart(DamagePart.class);
         ExplosionTexturePart explosionTexturePart = entity.getPart(ExplosionTexturePart.class);
+        CirclePart circlePart = entity.getPart(CirclePart.class);
 
         if ((this.isHitEntity() || this.isHitGameMap()) && positionPart != null && damagePart != null && explosionTexturePart != null) {
-            System.out.println("Explosion animation Event created");
             Event animationEvent = new ExplosionAnimationEvent(entity, new Vector2D(positionPart.getX(), positionPart.getY()), explosionTexturePart, damagePart.getExplosionRadius());
             Event explosionEvent = new ExplosionEvent(entity, new Vector2D(positionPart.getX(), positionPart.getY()), damagePart.getExplosionRadius());
             Event mapDestructionEvent = new MapDestructionEvent(entity, new Vector2D(positionPart.getX(), positionPart.getY()), damagePart.getExplosionRadius());
@@ -51,6 +51,9 @@ public class CollisionPart implements IEntityPart {
             gameData.addEvent(explosionEvent);
             gameData.addEvent(mapDestructionEvent);
             world.removeEntity(entity);
+        } else if(this.isHitGameMap() && positionPart != null && circlePart != null && world.getGameMap().getHeight(new Vector2D(positionPart.getX(),positionPart.getY()))-2f > positionPart.getY()-circlePart.getRadius()){
+            System.out.println("Underneath the map");
+            positionPart.setY(positionPart.getY()+3f);
         }
     }
 

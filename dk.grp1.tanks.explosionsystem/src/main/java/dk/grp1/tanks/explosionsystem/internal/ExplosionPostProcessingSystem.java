@@ -21,7 +21,6 @@ public class ExplosionPostProcessingSystem implements IPostEntityProcessingServi
                 if(isInExplosion(evnt, ent)){
                     LifePart lp = ent.getPart(LifePart.class);
                     if(lp != null) {
-                        System.out.println("Life part not null");
                         lp.removeHP(((DamagePart) evnt.getSource().getPart(DamagePart.class)).getDamage());
 
                         //System.out.println(lp.getCurrentHP());
