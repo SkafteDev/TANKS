@@ -12,6 +12,9 @@ public class BouncyBallWeapon implements IWeapon{
     private final String description = "Shoots a bouncing ball";
     private final String iconPath = "bouncy_ball.png";
     private final String texturePath = "bouncy_ball.png";
+    private final String explosionTexturePath = "explosion.png";
+    private final int explosionTextureFrameRows = 6;
+    private final int explosionTextureFrameCols = 8;
 
     @Override
     public String getName() {
@@ -45,6 +48,8 @@ public class BouncyBallWeapon implements IWeapon{
         BouncyBall.add(new BouncyBallCollisionPart(true,0));
         BouncyBall.add(new DamagePart(3,1));
         BouncyBall.add(new TexturePart(this.texturePath));
+        BouncyBall.add(new ExplosionTexturePart(explosionTextureFrameCols,explosionTextureFrameRows,explosionTexturePath));
+
 
         world.addEntity(BouncyBall);
     }

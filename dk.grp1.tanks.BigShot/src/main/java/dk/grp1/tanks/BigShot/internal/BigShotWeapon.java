@@ -12,6 +12,9 @@ public class BigShotWeapon implements IWeapon {
     private final String description = "Fires a single shot";
     private final String iconPath = "bigshot.png";
     private final String texturePath = "bigshot.png";
+    private final String explosionTexturePath = "explosion.png";
+    private final int explosionTextureFrameRows = 3;
+    private final int explosionTextureFrameCols = 5;
 
     @Override
     public String getName() {
@@ -44,6 +47,7 @@ public class BigShotWeapon implements IWeapon {
         bs.add(new CollisionPart(true,0));
         bs.add(new DamagePart(10,1));
         bs.add(new TexturePart(this.texturePath));
+        bs.add(new ExplosionTexturePart(explosionTextureFrameCols,explosionTextureFrameRows,explosionTexturePath));
 
         world.addEntity(bs);
     }
