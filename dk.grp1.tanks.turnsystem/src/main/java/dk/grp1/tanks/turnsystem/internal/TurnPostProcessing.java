@@ -52,6 +52,7 @@ public class TurnPostProcessing implements IPostEntityProcessingService {
 
 
 
+
         if(anythingMoves(world)){
             TurnPart.setCurrentTurnNumber(-1);
             return;

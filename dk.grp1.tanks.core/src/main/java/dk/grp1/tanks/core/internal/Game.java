@@ -13,10 +13,7 @@ import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.GameMap;
 import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.data.parts.*;
-import dk.grp1.tanks.common.services.IEntityProcessingService;
-import dk.grp1.tanks.common.services.INonEntityProcessingService;
-import dk.grp1.tanks.common.services.IPostEntityProcessingService;
-import dk.grp1.tanks.common.services.IWeapon;
+import dk.grp1.tanks.common.services.*;
 import dk.grp1.tanks.common.utils.Vector2D;
 import dk.grp1.tanks.core.internal.GUI.*;
 import dk.grp1.tanks.core.internal.managers.GameInputProcessor;
@@ -30,12 +27,13 @@ import java.util.Map;
 
 
 public class Game implements ApplicationListener {
+    private final boolean DEBUG = false;
+    private GameState state;
     private ServiceLoader serviceLoader;
     private World world;
     private GameData gameData;
     private ShapeRenderer shapeRenderer;
     private OrthographicCamera camera;
-    private final boolean DEBUG = false;
     private Map<String, Texture> textureMap;
     private List<IGuiProcessingService> drawImplementations;
     private SpriteBatch uiSpriteBatch;
@@ -72,10 +70,11 @@ public class Game implements ApplicationListener {
 
         uiSpriteBatch = new SpriteBatch();
         uiSpriteBatch.setProjectionMatrix(camera.combined);
-       drawImplementations.add(new HealthBarGUI());
-       drawImplementations.add(new OnScreenText());
-       drawImplementations.add(new WeaponGUI());
-       drawImplementations.add(new FirepowerBarGUI());
+        drawImplementations.add(new HealthBarGUI());
+        drawImplementations.add(new OnScreenText());
+        drawImplementations.add(new WeaponGUI());
+        drawImplementations.add(new FirepowerBarGUI());
+        state = GameState.running;
 
     }
 
@@ -90,7 +89,7 @@ public class Game implements ApplicationListener {
 
         textureRegion = new TextureRegion(gameMapTexture);
         pix.dispose();
-       // polySpriteBatch.dispose();
+        // polySpriteBatch.dispose();
     }
 
     public void resize(int i, int i1) {
@@ -102,11 +101,30 @@ public class Game implements ApplicationListener {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         gameData.setDelta(Gdx.graphics.getDeltaTime());
 
-        update();
-        drawBackGround();
-        draw();
+
+        switch (state) {
+            case running:
+
+                update();
+                drawBackGround();
+                draw();
+                break;
+            case notRunning:
+                drawBackGround();
+                drawWinScreen();
+        }
     }
 
+    private void drawWinScreen() {
+        IGUIEntityProcessingService winDrawer = new WinScreenGUI();
+
+        for (IRoundEndService service : serviceLoader.getRoundEndServices()
+                ) {
+            winDrawer.drawEntity(service.getRoundWinner(world), gameData, uiSpriteBatch);
+
+        }
+
+    }
 
 
     private void drawBackGround() {
@@ -143,7 +161,7 @@ public class Game implements ApplicationListener {
             processingService.process(world, gameData);
         }
         for (INonEntityProcessingService iNonEntityProcessingService : serviceLoader.getNonEntityProcessingServices()) {
-            iNonEntityProcessingService.process(world,gameData);
+            iNonEntityProcessingService.process(world, gameData);
         }
 
         for (IPostEntityProcessingService postEntityProcessingService : serviceLoader.getPostEntityProcessingServices()) {
@@ -151,7 +169,16 @@ public class Game implements ApplicationListener {
             postEntityProcessingService.postProcess(world, gameData);
         }
 
+        for (IRoundEndService service : serviceLoader.getRoundEndServices()
+                ) {
+            if (service.isRoundOver(world)) {
+                state = GameState.notRunning;
+            }
+        }
+
+
         gameData.getKeys().update();
+
     }
 
     private void renderGameMap() {
@@ -163,7 +190,7 @@ public class Game implements ApplicationListener {
             return;
         }
 
-        if(!DEBUG) {
+        if (!DEBUG) {
             gameMapPolySprite = new PolygonSprite(convertGameMapToPolyRegion(gameMap));
             polySpriteBatch.begin();
             polySpriteBatch.setProjectionMatrix(camera.combined);
@@ -178,14 +205,14 @@ public class Game implements ApplicationListener {
                  i < vertices.size(); j = i++) {
                 Vector2D vector1 = vertices.get(i);
                 Vector2D vector2 = vertices.get(j);
-                shapeRenderer.line(vector1.getX(),vector1.getY(),vector2.getX(),vector2.getY());
+                shapeRenderer.line(vector1.getX(), vector1.getY(), vector2.getX(), vector2.getY());
             }
             shapeRenderer.end();
         }
     }
 
     private PolygonRegion convertGameMapToPolyRegion(GameMap gameMap) {
-        FloatArray vertices = new FloatArray(gameMap.getVerticesAsFloats(0,gameData.getGameWidth(),1024));
+        FloatArray vertices = new FloatArray(gameMap.getVerticesAsFloats(0, gameData.getGameWidth(), 1024));
         EarClippingTriangulator triangulator = new EarClippingTriangulator();
         ShortArray triangleIndices = triangulator.computeTriangles(vertices);
         PolygonRegion polygonRegion = new PolygonRegion(textureRegion, vertices.toArray(), triangleIndices.toArray());
@@ -200,13 +227,13 @@ public class Game implements ApplicationListener {
         drawUI();
     }
 
-    private void drawUI(){
-        for (IGuiProcessingService gui: drawImplementations){
+    private void drawUI() {
+        for (IGuiProcessingService gui : drawImplementations) {
             gui.draw(world, gameData, uiSpriteBatch);
         }
     }
 
-    private void drawShapes(){
+    private void drawShapes() {
         for (Entity entity : world.getEntities()) {
             shapeRenderer.setProjectionMatrix(camera.combined);
             shapeRenderer.setColor(1, 1, 1, 1);
@@ -228,8 +255,6 @@ public class Game implements ApplicationListener {
                 shapeRenderer.polygon(Vector2D.getVerticesAsFloatArray(cannonPart.getVertices()));
                 shapeRenderer.end();
             }
-
-
 
 
         }
