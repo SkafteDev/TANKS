@@ -15,7 +15,6 @@ public class TurnGamePlugin implements IGamePluginService {
 
     @Override
     public void stop(World world, GameData gameData) {
-        System.out.println("TURNS STOPPED!");
         TurnPart.resetPart();
     }
 }

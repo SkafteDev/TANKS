@@ -52,7 +52,6 @@ public class CollisionPart implements IEntityPart {
             gameData.addEvent(mapDestructionEvent);
             world.removeEntity(entity);
         } else if(this.isHitGameMap() && positionPart != null && circlePart != null && world.getGameMap().getHeight(new Vector2D(positionPart.getX(),positionPart.getY()))-2f > positionPart.getY()-circlePart.getRadius()){
-            System.out.println("Underneath the map");
             positionPart.setY(positionPart.getY()+3f);
         }
     }
