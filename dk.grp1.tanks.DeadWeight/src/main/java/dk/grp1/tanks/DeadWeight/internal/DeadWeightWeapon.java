@@ -15,7 +15,9 @@ public class DeadWeightWeapon implements IWeapon {
     private final String iconPath = "dead_weight.png";
     private final String description = "Stops all horizontal movement when above a tank";
     private final String texturePath = "dead_weight.png";
-
+    private final String explosionTexturePath = "explosion.png";
+    private final int explosionTextureFrameRows = 6;
+    private final int explosionTextureFrameCols = 8;
 
     @Override
     public String getName() {
@@ -55,15 +57,13 @@ public class DeadWeightWeapon implements IWeapon {
 
         dw.add(new DeadWeightMovementPart(accelerationVector, 10000, entities));
 
-
-
-
         dw.add(new ShapePart());
         dw.add(new CirclePart(cannonCentre.getX(),cannonCentre.getY(),4));
         dw.add(new PhysicsPart(30, -90.82f));
         dw.add(new CollisionPart(true,0));
         dw.add(new DamagePart(5,1));
         dw.add(new TexturePart(this.texturePath));
+        dw.add(new ExplosionTexturePart(explosionTextureFrameCols,explosionTextureFrameRows,explosionTexturePath));
 
         world.addEntity(dw);
     }

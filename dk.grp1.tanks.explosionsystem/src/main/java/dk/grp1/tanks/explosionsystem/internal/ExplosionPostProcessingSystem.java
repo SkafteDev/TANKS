@@ -15,7 +15,7 @@ public class ExplosionPostProcessingSystem implements IPostEntityProcessingServi
     @Override
     public void postProcess(World world, GameData gameData) {
         for (Event evnt : gameData.getEvents(ExplosionEvent.class)) {
-            System.out.println("Explosion event caught");
+
             for (Entity ent: world.getEntities()) {
 
                 if(isInExplosion(evnt, ent)){
