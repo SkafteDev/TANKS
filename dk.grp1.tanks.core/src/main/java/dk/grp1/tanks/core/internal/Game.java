@@ -13,12 +13,9 @@ import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.GameMap;
 import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.data.parts.*;
+import dk.grp1.tanks.common.services.*;
 import dk.grp1.tanks.common.events.Event;
 import dk.grp1.tanks.common.events.ExplosionAnimationEvent;
-import dk.grp1.tanks.common.services.IEntityProcessingService;
-import dk.grp1.tanks.common.services.INonEntityProcessingService;
-import dk.grp1.tanks.common.services.IPostEntityProcessingService;
-import dk.grp1.tanks.common.services.IWeapon;
 import dk.grp1.tanks.common.utils.Vector2D;
 import dk.grp1.tanks.core.internal.GUI.*;
 import dk.grp1.tanks.core.internal.managers.GameInputProcessor;
@@ -35,12 +32,13 @@ import static com.badlogic.gdx.math.MathUtils.random;
 
 
 public class Game implements ApplicationListener {
+    private final boolean DEBUG = false;
+    private GameState state;
     private ServiceLoader serviceLoader;
     private World world;
     private GameData gameData;
     private ShapeRenderer shapeRenderer;
     private OrthographicCamera camera;
-    private final boolean DEBUG = false;
     private Map<String, Texture> textureMap;
     private List<IGuiProcessingService> drawImplementations;
     private SpriteBatch uiSpriteBatch;
@@ -95,6 +93,7 @@ public class Game implements ApplicationListener {
 
         uiSpriteBatch = new SpriteBatch();
         uiSpriteBatch.setProjectionMatrix(camera.combined);
+        state = GameState.running;
 
         animationSpriteBatch = new SpriteBatch();
         animationSpriteBatch.setProjectionMatrix(camera.combined);
@@ -132,11 +131,19 @@ public class Game implements ApplicationListener {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         gameData.setDelta(Gdx.graphics.getDeltaTime());
 
-        shakeCamera();
 
-        update();
-        drawBackGround();
-        draw();
+        switch (state) {
+            case running:
+  shakeCamera();
+                update();
+                drawBackGround();
+                draw();
+                break;
+            case notRunning:
+                drawBackGround();
+                drawWinScreen();
+        }
+      
     }
 
     private void shakeCamera() {
@@ -149,6 +156,16 @@ public class Game implements ApplicationListener {
 // Update the shake position, then the camera.
         cameraShakeUpdate(gameData.getDelta(), camera);
         camera.update();
+    }
+        private void drawWinScreen() {
+        IGUIEntityProcessingService winDrawer = new WinScreenGUI();
+
+        for (IRoundEndService service : serviceLoader.getRoundEndServices()
+                ) {
+            winDrawer.drawEntity(service.getRoundWinner(world), gameData, uiSpriteBatch);
+
+        }
+
     }
 
 
@@ -208,7 +225,16 @@ public class Game implements ApplicationListener {
             animationsToProcess.add(animationWrapper);
             gameData.removeEvent(event);
         }
+        for (IRoundEndService service : serviceLoader.getRoundEndServices()
+                ) {
+            if (service.isRoundOver(world)) {
+                state = GameState.notRunning;
+            }
+        }
+
+
         gameData.getKeys().update();
+
     }
 
     private void renderGameMap() {
