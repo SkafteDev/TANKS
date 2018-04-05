@@ -43,7 +43,6 @@ public class CollisionPart implements IEntityPart {
         ExplosionTexturePart explosionTexturePart = entity.getPart(ExplosionTexturePart.class);
 
         if ((this.isHitEntity() || this.isHitGameMap()) && positionPart != null && damagePart != null && explosionTexturePart != null) {
-            System.out.println("Explosion animation Event created");
             Event animationEvent = new ExplosionAnimationEvent(entity, new Vector2D(positionPart.getX(), positionPart.getY()), explosionTexturePart, damagePart.getExplosionRadius());
             Event explosionEvent = new ExplosionEvent(entity, new Vector2D(positionPart.getX(), positionPart.getY()), damagePart.getExplosionRadius());
             Event mapDestructionEvent = new MapDestructionEvent(entity, new Vector2D(positionPart.getX(), positionPart.getY()), damagePart.getExplosionRadius());
