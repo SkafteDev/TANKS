@@ -178,10 +178,11 @@ public class Game implements ApplicationListener {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         gameData.setDelta(Gdx.graphics.getDeltaTime());
 
-
+        shakeCamera();
         switch (state) {
+
             case running:
-                shakeCamera();
+                //shakeCamera();
                 update();
                 drawBackGround();
                 draw();
@@ -213,6 +214,7 @@ public class Game implements ApplicationListener {
 
         for (IRoundEndService service : serviceLoader.getRoundEndServices()
                 ) {
+            uiSpriteBatch.setProjectionMatrix(camera.combined);
             winDrawer.drawEntity(service.getRoundWinner(world), gameData, uiSpriteBatch);
 
         }
