@@ -1,4 +1,4 @@
-package dk.grp1.tanks.DeadWeight.internal;
+package dk.grp1.tanks.weapon.DeadWeight.internal;
 
 import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.data.GameData;

@@ -1,5 +1,4 @@
-<<<<<<< HEAD:dk.grp1.tanks.weapon.DeadWeight/src/main/java/dk/grp1/tanks/weapon/DeadWeight/internal/DeadWeightActivator.java
-package dk.grp1.tanks.DeadWeight.internal;
+package dk.grp1.tanks.weapon.DeadWeight.internal;
 
 import dk.grp1.tanks.common.services.IGamePluginService;
 import dk.grp1.tanks.common.services.IWeapon;
@@ -11,7 +10,6 @@ public class DeadWeightActivator implements BundleActivator {
     @Override
     public void start(BundleContext bundleContext) throws Exception {
         bundleContext.registerService(IGamePluginService.class.getName(), new DeadWeightPlugin(), null);
-        bundleContext.registerService(IWeapon.class.getName(), new DeadWeightWeapon(), null);
     }
 
     @Override
@@ -19,25 +17,3 @@ public class DeadWeightActivator implements BundleActivator {
 
     }
 }
-=======
-package dk.grp1.tanks.DeadWeight.internal;
-
-import dk.grp1.tanks.common.services.IGamePluginService;
-import dk.grp1.tanks.common.services.IWeapon;
-import org.osgi.framework.BundleActivator;
-import org.osgi.framework.BundleContext;
-
-public class DeadWeightActivator implements BundleActivator {
-
-    @Override
-    public void start(BundleContext bundleContext) throws Exception {
-        bundleContext.registerService(IGamePluginService.class.getName(), new DeadWeightPlugin(), null);
-        //bundleContext.registerService(IWeapon.class.getName(), new DeadWeightWeapon(), null);
-    }
-
-    @Override
-    public void stop(BundleContext bundleContext) throws Exception {
-
-    }
-}
->>>>>>> develop:dk.grp1.tanks.DeadWeight/src/main/java/dk/grp1/tanks/DeadWeight/internal/DeadWeightActivator.java
