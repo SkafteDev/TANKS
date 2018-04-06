@@ -1,4 +1,4 @@
-package dk.grp1.tanks.SingleShot.internal;
+package dk.grp1.tanks.weapon.SingleShot.internal;
 
 import dk.grp1.tanks.common.services.IGamePluginService;
 import dk.grp1.tanks.common.services.IWeapon;

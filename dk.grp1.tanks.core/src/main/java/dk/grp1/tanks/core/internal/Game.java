@@ -431,11 +431,6 @@ public class Game implements ApplicationListener {
             PositionPart pp = e.getPart(PositionPart.class);
             CirclePart cp = e.getPart(CirclePart.class);
 
-            CannonPart cannonPart = e.getPart(CannonPart.class);
-            if (cannonPart != null && pp != null && cp != null) {
-                TextureRegion textureRegion = new TextureRegion(checkGetTexture(e, cannonPart.getTexturePath()));
-                drawCannon(textureSpriteBatch, textureRegion, cannonPart);
-            }
 
             if (tp != null && pp != null && cp != null) {
                 Texture texture = checkGetTexture(e, tp.getSrcPath());
@@ -443,6 +438,11 @@ public class Game implements ApplicationListener {
                 textureSpriteBatch.draw(texture, pp.getX() - cp.getRadius(), pp.getY() - cp.getRadius(), cp.getRadius() * 2, cp.getRadius() * 2);
             }
 
+            CannonPart cannonPart = e.getPart(CannonPart.class);
+            if (cannonPart != null && pp != null && cp != null) {
+                TextureRegion textureRegion = new TextureRegion(checkGetTexture(e, cannonPart.getTexturePath()));
+                drawCannon(textureSpriteBatch, textureRegion, cannonPart);
+            }
 
         }
         textureSpriteBatch.end();
