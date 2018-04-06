@@ -1,13 +1,13 @@
 package dk.grp1.tanks.core.internal.GUI;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.GameKeys;
+import dk.grp1.tanks.common.data.UI.IGUIFirepowerBar;
 import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.data.parts.CannonPart;
 
@@ -22,9 +22,11 @@ public class FirepowerBarGUI implements IGuiProcessingService {
     @Override
     public void draw(World world, GameData gameData, SpriteBatch spriteBatch) {
         for (Entity entity : world.getEntities()) {
-            CannonPart cannonPart = entity.getPart(CannonPart.class);
-            if (cannonPart != null && gameData.getKeys().isDown(GameKeys.SPACE)) {
-                firepowerBar(entity, cannonPart, spriteBatch);
+            if (entity instanceof IGUIFirepowerBar) {
+                CannonPart cannonPart = entity.getPart(CannonPart.class);
+                if (cannonPart != null && gameData.getKeys().isDown(GameKeys.SPACE)) {
+                    firepowerBar(entity, cannonPart, spriteBatch);
+                }
             }
         }
 

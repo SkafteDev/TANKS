@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Gdx2DPixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.data.GameData;
+import dk.grp1.tanks.common.data.UI.IGUIWeapon;
 import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.data.parts.InventoryPart;
 import dk.grp1.tanks.common.data.parts.PositionPart;
@@ -24,9 +25,12 @@ public class WeaponGUI implements IGuiProcessingService {
     @Override
     public void draw(World world, GameData gameData, SpriteBatch batch) {
         for (Entity entity : world.getEntities()) {
-            InventoryPart inventoryPart = entity.getPart(InventoryPart.class);
-            if (inventoryPart != null){
-                drawWeaponIcon(entity, inventoryPart, batch);
+
+            if (entity instanceof IGUIWeapon) {
+                InventoryPart inventoryPart = entity.getPart(InventoryPart.class);
+                if (inventoryPart != null){
+                    drawWeaponIcon(entity, inventoryPart, batch);
+                }
             }
         }
     }

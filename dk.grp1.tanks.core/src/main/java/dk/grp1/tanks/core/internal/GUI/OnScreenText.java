@@ -5,6 +5,9 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.data.GameData;
+import dk.grp1.tanks.common.data.UI.IGUIAngleText;
+import dk.grp1.tanks.common.data.UI.IGUIFirepowerText;
+import dk.grp1.tanks.common.data.UI.IGUIWeaponText;
 import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.data.parts.*;
 import dk.grp1.tanks.common.services.IWeapon;
@@ -27,9 +30,16 @@ public class OnScreenText implements IGuiProcessingService {
         for (Entity entity : world.getEntities()) {
             InventoryPart inventoryPart = entity.getPart(InventoryPart.class);
             if (inventoryPart != null) {
-                weaponText(entity, inventoryPart, batch);
-                angleText(entity, batch);
-                firepowerText(entity, batch);
+
+                if (entity instanceof IGUIWeaponText) {
+                    weaponText(entity, inventoryPart, batch);
+                }
+                if (entity instanceof IGUIAngleText) {
+                    angleText(entity, batch);
+                }
+                if (entity instanceof IGUIFirepowerText) {
+                    firepowerText(entity, batch);
+                }
             }
         }
     }

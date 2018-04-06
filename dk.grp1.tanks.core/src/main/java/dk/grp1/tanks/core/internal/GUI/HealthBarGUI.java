@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.data.GameData;
+import dk.grp1.tanks.common.data.UI.IGUIHealthBar;
 import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.data.parts.CirclePart;
 import dk.grp1.tanks.common.data.parts.LifePart;
@@ -25,20 +26,23 @@ public class HealthBarGUI implements IGuiProcessingService {
     @Override
     public void draw(World world, GameData gameData, SpriteBatch batch) {
         for (Entity entity : world.getEntities()) {
-            LifePart lifePart = entity.getPart(LifePart.class);
-            if (lifePart != null) {
-                CirclePart circlePart = entity.getPart(CirclePart.class);
-                makeHealthBar(circlePart.getCentreX(), circlePart.getCentreY(),
-                        circlePart.getRadius(), lifePart.getHealthRatio(), batch);
+
+            if (entity instanceof IGUIHealthBar) {
+                LifePart lifePart = entity.getPart(LifePart.class);
+                if (lifePart != null) {
+                    CirclePart circlePart = entity.getPart(CirclePart.class);
+                    makeHealthBar(circlePart.getCentreX(), circlePart.getCentreY(),
+                            circlePart.getRadius(), lifePart.getHealthRatio(), batch);
+                }
             }
         }
 
     }
 
- //   @Override
-  //  public void setCam(OrthographicCamera camera) {
-  //      this.camera = camera;
-  //  }
+    //   @Override
+    //  public void setCam(OrthographicCamera camera) {
+    //      this.camera = camera;
+    //  }
 
 
     /**
