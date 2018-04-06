@@ -28,6 +28,19 @@ public class GameMapSin implements IGameMapFunction {
         this.endX = endX;
     }
 
+    /**
+     * Create a sin function based on the sucessor. This ensures a continuous function
+     * @param amplitude
+     * @param angularFrequency
+     * @param phaseShift
+     * @param sucessorFn
+     * @param startX
+     * @param endX
+     */
+    public GameMapSin(double amplitude,double angularFrequency, float phaseShift, IGameMapFunction sucessorFn, float startX, float endX){
+        this(amplitude,angularFrequency,phaseShift,0,startX,endX);
+        this.shiftConstant = (float) (-amplitude*Math.sin(angularFrequency*sucessorFn.getEndX()+phaseShift)+sucessorFn.getYValue(sucessorFn.getEndX()));
+        }
     @Override
     public float getStartX() {
         return startX;
@@ -54,7 +67,7 @@ public class GameMapSin implements IGameMapFunction {
 
     @Override
     public boolean isWithin(float x) {
-        if(this.startX < x && this.endX > x){
+        if(this.startX <= x && this.endX > x){
             return true;
         }
         return false;

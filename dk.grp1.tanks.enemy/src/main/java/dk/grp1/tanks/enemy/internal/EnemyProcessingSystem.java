@@ -39,6 +39,7 @@ public class EnemyProcessingSystem implements IEntityProcessingService {
             CollisionPart collisionPart = enemy.getPart(CollisionPart.class);
             PhysicsPart physicsPart = enemy.getPart(PhysicsPart.class);
             LifePart lifePart = enemy.getPart(LifePart.class);
+            CirclePart circlePart = enemy.getPart(CirclePart.class);
             InventoryPart inventoryPart = enemy.getPart(InventoryPart.class);
             inventoryPart.processPart(enemy, gameData, world);
 
@@ -65,7 +66,7 @@ public class EnemyProcessingSystem implements IEntityProcessingService {
             ctrlPart.processPart(enemy, gameData, world);
             collisionPart.processPart(enemy, gameData, world);
             movePart.processPart(enemy, gameData, world);
-            cannonPart.setJointY(positionPart.getY());
+            cannonPart.setJointY(positionPart.getY() + circlePart.getRadius()/8*3);
             cannonPart.setJointX(positionPart.getX());
             cannonPart.processPart(enemy, gameData, world);
 

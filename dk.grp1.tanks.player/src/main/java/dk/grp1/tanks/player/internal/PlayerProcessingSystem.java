@@ -33,6 +33,7 @@ public class PlayerProcessingSystem implements IEntityProcessingService {
             CollisionPart collisionPart = player.getPart(CollisionPart.class);
             PhysicsPart physicsPart = player.getPart(PhysicsPart.class);
             LifePart lifePart = player.getPart(LifePart.class);
+            CirclePart circlePart = player.getPart(CirclePart.class);
             InventoryPart inventoryPart = player.getPart(InventoryPart.class);
             inventoryPart.processPart(player, gameData, world);
 
@@ -92,7 +93,7 @@ public class PlayerProcessingSystem implements IEntityProcessingService {
             ctrlPart.processPart(player, gameData, world);
             collisionPart.processPart(player, gameData, world);
             movePart.processPart(player, gameData, world);
-            cannonPart.setJointY(positionPart.getY());
+            cannonPart.setJointY(positionPart.getY() + circlePart.getRadius()/8*3);
             cannonPart.setJointX(positionPart.getX());
             cannonPart.processPart(player, gameData, world);
 

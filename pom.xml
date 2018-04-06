@@ -59,9 +59,9 @@
     <module>dk.grp1.tanks.mapcollision</module>
     <module>dk.grp1.tanks.OutOfBoundsProcessor</module>
     <module>dk.grp1.tanks.explosionsystem</module>
-    <module>dk.grp1.tanks.SingleShot</module>
-    <module>dk.grp1.tanks.BigShot</module>
-    <module>dk.grp1.tanks.DeadWeight</module>
+    <module>dk.grp1.tanks.weapon.SingleShot</module>
+    <module>dk.grp1.tanks.weapon.BigShot</module>
+    <module>dk.grp1.tanks.weapon.DeadWeight</module>
     <module>dk.grp1.tanks.weapon.grenade</module>
     <module>dk.grp1.tanks.weapon.BouncyBall</module>
     <module>dk.grp1.tanks.EntityCollision</module>
