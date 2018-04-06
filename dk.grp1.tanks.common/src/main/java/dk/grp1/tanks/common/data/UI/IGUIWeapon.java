@@ -1,4 +1,4 @@
 package dk.grp1.tanks.common.data.UI;
 
-public interface IGUIWeapon {
+public interface IGUIWeapon extends IGUIBase {
 }

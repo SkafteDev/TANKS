@@ -2,6 +2,7 @@ package dk.grp1.tanks.player.internal;
 
 import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.data.GameData;
+import dk.grp1.tanks.common.data.UI.IGUIHealthBar;
 import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.data.parts.CirclePart;
 import dk.grp1.tanks.common.data.parts.*;
@@ -41,6 +42,11 @@ public class PlayerGamePlugin implements IGamePluginService {
         player.add(new MovementPart(50));
         player.add(new TexturePart("Mario_Head.png"));
         player.add(new TurnPart());
+
+        UIPart uiPart = new UIPart();
+
+        uiPart.addUIElement(IGUIHealthBar);
+
 
         InventoryPart inventoryPart = new InventoryPart(gameData.getWeapons());
         gameData.addWeaponListener(inventoryPart);
