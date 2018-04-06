@@ -25,8 +25,8 @@ public class PlayerGamePlugin implements IGamePluginService {
         float centreY = gameData.getGameHeight();
         PositionPart positionPart = new PositionPart(centreX,centreY, 0);
         float cannonDirection = 3.1415f/2;
-        float cannonWidth = (playerRadius/2)*2;
-        float cannonLength = (playerRadius/2)*4;
+        float cannonWidth = (playerRadius/4);
+        float cannonLength = (playerRadius/2)*3;
         player.add(new CirclePart(centreX, centreY, playerRadius));
         player.add(new PhysicsPart(5000f,-62f));
         player.add(new ControlPart(200));
@@ -35,11 +35,11 @@ public class PlayerGamePlugin implements IGamePluginService {
         lifePart.setCurrentHP(5);
         player.add(lifePart);
         player.add(positionPart);
-        player.add(new CannonPart(positionPart.getX(), positionPart.getY(), cannonDirection, cannonWidth, cannonLength, "Mario_pipe.png"));
+        player.add(new CannonPart(positionPart.getX(), positionPart.getY()+(playerRadius/2), cannonDirection, cannonWidth, cannonLength, "playerCanon.png"));
         player.add(new ShapePart());
         player.add(new CollisionPart(true,0));
         player.add(new MovementPart(50));
-        player.add(new TexturePart("Mario_Head.png"));
+        player.add(new TexturePart("player.png"));
         player.add(new TurnPart());
 
         InventoryPart inventoryPart = new InventoryPart(gameData.getWeapons());
