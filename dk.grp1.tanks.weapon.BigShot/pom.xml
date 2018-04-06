@@ -9,13 +9,13 @@
   </parent>
 
   <properties>
-    <bundle.symbolicName>dk.grp1.tanks.BigShot</bundle.symbolicName>
-    <bundle.namespace>dk.grp1.tanks.BigShot</bundle.namespace>
+    <bundle.symbolicName>dk.grp1.tanks.weapon.BigShot</bundle.symbolicName>
+    <bundle.namespace>dk.grp1.tanks.weapon.BigShot</bundle.namespace>
   </properties>
 
   <modelVersion>4.0.0</modelVersion>
   <groupId>dk.grp1.tanks</groupId>
-  <artifactId>dk.grp1.tanks.BigShot</artifactId>
+  <artifactId>dk.grp1.tanks.weapon.BigShot</artifactId>
   <version>1.0-SNAPSHOT</version>
 
   <name>${bundle.symbolicName}</name>
