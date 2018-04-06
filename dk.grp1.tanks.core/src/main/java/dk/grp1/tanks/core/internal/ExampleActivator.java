@@ -22,12 +22,10 @@ import java.util.Arrays;
  */
 public final class ExampleActivator
         implements BundleActivator, ServiceListener {
-    private final int WIDTH = 800;
-    private final int HEIGHT = 600;
+
 
     private BundleContext bc;
     private Game game;
-    LwjglApplication app;
 
     /**
      * Called whenever the OSGi framework starts our bundle
@@ -38,20 +36,10 @@ public final class ExampleActivator
 
         System.out.println("STARTING dk.grp1.tanks.core");
         ServiceLoader serviceLoader = new ServiceLoader(bc);
-        GameData gameData = new GameData();
-        gameData.setDisplayWidth(WIDTH);
-        gameData.setDisplayHeight(HEIGHT);
-        game = new Game(serviceLoader, gameData);
 
-
-        LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
-        cfg.title = "Tanks";
-        cfg.width = WIDTH;
-        cfg.height = HEIGHT;
-        cfg.useGL30 = false;
-        cfg.resizable = true;
-        app = new LwjglApplication(game, cfg);
+        game = new Game(serviceLoader);
         bc.addServiceListener(this);
+
     }
 
     /**
@@ -61,8 +49,7 @@ public final class ExampleActivator
             throws Exception {
         bc.removeServiceListener(this);
         System.out.println("STOPPING dk.grp1.tanks.core");
-        app.stop();
-        app.exit();
+
 
 
         // no need to unregister our service - the OSGi framework handles it for us
@@ -82,9 +69,6 @@ public final class ExampleActivator
                 IGamePluginService plugin = (IGamePluginService) bc.getService(serviceEvent.getServiceReference());
                 plugin.start(game.getWorld(), game.getGameData());
 
-            } else if (objectClass[0].equalsIgnoreCase(IWeapon.class.getCanonicalName())) {
-                IWeapon weapon = (IWeapon) bc.getService(serviceEvent.getServiceReference());
-                game.getGameData().addWeapon(weapon);
             }
         }
 

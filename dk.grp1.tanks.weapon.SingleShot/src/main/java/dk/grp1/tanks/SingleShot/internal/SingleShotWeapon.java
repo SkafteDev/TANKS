@@ -12,6 +12,9 @@ public class SingleShotWeapon implements IWeapon {
     private final String description = "Fires a single shot";
     private final String iconPath = "singleshot.png";
     private final String texturePath = "singleshot.png";
+    private final String explosionTexturePath = "explosion.png";
+    private final int explosionTextureFrameRows = 6;
+    private final int explosionTextureFrameCols = 8;
 
     @Override
     public String getName() {
@@ -44,6 +47,7 @@ public class SingleShotWeapon implements IWeapon {
         ss.add(new CollisionPart(true,0));
         ss.add(new DamagePart(4,1));
         ss.add(new TexturePart(this.texturePath));
+        ss.add(new ExplosionTexturePart(explosionTextureFrameCols,explosionTextureFrameRows,explosionTexturePath));
 
         world.addEntity(ss);
     }

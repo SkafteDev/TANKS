@@ -66,6 +66,8 @@
     <module>dk.grp1.tanks.weapon.BouncyBall</module>
     <module>dk.grp1.tanks.EntityCollision</module>
     <module>dk.grp1.tanks.turnsystem</module>
+    <module>dk.grp1.tanks.roundendsystem</module>
+    <module>dk.grp1.tanks.weapon.nuke</module>
   </modules>
 
   <build>

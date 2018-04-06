@@ -11,7 +11,7 @@ public class TurnPart implements IEntityPart {
     private int myTurnNumber;
     private static int currentTurnNumber;
 
-    private float turnDuration = 5f;
+    private float turnDuration = 30f;
     private float turnTimeRemaining = turnDuration;
 
     private boolean turnEndRequested;
@@ -25,6 +25,11 @@ public class TurnPart implements IEntityPart {
     }
     public static int getCurrentTurnNumber() {
        return currentTurnNumber;
+    }
+
+    public static void resetPart(){
+        currentTurnNumber = 0;
+        turnPartCount = 0;
     }
 
 

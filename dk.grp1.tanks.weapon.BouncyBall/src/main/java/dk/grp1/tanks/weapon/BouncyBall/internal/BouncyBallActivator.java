@@ -10,7 +10,6 @@ public class BouncyBallActivator implements BundleActivator {
     public void start(BundleContext bundleContext) throws Exception {
 
         bundleContext.registerService(IGamePluginService.class.getName(), new BouncyBallPlugin(), null);
-        bundleContext.registerService(IWeapon.class.getName(), new BouncyBallWeapon(), null);
     }
 
     @Override

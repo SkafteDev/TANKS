@@ -10,7 +10,6 @@ public class SingleShotActivator implements BundleActivator {
     @Override
     public void start(BundleContext bundleContext) throws Exception {
         bundleContext.registerService(IGamePluginService.class.getName(), new SingleShotPlugin(), null);
-        bundleContext.registerService(IWeapon.class.getName(), new SingleShotWeapon(), null);
     }
 
     @Override

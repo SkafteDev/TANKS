@@ -12,6 +12,8 @@ public class TurnActivator implements BundleActivator {
         System.out.println( "STARTING dk.grp1.tanks.player" );
 
         bundleContext.registerService(IPostEntityProcessingService.class.getName(), new TurnPostProcessing(),null);
+        bundleContext.registerService(IGamePluginService.class.getName(), new TurnGamePlugin(),null);
+
 
     }
 

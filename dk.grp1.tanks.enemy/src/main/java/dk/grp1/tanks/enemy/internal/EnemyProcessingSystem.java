@@ -66,7 +66,7 @@ public class EnemyProcessingSystem implements IEntityProcessingService {
             movePart.processPart(enemy, gameData, world);
             cannonPart.setJointY(positionPart.getY() + circlePart.getRadius()/8*3);
             cannonPart.setJointX(positionPart.getX());
-
+            cannonPart.processPart(enemy, gameData, world);
 
 
                 if (gameData.getKeys().isPressed(GameKeys.SHIFT) && turnPart.isMyTurn()) {
@@ -75,38 +75,47 @@ public class EnemyProcessingSystem implements IEntityProcessingService {
 
                 }
 
-
-            cannonPart.processPart(enemy, gameData, world);
-
-
-
         }
     }
 
     private void aiShoot(GameData gameData, World world, CannonPart cannonPart, Entity enemy){
-        PositionPart enemyPositionPart = enemy.getPart(PositionPart.class);
+
         InventoryPart inventoryPart = enemy.getPart(InventoryPart.class);
         inventoryPart.processPart(enemy, gameData, world);
+
 
         for (Entity entity: world.getEntities()) {
 
             if (entity != enemy && entity.getPart(ControlPart.class) != null){
                 PositionPart otherEntityPositionPart = entity.getPart(PositionPart.class);
 
-                //check if other entity is to my left or right
-                if (enemyPositionPart.getX() < otherEntityPositionPart.getX()) {
-                    cannonPart.setDirection(3.1415f / 4);
-                } else {
-                    cannonPart.setDirection(3 * 3.1415f / 4);
-                }
 
-                //TODO fix me
+                setCannonAngle(cannonPart, enemy, otherEntityPositionPart);
+                cannonPart.processPart(enemy, gameData, world);
+
                 firepower = initialVelocity(cannonPart, otherEntityPositionPart, 90.82f, cannonPart.getDirection());
+
                 inventoryPart.getCurrentWeapon().shoot(enemy, firepower, world);
                 cannonPart.setPreviousFirepower(firepower);
                 cannonPart.setPreviousAngle(cannonPart.getDirection());
                 //gameData.addEvent(new ShootingEvent(enemy, firepower));
             }
+        }
+    }
+
+    /**
+     * Sets the cannon o match the direction of the target, while maintaining a 45 degree angle
+     * @param cannonPart
+     * @param enemy
+     * @param otherEntityPositionPart
+     */
+    private void setCannonAngle(CannonPart cannonPart, Entity enemy, PositionPart otherEntityPositionPart){
+        //check if other entity is to my left or right
+        PositionPart enemyPositionPart = enemy.getPart(PositionPart.class);
+        if (enemyPositionPart.getX() < otherEntityPositionPart.getX()) {
+            cannonPart.setDirection(3.1415f / 4);
+        } else {
+            cannonPart.setDirection(3 * 3.1415f / 4);
         }
     }
 
