@@ -7,11 +7,10 @@ import dk.grp1.tanks.common.services.IGamePluginService;
 import dk.grp1.tanks.common.services.IWeapon;
 
 public class NukeGamePlugin implements IGamePluginService {
-    private IWeapon nukeWeapon;
+    private final IWeapon nukeWeapon = new NukeWeapon();;
 
     @Override
     public void start(World world, GameData gameData) {
-        nukeWeapon = new NukeWeapon();
         gameData.addWeapon(nukeWeapon);
     }
 

@@ -7,9 +7,11 @@ import dk.grp1.tanks.common.services.IGamePluginService;
 import dk.grp1.tanks.common.services.IWeapon;
 
 public class GrenadePlugin implements IGamePluginService {
+
+    private final IWeapon weapon = new GrenadeWeapon();
+
     @Override
     public void start(World world, GameData gameData) {
-        IWeapon weapon = new GrenadeWeapon();
         gameData.addWeapon(weapon);
     }
 
@@ -18,5 +20,7 @@ public class GrenadePlugin implements IGamePluginService {
         for (Entity e : world.getEntities(Grenade.class)) {
             world.removeEntity(e);
         }
+
+        gameData.removeWeapon(weapon);
     }
 }
