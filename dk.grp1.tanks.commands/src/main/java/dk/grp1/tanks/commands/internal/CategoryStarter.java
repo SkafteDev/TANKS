@@ -1,6 +1,6 @@
-package dk.grp1.tanks.core.internal.gogo.commands;
+package dk.grp1.tanks.commands.internal;
 
-import dk.grp1.tanks.common.services.IGamePluginService;
+
 import org.osgi.framework.*;
 
 import java.util.Dictionary;

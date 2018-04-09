@@ -1,22 +1,12 @@
 package dk.grp1.tanks.core.internal;
 
 
-import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-
-import dk.grp1.tanks.common.data.Entity;
-import dk.grp1.tanks.common.data.GameData;
-import dk.grp1.tanks.common.data.parts.InventoryPart;
 import dk.grp1.tanks.common.services.IGamePluginService;
 import dk.grp1.tanks.common.services.IWeapon;
-import dk.grp1.tanks.core.internal.gogo.commands.CategoryStarter;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServiceListener;
-
-import java.util.Arrays;
-import java.util.Hashtable;
 
 
 /**
@@ -41,10 +31,6 @@ public final class ExampleActivator
         game = new Game(serviceLoader);
         bc.addServiceListener(this);
 
-        Hashtable props = new Hashtable();
-        props.put("osgi.command.scope", "tanksCommands");
-        props.put("osgi.command.function", new String[]{"startCategory", "stopCategory"});
-        bc.registerService(CategoryStarter.class.getName(), new CategoryStarter(bc), props);
     }
 
     /**
