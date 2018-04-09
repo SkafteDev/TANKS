@@ -9,12 +9,14 @@ import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.parts.InventoryPart;
 import dk.grp1.tanks.common.services.IGamePluginService;
 import dk.grp1.tanks.common.services.IWeapon;
+import dk.grp1.tanks.core.internal.gogo.commands.CategoryStarter;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServiceListener;
 
 import java.util.Arrays;
+import java.util.Hashtable;
 
 
 /**
@@ -30,8 +32,7 @@ public final class ExampleActivator
     /**
      * Called whenever the OSGi framework starts our bundle
      */
-    public void start(BundleContext bc)
-            throws Exception {
+    public void start(BundleContext bc) throws Exception {
         this.bc = bc;
 
         System.out.println("STARTING dk.grp1.tanks.core");
@@ -40,6 +41,10 @@ public final class ExampleActivator
         game = new Game(serviceLoader);
         bc.addServiceListener(this);
 
+        Hashtable props = new Hashtable();
+        props.put("osgi.command.scope", "tanksCommands");
+        props.put("osgi.command.function", new String[]{"startCategory", "stopCategory"});
+        bc.registerService(CategoryStarter.class.getName(), new CategoryStarter(bc), props);
     }
 
     /**
@@ -49,7 +54,6 @@ public final class ExampleActivator
             throws Exception {
         bc.removeServiceListener(this);
         System.out.println("STOPPING dk.grp1.tanks.core");
-
 
 
         // no need to unregister our service - the OSGi framework handles it for us
@@ -80,7 +84,7 @@ public final class ExampleActivator
                 IGamePluginService plugin = (IGamePluginService) bc.getService(serviceEvent.getServiceReference());
                 plugin.stop(game.getWorld(), game.getGameData());
 
-            }else if (objectClass[0].equalsIgnoreCase(IWeapon.class.getCanonicalName())) {
+            } else if (objectClass[0].equalsIgnoreCase(IWeapon.class.getCanonicalName())) {
                 IWeapon weapon = (IWeapon) bc.getService(serviceEvent.getServiceReference());
                 game.getGameData().removeWeapon(weapon);
             }
