@@ -6,10 +6,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.World;
-import dk.grp1.tanks.common.data.parts.CannonPart;
-import dk.grp1.tanks.common.data.parts.CirclePart;
-import dk.grp1.tanks.common.data.parts.InventoryPart;
-import dk.grp1.tanks.common.data.parts.PositionPart;
+import dk.grp1.tanks.common.data.parts.*;
+import dk.grp1.tanks.common.services.IWeapon;
 import javafx.geometry.Pos;
 
 public class OnScreenText implements IGuiProcessingService {
@@ -25,13 +23,13 @@ public class OnScreenText implements IGuiProcessingService {
      */
     @Override
     public void draw(World world, GameData gameData, SpriteBatch batch) {
-        turnText(gameData, batch);
+        turnText(world, gameData, batch);
         for (Entity entity : world.getEntities()) {
             InventoryPart inventoryPart = entity.getPart(InventoryPart.class);
             if (inventoryPart != null) {
                 weaponText(entity, inventoryPart, batch);
                 angleText(entity, batch);
-                firepowerText(entity,batch);
+                firepowerText(entity, batch);
             }
         }
     }
@@ -55,7 +53,7 @@ public class OnScreenText implements IGuiProcessingService {
 //        this.camera = camera;
 //    }
 
-    private void angleText(Entity entity, SpriteBatch batch){
+    private void angleText(Entity entity, SpriteBatch batch) {
         font.getData().scaleX = 0.5f;
         font.getData().scaleY = 0.5f;
         CannonPart cannonPart = entity.getPart(CannonPart.class);
@@ -72,9 +70,11 @@ public class OnScreenText implements IGuiProcessingService {
 
     private void weaponText(Entity entity, InventoryPart inventoryPart, SpriteBatch batch) {
         String weaponText;
-        try {
-            weaponText = inventoryPart.getCurrentWeapon().getName();
-        } catch (NullPointerException e) {
+
+        IWeapon weapon = inventoryPart.getCurrentWeapon();
+        if (weapon != null) {
+            weaponText = weapon.getName();
+        } else {
             weaponText = "None";
         }
         font.getData().scaleX = 0.5f;
@@ -87,12 +87,27 @@ public class OnScreenText implements IGuiProcessingService {
     }
 
 
-    private void turnText(GameData gameData, SpriteBatch batch) {
+    private void turnText(World world, GameData gameData, SpriteBatch batch) {
         font.getData().scaleX = 0.5f;
         font.getData().scaleY = 0.5f;
         String turnText = "Turn: ";
+        String timeText = "Remaining time of turn: ";
+
+        for (Entity e : world.getEntities()
+                ) {
+            TurnPart turn = e.getPart(TurnPart.class);
+
+            if (turn != null && turn.isMyTurn()) {
+                turnText += turn.getMyTurnNumber();
+                timeText += Math.floor(turn.getTurnTimeRemaining() * 10) / 10f;
+            }
+
+        }
+
         batch.begin();
         font.draw(batch, turnText, 10, gameData.getGameHeight() - 10);
+        font.draw(batch, timeText, 10, gameData.getGameHeight() - 20);
+
         batch.end();
     }
 }

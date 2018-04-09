@@ -10,7 +10,7 @@ import dk.grp1.tanks.common.services.IGamePluginService;
  * Created by danie on 12-03-2018.
  */
 public class EnemyGamePlugin implements IGamePluginService {
-    private float enemyRadius = 5f;
+    private float enemyRadius = 10f;
 
     @Override
     public void start(World world, GameData gameData) {
@@ -24,8 +24,8 @@ public class EnemyGamePlugin implements IGamePluginService {
         float centreY = gameData.getGameHeight();
         PositionPart positionPart = new PositionPart(centreX,centreY, 0);
         float cannonDirection = 3.1415f/2;
-        float cannonWidth = enemyRadius /2;
-        float cannonLength = enemyRadius *2;
+        float cannonWidth = (enemyRadius/4);
+        float cannonLength = (enemyRadius/2)*3;
         enemy.add(new CirclePart(centreX, centreY, enemyRadius));
         enemy.add(new PhysicsPart(5000f,-62f));
         enemy.add(new ControlPart(200));
@@ -39,6 +39,7 @@ public class EnemyGamePlugin implements IGamePluginService {
         enemy.add(new CollisionPart(true,0));
         enemy.add(new MovementPart(50));
         enemy.add(new TexturePart("enemy.png"));
+        enemy.add(new TurnPart());
 
         InventoryPart inventoryPart = new InventoryPart(gameData.getWeapons());
         gameData.addWeaponListener(inventoryPart);

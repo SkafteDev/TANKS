@@ -39,4 +39,9 @@ public abstract class Entity {
     public String getID() {
         return ID.toString();
     }
+
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName();
+    }
 }

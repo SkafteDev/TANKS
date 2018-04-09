@@ -13,6 +13,10 @@ public class BouncyBallWeapon implements IWeapon{
     private final String iconPath = "bouncy_ball.png";
     private final String texturePath = "bouncy_ball.png";
 
+    private final String explosionTexturePath = "explosionWhite.png";
+    private final int explosionTextureFrameRows = 3;
+    private final int explosionTextureFrameCols = 7;
+
     @Override
     public String getName() {
         return this.name;
@@ -40,11 +44,13 @@ public class BouncyBallWeapon implements IWeapon{
         BouncyBall.add(new BouncyBallMovementPart(accelerationVector, 10000));
         BouncyBall.add(new BouncyBallExpirationPart(10));
         BouncyBall.add(new ShapePart());
-        BouncyBall.add(new CirclePart(cannonCentre.getX(),cannonCentre.getY(),5));
+        BouncyBall.add(new CirclePart(cannonCentre.getX(),cannonCentre.getY(),4));
         BouncyBall.add(new PhysicsPart(30, -90.82f));
         BouncyBall.add(new BouncyBallCollisionPart(true,0));
-        BouncyBall.add(new DamagePart(3,1));
+        BouncyBall.add(new DamagePart(5,1));
         BouncyBall.add(new TexturePart(this.texturePath));
+        BouncyBall.add(new ExplosionTexturePart(explosionTextureFrameCols,explosionTextureFrameRows,explosionTexturePath));
+
 
         world.addEntity(BouncyBall);
     }

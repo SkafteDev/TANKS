@@ -11,6 +11,9 @@ public class GrenadeWeapon implements IWeapon {
     private final String description = "Throws a grenade";
     private final String iconPath = "grenade.png";
     private final String texturePath = "grenade.png";
+    private final String explosionTexturePath = "explosion.png";
+    private final int explosionTextureFrameRows = 6;
+    private final int explosionTextureFrameCols = 8;
 
     @Override
     public String getName() {
@@ -44,7 +47,7 @@ public class GrenadeWeapon implements IWeapon {
         grenade.add(new GrenadeCollisionPart(true,0));
         grenade.add(new DamagePart(7,1));
         grenade.add(new TexturePart(this.texturePath));
-
+        grenade.add(new ExplosionTexturePart(explosionTextureFrameCols,explosionTextureFrameRows,explosionTexturePath));
         world.addEntity(grenade);
     }
 }

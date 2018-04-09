@@ -65,7 +65,6 @@ public class GameMapProcessing implements INonEntityProcessingService {
         if (rightFunc == null || leftFunc == null){
 //            System.out.println("Right is null: " + (rightFunc == null));
 //            System.out.println("Left is null: " + (leftFunc == null));
-            System.out.println("Restore Map");
             restore(gameMap);
             return;
         }

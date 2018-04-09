@@ -39,6 +39,7 @@ public class BouncyBallCollisionPart extends CollisionPart {
         float res = Vector2D.dot(vector, n) * 2; // quick maths
         n.multiplyWithConstant(res); // quick maths
         vector.subtract(n); // quick maths
-        this.bouncingVector = vector;
+        vector.multiplyWithConstant(0.85f); //Quicker maths
+        this.bouncingVector = vector; //slow maths
     }
 }

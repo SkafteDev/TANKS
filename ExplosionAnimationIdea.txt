@@ -1,0 +1,14 @@
+ExplosionTexturePart ligger på alle entities der kan eksplodere.
+   Frame Rows
+   Frame Columns
+ExplosionAnimationEvent der triggers af ExplosionSystem.
+ExplosionAnimationEvent håndteres i  Core.
+   AnimationMap i Core. Load animationen ind 1 gang.
+	1 Event = 1 Animation.
+	Animationer smides i en liste af animationer der skal tegnes. 
+	Wrappes så der er position med, samt specifik statetime for animationen.
+	Wrapper ligger i core modulet. 
+	StateTime skal opdateres hver frame.
+	Tjek om animationen er færdig, hvis den er så fjern fra listen.
+	Når Animationen er lagt i listen så slettes eventet
+	

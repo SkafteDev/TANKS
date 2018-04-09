@@ -13,8 +13,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class GameData {
 
-    private final int GAMEWIDTH = 400;
-    private final int GAMEHEIGHT = 300;
+    private final int GAMEWIDTH = 800;
+    private final int GAMEHEIGHT = 600;
 
     private float delta;
     private int displayWidth;
@@ -73,7 +73,7 @@ public class GameData {
 //        }
 
     public <E extends Event> List<Event> getEvents(Class<E> type, String sourceID) {
-        List<Event> r = new ArrayList();
+        List<Event> r = new ArrayList<>();
         for (Event event : events) {
             if (event.getClass().equals(type) && event.getSource().getID().equals(sourceID)) {
                 r.add(event);
@@ -84,7 +84,7 @@ public class GameData {
     }
 
     public <E extends Event> List<Event> getEvents(Class<E>... types) {
-        List<Event> r = new ArrayList();
+        List<Event> r = new ArrayList<>();
         for (Event event : events) {
             for (Class<E> eventType : types) {
                 if (eventType.isInstance(event)) {

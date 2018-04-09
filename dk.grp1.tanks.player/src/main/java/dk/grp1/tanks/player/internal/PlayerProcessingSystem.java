@@ -25,6 +25,7 @@ public class PlayerProcessingSystem implements IEntityProcessingService {
         for (Entity player : world.getEntities(Player.class)
                 ) {
 
+            TurnPart turnPart = player.getPart(TurnPart.class);
             CannonPart cannonPart = player.getPart(CannonPart.class);
             MovementPart movePart = player.getPart(MovementPart.class);
             ControlPart ctrlPart = player.getPart(ControlPart.class);
@@ -32,6 +33,7 @@ public class PlayerProcessingSystem implements IEntityProcessingService {
             CollisionPart collisionPart = player.getPart(CollisionPart.class);
             PhysicsPart physicsPart = player.getPart(PhysicsPart.class);
             LifePart lifePart = player.getPart(LifePart.class);
+            CirclePart circlePart = player.getPart(CirclePart.class);
             InventoryPart inventoryPart = player.getPart(InventoryPart.class);
             inventoryPart.processPart(player, gameData, world);
 
@@ -40,9 +42,15 @@ public class PlayerProcessingSystem implements IEntityProcessingService {
             }
 
 
-            ctrlPart.setLeft(gameData.getKeys().isDown(GameKeys.LEFT));
-            ctrlPart.setRight(gameData.getKeys().isDown(GameKeys.RIGHT));
-            ctrlPart.setRotation(world.getGameMap().getDirectionVector(new Vector2D(positionPart.getX(),positionPart.getY())));
+            if(turnPart.isMyTurn()) {
+                ctrlPart.setLeft(gameData.getKeys().isDown(GameKeys.LEFT));
+                ctrlPart.setRight(gameData.getKeys().isDown(GameKeys.RIGHT));
+                ctrlPart.setRotation(world.getGameMap().getDirectionVector(new Vector2D(positionPart.getX(), positionPart.getY())));
+            } else{
+                ctrlPart.setLeft(false);
+                ctrlPart.setRight(false);
+                ctrlPart.setRotation(world.getGameMap().getDirectionVector(new Vector2D(positionPart.getX(), positionPart.getY())));
+            }
 
             //Cannon movement
             if (gameData.getKeys().isDown(GameKeys.UP)){
@@ -54,6 +62,7 @@ public class PlayerProcessingSystem implements IEntityProcessingService {
             //Cannon fire cooldown
             if (gameData.getKeys().isDown(GameKeys.SPACE)
                     //&& timeSinceLastShot> 1
+                    && turnPart.isMyTurn()
             ) {
                 firepower = cannonPart.calculateFirepower(gameData);
                 //timeSinceLastShot = 0;
@@ -75,14 +84,16 @@ public class PlayerProcessingSystem implements IEntityProcessingService {
                 cannonPart.setPreviousAngle(cannonPart.getDirection());
                 //timeSinceLastShot += gameData.getDelta();
                 isReadyToShoot = false;
+                turnPart.endMyTurn();
             }
 
 
+            turnPart.processPart(player,gameData,world);
             physicsPart.processPart(player, gameData, world);
             ctrlPart.processPart(player, gameData, world);
             collisionPart.processPart(player, gameData, world);
             movePart.processPart(player, gameData, world);
-            cannonPart.setJointY(positionPart.getY());
+            cannonPart.setJointY(positionPart.getY() + circlePart.getRadius()/8*3);
             cannonPart.setJointX(positionPart.getX());
             cannonPart.processPart(player, gameData, world);
 

@@ -9,7 +9,6 @@ public class GrenadeActivator implements BundleActivator {
     @Override
     public void start(BundleContext bundleContext) throws Exception {
         bundleContext.registerService(IGamePluginService.class.getName(), new GrenadePlugin(), null);
-        bundleContext.registerService(IWeapon.class.getName(), new GrenadeWeapon(), null);
     }
 
     @Override

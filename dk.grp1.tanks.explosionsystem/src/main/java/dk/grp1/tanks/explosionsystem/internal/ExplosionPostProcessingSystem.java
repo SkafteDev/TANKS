@@ -3,14 +3,13 @@ package dk.grp1.tanks.explosionsystem.internal;
 import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.World;
-import dk.grp1.tanks.common.data.parts.CirclePart;
-import dk.grp1.tanks.common.data.parts.DamagePart;
-import dk.grp1.tanks.common.data.parts.LifePart;
-import dk.grp1.tanks.common.data.parts.PositionPart;
+import dk.grp1.tanks.common.data.parts.*;
 import dk.grp1.tanks.common.events.Event;
+import dk.grp1.tanks.common.events.ExplosionAnimationEvent;
 import dk.grp1.tanks.common.events.ExplosionEvent;
 import dk.grp1.tanks.common.events.ShootingEvent;
 import dk.grp1.tanks.common.services.IPostEntityProcessingService;
+import dk.grp1.tanks.common.utils.Vector2D;
 
 public class ExplosionPostProcessingSystem implements IPostEntityProcessingService {
     @Override
@@ -18,13 +17,17 @@ public class ExplosionPostProcessingSystem implements IPostEntityProcessingServi
         for (Event evnt : gameData.getEvents(ExplosionEvent.class)) {
 
             for (Entity ent: world.getEntities()) {
+
                 if(isInExplosion(evnt, ent)){
                     LifePart lp = ent.getPart(LifePart.class);
                     if(lp != null) {
                         lp.removeHP(((DamagePart) evnt.getSource().getPart(DamagePart.class)).getDamage());
+
                         //System.out.println(lp.getCurrentHP());
                     }
                 }
+
+
 
             }
 

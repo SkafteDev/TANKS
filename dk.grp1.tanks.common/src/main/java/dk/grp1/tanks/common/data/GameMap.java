@@ -105,7 +105,7 @@ public class GameMap {
      */
     public Vector2D getDirectionVector(Vector2D ownPosition) {
         float y = getHeight(ownPosition);
-        Vector2D nearbyPoint = new Vector2D(ownPosition.getX()+0.001f,ownPosition.getY());
+        Vector2D nearbyPoint = new Vector2D(ownPosition.getX()+0.001f,y);
         float y2 = getHeight(nearbyPoint);
         Vector2D vector = new Vector2D(nearbyPoint.getX() - ownPosition.getX(), y2 - y);
         return vector.unitVector();
