@@ -31,8 +31,8 @@ public class PlayerGamePlugin implements IGamePluginService {
         player.add(new PhysicsPart(5000f,-62f));
         player.add(new ControlPart(200));
         LifePart lifePart = new LifePart();
-        lifePart.setMaxHP(5);
-        lifePart.setCurrentHP(5);
+        lifePart.setMaxHP(100);
+        lifePart.setCurrentHP(100);
         player.add(lifePart);
         player.add(positionPart);
         player.add(new CannonPart(positionPart.getX(), positionPart.getY()+(playerRadius/2), cannonDirection, cannonWidth, cannonLength, "playerCanon.png"));

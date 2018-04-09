@@ -45,7 +45,7 @@ public class BigShotWeapon implements IWeapon {
         bs.add(new CirclePart(cannonCentre.getX(),cannonCentre.getY(),4));
         bs.add(new PhysicsPart(30, -90.82f));
         bs.add(new CollisionPart(true,0));
-        bs.add(new DamagePart(10,1));
+        bs.add(new DamagePart(10,20));
         bs.add(new TexturePart(this.texturePath));
         bs.add(new ExplosionTexturePart(explosionTextureFrameCols,explosionTextureFrameRows,explosionTexturePath));
 

@@ -61,7 +61,7 @@ public class DeadWeightWeapon implements IWeapon {
         dw.add(new CirclePart(cannonCentre.getX(),cannonCentre.getY(),4));
         dw.add(new PhysicsPart(30, -90.82f));
         dw.add(new CollisionPart(true,0));
-        dw.add(new DamagePart(5,1));
+        dw.add(new DamagePart(5,7));
         dw.add(new TexturePart(this.texturePath));
         dw.add(new ExplosionTexturePart(explosionTextureFrameCols,explosionTextureFrameRows,explosionTexturePath));
 
