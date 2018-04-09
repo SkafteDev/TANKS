@@ -10,7 +10,7 @@ import java.util.Random;
 
 public class GameMapPlugin implements IGamePluginService {
     private final float BOTTOMBOUNDARY = 30f;
-    private final float TOPBOUNDARY = 450f;
+    private final float TOPBOUNDARY = 400f;
 
 
     @Override
@@ -73,7 +73,7 @@ public class GameMapPlugin implements IGamePluginService {
         Random random = new Random();
         switch (random.nextInt(2)) {
             case 0:
-                return new GameMapLinear(random.nextFloat() * 2f - 1f, BOTTOMBOUNDARY + (random.nextFloat() * 500f), 0f, mapFunctionInterval);
+                return new GameMapLinear(random.nextFloat() * 2f - 1f, BOTTOMBOUNDARY + (random.nextFloat() * TOPBOUNDARY), 0f, mapFunctionInterval);
             case 1:
                 return new GameMapSin(100f, (1 / 66f), 0, gameData.getGameHeight() / 3f, 0f, mapFunctionInterval);
         }
