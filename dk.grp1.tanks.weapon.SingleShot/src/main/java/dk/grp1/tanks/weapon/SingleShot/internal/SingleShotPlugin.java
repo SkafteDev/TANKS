@@ -7,9 +7,11 @@ import dk.grp1.tanks.common.services.IGamePluginService;
 import dk.grp1.tanks.common.services.IWeapon;
 
 public class SingleShotPlugin implements IGamePluginService {
+
+    private final IWeapon weapon = new SingleShotWeapon();
+
     @Override
     public void start(World world, GameData gameData) {
-        IWeapon weapon = new SingleShotWeapon();
         gameData.addWeapon(weapon);
     }
 
@@ -18,5 +20,7 @@ public class SingleShotPlugin implements IGamePluginService {
         for (Entity e : world.getEntities(SingleShot.class)) {
             world.removeEntity(e);
         }
+
+        gameData.removeWeapon(weapon);
     }
 }
