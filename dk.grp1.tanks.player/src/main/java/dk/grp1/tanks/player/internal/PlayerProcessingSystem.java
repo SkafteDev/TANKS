@@ -7,6 +7,7 @@ import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.data.parts.*;
 import dk.grp1.tanks.common.events.ShootingEvent;
 import dk.grp1.tanks.common.data.parts.PositionPart;
+import dk.grp1.tanks.common.events.SoundEvent;
 import dk.grp1.tanks.common.services.IEntityProcessingService;
 import dk.grp1.tanks.common.utils.Vector2D;
 
@@ -76,7 +77,7 @@ public class PlayerProcessingSystem implements IEntityProcessingService {
             }
 
             if (isReadyToShoot && !gameData.getKeys().isDown(GameKeys.SPACE) && inventoryPart.getCurrentWeapon() != null) {
-                gameData.addEvent(new ShootingEvent(player, firepower));
+                gameData.addEvent(new SoundEvent(player, "boom"));
                 inventoryPart.getCurrentWeapon().shoot(player, firepower, world);
                 //inventoryPart.decreaseAmmo();
                 cannonPart.setFirepower(0);

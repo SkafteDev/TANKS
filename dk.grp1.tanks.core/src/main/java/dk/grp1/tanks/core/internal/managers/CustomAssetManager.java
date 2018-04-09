@@ -59,6 +59,9 @@ public class CustomAssetManager {
     }
 
     public void loadSoundAsset(Class clazz, String fileName, String fileType) {
+        if(tempFileMap.containsKey(fileName+fileType))
+            return;
+        
         File assetFile = createTempFileFromBundle(clazz, fileName, fileType);
 
         assetManager.load(assetFile.getAbsolutePath(), Sound.class);
@@ -77,10 +80,13 @@ public class CustomAssetManager {
     public Sound getSoundAsset(String fileName, String fileType) {
         String tmpFileName = tempFileMap.get(fileName+fileType);
 
+
         Sound sound = null;
 
         try {
+
             sound = assetManager.get(tmpFileName);
+
         } catch (NullPointerException ex) {
             System.out.println("The sound asset: " + fileName+fileType + ", could not be found.");
         }

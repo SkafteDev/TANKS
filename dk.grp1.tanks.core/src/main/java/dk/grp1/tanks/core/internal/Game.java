@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.FloatArray;
 import com.badlogic.gdx.utils.ShortArray;
 import dk.grp1.tanks.common.data.*;
 import dk.grp1.tanks.common.data.parts.*;
+import dk.grp1.tanks.common.events.SoundEvent;
 import dk.grp1.tanks.common.services.*;
 import dk.grp1.tanks.common.events.Event;
 import dk.grp1.tanks.common.events.ExplosionAnimationEvent;
@@ -91,7 +92,6 @@ public class Game implements ApplicationListener {
 
     private void setupAssetManager() {
         this.assetManager = new CustomAssetManager(Gdx.files.getLocalStoragePath());
-        this.assetManager.loadSoundAsset(Game.class, "cannon", ".mp3");
     }
 
     private void restartGame(){
@@ -203,10 +203,17 @@ public class Game implements ApplicationListener {
                     restartGame();
                 }
         }
+        playSounds();
 
-        List<Event> shootingEvents = gameData.getEvents(ShootingEvent.class);
-        for (Event event : shootingEvents) {
-            Sound sound = assetManager.getSoundAsset("cannon", ".mp3");
+
+    }
+
+    private void playSounds() {
+        List<Event> soundEvents = gameData.getEvents(SoundEvent.class);
+        for (Event event : soundEvents) {
+            SoundEvent soundEvent = (SoundEvent) event;
+            assetManager.loadSoundAsset(event.getSource().getClass(),soundEvent.getPath(), ".mp3" );
+            Sound sound = assetManager.getSoundAsset(soundEvent.getPath(), ".mp3");
 
             if (sound != null) {
                 System.out.println("Playing sound");
