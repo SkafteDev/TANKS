@@ -1,6 +1,6 @@
 package dk.grp1.tanks.common.data;
 
-import dk.grp1.tanks.common.events.Event;
+import dk.grp1.tanks.common.eventManager.events.Event;
 import dk.grp1.tanks.common.services.IWeapon;
 import dk.grp1.tanks.common.services.IWeaponListener;
 

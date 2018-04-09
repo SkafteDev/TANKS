@@ -1,7 +1,6 @@
 package dk.grp1.tanks.core.internal;
 
 import com.badlogic.gdx.ApplicationListener;
-import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
@@ -14,8 +13,8 @@ import com.badlogic.gdx.utils.ShortArray;
 import dk.grp1.tanks.common.data.*;
 import dk.grp1.tanks.common.data.parts.*;
 import dk.grp1.tanks.common.services.*;
-import dk.grp1.tanks.common.events.Event;
-import dk.grp1.tanks.common.events.ExplosionAnimationEvent;
+import dk.grp1.tanks.common.eventManager.events.Event;
+import dk.grp1.tanks.common.eventManager.events.ExplosionAnimationEvent;
 import dk.grp1.tanks.common.utils.Vector2D;
 import dk.grp1.tanks.core.internal.GUI.*;
 import dk.grp1.tanks.core.internal.managers.GameInputProcessor;
@@ -26,7 +25,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import static com.badlogic.gdx.math.MathUtils.random;
 

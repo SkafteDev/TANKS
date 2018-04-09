@@ -5,8 +5,8 @@ import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.data.parts.MovementPart;
 import dk.grp1.tanks.common.data.parts.TurnPart;
-import dk.grp1.tanks.common.events.EndTurnEvent;
-import dk.grp1.tanks.common.events.Event;
+import dk.grp1.tanks.common.eventManager.events.EndTurnEvent;
+import dk.grp1.tanks.common.eventManager.events.Event;
 import dk.grp1.tanks.common.services.IPostEntityProcessingService;
 
 import java.util.*;
