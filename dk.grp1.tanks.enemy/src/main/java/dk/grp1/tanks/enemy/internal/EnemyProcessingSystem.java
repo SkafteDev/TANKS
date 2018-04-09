@@ -51,7 +51,7 @@ public class EnemyProcessingSystem implements IEntityProcessingService {
                 if (!AICONTROLLED) {
                     manualControl(ctrlPart, gameData, world, positionPart);
                 } else {
-                    simpleAIControl(ctrlPart, movePart, world, positionPart);
+                    simpleAIControl(ctrlPart,gameData, movePart, world, positionPart);
                 }
 
 
@@ -107,7 +107,7 @@ public class EnemyProcessingSystem implements IEntityProcessingService {
         ctrlPart.setRotation(world.getGameMap().getDirectionVector(new Vector2D(positionPart.getX(), positionPart.getY())));
     }
 
-    private void simpleAIControl(ControlPart ctrlPart, MovementPart movementPart, World world, PositionPart positionPart) {
+    private void simpleAIControl(ControlPart ctrlPart, GameData gameData, MovementPart movementPart, World world, PositionPart positionPart) {
         Random random = new Random();
         boolean moving = movementPart.getCurrentSpeed() > 0;
 
@@ -118,6 +118,15 @@ public class EnemyProcessingSystem implements IEntityProcessingService {
             if(!moving){
                 ctrlPart.setLeft(!goRight);
                 ctrlPart.setRight(goRight);
+            }else {
+                if(positionPart.getX() < 10){
+                    ctrlPart.setRight(true);
+                    ctrlPart.setLeft(false);
+                }
+                if(positionPart.getX() > gameData.getGameWidth()-10){
+                    ctrlPart.setRight(false);
+                    ctrlPart.setLeft(true);
+                }
             }
 
             ctrlPart.setRotation(world.getGameMap().getDirectionVector(new Vector2D(positionPart.getX(), positionPart.getY())));
