@@ -21,7 +21,7 @@ public final class GameMapActivator
     {
         System.out.println( "STARTING dk.grp1.tanks.gamemap" );
         bc.registerService(IGamePluginService.class.getName(),new GameMapPlugin(),null);
-        bc.registerService(INonEntityProcessingService.class.getName(), new GameMapProcessing(),null);
+       // bc.registerService(INonEntityProcessingService.class.getName(), new GameMapProcessing(),null);
 
     }
 

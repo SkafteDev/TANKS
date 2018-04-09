@@ -42,18 +42,6 @@ public class BouncyBallMovementPart extends MovementPart {
             bouncyBallCollisionPart.updateBouncingVector(this.getVelocity());
             this.setVelocity(bouncyBallCollisionPart.getBouncingVector());
             bouncyBallCollisionPart.setHitGameMap(false);
-
-            DamagePart damagePart = entity.getPart(DamagePart.class);
-            ExplosionTexturePart explosionTexturePart = entity.getPart(ExplosionTexturePart.class);
-            if (damagePart != null && explosionTexturePart != null) {
-                Event explosionEvent = new ExplosionEvent(entity, new Vector2D(positionPart.getX(), positionPart.getY()), damagePart.getExplosionRadius());
-                Event mapDestructionEvent = new MapDestructionEvent(entity,new Vector2D(positionPart.getX(),positionPart.getY()),damagePart.getExplosionRadius());
-                Event animationEvent = new ExplosionAnimationEvent(entity,new Vector2D(positionPart.getX(),positionPart.getY()),explosionTexturePart,damagePart.getExplosionRadius());
-                gameData.addEvent(explosionEvent);
-                gameData.addEvent(animationEvent);
-                gameData.addEvent(mapDestructionEvent);
-            }
-
         }
 
         // update pos with velo

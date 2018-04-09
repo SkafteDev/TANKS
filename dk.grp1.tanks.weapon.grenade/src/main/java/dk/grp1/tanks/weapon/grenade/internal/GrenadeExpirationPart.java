@@ -32,9 +32,9 @@ public class GrenadeExpirationPart extends ExpirationPart {
                 Event animationEvent = new ExplosionAnimationEvent(entity, new Vector2D(positionPart.getX(), positionPart.getY()), explosionTexturePart, damagePart.getExplosionRadius());
                 Event explosionEvent = new ExplosionEvent(entity, new Vector2D(positionPart.getX(), positionPart.getY()), damagePart.getExplosionRadius());
                 Event mapDestructionEvent = new MapDestructionEvent(entity,new Vector2D(positionPart.getX(),positionPart.getY()),damagePart.getExplosionRadius());
-                gameData.addEvent(explosionEvent);
-                gameData.addEvent(animationEvent);
-                gameData.addEvent(mapDestructionEvent);
+                gameData.getEventManager().addEvent(explosionEvent);
+                gameData.getEventManager().addEvent(animationEvent);
+                gameData.getEventManager().addEvent(mapDestructionEvent);
                 world.removeEntity(entity);
             }
         }

@@ -4,33 +4,41 @@ import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.data.parts.*;
+import dk.grp1.tanks.common.eventManager.IEventCallback;
 import dk.grp1.tanks.common.eventManager.events.Event;
 import dk.grp1.tanks.common.eventManager.events.ExplosionEvent;
 import dk.grp1.tanks.common.services.IPostEntityProcessingService;
 
-public class ExplosionPostProcessingSystem implements IPostEntityProcessingService {
+public class ExplosionPostProcessingSystem implements IPostEntityProcessingService, IEventCallback {
+
+    private GameData gameData;
+    private World world;
+
+    public ExplosionPostProcessingSystem(GameData gameData, World world) {
+        this.gameData = gameData;
+        this.world = world;
+    }
+
     @Override
-    public void postProcess(World world, GameData gameData) {
-        for (Event evnt : gameData.getEvents(ExplosionEvent.class)) {
+    public void processEvent(Event event) {
+        for (Entity ent: world.getEntities()) {
 
-            for (Entity ent: world.getEntities()) {
+            if(isInExplosion(event, ent)){
+                LifePart lp = ent.getPart(LifePart.class);
+                if(lp != null) {
+                    lp.removeHP(((DamagePart) event.getSource().getPart(DamagePart.class)).getDamage());
 
-                if(isInExplosion(evnt, ent)){
-                    LifePart lp = ent.getPart(LifePart.class);
-                    if(lp != null) {
-                        lp.removeHP(((DamagePart) evnt.getSource().getPart(DamagePart.class)).getDamage());
-
-                        //System.out.println(lp.getCurrentHP());
-                    }
                 }
-
-
-
             }
 
-            gameData.removeEvent(evnt);
+
 
         }
+    }
+
+    @Override
+    public void postProcess(World world, GameData gameData) {
+
     }
 
     private boolean isInExplosion(Event evnt, Entity ent) {
@@ -43,5 +51,6 @@ public class ExplosionPostProcessingSystem implements IPostEntityProcessingServi
         float distance = (float)(Math.sqrt(distX*distX + distY*distY));
         return distance < (exEvnt.getExplosionRadius()+circlePart.getRadius());
         }
+
 
 }

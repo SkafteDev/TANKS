@@ -38,7 +38,7 @@ public class TurnPart implements IEntityPart {
         if(isMyTurn()) {
             turnTimeRemaining -= gameData.getDelta();
             if (turnTimeRemaining < 0 ||turnEndRequested) {
-                gameData.addEvent(new EndTurnEvent(entity));
+                gameData.getEventManager().addEvent(new EndTurnEvent(entity));
                 turnTimeRemaining = turnDuration;
                 turnEndRequested = false;
             }
