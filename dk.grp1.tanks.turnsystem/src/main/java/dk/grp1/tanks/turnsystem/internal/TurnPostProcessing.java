@@ -17,7 +17,6 @@ public class TurnPostProcessing implements IPostEntityProcessingService {
 
     public TurnPostProcessing() {
 
-
     }
 
     @Override
@@ -40,13 +39,11 @@ public class TurnPostProcessing implements IPostEntityProcessingService {
         EndTurnEvent event = (EndTurnEvent) events.get(0);
 
 
-        for (Entity entity : world.getEntities()
-                ) {
+        for (Entity entity : world.getEntities()) {
             TurnPart turnPart = entity.getPart(TurnPart.class);
             if (turnPart != null) {
                 turnParts.add(turnPart);
             }
-
         }
 
 
