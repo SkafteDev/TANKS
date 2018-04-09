@@ -34,7 +34,6 @@ public class WeaponActivator implements BundleActivator {
 
             String category = (String) ref.getBundle().getHeaders().get("Bundle-Category");
             if(category!= null && category.equals("weapon")){
-                System.out.println("Stopping bundle: " + ref.getBundle().getSymbolicName());
                 ref.getBundle().stop();
             }
         }
