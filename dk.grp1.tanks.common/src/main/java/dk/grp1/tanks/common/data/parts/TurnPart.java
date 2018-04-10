@@ -3,7 +3,7 @@ package dk.grp1.tanks.common.data.parts;
 import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.World;
-import dk.grp1.tanks.common.events.EndTurnEvent;
+import dk.grp1.tanks.common.eventManager.events.EndTurnEvent;
 
 public class TurnPart implements IEntityPart {
 
@@ -38,7 +38,7 @@ public class TurnPart implements IEntityPart {
         if(isMyTurn()) {
             turnTimeRemaining -= gameData.getDelta();
             if (turnTimeRemaining < 0 ||turnEndRequested) {
-                gameData.addEvent(new EndTurnEvent(entity));
+                gameData.getEventManager().addEvent(new EndTurnEvent(entity));
                 turnTimeRemaining = turnDuration;
                 turnEndRequested = false;
             }

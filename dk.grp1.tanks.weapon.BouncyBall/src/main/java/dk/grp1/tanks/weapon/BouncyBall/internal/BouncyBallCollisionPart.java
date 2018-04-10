@@ -4,7 +4,13 @@ import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.data.parts.CollisionPart;
+import dk.grp1.tanks.common.data.parts.DamagePart;
+import dk.grp1.tanks.common.data.parts.ExplosionTexturePart;
 import dk.grp1.tanks.common.data.parts.PositionPart;
+import dk.grp1.tanks.common.eventManager.events.Event;
+import dk.grp1.tanks.common.eventManager.events.ExplosionAnimationEvent;
+import dk.grp1.tanks.common.eventManager.events.ExplosionEvent;
+import dk.grp1.tanks.common.eventManager.events.MapDestructionEvent;
 import dk.grp1.tanks.common.utils.Vector2D;
 
 public class BouncyBallCollisionPart extends CollisionPart {
@@ -28,6 +34,23 @@ public class BouncyBallCollisionPart extends CollisionPart {
         PositionPart pos = entity.getPart(PositionPart.class);
         Vector2D mapDirectionVector = world.getGameMap().getDirectionVector(new Vector2D(pos.getX(), pos.getY()));
         this.mapNormalVector = mapDirectionVector.rotate90degrees();
+
+        DamagePart damagePart = entity.getPart(DamagePart.class);
+        ExplosionTexturePart explosionTexturePart = entity.getPart(ExplosionTexturePart.class);
+        PositionPart positionPart = entity.getPart(PositionPart.class);
+
+        if ((this.isHitGameMap()) && positionPart != null && damagePart != null && explosionTexturePart != null) {
+            Event explosionEvent = new ExplosionEvent(entity, new Vector2D(positionPart.getX(), positionPart.getY()), damagePart.getExplosionRadius());
+            Event mapDestructionEvent = new MapDestructionEvent(entity,new Vector2D(positionPart.getX(),positionPart.getY()),damagePart.getExplosionRadius());
+            Event animationEvent = new ExplosionAnimationEvent(entity,new Vector2D(positionPart.getX(),positionPart.getY()),explosionTexturePart,damagePart.getExplosionRadius());
+
+            gameData.getEventManager().addEvent(explosionEvent);
+            gameData.getEventManager().addEvent(animationEvent);
+            gameData.getEventManager().addEvent(mapDestructionEvent);
+
+        }
+
+
     }
 
     public Vector2D getBouncingVector() {

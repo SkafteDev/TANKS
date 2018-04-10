@@ -2,10 +2,7 @@ package dk.grp1.tanks.weapon.internal;
 
 import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.data.GameData;
-import dk.grp1.tanks.common.data.parts.*;
-import dk.grp1.tanks.common.events.Event;
-import dk.grp1.tanks.common.events.ShootingEvent;
-import dk.grp1.tanks.common.utils.Vector2D;
+import dk.grp1.tanks.common.eventManager.events.Event;
 
 public class WeaponFactory {
     public Entity create(){
