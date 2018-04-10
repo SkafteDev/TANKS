@@ -37,9 +37,10 @@ public class WeaponGUI implements IGuiProcessingService {
             if (entity instanceof IGUIWeapon) {
                 InventoryPart inventoryPart = entity.getPart(InventoryPart.class);
                 if (inventoryPart != null){
+                    weaponText(entity, inventoryPart, batch);
                     drawWeaponIcon(entity, inventoryPart, batch);
                 }
-                weaponText(entity, inventoryPart, batch);
+
             }
         }
     }
