@@ -14,7 +14,7 @@ import dk.grp1.tanks.common.data.parts.CannonPart;
 public class FirepowerBarGUI implements IGuiProcessingService {
     private Texture firepowerTexture;
     private Pixmap pixmap;
-    private float barHeight = 27;
+    private float barHeight = 23.5f;
     private float barWidth = 5;
     private float xOffSet = 20;
     private float yOffSet = -5;

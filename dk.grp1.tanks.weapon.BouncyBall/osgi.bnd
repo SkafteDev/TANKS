@@ -1,1 +1,3 @@
 Bundle-Activator: dk.grp1.tanks.weapon.BouncyBall.internal.BouncyBallActivator
+Bundle-Category: weapon
+

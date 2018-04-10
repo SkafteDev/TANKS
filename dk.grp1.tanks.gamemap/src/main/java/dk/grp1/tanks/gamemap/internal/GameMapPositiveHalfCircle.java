@@ -47,7 +47,7 @@ public class GameMapPositiveHalfCircle implements IGameMapFunction {
 
     @Override
     public boolean isWithin(float x) {
-        if(this.startX < x && this.endX > x){
+        if(this.startX <= x && this.endX > x){
             return true;
         }
         return false;

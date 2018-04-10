@@ -78,24 +78,6 @@ public class OnScreenText implements IGuiProcessingService {
 
     }
 
-    private void weaponText(Entity entity, InventoryPart inventoryPart, SpriteBatch batch) {
-        String weaponText;
-
-        IWeapon weapon = inventoryPart.getCurrentWeapon();
-        if (weapon != null) {
-            weaponText = weapon.getName();
-        } else {
-            weaponText = "None";
-        }
-        font.getData().scaleX = 0.5f;
-        font.getData().scaleY = 0.5f;
-        batch.begin();
-        CirclePart circlePart = entity.getPart(CirclePart.class);
-        textBounds = font.getBounds(weaponText);
-        font.draw(batch, weaponText, circlePart.getCentreX() - textBounds.width / 2, circlePart.getCentreY() - 10);
-        batch.end();
-    }
-
 
     private void turnText(World world, GameData gameData, SpriteBatch batch) {
         font.getData().scaleX = 0.5f;

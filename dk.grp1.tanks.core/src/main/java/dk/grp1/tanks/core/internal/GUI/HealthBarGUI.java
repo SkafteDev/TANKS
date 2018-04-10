@@ -21,7 +21,7 @@ public class HealthBarGUI implements IGuiProcessingService {
     private float barHeight = 2;
     private float barWidth = 4;
     private float xOffSet = 2;
-    private float yOffSet = 2;
+    private float yOffSet = 2f;
 
     @Override
     public void draw(World world, GameData gameData, SpriteBatch batch) {
