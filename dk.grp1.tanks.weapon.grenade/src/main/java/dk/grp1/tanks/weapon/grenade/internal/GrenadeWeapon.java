@@ -15,6 +15,7 @@ public class GrenadeWeapon implements IWeapon {
     private final String texturePath = "grenade.png";
     private final String explosionTexturePath = "explosion.png";
     private final String shootSoundPath = "grenadeSound.mp3";
+    private final String explosionSoundPath = "goodNade.mp3";
     private final int explosionTextureFrameRows = 6;
     private final int explosionTextureFrameCols = 8;
 
@@ -51,7 +52,9 @@ public class GrenadeWeapon implements IWeapon {
         grenade.add(new DamagePart(7,25));
         grenade.add(new TexturePart(this.texturePath));
         grenade.add(new ExplosionTexturePart(explosionTextureFrameCols,explosionTextureFrameRows,explosionTexturePath));
+        SoundPart sounds = new SoundPart(shootSoundPath, explosionSoundPath);
+        grenade.add(sounds);
+        gameData.getEventManager().addEvent(new SoundEvent(grenade, sounds.getShootSoundPath()));
         world.addEntity(grenade);
-        gameData.getEventManager().addEvent(new SoundEvent(grenade, shootSoundPath));
     }
 }
