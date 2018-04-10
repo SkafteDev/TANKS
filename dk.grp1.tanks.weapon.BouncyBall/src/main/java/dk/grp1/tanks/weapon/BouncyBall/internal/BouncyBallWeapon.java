@@ -7,7 +7,7 @@ import dk.grp1.tanks.common.data.parts.*;
 import dk.grp1.tanks.common.events.SoundEvent;
 import dk.grp1.tanks.common.services.IWeapon;
 import dk.grp1.tanks.common.utils.Vector2D;
-import dk.grp1.tanks.weapon.WeaponSoundPart;
+import dk.grp1.tanks.common.data.parts.SoundPart;
 
 public class BouncyBallWeapon implements IWeapon{
 
@@ -38,27 +38,27 @@ public class BouncyBallWeapon implements IWeapon{
 
     @Override
     public void shoot(Entity actor, GameData gameData, float firePower, World world) {
-        BouncyBall BouncyBall = new BouncyBall();
+        BouncyBall bouncyBall = new BouncyBall();
 
         CannonPart cannonPart = actor.getPart(CannonPart.class);
         Vector2D cannonCentre = cannonPart.getMuzzleFaceCentre();
-        BouncyBall.add(new PositionPart(cannonCentre.getX(),cannonCentre.getY(), cannonPart.getDirection()));
+        bouncyBall.add(new PositionPart(cannonCentre.getX(),cannonCentre.getY(), cannonPart.getDirection()));
         Vector2D accelerationVector = cannonPart.getDirectionVector();
         accelerationVector.multiplyWithConstant(firePower);
-        BouncyBall.add(new BouncyBallMovementPart(accelerationVector, 10000));
-        BouncyBall.add(new BouncyBallExpirationPart(10));
-        BouncyBall.add(new ShapePart());
-        BouncyBall.add(new CirclePart(cannonCentre.getX(),cannonCentre.getY(),4));
-        BouncyBall.add(new PhysicsPart(30, -90.82f));
-        BouncyBall.add(new BouncyBallCollisionPart(true,0));
-        BouncyBall.add(new DamagePart(5,10));
-        BouncyBall.add(new TexturePart(this.texturePath));
-        BouncyBall.add(new ExplosionTexturePart(explosionTextureFrameCols,explosionTextureFrameRows,explosionTexturePath));
-        WeaponSoundPart sounds = new  WeaponSoundPart("boom.mp3","boing.mp3");
-        BouncyBall.add(sounds);
-        gameData.getEventManager().addEvent(new SoundEvent(BouncyBall,sounds.getShootSoundPath()));
+        bouncyBall.add(new BouncyBallMovementPart(accelerationVector, 10000));
+        bouncyBall.add(new BouncyBallExpirationPart(10));
+        bouncyBall.add(new ShapePart());
+        bouncyBall.add(new CirclePart(cannonCentre.getX(),cannonCentre.getY(),4));
+        bouncyBall.add(new PhysicsPart(30, -90.82f));
+        bouncyBall.add(new BouncyBallCollisionPart(true,0));
+        bouncyBall.add(new DamagePart(5,10));
+        bouncyBall.add(new TexturePart(this.texturePath));
+        bouncyBall.add(new ExplosionTexturePart(explosionTextureFrameCols,explosionTextureFrameRows,explosionTexturePath));
+        SoundPart sounds = new SoundPart("boom.mp3","boing.mp3");
+        bouncyBall.add(sounds);
+        gameData.getEventManager().addEvent(new SoundEvent(bouncyBall,sounds.getShootSoundPath()));
 
 
-        world.addEntity(BouncyBall);
+        world.addEntity(bouncyBall);
     }
 }

@@ -37,7 +37,6 @@ public class NukeWeapon implements IWeapon {
     }
 
 
-
     @Override
     public void shoot(Entity actor, GameData gameData, float firePower, World world) {
         Projectile nuke = new Nuke();
