@@ -1,8 +1,10 @@
 package dk.grp1.tanks.weapon.MadCat.internal;
 
 import dk.grp1.tanks.common.data.Entity;
+import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.data.parts.*;
+import dk.grp1.tanks.common.events.SoundEvent;
 import dk.grp1.tanks.common.services.IWeapon;
 import dk.grp1.tanks.common.utils.Vector2D;
 
@@ -13,6 +15,7 @@ public class MadCatWeapon implements IWeapon {
     private final String iconPath = "mad_cat.png";
     private final String texturePath = "mad_cat.png";
     private final String explosionTexturePath = "explosionWhite.png";
+    private final String shootSoundPath = "boom.mp3";
     private final int explosionTextureFrameRows = 3;
     private final int explosionTextureFrameCols = 7;
 
@@ -32,7 +35,7 @@ public class MadCatWeapon implements IWeapon {
     }
 
     @Override
-    public void shoot(Entity actor, float firePower, World world) {
+    public void shoot(Entity actor, GameData gameData, float firePower, World world) {
         MadCat cat = new MadCat();
 
         CannonPart cannonPart = actor.getPart(CannonPart.class);
@@ -48,6 +51,9 @@ public class MadCatWeapon implements IWeapon {
         cat.add(new DamagePart(10,20));
         cat.add(new TexturePart(this.texturePath));
         cat.add(new ExplosionTexturePart(explosionTextureFrameCols,explosionTextureFrameRows,explosionTexturePath));
+        SoundPart sounds = new SoundPart("mad_cat.mp3","mad_cat.mp3");
+        cat.add(sounds);
+        gameData.getEventManager().addEvent(new SoundEvent(cat,sounds.getShootSoundPath()));
 
         world.addEntity(cat);
     }

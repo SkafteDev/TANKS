@@ -1,16 +1,20 @@
 package dk.grp1.tanks.weapon.BigShot.internal;
 
 import dk.grp1.tanks.common.data.Entity;
+import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.data.parts.*;
+import dk.grp1.tanks.common.events.SoundEvent;
 import dk.grp1.tanks.common.services.IWeapon;
 import dk.grp1.tanks.common.utils.Vector2D;
+import dk.grp1.tanks.common.data.parts.SoundPart;
 
 public class BigShotWeapon implements IWeapon {
 
     private final String name = "Big Shot";
-    private final String description = "Fires a single shot";
+    private final String description = "Fires a single big shot";
     private final String iconPath = "bigshot.png";
+    private final String shootSoundPath= "boom.mp3";
     private final String texturePath = "bigshot.png";
     private final String explosionTexturePath = "explosion.png";
     private final int explosionTextureFrameRows = 6;
@@ -32,7 +36,7 @@ public class BigShotWeapon implements IWeapon {
     }
 
     @Override
-    public void shoot(Entity actor, float firePower, World world) {
+    public void shoot(Entity actor, GameData gameData, float firePower, World world) {
         BigShot bs = new BigShot();
 
         CannonPart cannonPart = actor.getPart(CannonPart.class);
@@ -48,7 +52,9 @@ public class BigShotWeapon implements IWeapon {
         bs.add(new DamagePart(10,20));
         bs.add(new TexturePart(this.texturePath));
         bs.add(new ExplosionTexturePart(explosionTextureFrameCols,explosionTextureFrameRows,explosionTexturePath));
-
+        SoundPart sounds = new SoundPart("boom.mp3","party_horn.mp3");
+        bs.add(sounds);
+        gameData.getEventManager().addEvent(new SoundEvent(bs,sounds.getShootSoundPath()));
         world.addEntity(bs);
     }
 }

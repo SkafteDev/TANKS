@@ -160,7 +160,7 @@ public class EnemyProcessingSystem implements IEntityProcessingService {
 
                 firepower = initialVelocity(cannonPart, otherEntityPositionPart, 90.82f, cannonPart.getDirection());
 
-                inventoryPart.getCurrentWeapon().shoot(enemy, firepower, world);
+                inventoryPart.getCurrentWeapon().shoot(enemy, gameData, firepower, world);
                 cannonPart.setPreviousFirepower(firepower);
                 cannonPart.setPreviousAngle(cannonPart.getDirection());
                 //gameData.addEvent(new ShootingEvent(enemy, firepower));
@@ -198,7 +198,7 @@ public class EnemyProcessingSystem implements IEntityProcessingService {
                 firepower = firepower * (1 + modification1) * (1 - modification2);
 
 
-                inventoryPart.getCurrentWeapon().shoot(enemy, firepower, world);
+                inventoryPart.getCurrentWeapon().shoot(enemy, gameData, firepower, world);
                 cannonPart.setPreviousFirepower(firepower);
                 cannonPart.setPreviousAngle(cannonPart.getDirection());
                 //gameData.addEvent(new ShootingEvent(enemy, firepower));
