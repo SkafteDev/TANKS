@@ -8,7 +8,6 @@ import dk.grp1.tanks.common.events.SoundEvent;
 import dk.grp1.tanks.common.services.IWeapon;
 import dk.grp1.tanks.common.utils.Vector2D;
 import dk.grp1.tanks.weapon.Projectile;
-import dk.grp1.tanks.weapon.WeaponSoundPart;
 
 public class NukeWeapon implements IWeapon {
     private final String name = "Nuke";
@@ -54,7 +53,7 @@ public class NukeWeapon implements IWeapon {
         nuke.add(new DamagePart(50,40));
         nuke.add(new TexturePart(this.texturePath));
         nuke.add(new ExplosionTexturePart(explosionTextureFrameCols,explosionTextureFrameRows,explosionTexturePath));
-        WeaponSoundPart sounds = new WeaponSoundPart(shootSoundPath, explosionSoundPath);
+        SoundPart sounds = new SoundPart(shootSoundPath, explosionSoundPath);
         nuke.add(sounds);
         gameData.getEventManager().addEvent(new SoundEvent(nuke, sounds.getShootSoundPath()));
         world.addEntity(nuke);
