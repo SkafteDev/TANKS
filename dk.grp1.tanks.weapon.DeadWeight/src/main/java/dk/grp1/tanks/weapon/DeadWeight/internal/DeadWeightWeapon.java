@@ -36,11 +36,6 @@ public class DeadWeightWeapon implements IWeapon {
     }
 
     @Override
-    public String getShootSoundPath() {
-        return null;
-    }
-
-    @Override
     public void shoot(Entity actor, GameData gameData, float firePower, World world) {
         DeadWeight dw = new DeadWeight();
 
