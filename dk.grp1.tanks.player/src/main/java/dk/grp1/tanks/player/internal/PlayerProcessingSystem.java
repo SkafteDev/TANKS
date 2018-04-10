@@ -37,6 +37,9 @@ public class PlayerProcessingSystem implements IEntityProcessingService {
             inventoryPart.processPart(player, gameData, world);
 
             if(lifePart.getCurrentHP() <= 0){
+                if(turnPart.isMyTurn()) {
+                    turnPart.endMyTurn();
+                }
                 world.removeEntity(player);
             }
 
