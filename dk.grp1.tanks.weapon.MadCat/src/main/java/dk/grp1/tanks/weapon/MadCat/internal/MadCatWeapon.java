@@ -4,6 +4,7 @@ import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.data.parts.*;
+import dk.grp1.tanks.common.events.SoundEvent;
 import dk.grp1.tanks.common.services.IWeapon;
 import dk.grp1.tanks.common.utils.Vector2D;
 
@@ -50,6 +51,9 @@ public class MadCatWeapon implements IWeapon {
         cat.add(new DamagePart(10,20));
         cat.add(new TexturePart(this.texturePath));
         cat.add(new ExplosionTexturePart(explosionTextureFrameCols,explosionTextureFrameRows,explosionTexturePath));
+        SoundPart sounds = new SoundPart("mad_cat.mp3","mad_cat.mp3");
+        cat.add(sounds);
+        gameData.getEventManager().addEvent(new SoundEvent(cat,sounds.getShootSoundPath()));
 
         world.addEntity(cat);
     }
