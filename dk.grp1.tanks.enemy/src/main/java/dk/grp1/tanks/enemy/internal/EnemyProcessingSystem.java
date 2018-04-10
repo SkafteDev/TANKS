@@ -170,10 +170,13 @@ public class EnemyProcessingSystem implements IEntityProcessingService {
 
         InventoryPart inventoryPart = enemy.getPart(InventoryPart.class);
         inventoryPart.processPart(enemy, gameData, world);
-        Random wepRandom = new Random();
-        int i = wepRandom.nextInt(inventoryPart.getWeapons().size());
-        for (; i > 0; i--) {
-            inventoryPart.nextWeapon();
+
+        if(!inventoryPart.getWeapons().isEmpty()) {
+            Random wepRandom = new Random();
+            int i = wepRandom.nextInt(inventoryPart.getWeapons().size());
+            for (; i > 0; i--) {
+                inventoryPart.nextWeapon();
+            }
         }
 
         for (Entity entity : world.getEntities()) {
