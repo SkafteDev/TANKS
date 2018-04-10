@@ -1,8 +1,10 @@
 package dk.grp1.tanks.weapon.SingleShot.internal;
 
 import dk.grp1.tanks.common.data.Entity;
+import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.data.parts.*;
+import dk.grp1.tanks.common.events.SoundEvent;
 import dk.grp1.tanks.common.services.IWeapon;
 import dk.grp1.tanks.common.utils.Vector2D;
 
@@ -13,6 +15,7 @@ public class SingleShotWeapon implements IWeapon {
     private final String iconPath = "singleshot.png";
     private final String texturePath = "singleshot.png";
     private final String explosionTexturePath = "explosion.png";
+    private final String shootSoundPath = "boom.mp3";
     private final int explosionTextureFrameRows = 6;
     private final int explosionTextureFrameCols = 8;
 
@@ -32,7 +35,7 @@ public class SingleShotWeapon implements IWeapon {
     }
 
     @Override
-    public void shoot(Entity actor, float firePower, World world) {
+    public void shoot(Entity actor, GameData gameData, float firePower, World world) {
         SingleShot ss = new SingleShot();
 
         CannonPart cannonPart = actor.getPart(CannonPart.class);
@@ -48,6 +51,9 @@ public class SingleShotWeapon implements IWeapon {
         ss.add(new DamagePart(4,10));
         ss.add(new TexturePart(this.texturePath));
         ss.add(new ExplosionTexturePart(explosionTextureFrameCols,explosionTextureFrameRows,explosionTexturePath));
+        SoundPart sounds = new SoundPart("boom.mp3","boom.mp3");
+        ss.add(sounds);
+        gameData.getEventManager().addEvent(new SoundEvent(ss,sounds.getShootSoundPath()));
 
         world.addEntity(ss);
     }

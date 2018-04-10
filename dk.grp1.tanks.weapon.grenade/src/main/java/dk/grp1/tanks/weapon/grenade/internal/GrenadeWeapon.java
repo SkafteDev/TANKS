@@ -1,8 +1,10 @@
 package dk.grp1.tanks.weapon.grenade.internal;
 
 import dk.grp1.tanks.common.data.Entity;
+import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.data.parts.*;
+import dk.grp1.tanks.common.events.SoundEvent;
 import dk.grp1.tanks.common.services.IWeapon;
 import dk.grp1.tanks.common.utils.Vector2D;
 
@@ -12,6 +14,8 @@ public class GrenadeWeapon implements IWeapon {
     private final String iconPath = "grenade.png";
     private final String texturePath = "grenade.png";
     private final String explosionTexturePath = "explosion.png";
+    private final String shootSoundPath = "grenadeSound.mp3";
+    private final String explosionSoundPath = "goodNade.mp3";
     private final int explosionTextureFrameRows = 6;
     private final int explosionTextureFrameCols = 8;
 
@@ -31,7 +35,7 @@ public class GrenadeWeapon implements IWeapon {
     }
 
     @Override
-    public void shoot(Entity actor, float firePower, World world) {
+    public void shoot(Entity actor, GameData gameData, float firePower, World world) {
         Grenade grenade = new Grenade();
 
         CannonPart cannonPart = actor.getPart(CannonPart.class);
@@ -48,6 +52,9 @@ public class GrenadeWeapon implements IWeapon {
         grenade.add(new DamagePart(7,25));
         grenade.add(new TexturePart(this.texturePath));
         grenade.add(new ExplosionTexturePart(explosionTextureFrameCols,explosionTextureFrameRows,explosionTexturePath));
+        SoundPart sounds = new SoundPart(shootSoundPath, explosionSoundPath);
+        grenade.add(sounds);
+        gameData.getEventManager().addEvent(new SoundEvent(grenade, sounds.getShootSoundPath()));
         world.addEntity(grenade);
     }
 }
