@@ -9,7 +9,7 @@ import dk.grp1.tanks.common.utils.Vector2D;
 public class BigShotWeapon implements IWeapon {
 
     private final String name = "Big Shot";
-    private final String description = "Fires a single shot";
+    private final String description = "Fires a single big shot";
     private final String iconPath = "bigshot.png";
     private final String texturePath = "bigshot.png";
     private final String explosionTexturePath = "explosion.png";
@@ -29,6 +29,11 @@ public class BigShotWeapon implements IWeapon {
     @Override
     public String getIconPath() {
         return iconPath;
+    }
+
+    @Override
+    public String getShootSoundPath() {
+        return null;
     }
 
     @Override

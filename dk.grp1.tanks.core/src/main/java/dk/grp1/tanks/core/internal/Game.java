@@ -13,6 +13,7 @@ import com.badlogic.gdx.utils.FloatArray;
 import com.badlogic.gdx.utils.ShortArray;
 import dk.grp1.tanks.common.data.*;
 import dk.grp1.tanks.common.data.parts.*;
+import dk.grp1.tanks.common.eventManager.IEventCallback;
 import dk.grp1.tanks.common.events.SoundEvent;
 import dk.grp1.tanks.common.services.*;
 import dk.grp1.tanks.common.eventManager.events.Event;
@@ -121,6 +122,8 @@ public class Game implements ApplicationListener, IEventCallback {
         state = GameState.running;
 
         gameData.getEventManager().register(ExplosionAnimationEvent.class,this);
+        gameData.getEventManager().register(SoundEvent.class,this);
+
 
     }
 
@@ -205,24 +208,18 @@ public class Game implements ApplicationListener, IEventCallback {
                     restartGame();
                 }
         }
-        playSounds();
 
 
     }
 
-    private void playSounds() {
-        List<Event> soundEvents = gameData.getEvents(SoundEvent.class);
-        for (Event event : soundEvents) {
-            SoundEvent soundEvent = (SoundEvent) event;
-            assetManager.loadSoundAsset(event.getSource().getClass(),soundEvent.getPath(), ".mp3" );
-            Sound sound = assetManager.getSoundAsset(soundEvent.getPath(), ".mp3");
+    private void playSounds(SoundEvent soundEvent) {
+        assetManager.loadSoundAsset(soundEvent.getSource().getClass(),soundEvent.getPath() );
+        Sound sound = assetManager.getSoundAsset(soundEvent.getPath());
 
-            if (sound != null) {
-                System.out.println("Playing sound");
-                float volume = 1.0f;
-                sound.play(volume);
-            }
-            gameData.removeEvent(event);
+        if (sound != null) {
+            System.out.println("Playing sound");
+            float volume = 1.0f;
+            sound.play(volume);
         }
     }
 
@@ -285,6 +282,8 @@ public class Game implements ApplicationListener, IEventCallback {
 
         if (event instanceof ExplosionAnimationEvent){
             processExplosionAnimationEvent(event);
+        }else if(event instanceof SoundEvent){
+            playSounds((SoundEvent) event);
         }
 
     }

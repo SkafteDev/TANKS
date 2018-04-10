@@ -27,16 +27,15 @@ public class CustomAssetManager {
      * Creates a new temporary file from the given Class' ClassLoader and FileName.
      * @param clazz
      * @param fileName
-     * @param fileType The File type of the file. This can be .mp3, .wav, etc.
      * @return
      */
-    private File createTempFileFromBundle(Class clazz, String fileName, String fileType) {
-        InputStream is = clazz.getClassLoader().getResourceAsStream(fileName+fileType);
+    private File createTempFileFromBundle(Class clazz, String fileName) {
+        InputStream is = clazz.getClassLoader().getResourceAsStream(fileName);
         File tempFile = null;
         String filePath = this.localStoragePath;
         try {
-            tempFile = File.createTempFile(fileName, fileType, new File(filePath));
-            tempFile.deleteOnExit(); // Does this even work??
+            tempFile = new File(filePath+"/"+ fileName);
+            System.out.println("Writing temp file to " + tempFile.getAbsolutePath());
 
             try (FileOutputStream fos = new FileOutputStream(tempFile)){
                 byte[] buffer = new byte[8 * 1024];
@@ -49,7 +48,7 @@ public class CustomAssetManager {
             System.out.println("TempFile: " + tempFile.getAbsolutePath());
             // Store the file-name/type and the tempFile-path for later lookup
             // Replacing backslashes with forward-slashes for compatibility issues in LibGDX AssetManager.
-            tempFileMap.put(fileName+fileType, tempFile.getAbsolutePath().replace("\\", "/"));
+            tempFileMap.put(fileName, tempFile.getAbsolutePath().replace("\\", "/"));
 
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -58,11 +57,11 @@ public class CustomAssetManager {
         return tempFile;
     }
 
-    public void loadSoundAsset(Class clazz, String fileName, String fileType) {
-        if(tempFileMap.containsKey(fileName+fileType))
+    public void loadSoundAsset(Class clazz, String fileName) {
+        if(tempFileMap.containsKey(fileName))
             return;
         
-        File assetFile = createTempFileFromBundle(clazz, fileName, fileType);
+        File assetFile = createTempFileFromBundle(clazz, fileName);
 
         assetManager.load(assetFile.getAbsolutePath(), Sound.class);
 
@@ -77,8 +76,8 @@ public class CustomAssetManager {
         }
     }
 
-    public Sound getSoundAsset(String fileName, String fileType) {
-        String tmpFileName = tempFileMap.get(fileName+fileType);
+    public Sound getSoundAsset(String fileName) {
+        String tmpFileName = tempFileMap.get(fileName);
 
 
         Sound sound = null;
@@ -88,7 +87,7 @@ public class CustomAssetManager {
             sound = assetManager.get(tmpFileName);
 
         } catch (NullPointerException ex) {
-            System.out.println("The sound asset: " + fileName+fileType + ", could not be found.");
+            System.out.println("The sound asset: " + fileName + ", could not be found.");
         }
 
         return sound;

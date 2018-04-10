@@ -31,6 +31,11 @@ public class NukeWeapon implements IWeapon {
         return iconPath;
     }
 
+    @Override
+    public String getShootSoundPath() {
+        return null;
+    }
+
 
     @Override
     public void shoot(Entity actor, float firePower, World world) {

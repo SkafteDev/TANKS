@@ -13,6 +13,7 @@ public class SingleShotWeapon implements IWeapon {
     private final String iconPath = "singleshot.png";
     private final String texturePath = "singleshot.png";
     private final String explosionTexturePath = "explosion.png";
+    private final String shootSoundPath = "boom.mp3";
     private final int explosionTextureFrameRows = 6;
     private final int explosionTextureFrameCols = 8;
 
@@ -29,6 +30,11 @@ public class SingleShotWeapon implements IWeapon {
     @Override
     public String getIconPath() {
         return iconPath;
+    }
+
+    @Override
+    public String getShootSoundPath() {
+        return shootSoundPath;
     }
 
     @Override

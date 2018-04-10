@@ -31,6 +31,11 @@ public class GrenadeWeapon implements IWeapon {
     }
 
     @Override
+    public String getShootSoundPath() {
+        return null;
+    }
+
+    @Override
     public void shoot(Entity actor, float firePower, World world) {
         Grenade grenade = new Grenade();
 
