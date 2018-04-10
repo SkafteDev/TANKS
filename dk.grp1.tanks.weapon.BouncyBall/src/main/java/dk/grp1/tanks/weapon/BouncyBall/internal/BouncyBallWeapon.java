@@ -4,8 +4,10 @@ import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.data.parts.*;
+import dk.grp1.tanks.common.events.SoundEvent;
 import dk.grp1.tanks.common.services.IWeapon;
 import dk.grp1.tanks.common.utils.Vector2D;
+import dk.grp1.tanks.weapon.WeaponSoundPart;
 
 public class BouncyBallWeapon implements IWeapon{
 
@@ -13,7 +15,6 @@ public class BouncyBallWeapon implements IWeapon{
     private final String description = "Shoots a bouncing ball";
     private final String iconPath = "bouncy_ball.png";
     private final String texturePath = "bouncy_ball.png";
-    private final String shootSoundPath = "boom.mp3";
     private final String explosionTexturePath = "explosionWhite.png";
     private final int explosionTextureFrameRows = 3;
     private final int explosionTextureFrameCols = 7;
@@ -33,10 +34,7 @@ public class BouncyBallWeapon implements IWeapon{
         return iconPath;
     }
 
-    @Override
-    public String getShootSoundPath() {
-        return shootSoundPath;
-    }
+
 
     @Override
     public void shoot(Entity actor, GameData gameData, float firePower, World world) {
@@ -56,6 +54,9 @@ public class BouncyBallWeapon implements IWeapon{
         BouncyBall.add(new DamagePart(5,10));
         BouncyBall.add(new TexturePart(this.texturePath));
         BouncyBall.add(new ExplosionTexturePart(explosionTextureFrameCols,explosionTextureFrameRows,explosionTexturePath));
+        WeaponSoundPart sounds = new  WeaponSoundPart("boom.mp3","boing.mp3");
+        BouncyBall.add(sounds);
+        gameData.getEventManager().addEvent(new SoundEvent(BouncyBall,sounds.getShootSoundPath()));
 
 
         world.addEntity(BouncyBall);

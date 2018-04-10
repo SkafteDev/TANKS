@@ -8,6 +8,5 @@ public interface IWeapon {
     String getName();
     String getDescription();
     String getIconPath();
-    String getShootSoundPath();
     void shoot(Entity actor, GameData gameData, float firePower, World world);
 }

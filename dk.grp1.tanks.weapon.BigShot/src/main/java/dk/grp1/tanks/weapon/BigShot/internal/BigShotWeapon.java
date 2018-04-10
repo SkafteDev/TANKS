@@ -4,8 +4,10 @@ import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.data.parts.*;
+import dk.grp1.tanks.common.events.SoundEvent;
 import dk.grp1.tanks.common.services.IWeapon;
 import dk.grp1.tanks.common.utils.Vector2D;
+import dk.grp1.tanks.weapon.WeaponSoundPart;
 
 public class BigShotWeapon implements IWeapon {
 
@@ -33,10 +35,6 @@ public class BigShotWeapon implements IWeapon {
         return iconPath;
     }
 
-    @Override
-    public String getShootSoundPath() {
-        return shootSoundPath;
-    }
 
     @Override
     public void shoot(Entity actor, GameData gameData, float firePower, World world) {
@@ -55,7 +53,9 @@ public class BigShotWeapon implements IWeapon {
         bs.add(new DamagePart(10,20));
         bs.add(new TexturePart(this.texturePath));
         bs.add(new ExplosionTexturePart(explosionTextureFrameCols,explosionTextureFrameRows,explosionTexturePath));
-
+        WeaponSoundPart sounds = new  WeaponSoundPart("boom.mp3","party_horn.mp3");
+        bs.add(sounds);
+        gameData.getEventManager().addEvent(new SoundEvent(bs,sounds.getShootSoundPath()));
         world.addEntity(bs);
     }
 }

@@ -13,6 +13,7 @@ public class MadCatWeapon implements IWeapon {
     private final String iconPath = "mad_cat.png";
     private final String texturePath = "mad_cat.png";
     private final String explosionTexturePath = "explosionWhite.png";
+    private final String shootSoundPath = "boom.mp3";
     private final int explosionTextureFrameRows = 3;
     private final int explosionTextureFrameCols = 7;
 
@@ -29,6 +30,11 @@ public class MadCatWeapon implements IWeapon {
     @Override
     public String getIconPath() {
         return iconPath;
+    }
+
+    @Override
+    public String getShootSoundPath() {
+        return shootSoundPath;
     }
 
     @Override
