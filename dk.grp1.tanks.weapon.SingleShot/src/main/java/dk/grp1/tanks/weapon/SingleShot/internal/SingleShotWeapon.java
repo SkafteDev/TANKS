@@ -34,7 +34,6 @@ public class SingleShotWeapon implements IWeapon {
         return iconPath;
     }
 
-
     @Override
     public void shoot(Entity actor, GameData gameData, float firePower, World world) {
         SingleShot ss = new SingleShot();

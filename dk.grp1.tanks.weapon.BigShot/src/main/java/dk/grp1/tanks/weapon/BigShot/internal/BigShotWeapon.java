@@ -35,7 +35,6 @@ public class BigShotWeapon implements IWeapon {
         return iconPath;
     }
 
-
     @Override
     public void shoot(Entity actor, GameData gameData, float firePower, World world) {
         BigShot bs = new BigShot();

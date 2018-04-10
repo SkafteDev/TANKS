@@ -33,8 +33,6 @@ public class MadCatWeapon implements IWeapon {
         return iconPath;
     }
 
-
-
     @Override
     public void shoot(Entity actor, GameData gameData, float firePower, World world) {
         MadCat cat = new MadCat();

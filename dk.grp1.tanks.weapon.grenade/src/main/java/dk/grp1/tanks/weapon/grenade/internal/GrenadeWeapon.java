@@ -33,7 +33,6 @@ public class GrenadeWeapon implements IWeapon {
         return iconPath;
     }
 
-
     @Override
     public void shoot(Entity actor, GameData gameData, float firePower, World world) {
         Grenade grenade = new Grenade();
