@@ -1,0 +1,7 @@
+unload & Load af moduler specifikt weapon.			Jonas Christian		DONE
+UI fix - Ryk navn på våben ned til ikon.			Barrow			DONE
+Lyd til spillet.						Vic & Barrow		IN PROGRESS
+Eventsystem. - 							Vinge Daniel		IN PROGRESS
+Enemy ændringer. Vent før den skyder. Skift Våben. Bevægelse.	Vic			DONE
+Rebalancere hp  og våben dmg. 					Jonas Christian		DONE
+Firepower stiger og derefter falder.				Barrow			DONE

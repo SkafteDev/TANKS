@@ -8,9 +8,10 @@ import dk.grp1.tanks.common.services.IWeapon;
 
 public class DeadWeightPlugin implements IGamePluginService {
 
+    private final IWeapon weapon = new DeadWeightWeapon();
+
     @Override
     public void start(World world, GameData gameData) {
-        IWeapon weapon = new DeadWeightWeapon();
         gameData.addWeapon(weapon);
     }
 
@@ -19,5 +20,7 @@ public class DeadWeightPlugin implements IGamePluginService {
         for (Entity entity: world.getEntities(DeadWeight.class)){
             world.removeEntity(entity);
         }
+
+        gameData.removeWeapon(weapon);
     }
 }

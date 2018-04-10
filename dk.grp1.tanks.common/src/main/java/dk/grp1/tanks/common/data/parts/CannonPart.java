@@ -24,6 +24,7 @@ public class CannonPart implements IEntityPart{
     private float pi = 3.1415f;
     private float previousFirepower;
     private float previousAngle;
+    private boolean increase = true;
 
     public CannonPart(float jointX, float jointY, float direction, float width, float length, String texturePath) {
         this.jointX = jointX;
@@ -81,10 +82,21 @@ public class CannonPart implements IEntityPart{
 
     public float calculateFirepower(GameData gameData){
         float time = gameData.getDelta();
-        firepower = (firepower + (time * 65/100 * maxFirepower)) % maxFirepower;
+
+        if (increase) {
+            firepower = (firepower + (time * 65 / 100 * maxFirepower));
+        } else {
+            firepower = (firepower - (time * 65 / 100 * maxFirepower));
+        }
 
         if (1 < firepower/maxFirepower) { //percentage of max firepower
             firepower = maxFirepower;
+            increase = false;
+        }
+
+        if (0 >= firepower/maxFirepower) {
+            firepower = 0;
+            increase = true;
         }
 
         return this.firepower;

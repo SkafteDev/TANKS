@@ -4,6 +4,7 @@ import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.services.IGamePluginService;
+import dk.grp1.tanks.common.services.IWeapon;
 import dk.grp1.tanks.weapon.Projectile;
 
 public class WeaponPlugin implements IGamePluginService {
@@ -20,5 +21,6 @@ public class WeaponPlugin implements IGamePluginService {
             world.removeEntity(e);
 
         }
+
     }
 }

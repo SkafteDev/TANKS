@@ -27,7 +27,6 @@ public class OnScreenText implements IGuiProcessingService {
         for (Entity entity : world.getEntities()) {
             InventoryPart inventoryPart = entity.getPart(InventoryPart.class);
             if (inventoryPart != null) {
-                weaponText(entity, inventoryPart, batch);
                 angleText(entity, batch);
                 firepowerText(entity, batch);
             }
@@ -66,24 +65,6 @@ public class OnScreenText implements IGuiProcessingService {
                 cannonPart.getJointY() - 20);
         batch.end();
 
-    }
-
-    private void weaponText(Entity entity, InventoryPart inventoryPart, SpriteBatch batch) {
-        String weaponText;
-
-        IWeapon weapon = inventoryPart.getCurrentWeapon();
-        if (weapon != null) {
-            weaponText = weapon.getName();
-        } else {
-            weaponText = "None";
-        }
-        font.getData().scaleX = 0.5f;
-        font.getData().scaleY = 0.5f;
-        batch.begin();
-        CirclePart circlePart = entity.getPart(CirclePart.class);
-        textBounds = font.getBounds(weaponText);
-        font.draw(batch, weaponText, circlePart.getCentreX() - textBounds.width / 2, circlePart.getCentreY() - 10);
-        batch.end();
     }
 
 
