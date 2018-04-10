@@ -69,6 +69,7 @@
     <module>dk.grp1.tanks.roundendsystem</module>
     <module>dk.grp1.tanks.weapon.nuke</module>
     <module>dk.grp1.tanks.commands</module>
+    <module>dk.grp1.tanks.weapon.MadCat</module>
   </modules>
 
   <build>
