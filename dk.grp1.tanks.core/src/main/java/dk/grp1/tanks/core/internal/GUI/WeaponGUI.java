@@ -61,23 +61,29 @@ public class WeaponGUI implements IGuiProcessingService {
 
     private void drawWeaponIcon(Entity entity, InventoryPart inventoryPart, SpriteBatch spriteBatch){
 
-            String path = inventoryPart.getCurrentWeapon().getIconPath();
-            if (!textureMap.containsKey(path)) {
-                InputStream input = inventoryPart.getCurrentWeapon().getClass().getClassLoader().getResourceAsStream(path);
-                try {
-                    Gdx2DPixmap gmp = new Gdx2DPixmap(input, Gdx2DPixmap.GDX2D_FORMAT_RGBA8888);
-                    Pixmap pixmap = new Pixmap(gmp);
-                    textureMap.put(path, new Texture(pixmap));
-                    pixmap.dispose();
-                    input.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+        IWeapon weapon = inventoryPart.getCurrentWeapon();
+        if (weapon == null) {
+            return;
+        }
+
+
+        String path = weapon.getIconPath();
+        if (!textureMap.containsKey(path)) {
+            InputStream input = inventoryPart.getCurrentWeapon().getClass().getClassLoader().getResourceAsStream(path);
+            try {
+                Gdx2DPixmap gmp = new Gdx2DPixmap(input, Gdx2DPixmap.GDX2D_FORMAT_RGBA8888);
+                Pixmap pixmap = new Pixmap(gmp);
+                textureMap.put(path, new Texture(pixmap));
+                pixmap.dispose();
+                input.close();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
+        }
 
 
-            spriteBatch.begin();
-            Texture t = textureMap.get(path);
+        spriteBatch.begin();
+        Texture t = textureMap.get(path);
 
             PositionPart positionPart = entity.getPart(PositionPart.class);
             spriteBatch.draw(t, positionPart.getX() + weaponIconWidth/2, textYvalue-weaponIconHeight/8,

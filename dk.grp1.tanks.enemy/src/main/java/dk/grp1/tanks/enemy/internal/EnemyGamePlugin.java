@@ -32,8 +32,8 @@ public class EnemyGamePlugin implements IGamePluginService {
         enemy.add(new PhysicsPart(5000f,-62f));
         enemy.add(new ControlPart(200));
         LifePart lifePart = new LifePart();
-        lifePart.setMaxHP(5);
-        lifePart.setCurrentHP(5);
+        lifePart.setMaxHP(100);
+        lifePart.setCurrentHP(100);
         enemy.add(lifePart);
         enemy.add(positionPart);
         enemy.add(new CannonPart(positionPart.getX(), positionPart.getY(), cannonDirection, cannonWidth, cannonLength, "enemyCanon.png"));

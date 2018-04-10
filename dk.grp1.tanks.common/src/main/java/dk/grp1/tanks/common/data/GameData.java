@@ -97,19 +97,23 @@ public class GameData {
     }
 
     public void addWeapon(IWeapon weapon) {
-        this.gameWeapons.add(weapon);
-        for (IWeaponListener listener : weaponListeners) {
-            listener.weaponAdded(weapon, this);
+        if (weapon != null) {
+            this.gameWeapons.add(weapon);
+            for (IWeaponListener listener : weaponListeners) {
+                listener.weaponAdded(weapon, this);
+            }
+            System.out.println("Weapon added!");
         }
-        System.out.println("Weapon added!");
     }
 
     public void removeWeapon(IWeapon weapon) {
-        this.gameWeapons.remove(weapon);
-        for (IWeaponListener listener : weaponListeners) {
-            listener.weaponRemoved(weapon, this);
+        if (weapon != null) {
+            this.gameWeapons.remove(weapon);
+            for (IWeaponListener listener : weaponListeners) {
+                listener.weaponRemoved(weapon, this);
+            }
+            System.out.println("Weapon removed!");
         }
-        System.out.println("Weapon removed!");
     }
 
     public void addWeaponListener(IWeaponListener listener) {

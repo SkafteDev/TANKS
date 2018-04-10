@@ -1,1 +1,2 @@
 Bundle-Activator: ${bundle.namespace}.internal.NukeActivator
+Bundle-Category: weapon

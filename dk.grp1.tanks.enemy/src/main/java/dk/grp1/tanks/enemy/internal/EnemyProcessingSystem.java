@@ -148,7 +148,7 @@ public class EnemyProcessingSystem implements IEntityProcessingService {
 
         for (Entity entity : world.getEntities()) {
 
-            if (entity != enemy && entity.getPart(ControlPart.class) != null) {
+            if (entity != enemy && entity.getPart(ControlPart.class) != null && inventoryPart.getCurrentWeapon() != null) {
                 PositionPart otherEntityPositionPart = entity.getPart(PositionPart.class);
 
 
@@ -178,7 +178,7 @@ public class EnemyProcessingSystem implements IEntityProcessingService {
 
         for (Entity entity : world.getEntities()) {
 
-            if (entity != enemy && entity.getPart(ControlPart.class) != null) {
+            if (entity != enemy && entity.getPart(ControlPart.class) != null && inventoryPart.getCurrentWeapon() != null) {
                 PositionPart otherEntityPositionPart = entity.getPart(PositionPart.class);
 
 
