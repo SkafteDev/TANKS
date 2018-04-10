@@ -9,14 +9,15 @@ import dk.grp1.tanks.common.eventManager.IEventCallback;
 import dk.grp1.tanks.common.eventManager.events.EndTurnEvent;
 import dk.grp1.tanks.common.eventManager.events.Event;
 import dk.grp1.tanks.common.services.IPostEntityProcessingService;
+import sun.awt.image.ImageWatched;
 
 import java.util.*;
 
 public class TurnPostProcessing implements IPostEntityProcessingService, IEventCallback {
 
-    private TreeSet<TurnPart> turnParts;
     private Boolean shouldEndTurn = false;
     private Entity entityWantsToEndTurn;
+    private int lastTurn = -1;
 
     public TurnPostProcessing() {
 
@@ -24,7 +25,7 @@ public class TurnPostProcessing implements IPostEntityProcessingService, IEventC
 
     @Override
     public void processEvent(Event event) {
-        if (event instanceof EndTurnEvent){
+        if (event instanceof EndTurnEvent) {
             shouldEndTurn = true;
             entityWantsToEndTurn = event.getSource();
         }
@@ -32,52 +33,54 @@ public class TurnPostProcessing implements IPostEntityProcessingService, IEventC
 
     @Override
     public void postProcess(World world, GameData gameData) {
-
-        turnParts = new TreeSet<>(new Comparator<TurnPart>() {
-            @Override
-            public int compare(TurnPart o1, TurnPart o2) {
-                return o1.getMyTurnNumber() - o2.getMyTurnNumber();
-            }
-        });
-
-//        List<Event> events = gameData.getEvents(EndTurnEvent.class);
         if (!shouldEndTurn) {
             return;
         }
-//        if (events.size() > 1) {
-//            throw new Error("You cant end more than one turn each frame.");
-//        }
-//        EndTurnEvent event = (EndTurnEvent) events.get(0);
 
-
+        List<TurnPart> turnParts = new ArrayList<>();
+        Collections.sort(turnParts, new Comparator<TurnPart>() {
+            @Override
+            public int compare(TurnPart turnPart, TurnPart t1) {
+                return turnPart.getMyTurnNumber() - t1.getMyTurnNumber();
+            }
+        });
         for (Entity entity : world.getEntities()) {
             TurnPart turnPart = entity.getPart(TurnPart.class);
             if (turnPart != null) {
                 turnParts.add(turnPart);
             }
         }
+        //If only one turnpart exists, return out as it is not possible to change the turn.
+        if (turnParts.size() == 1) {
+            return;
+        }
 
-
+        //If anything in the world moves, wait for it to finish.
         if (anythingMoves(world)) {
+            setLastTurn(TurnPart.getCurrentTurnNumber());
             TurnPart.setCurrentTurnNumber(-1);
             return;
         }
 
 
-        // Next turn
-        TurnPart eventTurn = entityWantsToEndTurn.getPart(TurnPart.class);
-        if (turnParts.last().equals(eventTurn)) {
-            TurnPart.setCurrentTurnNumber(turnParts.first().getMyTurnNumber());
-            shouldEndTurn = false;
-//            gameData.removeEvent(event);
+        int index = -1;
+
+        for (TurnPart turnPart : turnParts) {
+            if (turnPart.getMyTurnNumber() == getLastTurn()) {
+                index = turnParts.indexOf(turnPart);
+            }
+        }
+        if (index == -1) {
             return;
         }
 
-        int nextturn = turnParts.higher(eventTurn).getMyTurnNumber();
+        int nextIndex = ((index + 1) % turnParts.size());
 
-        TurnPart.setCurrentTurnNumber(nextturn);
+        //Change the turn number to the next indexes turn number
+        TurnPart.setCurrentTurnNumber(turnParts.get(nextIndex).getMyTurnNumber());
         shouldEndTurn = false;
-        return;
+
+
 
     }
 
@@ -92,6 +95,15 @@ public class TurnPostProcessing implements IPostEntityProcessingService, IEventC
         return false;
     }
 
+    private int getLastTurn() {
+        return lastTurn;
+    }
+
+    private void setLastTurn(int lastTurn) {
+        if (lastTurn > -1) {
+            this.lastTurn = lastTurn;
+        }
+    }
 
 
 }

@@ -2,6 +2,7 @@ package dk.grp1.tanks.core.internal;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.*;
@@ -13,11 +14,13 @@ import com.badlogic.gdx.utils.ShortArray;
 import dk.grp1.tanks.common.data.*;
 import dk.grp1.tanks.common.data.parts.*;
 import dk.grp1.tanks.common.eventManager.IEventCallback;
+import dk.grp1.tanks.common.events.SoundEvent;
 import dk.grp1.tanks.common.services.*;
 import dk.grp1.tanks.common.eventManager.events.Event;
 import dk.grp1.tanks.common.eventManager.events.ExplosionAnimationEvent;
 import dk.grp1.tanks.common.utils.Vector2D;
 import dk.grp1.tanks.core.internal.GUI.*;
+import dk.grp1.tanks.core.internal.managers.CustomAssetManager;
 import dk.grp1.tanks.core.internal.managers.GameInputProcessor;
 
 import java.io.IOException;
@@ -54,6 +57,7 @@ public class Game implements ApplicationListener, IEventCallback {
     private PolygonSpriteBatch polySpriteBatch;
     private TextureRegion textureRegion;
 
+    private CustomAssetManager assetManager;
 
     private List<AnimationWrapper> animationsToProcess;
     private Map<String, Animation> animationMap;
@@ -81,12 +85,16 @@ public class Game implements ApplicationListener, IEventCallback {
         new LwjglApplication(this, cfg);
     }
 
-
     public void create() {
+        setupAssetManager();
         setupGame();
     }
 
-    private void restartGame() {
+    private void setupAssetManager() {
+        this.assetManager = new CustomAssetManager(Gdx.files.getLocalStoragePath());
+    }
+
+    private void restartGame(){
         initGame();
         setupGame();
         for (IGamePluginService plugin : serviceLoader.getGamePluginServices()
@@ -114,6 +122,8 @@ public class Game implements ApplicationListener, IEventCallback {
         state = GameState.running;
 
         gameData.getEventManager().register(ExplosionAnimationEvent.class,this);
+        gameData.getEventManager().register(SoundEvent.class,this);
+
 
     }
 
@@ -199,6 +209,18 @@ public class Game implements ApplicationListener, IEventCallback {
                 }
         }
 
+
+    }
+
+    private void playSounds(SoundEvent soundEvent) {
+        assetManager.loadSoundAsset(soundEvent.getSource().getClass(),soundEvent.getPath() );
+        Sound sound = assetManager.getSoundAsset(soundEvent.getSource().getClass(),soundEvent.getPath());
+
+        if (sound != null) {
+            System.out.println("Playing sound");
+            float volume = 1.0f;
+            sound.play(volume);
+        }
     }
 
     private void shakeCamera() {
@@ -260,6 +282,8 @@ public class Game implements ApplicationListener, IEventCallback {
 
         if (event instanceof ExplosionAnimationEvent){
             processExplosionAnimationEvent(event);
+        }else if(event instanceof SoundEvent){
+            playSounds((SoundEvent) event);
         }
 
     }
