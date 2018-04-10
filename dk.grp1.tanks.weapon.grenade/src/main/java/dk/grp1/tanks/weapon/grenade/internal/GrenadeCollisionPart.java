@@ -40,6 +40,9 @@ public class GrenadeCollisionPart extends CollisionPart {
 
         Vector2D d = vector; // quick maths
         Vector2D n = mapNormalVector; // quick maths
+        if (n == null){
+            n = new Vector2D(0,1);
+        }
         float res = Vector2D.dot(d,n) * 2; // quick maths
         n.multiplyWithConstant(res); // quick maths
         d.subtract(n); // quick maths

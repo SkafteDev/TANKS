@@ -59,6 +59,9 @@ public class BouncyBallCollisionPart extends CollisionPart {
 
     public void updateBouncingVector(Vector2D vector) {
         Vector2D n = mapNormalVector; // quick maths
+        if (n == null){
+            n = new Vector2D(0,1);
+        }
         float res = Vector2D.dot(vector, n) * 2; // quick maths
         n.multiplyWithConstant(res); // quick maths
         vector.subtract(n); // quick maths
