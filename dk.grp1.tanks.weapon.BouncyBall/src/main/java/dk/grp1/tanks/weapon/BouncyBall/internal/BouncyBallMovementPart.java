@@ -13,7 +13,6 @@ import dk.grp1.tanks.common.utils.Vector2D;
 public class BouncyBallMovementPart extends MovementPart {
 
 
-
     public BouncyBallMovementPart(Vector2D velocity, float maxSpeed) {
         super(velocity, maxSpeed);
     }
@@ -42,6 +41,27 @@ public class BouncyBallMovementPart extends MovementPart {
             bouncyBallCollisionPart.updateBouncingVector(this.getVelocity());
             this.setVelocity(bouncyBallCollisionPart.getBouncingVector());
             bouncyBallCollisionPart.setHitGameMap(false);
+            DamagePart damagePart = entity.getPart(DamagePart.class);
+
+            ExplosionTexturePart explosionTexturePart = entity.getPart(ExplosionTexturePart.class);
+
+            if (damagePart != null && explosionTexturePart != null) {
+
+                Event explosionEvent = new ExplosionEvent(entity, new Vector2D(positionPart.getX(), positionPart.getY()), damagePart.getExplosionRadius());
+
+                Event mapDestructionEvent = new MapDestructionEvent(entity, new Vector2D(positionPart.getX(), positionPart.getY()), damagePart.getExplosionRadius());
+
+                Event animationEvent = new ExplosionAnimationEvent(entity, new Vector2D(positionPart.getX(), positionPart.getY()), explosionTexturePart, damagePart.getExplosionRadius());
+
+                gameData.getEventManager().addEvent(explosionEvent);
+
+                gameData.getEventManager().addEvent(animationEvent);
+
+                gameData.getEventManager().addEvent(mapDestructionEvent);
+
+
+            }
+
         }
 
         // update pos with velo
@@ -56,6 +76,7 @@ public class BouncyBallMovementPart extends MovementPart {
 
     /**
      * adds a vector to the velocity vector
+     *
      * @param velocity
      */
     private void addVelocity(Vector2D velocity) {
