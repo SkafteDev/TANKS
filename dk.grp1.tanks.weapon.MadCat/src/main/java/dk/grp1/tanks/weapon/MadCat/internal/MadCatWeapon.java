@@ -47,7 +47,7 @@ public class MadCatWeapon implements IWeapon {
         cat.add(new ShapePart());
         cat.add(new CirclePart(cannonCentre.getX(),cannonCentre.getY(),5));
         cat.add(new PhysicsPart(30, -90.82f));
-        cat.add(new CollisionPart(true,0));
+        cat.add(new MadCatCollisionPart(true,0));
         cat.add(new DamagePart(10,20));
         cat.add(new TexturePart(this.texturePath));
         cat.add(new ExplosionTexturePart(explosionTextureFrameCols,explosionTextureFrameRows,explosionTexturePath));
