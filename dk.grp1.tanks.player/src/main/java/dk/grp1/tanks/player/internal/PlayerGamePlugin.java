@@ -45,7 +45,7 @@ public class PlayerGamePlugin implements IGamePluginService {
 
         UIPart uiPart = new UIPart();
 
-        uiPart.addUIElement(IGUIHealthBar);
+       // uiPart.addUIElement(IGUIHealthBar);
 
 
         InventoryPart inventoryPart = new InventoryPart(gameData.getWeapons());

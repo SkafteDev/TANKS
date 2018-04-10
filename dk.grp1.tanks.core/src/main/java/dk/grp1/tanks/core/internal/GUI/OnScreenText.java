@@ -31,9 +31,9 @@ public class OnScreenText implements IGuiProcessingService {
             InventoryPart inventoryPart = entity.getPart(InventoryPart.class);
             if (inventoryPart != null) {
 
-                if (entity instanceof IGUIWeaponText) {
-                    weaponText(entity, inventoryPart, batch);
-                }
+//                if (entity instanceof IGUIWeaponText) {
+//                    weaponText(entity, inventoryPart, batch);
+//                }
                 if (entity instanceof IGUIAngleText) {
                     angleText(entity, batch);
                 }
