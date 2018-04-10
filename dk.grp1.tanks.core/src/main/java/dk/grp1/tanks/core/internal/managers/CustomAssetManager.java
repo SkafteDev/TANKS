@@ -34,7 +34,7 @@ public class CustomAssetManager {
         File tempFile = null;
         String filePath = this.localStoragePath;
         try {
-            tempFile = new File(filePath+"/"+ fileName);
+            tempFile = new File(filePath+"/"+ clazz.getSimpleName()+fileName);
             System.out.println("Writing temp file to " + tempFile.getAbsolutePath());
 
             try (FileOutputStream fos = new FileOutputStream(tempFile)){
@@ -48,7 +48,7 @@ public class CustomAssetManager {
             System.out.println("TempFile: " + tempFile.getAbsolutePath());
             // Store the file-name/type and the tempFile-path for later lookup
             // Replacing backslashes with forward-slashes for compatibility issues in LibGDX AssetManager.
-            tempFileMap.put(fileName, tempFile.getAbsolutePath().replace("\\", "/"));
+            tempFileMap.put(clazz.getSimpleName()+fileName, tempFile.getAbsolutePath().replace("\\", "/"));
 
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -58,7 +58,7 @@ public class CustomAssetManager {
     }
 
     public void loadSoundAsset(Class clazz, String fileName) {
-        if(tempFileMap.containsKey(fileName))
+        if(tempFileMap.containsKey(clazz.getSimpleName()+fileName))
             return;
         
         File assetFile = createTempFileFromBundle(clazz, fileName);
@@ -76,8 +76,8 @@ public class CustomAssetManager {
         }
     }
 
-    public Sound getSoundAsset(String fileName) {
-        String tmpFileName = tempFileMap.get(fileName);
+    public Sound getSoundAsset(Class clazz, String fileName) {
+        String tmpFileName = tempFileMap.get(clazz.getSimpleName()+fileName);
 
 
         Sound sound = null;
