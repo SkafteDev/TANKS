@@ -16,7 +16,7 @@ public class NukeWeapon implements IWeapon {
     private final String texturePath = "nuke.png";
     private final String explosionTexturePath = "explosionWhite.png";
     private final String shootSoundPath = "Nuclear.mp3";
-    private final String explosionSoundPath = "Nuclear.mp3";
+    private final String explosionSoundPath = "nukeExplode.mp3";
     private final int explosionTextureFrameRows = 3;
     private final int explosionTextureFrameCols = 7;
 
