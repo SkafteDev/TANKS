@@ -4,6 +4,7 @@ import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.data.parts.*;
+import dk.grp1.tanks.common.events.SoundEvent;
 import dk.grp1.tanks.common.services.IWeapon;
 import dk.grp1.tanks.common.utils.Vector2D;
 
@@ -50,6 +51,9 @@ public class SingleShotWeapon implements IWeapon {
         ss.add(new DamagePart(4,10));
         ss.add(new TexturePart(this.texturePath));
         ss.add(new ExplosionTexturePart(explosionTextureFrameCols,explosionTextureFrameRows,explosionTexturePath));
+        SoundPart sounds = new SoundPart("boom.mp3","boom.mp3");
+        ss.add(sounds);
+        gameData.getEventManager().addEvent(new SoundEvent(ss,sounds.getShootSoundPath()));
 
         world.addEntity(ss);
     }

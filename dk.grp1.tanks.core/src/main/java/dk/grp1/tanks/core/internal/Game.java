@@ -214,7 +214,7 @@ public class Game implements ApplicationListener, IEventCallback {
 
     private void playSounds(SoundEvent soundEvent) {
         assetManager.loadSoundAsset(soundEvent.getSource().getClass(),soundEvent.getPath() );
-        Sound sound = assetManager.getSoundAsset(soundEvent.getPath());
+        Sound sound = assetManager.getSoundAsset(soundEvent.getSource().getClass(),soundEvent.getPath());
 
         if (sound != null) {
             System.out.println("Playing sound");
