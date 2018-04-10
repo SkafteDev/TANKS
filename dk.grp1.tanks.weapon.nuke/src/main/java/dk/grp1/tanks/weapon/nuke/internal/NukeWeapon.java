@@ -1,6 +1,7 @@
 package dk.grp1.tanks.weapon.nuke.internal;
 
 import dk.grp1.tanks.common.data.Entity;
+import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.data.parts.*;
 import dk.grp1.tanks.common.services.IWeapon;
@@ -38,7 +39,7 @@ public class NukeWeapon implements IWeapon {
 
 
     @Override
-    public void shoot(Entity actor, float firePower, World world) {
+    public void shoot(Entity actor, GameData gameData, float firePower, World world) {
         Projectile nuke = new Nuke();
 
         CannonPart cannonPart = actor.getPart(CannonPart.class);
