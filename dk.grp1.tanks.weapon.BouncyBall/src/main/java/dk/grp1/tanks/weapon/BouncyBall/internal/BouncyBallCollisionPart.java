@@ -35,20 +35,20 @@ public class BouncyBallCollisionPart extends CollisionPart {
         Vector2D mapDirectionVector = world.getGameMap().getDirectionVector(new Vector2D(pos.getX(), pos.getY()));
         this.mapNormalVector = mapDirectionVector.rotate90degrees();
 
-        DamagePart damagePart = entity.getPart(DamagePart.class);
-        ExplosionTexturePart explosionTexturePart = entity.getPart(ExplosionTexturePart.class);
-        PositionPart positionPart = entity.getPart(PositionPart.class);
-
-        if ((this.isHitGameMap()) && positionPart != null && damagePart != null && explosionTexturePart != null) {
-            Event explosionEvent = new ExplosionEvent(entity, new Vector2D(positionPart.getX(), positionPart.getY()), damagePart.getExplosionRadius());
-            Event mapDestructionEvent = new MapDestructionEvent(entity,new Vector2D(positionPart.getX(),positionPart.getY()),damagePart.getExplosionRadius());
-            Event animationEvent = new ExplosionAnimationEvent(entity,new Vector2D(positionPart.getX(),positionPart.getY()),explosionTexturePart,damagePart.getExplosionRadius());
-
-            gameData.getEventManager().addEvent(explosionEvent);
-            gameData.getEventManager().addEvent(animationEvent);
-            gameData.getEventManager().addEvent(mapDestructionEvent);
-
-        }
+//        DamagePart damagePart = entity.getPart(DamagePart.class);
+//        ExplosionTexturePart explosionTexturePart = entity.getPart(ExplosionTexturePart.class);
+//        PositionPart positionPart = entity.getPart(PositionPart.class);
+//
+//        if ((this.isHitGameMap()) && positionPart != null && damagePart != null && explosionTexturePart != null) {
+//            Event explosionEvent = new ExplosionEvent(entity, new Vector2D(positionPart.getX(), positionPart.getY()), damagePart.getExplosionRadius());
+//            Event mapDestructionEvent = new MapDestructionEvent(entity,new Vector2D(positionPart.getX(),positionPart.getY()),damagePart.getExplosionRadius());
+//            Event animationEvent = new ExplosionAnimationEvent(entity,new Vector2D(positionPart.getX(),positionPart.getY()),explosionTexturePart,damagePart.getExplosionRadius());
+//
+//            gameData.getEventManager().addEvent(explosionEvent);
+//            gameData.getEventManager().addEvent(animationEvent);
+//            gameData.getEventManager().addEvent(mapDestructionEvent);
+//
+//        }
 
 
     }
