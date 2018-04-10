@@ -11,6 +11,7 @@ import dk.grp1.tanks.common.eventManager.events.Event;
 import dk.grp1.tanks.common.eventManager.events.ExplosionAnimationEvent;
 import dk.grp1.tanks.common.eventManager.events.ExplosionEvent;
 import dk.grp1.tanks.common.eventManager.events.MapDestructionEvent;
+import dk.grp1.tanks.common.events.SoundEvent;
 import dk.grp1.tanks.common.utils.Vector2D;
 
 public class BouncyBallCollisionPart extends CollisionPart {

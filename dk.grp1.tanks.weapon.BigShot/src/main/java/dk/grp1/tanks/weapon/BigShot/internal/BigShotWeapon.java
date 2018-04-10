@@ -11,6 +11,7 @@ public class BigShotWeapon implements IWeapon {
     private final String name = "Big Shot";
     private final String description = "Fires a single big shot";
     private final String iconPath = "bigshot.png";
+    private final String shootSoundPath= "boom.mp3";
     private final String texturePath = "bigshot.png";
     private final String explosionTexturePath = "explosion.png";
     private final int explosionTextureFrameRows = 6;
@@ -33,7 +34,7 @@ public class BigShotWeapon implements IWeapon {
 
     @Override
     public String getShootSoundPath() {
-        return null;
+        return shootSoundPath;
     }
 
     @Override

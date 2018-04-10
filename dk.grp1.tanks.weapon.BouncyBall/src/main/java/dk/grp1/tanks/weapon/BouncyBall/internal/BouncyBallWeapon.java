@@ -12,7 +12,7 @@ public class BouncyBallWeapon implements IWeapon{
     private final String description = "Shoots a bouncing ball";
     private final String iconPath = "bouncy_ball.png";
     private final String texturePath = "bouncy_ball.png";
-
+    private final String shootSoundPath = "boom.mp3";
     private final String explosionTexturePath = "explosionWhite.png";
     private final int explosionTextureFrameRows = 3;
     private final int explosionTextureFrameCols = 7;
@@ -34,7 +34,7 @@ public class BouncyBallWeapon implements IWeapon{
 
     @Override
     public String getShootSoundPath() {
-        return null;
+        return shootSoundPath;
     }
 
     @Override
