@@ -24,7 +24,7 @@ public class MadCatCollisionPart extends CollisionPart {
 
     @Override
     public void processPart(Entity entity, GameData gameData, World world) {
-        if (isHitGameMap()){
+        if (isHitGameMap() || isHitEntity()){
             world.removeEntity(entity);
             for (Entity cat : createCats(entity)) {
                 world.addEntity(cat);
