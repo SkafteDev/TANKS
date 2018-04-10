@@ -45,7 +45,7 @@ public class SingleShotWeapon implements IWeapon {
         ss.add(new CirclePart(cannonCentre.getX(),cannonCentre.getY(),2));
         ss.add(new PhysicsPart(30, -90.82f));
         ss.add(new CollisionPart(true,0));
-        ss.add(new DamagePart(4,1));
+        ss.add(new DamagePart(4,10));
         ss.add(new TexturePart(this.texturePath));
         ss.add(new ExplosionTexturePart(explosionTextureFrameCols,explosionTextureFrameRows,explosionTexturePath));
 

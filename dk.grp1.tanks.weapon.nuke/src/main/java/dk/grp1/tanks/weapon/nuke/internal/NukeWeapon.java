@@ -46,7 +46,7 @@ public class NukeWeapon implements IWeapon {
         nuke.add(new CirclePart(cannonCentre.getX(),cannonCentre.getY(),4));
         nuke.add(new PhysicsPart(30, -90.82f));
         nuke.add(new CollisionPart(true,0));
-        nuke.add(new DamagePart(50,2));
+        nuke.add(new DamagePart(50,40));
         nuke.add(new TexturePart(this.texturePath));
         nuke.add(new ExplosionTexturePart(explosionTextureFrameCols,explosionTextureFrameRows,explosionTexturePath));
         world.addEntity(nuke);

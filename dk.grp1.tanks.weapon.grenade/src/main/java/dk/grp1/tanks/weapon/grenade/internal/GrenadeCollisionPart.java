@@ -4,14 +4,8 @@ import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.data.parts.CollisionPart;
-import dk.grp1.tanks.common.data.parts.DamagePart;
 import dk.grp1.tanks.common.data.parts.PositionPart;
-import dk.grp1.tanks.common.events.Event;
-import dk.grp1.tanks.common.events.ExplosionEvent;
-import dk.grp1.tanks.common.events.MapDestructionEvent;
 import dk.grp1.tanks.common.utils.Vector2D;
-
-import java.util.Vector;
 
 public class GrenadeCollisionPart extends CollisionPart {
 
