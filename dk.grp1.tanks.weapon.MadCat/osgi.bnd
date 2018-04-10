@@ -1,0 +1,2 @@
+Bundle-Activator: ${bundle.namespace}.internal.MadCatActivator
+Bundle-Category: weapon
