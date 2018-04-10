@@ -12,13 +12,23 @@ import dk.grp1.tanks.common.services.IPostEntityProcessingService;
 
 import java.util.*;
 
-public class TurnPostProcessing implements IPostEntityProcessingService {
+public class TurnPostProcessing implements IPostEntityProcessingService, IEventCallback {
 
     private TreeSet<TurnPart> turnParts;
+    private Boolean shouldEndTurn = false;
+    private Entity entityWantsToEndTurn;
 
     public TurnPostProcessing() {
 
 
+    }
+
+    @Override
+    public void processEvent(Event event) {
+        if (event instanceof EndTurnEvent){
+            shouldEndTurn = true;
+            entityWantsToEndTurn = event.getSource();
+        }
     }
 
     @Override
@@ -31,14 +41,14 @@ public class TurnPostProcessing implements IPostEntityProcessingService {
             }
         });
 
-        List<Event> events = gameData.getEvents(EndTurnEvent.class);
-        if (events.size() == 0) {
+//        List<Event> events = gameData.getEvents(EndTurnEvent.class);
+        if (!shouldEndTurn) {
             return;
         }
-        if (events.size() > 1) {
-            throw new Error("You cant end more than one turn each frame.");
-        }
-        EndTurnEvent event = (EndTurnEvent) events.get(0);
+//        if (events.size() > 1) {
+//            throw new Error("You cant end more than one turn each frame.");
+//        }
+//        EndTurnEvent event = (EndTurnEvent) events.get(0);
 
 
         for (Entity entity : world.getEntities()
@@ -58,18 +68,18 @@ public class TurnPostProcessing implements IPostEntityProcessingService {
 
 
         // Next turn
-        TurnPart eventTurn = event.getSource().getPart(TurnPart.class);
+        TurnPart eventTurn = entityWantsToEndTurn.getPart(TurnPart.class);
         if (turnParts.last().equals(eventTurn)) {
             TurnPart.setCurrentTurnNumber(turnParts.first().getMyTurnNumber());
-            gameData.removeEvent(event);
-
+            shouldEndTurn = false;
+//            gameData.removeEvent(event);
             return;
         }
 
         int nextturn = turnParts.higher(eventTurn).getMyTurnNumber();
 
         TurnPart.setCurrentTurnNumber(nextturn);
-        gameData.removeEvent(event);
+        shouldEndTurn = false;
         return;
 
     }
@@ -84,6 +94,7 @@ public class TurnPostProcessing implements IPostEntityProcessingService {
         }
         return false;
     }
+
 
 
 }

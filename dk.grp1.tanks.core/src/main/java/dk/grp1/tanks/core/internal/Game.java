@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.FloatArray;
 import com.badlogic.gdx.utils.ShortArray;
 import dk.grp1.tanks.common.data.*;
 import dk.grp1.tanks.common.data.parts.*;
+import dk.grp1.tanks.common.eventManager.IEventCallback;
 import dk.grp1.tanks.common.services.*;
 import dk.grp1.tanks.common.eventManager.events.Event;
 import dk.grp1.tanks.common.eventManager.events.ExplosionAnimationEvent;
@@ -29,7 +30,7 @@ import java.util.Map;
 import static com.badlogic.gdx.math.MathUtils.random;
 
 
-public class Game implements ApplicationListener {
+public class Game implements ApplicationListener, IEventCallback {
     private final int WIDTH = 800;
     private final int HEIGHT = 600;
 
@@ -69,7 +70,9 @@ public class Game implements ApplicationListener {
         initGame();
 
 
-        LwjglApplicationConfiguration cfg =  new LwjglApplicationConfiguration();
+
+
+        LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
         cfg.title = "Tanks";
         cfg.width = WIDTH;
         cfg.height = HEIGHT;
@@ -83,22 +86,23 @@ public class Game implements ApplicationListener {
         setupGame();
     }
 
-    private void restartGame(){
+    private void restartGame() {
         initGame();
         setupGame();
-        for (IGamePluginService plugin: serviceLoader.getGamePluginServices()
-             ) {
-            plugin.stop(world,gameData);
+        for (IGamePluginService plugin : serviceLoader.getGamePluginServices()
+                ) {
+            plugin.stop(world, gameData);
 
         }
-        for (IGamePluginService plugin: serviceLoader.getGamePluginServices()
+        for (IGamePluginService plugin : serviceLoader.getGamePluginServices()
                 ) {
             plugin.start(world, gameData);
         }
 
 
     }
-    private void initGame(){
+
+    private void initGame() {
         this.world = new World();
         this.gameData = new GameData();
         gameData.setDisplayHeight(HEIGHT);
@@ -108,6 +112,8 @@ public class Game implements ApplicationListener {
         this.drawImplementations = new ArrayList<>();
         this.animationsToProcess = new ArrayList<>();
         state = GameState.running;
+
+        gameData.getEventManager().register(ExplosionAnimationEvent.class,this);
 
     }
 
@@ -154,9 +160,9 @@ public class Game implements ApplicationListener {
             e.printStackTrace();
         }
         Pixmap pix = new Pixmap(gmp);
-       // Pixmap pix = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
-       // pix.setColor(Color.BLUE);
-       // pix.fill();
+        // Pixmap pix = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+        // pix.setColor(Color.BLUE);
+        // pix.fill();
 
         gameMapTexture = new Texture(pix);
 
@@ -188,7 +194,7 @@ public class Game implements ApplicationListener {
             case notRunning:
                 drawBackGround();
                 drawWinScreen();
-                if(gameData.getKeys().isPressed(GameKeys.RESTART)){
+                if (gameData.getKeys().isPressed(GameKeys.RESTART)) {
                     restartGame();
                 }
         }
@@ -249,6 +255,15 @@ public class Game implements ApplicationListener {
         spriteBatch.dispose();
     }
 
+    @Override
+    public void processEvent(Event event) {
+
+        if (event instanceof ExplosionAnimationEvent){
+            processExplosionAnimationEvent(event);
+        }
+
+    }
+
     private void update() {
         for (IEntityProcessingService processingService : serviceLoader.getEntityProcessingServices()) {
             processingService.process(world, gameData);
@@ -262,22 +277,7 @@ public class Game implements ApplicationListener {
             postEntityProcessingService.postProcess(world, gameData);
         }
 
-        for (Event event : gameData.getEvents(ExplosionAnimationEvent.class)) {
-            ExplosionAnimationEvent explosionAnimationEvent = (ExplosionAnimationEvent) event;
-            ExplosionTexturePart explosionTexturePart = explosionAnimationEvent.getExplosionTexturePart();
-            AnimationWrapper animationWrapper = new AnimationWrapper(explosionAnimationEvent.getPointOfExplosion(),
-                    explosionTexturePart.getSrcPath(),
-                    explosionAnimationEvent.getSource(),
-                    explosionTexturePart.getFrameCols(),
-                    explosionTexturePart.getFrameRows(),
-                    explosionAnimationEvent.getExplosionRadius()
-            );
-            shakeConfig(explosionAnimationEvent.getExplosionRadius() * 5, 1000f);
-            animationsToProcess.add(animationWrapper);
-            gameData.removeEvent(event);
-        }
-        for (IRoundEndService service : serviceLoader.getRoundEndServices()
-                ) {
+        for (IRoundEndService service : serviceLoader.getRoundEndServices()) {
             if (service.isRoundOver(world)) {
                 state = GameState.notRunning;
             }
@@ -285,6 +285,21 @@ public class Game implements ApplicationListener {
 
 
         gameData.getKeys().update();
+
+    }
+
+    private void processExplosionAnimationEvent(Event event) {
+        ExplosionAnimationEvent explosionAnimationEvent = (ExplosionAnimationEvent) event;
+        ExplosionTexturePart explosionTexturePart = explosionAnimationEvent.getExplosionTexturePart();
+        AnimationWrapper animationWrapper = new AnimationWrapper(explosionAnimationEvent.getPointOfExplosion(),
+                explosionTexturePart.getSrcPath(),
+                explosionAnimationEvent.getSource(),
+                explosionTexturePart.getFrameCols(),
+                explosionTexturePart.getFrameRows(),
+                explosionAnimationEvent.getExplosionRadius()
+        );
+        shakeConfig(explosionAnimationEvent.getExplosionRadius() * 5, 1000f);
+        animationsToProcess.add(animationWrapper);
 
     }
 
@@ -537,4 +552,6 @@ public class Game implements ApplicationListener {
     public GameData getGameData() {
         return gameData;
     }
+
+
 }

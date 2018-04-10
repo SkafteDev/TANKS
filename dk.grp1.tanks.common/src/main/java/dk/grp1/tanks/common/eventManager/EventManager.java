@@ -8,7 +8,7 @@ import java.util.HashSet;
 public class EventManager {
 
 
-    private HashMap<Class<? extends Event>,HashSet<IEventCallback>> handlers;
+    private HashMap<Class<? extends Event>, HashSet<IEventCallback>> handlers;
 
 
     public EventManager() {
@@ -17,30 +17,47 @@ public class EventManager {
     }
 
     // Might contain a failure
-    public void register(Class<? extends Event> eventType, IEventCallback callback){
+    public void register(Class<? extends Event> eventType, IEventCallback callback) {
+
+        if (eventType == null || callback == null){
+            throw new Error("CallBack or EventType is null");
+        }
+
         HashSet<IEventCallback> callbackSet = handlers.get(eventType);
-        if (callbackSet == null){
+        if (callbackSet == null) {
             callbackSet = new HashSet<>();
-            handlers.put(eventType,callbackSet);
+            handlers.put(eventType, callbackSet);
         }
 
         callbackSet.add(callback);
 
     }
 
-    public void unRegister(Class<? extends Event> eventType, IEventCallback callback){
-        if (handlers.containsKey(eventType)){
+    public void unRegister(Class<? extends Event> eventType, IEventCallback callback) {
+
+        if (eventType == null || callback == null){
+            throw new Error("CallBack or EventType is null");
+        }
+
+        if (handlers.containsKey(eventType)) {
             HashSet<IEventCallback> callbackSet = handlers.get(eventType);
             callbackSet.remove(callback);
         }
     }
 
-    public <T extends Event> void addEvent(T event){
-        for (IEventCallback callback : this.handlers.get(event.getClass())) {
-            callback.processEvent(event);
+    public <T extends Event> void addEvent(T event) {
+
+        if (event == null){
+            return;
+        }
+
+        if (this.handlers.containsKey(event.getClass())) {
+
+            for (IEventCallback callback : this.handlers.get(event.getClass())) {
+                callback.processEvent(event);
+            }
         }
     }
-
 
 
 }
