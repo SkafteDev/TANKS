@@ -3,6 +3,7 @@ package dk.grp1.tanks.explosionsystem.internal;
 import java.util.Dictionary;
 import java.util.Properties;
 
+import dk.grp1.tanks.common.services.IGamePluginService;
 import dk.grp1.tanks.common.services.IPostEntityProcessingService;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -20,7 +21,8 @@ public final class ExplosionSystemActivator
         throws Exception
     {
         System.out.println( "STARTING dk.grp1.tanks.explosionsystem" );
-        bc.registerService(IPostEntityProcessingService.class.getName(), new ExplosionPostProcessingSystem(), null);
+
+        bc.registerService(IGamePluginService.class.getName(), new ExplosionGamePlugin(), null);
     }
 
     /**

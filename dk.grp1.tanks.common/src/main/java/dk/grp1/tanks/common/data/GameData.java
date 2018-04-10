@@ -1,6 +1,7 @@
 package dk.grp1.tanks.common.data;
 
-import dk.grp1.tanks.common.events.Event;
+import dk.grp1.tanks.common.eventManager.EventManager;
+import dk.grp1.tanks.common.eventManager.events.Event;
 import dk.grp1.tanks.common.services.IWeapon;
 import dk.grp1.tanks.common.services.IWeaponListener;
 
@@ -19,22 +20,32 @@ public class GameData {
     private float delta;
     private int displayWidth;
     private int displayHeight;
+    private Boolean shouldEndTurn = false;
     private final GameKeys keys = new GameKeys();
-    private List<Event> events = new CopyOnWriteArrayList<>();
+//    private List<Event> events = new CopyOnWriteArrayList<>();
     private List<IWeapon> gameWeapons = new ArrayList<>();
     private List<IWeaponListener> weaponListeners = new ArrayList<>();
+    private EventManager eventManager = new EventManager();
 
-    public void addEvent(Event e) {
-        events.add(e);
+    public Boolean shouldEndTurn() {
+        return shouldEndTurn;
     }
 
-    public void removeEvent(Event e) {
-        events.remove(e);
+    public void setShouldEndTurn(Boolean shouldEndTurn) {
+        this.shouldEndTurn = shouldEndTurn;
     }
 
-    public List<Event> getEvents() {
-        return events;
-    }
+    //    public void addEvent(Event e) {
+//        events.add(e);
+//    }
+//
+//    public void removeEvent(Event e) {
+//        events.remove(e);
+//    }
+//
+//    public List<Event> getEvents() {
+//        return events;
+//    }
 
     public GameKeys getKeys() {
         return keys;
@@ -68,33 +79,38 @@ public class GameData {
         this.displayHeight = height;
     }
 
-//        public int getDisplayHeight() {
+    public EventManager getEventManager() {
+        return eventManager;
+    }
+
+
+    //        public int getDisplayHeight() {
 //            return displayHeight;
 //        }
 
-    public <E extends Event> List<Event> getEvents(Class<E> type, String sourceID) {
-        List<Event> r = new ArrayList<>();
-        for (Event event : events) {
-            if (event.getClass().equals(type) && event.getSource().getID().equals(sourceID)) {
-                r.add(event);
-            }
-        }
-
-        return r;
-    }
-
-    public <E extends Event> List<Event> getEvents(Class<E>... types) {
-        List<Event> r = new ArrayList<>();
-        for (Event event : events) {
-            for (Class<E> eventType : types) {
-                if (eventType.isInstance(event)) {
-                    r.add(event);
-                }
-            }
-        }
-
-        return r;
-    }
+//    public <E extends Event> List<Event> getEvents(Class<E> type, String sourceID) {
+//        List<Event> r = new ArrayList<>();
+//        for (Event event : events) {
+//            if (event.getClass().equals(type) && event.getSource().getID().equals(sourceID)) {
+//                r.add(event);
+//            }
+//        }
+//
+//        return r;
+//    }
+//
+//    public <E extends Event> List<Event> getEvents(Class<E>... types) {
+//        List<Event> r = new ArrayList<>();
+//        for (Event event : events) {
+//            for (Class<E> eventType : types) {
+//                if (eventType.isInstance(event)) {
+//                    r.add(event);
+//                }
+//            }
+//        }
+//
+//        return r;
+//    }
 
     public void addWeapon(IWeapon weapon) {
         this.gameWeapons.add(weapon);

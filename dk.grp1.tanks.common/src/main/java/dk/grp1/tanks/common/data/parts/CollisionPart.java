@@ -3,13 +3,11 @@ package dk.grp1.tanks.common.data.parts;
 import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.World;
-import dk.grp1.tanks.common.events.Event;
-import dk.grp1.tanks.common.events.ExplosionAnimationEvent;
-import dk.grp1.tanks.common.events.ExplosionEvent;
-import dk.grp1.tanks.common.events.MapDestructionEvent;
+import dk.grp1.tanks.common.eventManager.events.Event;
+import dk.grp1.tanks.common.eventManager.events.ExplosionAnimationEvent;
+import dk.grp1.tanks.common.eventManager.events.ExplosionEvent;
+import dk.grp1.tanks.common.eventManager.events.MapDestructionEvent;
 import dk.grp1.tanks.common.utils.Vector2D;
-import javafx.geometry.Pos;
-import sun.font.CompositeStrike;
 
 /**
  * Created by danie on 12-03-2018.
@@ -47,9 +45,10 @@ public class CollisionPart implements IEntityPart {
             Event animationEvent = new ExplosionAnimationEvent(entity, new Vector2D(positionPart.getX(), positionPart.getY()), explosionTexturePart, damagePart.getExplosionRadius());
             Event explosionEvent = new ExplosionEvent(entity, new Vector2D(positionPart.getX(), positionPart.getY()), damagePart.getExplosionRadius());
             Event mapDestructionEvent = new MapDestructionEvent(entity, new Vector2D(positionPart.getX(), positionPart.getY()), damagePart.getExplosionRadius());
-            gameData.addEvent(animationEvent);
-            gameData.addEvent(explosionEvent);
-            gameData.addEvent(mapDestructionEvent);
+
+            gameData.getEventManager().addEvent(animationEvent);
+            gameData.getEventManager().addEvent(explosionEvent);
+            gameData.getEventManager().addEvent(mapDestructionEvent);
             world.removeEntity(entity);
         } else if(this.isHitGameMap() && positionPart != null && circlePart != null && world.getGameMap().getHeight(new Vector2D(positionPart.getX(),positionPart.getY()))-2f > positionPart.getY()-circlePart.getRadius()){
             positionPart.setY(positionPart.getY()+3f);

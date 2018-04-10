@@ -4,6 +4,8 @@ import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.GameMap;
 import dk.grp1.tanks.common.data.IGameMapFunction;
 import dk.grp1.tanks.common.data.World;
+import dk.grp1.tanks.common.eventManager.IEventCallback;
+import dk.grp1.tanks.common.eventManager.events.MapDestructionEvent;
 import dk.grp1.tanks.common.services.IGamePluginService;
 
 import java.util.Random;
@@ -11,11 +13,13 @@ import java.util.Random;
 public class GameMapPlugin implements IGamePluginService {
     private final float BOTTOMBOUNDARY = 30f;
     private final float TOPBOUNDARY = 400f;
-
+    private IEventCallback eventCallback;
 
     @Override
     public void start(World world, GameData gameData) {
         world.setGameMap(createNewGameMap(gameData));
+        eventCallback =  new GameMapProcessing(gameData,world);
+        gameData.getEventManager().register(MapDestructionEvent.class, eventCallback);
         System.out.println("Created a new game map");
     }
 
@@ -29,19 +33,8 @@ public class GameMapPlugin implements IGamePluginService {
     private GameMap createNewGameMap(GameData gameData) {
         GameMap map = new GameMap(gameData.getGameWidth(), gameData.getGameHeight());
         //Generate map functions
-        //TODO: Generate random map, based on given list of random functions.
-        //IGameMapFunction gameMapFunction = new GameMapSin(100f, (1 / 66f), 0, gameData.getGameHeight() / 3f, 0, gameData.getGameWidth() / 2 + 30);
-        //IGameMapFunction gameMapFunction2 = new GameMapLinear(0f, gameData.getGameWidth() / 2 + 30, gameData.getGameWidth() / 2 + 130, gameMapFunction);
-        //IGameMapFunction gameMapFunction3 = new GameMapLinear(1f, gameData.getGameWidth() / 2 + 130, gameData.getGameWidth() / 2 + 250, gameMapFunction2);
-        //IGameMapFunction gameMapFunction4 = new GameMapLinear(0f, gameMapFunction3.getEndX(), gameData.getGameWidth(), gameMapFunction3);
         generateRandomMap(map, gameData);
-        //map.addGameMapFunction(gameMapFunction);
-        //map.addGameMapFunction(gameMapFunction3);
-        //map.addGameMapFunction(gameMapFunction2);
-        //map.addGameMapFunction(gameMapFunction4);
 
-        //IGameMapFunction function = new GameMapLinear(0,100,0,gameData.getGameWidth());
-        //map.addGameMapFunction(function);
         return map;
     }
 
@@ -50,7 +43,7 @@ public class GameMapPlugin implements IGamePluginService {
         int amountOfFunctions = random.nextInt(10); //Prevent 0 functions
         float mapFunctionInterval = (gameData.getGameWidth() / amountOfFunctions);
         //Pick the first function randomly
-        System.out.println("Amount of functions: " + amountOfFunctions + " Map function interval: " + mapFunctionInterval);
+        //System.out.println("Amount of functions: " + amountOfFunctions + " Map function interval: " + mapFunctionInterval);
         IGameMapFunction predecessor = generateRandomFirstFunction(gameData, mapFunctionInterval);
         map.addGameMapFunction(predecessor);
         for (int i = 0; i <= amountOfFunctions; i++) {
@@ -84,6 +77,7 @@ public class GameMapPlugin implements IGamePluginService {
     @Override
     public void stop(World world, GameData gameData) {
         System.out.println("Map stopped");
+        gameData.getEventManager().unRegister(MapDestructionEvent.class, eventCallback);
         world.setGameMap(null);
     }
 }

@@ -4,23 +4,38 @@ import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.GameMap;
 import dk.grp1.tanks.common.data.IGameMapFunction;
 import dk.grp1.tanks.common.data.World;
-import dk.grp1.tanks.common.events.Event;
-import dk.grp1.tanks.common.events.MapDestructionEvent;
+import dk.grp1.tanks.common.eventManager.IEventCallback;
+import dk.grp1.tanks.common.eventManager.events.Event;
+import dk.grp1.tanks.common.eventManager.events.MapDestructionEvent;
 import dk.grp1.tanks.common.services.INonEntityProcessingService;
 import dk.grp1.tanks.common.utils.Vector2D;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class GameMapProcessing implements INonEntityProcessingService {
+public class GameMapProcessing implements IEventCallback {
+    private final GameData gameData;
+    private final World world;
     private  List<IGameMapFunction> functionsToRemove = new ArrayList<>();
+
+    public GameMapProcessing(GameData gameData, World world) {
+        this.gameData = gameData;
+        this.world = world;
+    }
+
+//    @Override
+//    public void process(World world, GameData gameData) {
+//        for (Event event : gameData.getEvents(MapDestructionEvent.class)) {
+//            List<Vector2D> intersectionPoints = calculateIntersectionPointsWithMap(event, world);
+//            replacePartsOfMapWithLinearFunctions(intersectionPoints, world, event);
+//            gameData.removeEvent(event);
+//        }
+//    }
+
     @Override
-    public void process(World world, GameData gameData) {
-        for (Event event : gameData.getEvents(MapDestructionEvent.class)) {
-            List<Vector2D> intersectionPoints = calculateIntersectionPointsWithMap(event, world);
-            replacePartsOfMapWithLinearFunctions(intersectionPoints, world, event);
-            gameData.removeEvent(event);
-        }
+    public void processEvent(Event event) {
+        List<Vector2D> intersectionPoints = calculateIntersectionPointsWithMap(event, world);
+        replacePartsOfMapWithLinearFunctions(intersectionPoints, world, event);
     }
 
     /**
@@ -255,5 +270,6 @@ public class GameMapProcessing implements INonEntityProcessingService {
         // TODO: Vi skal overveje om det er korrekt at returnere dette.
         return -1;
     }
+
 
 }
