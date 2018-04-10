@@ -32,7 +32,7 @@ public class EntityCollisionPostProcessingSystem implements IPostEntityProcessin
         CirclePart circlePart2 = entity2.getPart(CirclePart.class);
 
         //no collision if no circle part
-        if (circlePart1 == null || circlePart2 == null){
+        if (circlePart1 == null || circlePart2 == null || entity1.getClass().equals(entity2.getClass())){
             return false;
         }
 
