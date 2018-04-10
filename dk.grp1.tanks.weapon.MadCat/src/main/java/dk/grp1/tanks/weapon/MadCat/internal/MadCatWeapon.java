@@ -1,6 +1,7 @@
 package dk.grp1.tanks.weapon.MadCat.internal;
 
 import dk.grp1.tanks.common.data.Entity;
+import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.data.parts.*;
 import dk.grp1.tanks.common.services.IWeapon;
@@ -32,13 +33,10 @@ public class MadCatWeapon implements IWeapon {
         return iconPath;
     }
 
-    @Override
-    public String getShootSoundPath() {
-        return shootSoundPath;
-    }
+
 
     @Override
-    public void shoot(Entity actor, float firePower, World world) {
+    public void shoot(Entity actor, GameData gameData, float firePower, World world) {
         MadCat cat = new MadCat();
 
         CannonPart cannonPart = actor.getPart(CannonPart.class);

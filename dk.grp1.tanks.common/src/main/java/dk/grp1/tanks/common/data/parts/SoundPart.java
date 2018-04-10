@@ -1,16 +1,16 @@
-package dk.grp1.tanks.weapon;
+package dk.grp1.tanks.common.data.parts;
 
 import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.data.parts.IEntityPart;
 
-public class WeaponSoundPart implements IEntityPart {
+public class SoundPart implements IEntityPart {
 
     private String shootSoundPath;
     private String onHitSoundPath;
 
-    public WeaponSoundPart(String shootSoundPath, String onHitSoundPath){
+    public SoundPart(String shootSoundPath, String onHitSoundPath){
 
         this.shootSoundPath = shootSoundPath;
         this.onHitSoundPath = onHitSoundPath;

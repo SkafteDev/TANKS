@@ -7,6 +7,7 @@ import dk.grp1.tanks.common.eventManager.events.Event;
 import dk.grp1.tanks.common.eventManager.events.ExplosionAnimationEvent;
 import dk.grp1.tanks.common.eventManager.events.ExplosionEvent;
 import dk.grp1.tanks.common.eventManager.events.MapDestructionEvent;
+import dk.grp1.tanks.common.events.SoundEvent;
 import dk.grp1.tanks.common.utils.Vector2D;
 
 /**
@@ -45,10 +46,17 @@ public class CollisionPart implements IEntityPart {
             Event animationEvent = new ExplosionAnimationEvent(entity, new Vector2D(positionPart.getX(), positionPart.getY()), explosionTexturePart, damagePart.getExplosionRadius());
             Event explosionEvent = new ExplosionEvent(entity, new Vector2D(positionPart.getX(), positionPart.getY()), damagePart.getExplosionRadius());
             Event mapDestructionEvent = new MapDestructionEvent(entity, new Vector2D(positionPart.getX(), positionPart.getY()), damagePart.getExplosionRadius());
+            SoundPart soundPart = entity.getPart(SoundPart.class);
+            if(soundPart != null){
+                Event soundEvent = new SoundEvent(entity,soundPart.getOnHitSoundPath());
+                gameData.getEventManager().addEvent(soundEvent);
 
+            }
             gameData.getEventManager().addEvent(animationEvent);
             gameData.getEventManager().addEvent(explosionEvent);
             gameData.getEventManager().addEvent(mapDestructionEvent);
+
+
             world.removeEntity(entity);
         } else if(this.isHitGameMap() && positionPart != null && circlePart != null && world.getGameMap().getHeight(new Vector2D(positionPart.getX(),positionPart.getY()))-2f > positionPart.getY()-circlePart.getRadius()){
             positionPart.setY(positionPart.getY()+3f);

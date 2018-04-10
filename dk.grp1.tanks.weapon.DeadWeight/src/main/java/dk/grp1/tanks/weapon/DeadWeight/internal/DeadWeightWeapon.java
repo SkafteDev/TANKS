@@ -4,10 +4,11 @@ import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.data.parts.*;
+import dk.grp1.tanks.common.events.SoundEvent;
 import dk.grp1.tanks.common.services.IWeapon;
 import dk.grp1.tanks.common.utils.Vector2D;
+import dk.grp1.tanks.common.data.parts.SoundPart;
 
-import javax.naming.ldap.Control;
 import java.util.ArrayList;
 
 public class DeadWeightWeapon implements IWeapon {
@@ -19,6 +20,8 @@ public class DeadWeightWeapon implements IWeapon {
     private final String explosionTexturePath = "explosion.png";
     private final int explosionTextureFrameRows = 6;
     private final int explosionTextureFrameCols = 8;
+
+
 
     @Override
     public String getName() {
@@ -35,10 +38,6 @@ public class DeadWeightWeapon implements IWeapon {
         return this.iconPath;
     }
 
-    @Override
-    public String getShootSoundPath() {
-        return null;
-    }
 
     @Override
     public void shoot(Entity actor, GameData gameData, float firePower, World world) {
@@ -46,7 +45,7 @@ public class DeadWeightWeapon implements IWeapon {
 
         CannonPart cannonPart = actor.getPart(CannonPart.class);
         Vector2D cannonCentre = cannonPart.getMuzzleFaceCentre();
-        dw.add(new PositionPart(cannonCentre.getX(),cannonCentre.getY(), cannonPart.getDirection()));
+        dw.add(new PositionPart(cannonCentre.getX(), cannonCentre.getY(), cannonPart.getDirection()));
         Vector2D accelerationVector = cannonPart.getDirectionVector();
         accelerationVector.multiplyWithConstant(firePower);
 
@@ -54,7 +53,7 @@ public class DeadWeightWeapon implements IWeapon {
         ArrayList<Entity> entities = new ArrayList<>();
         for (Entity e : world.getEntities()) {
             ControlPart controlPart = e.getPart(ControlPart.class);
-            if (controlPart != null){
+            if (controlPart != null) {
                 entities.add(e);
             }
         }
@@ -64,14 +63,19 @@ public class DeadWeightWeapon implements IWeapon {
         dw.add(new DeadWeightMovementPart(accelerationVector, 10000, entities));
 
         dw.add(new ShapePart());
-        dw.add(new CirclePart(cannonCentre.getX(),cannonCentre.getY(),4));
+        dw.add(new CirclePart(cannonCentre.getX(), cannonCentre.getY(), 4));
         dw.add(new PhysicsPart(30, -90.82f));
-        dw.add(new CollisionPart(true,0));
-        dw.add(new DamagePart(5,7));
+        dw.add(new CollisionPart(true, 0));
+        dw.add(new DamagePart(5, 7));
         dw.add(new TexturePart(this.texturePath));
-        dw.add(new ExplosionTexturePart(explosionTextureFrameCols,explosionTextureFrameRows,explosionTexturePath));
+        dw.add(new ExplosionTexturePart(explosionTextureFrameCols, explosionTextureFrameRows, explosionTexturePath));
+
+        SoundPart sounds = new SoundPart("boom.mp3", "decap.mp3");
+        dw.add(sounds);
+        gameData.getEventManager().addEvent(new SoundEvent(dw, sounds.getShootSoundPath()));
 
         world.addEntity(dw);
     }
+
 
 }

@@ -7,7 +7,7 @@ import dk.grp1.tanks.common.data.parts.*;
 import dk.grp1.tanks.common.events.SoundEvent;
 import dk.grp1.tanks.common.services.IWeapon;
 import dk.grp1.tanks.common.utils.Vector2D;
-import dk.grp1.tanks.weapon.WeaponSoundPart;
+import dk.grp1.tanks.common.data.parts.SoundPart;
 
 public class BigShotWeapon implements IWeapon {
 
@@ -53,7 +53,7 @@ public class BigShotWeapon implements IWeapon {
         bs.add(new DamagePart(10,20));
         bs.add(new TexturePart(this.texturePath));
         bs.add(new ExplosionTexturePart(explosionTextureFrameCols,explosionTextureFrameRows,explosionTexturePath));
-        WeaponSoundPart sounds = new  WeaponSoundPart("boom.mp3","party_horn.mp3");
+        SoundPart sounds = new SoundPart("boom.mp3","party_horn.mp3");
         bs.add(sounds);
         gameData.getEventManager().addEvent(new SoundEvent(bs,sounds.getShootSoundPath()));
         world.addEntity(bs);

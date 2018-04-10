@@ -10,7 +10,7 @@ import dk.grp1.tanks.common.eventManager.events.ExplosionEvent;
 import dk.grp1.tanks.common.eventManager.events.MapDestructionEvent;
 import dk.grp1.tanks.common.events.SoundEvent;
 import dk.grp1.tanks.common.utils.Vector2D;
-import dk.grp1.tanks.weapon.WeaponSoundPart;
+import dk.grp1.tanks.common.data.parts.SoundPart;
 
 public class BouncyBallMovementPart extends MovementPart {
 
@@ -55,7 +55,7 @@ public class BouncyBallMovementPart extends MovementPart {
 
                 Event animationEvent = new ExplosionAnimationEvent(entity, new Vector2D(positionPart.getX(), positionPart.getY()), explosionTexturePart, damagePart.getExplosionRadius());
 
-                WeaponSoundPart soundPart = entity.getPart(WeaponSoundPart.class);
+                SoundPart soundPart = entity.getPart(SoundPart.class);
                 if(soundPart != null){
                     Event soundEvent = new SoundEvent(entity,soundPart.getOnHitSoundPath());
                     gameData.getEventManager().addEvent(soundEvent);
