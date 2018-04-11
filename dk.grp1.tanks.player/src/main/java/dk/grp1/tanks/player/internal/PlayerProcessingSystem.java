@@ -6,7 +6,6 @@ import dk.grp1.tanks.common.data.GameKeys;
 import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.data.parts.*;
 import dk.grp1.tanks.common.data.parts.PositionPart;
-import dk.grp1.tanks.common.events.SoundEvent;
 import dk.grp1.tanks.common.services.IEntityProcessingService;
 import dk.grp1.tanks.common.utils.Vector2D;
 
