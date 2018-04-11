@@ -73,6 +73,7 @@
     <module>dk.grp1.tanks.weapon.Airstrike</module>
     <module>dk.grp1.tanks.weapon.boxingglove</module>
     <module>dk.grp1.tanks.pushsystem</module>
+    <module>dk.grp1.tanks.weapon.gravitybomb</module>
   </modules>
 
   <build>
