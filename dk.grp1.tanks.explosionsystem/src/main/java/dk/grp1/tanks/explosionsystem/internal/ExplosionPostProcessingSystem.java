@@ -46,6 +46,10 @@ public class ExplosionPostProcessingSystem implements IPostEntityProcessingServi
         PositionPart positionPart = ent.getPart(PositionPart.class);
         CirclePart circlePart = ent.getPart(CirclePart.class);
 
+        if(circlePart == null) {
+            return false;
+        }
+
         float distX = exEvnt.getPointOfCollision().getX() - positionPart.getX();
         float distY = exEvnt.getPointOfCollision().getY() - positionPart.getY();
         float distance = (float)(Math.sqrt(distX*distX + distY*distY));

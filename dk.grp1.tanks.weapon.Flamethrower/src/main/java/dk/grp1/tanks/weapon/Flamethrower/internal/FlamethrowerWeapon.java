@@ -40,7 +40,7 @@ public class FlamethrowerWeapon implements IWeapon {
         CannonPart cannonPart = actor.getPart(CannonPart.class);
         Vector2D cannonCentre = cannonPart.getMuzzleFaceCentre();
         flamethrower.add(new PositionPart(cannonCentre.getX(),cannonCentre.getY(), cannonPart.getDirection()));
-        flamethrower.add(new CirclePart(cannonCentre.getX(), cannonCentre.getY(), 2));
+        //flamethrower.add(new CirclePart(cannonCentre.getX(), cannonCentre.getY(), 2));
 
         Vector2D accelerationVector = cannonPart.getDirectionVector();
         accelerationVector.multiplyWithConstant(firePower);
