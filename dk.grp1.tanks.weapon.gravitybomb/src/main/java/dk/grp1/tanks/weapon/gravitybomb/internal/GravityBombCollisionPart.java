@@ -4,11 +4,7 @@ import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.data.parts.*;
-import dk.grp1.tanks.common.eventManager.events.Event;
-import dk.grp1.tanks.common.eventManager.events.ExplosionAnimationEvent;
-import dk.grp1.tanks.common.eventManager.events.ExplosionEvent;
-import dk.grp1.tanks.common.eventManager.events.MapDestructionEvent;
-import dk.grp1.tanks.common.events.SoundEvent;
+import dk.grp1.tanks.common.eventManager.events.*;
 import dk.grp1.tanks.common.utils.Vector2D;
 import javafx.geometry.Pos;
 
