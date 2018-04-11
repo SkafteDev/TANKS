@@ -122,11 +122,11 @@ public class EnemyProcessingSystem implements IEntityProcessingService {
                 ctrlPart.setLeft(!goRight);
                 ctrlPart.setRight(goRight);
             }else {
-                if(positionPart.getX() < 10){
+                if(positionPart.getX() < 40){
                     ctrlPart.setRight(true);
                     ctrlPart.setLeft(false);
                 }
-                if(positionPart.getX() > gameData.getGameWidth()-10){
+                if(positionPart.getX() > gameData.getGameWidth()-40){
                     ctrlPart.setRight(false);
                     ctrlPart.setLeft(true);
                 }
