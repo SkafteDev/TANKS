@@ -224,7 +224,6 @@ public class Game implements ApplicationListener, IEventCallback {
         Sound sound = assetManager.getSoundAsset(soundEvent.getSource().getClass(),soundEvent.getPath());
 
         if (sound != null) {
-            System.out.println("Playing sound");
             float volume = 1.0f;
             sound.play(volume);
         }

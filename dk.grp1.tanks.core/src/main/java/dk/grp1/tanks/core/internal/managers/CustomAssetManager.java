@@ -36,7 +36,7 @@ public class CustomAssetManager {
         String filePath = this.localStoragePath;
         try {
             tempFile = new File(filePath+"/"+ clazz.getSimpleName()+fileName);
-            System.out.println("Writing temp file to " + tempFile.getAbsolutePath());
+            //System.out.println("Writing temp file to " + tempFile.getAbsolutePath());
 
             try (FileOutputStream fos = new FileOutputStream(tempFile)){
                 byte[] buffer = new byte[8 * 1024];
@@ -46,7 +46,7 @@ public class CustomAssetManager {
                 }
             }
 
-            System.out.println("TempFile: " + tempFile.getAbsolutePath());
+            //System.out.println("TempFile: " + tempFile.getAbsolutePath());
             // Store the file-name/type and the tempFile-path for later lookup
             // Replacing backslashes with forward-slashes for compatibility issues in LibGDX AssetManager.
             tempFileMap.put(clazz.getSimpleName()+fileName, tempFile.getAbsolutePath().replace("\\", "/"));
@@ -69,11 +69,11 @@ public class CustomAssetManager {
         assetManager.finishLoading();
 
         if (assetManager.isLoaded(assetFile.getAbsolutePath(), Sound.class)) {
-            System.out.println("Loaded sound asset: " + assetFile.getAbsolutePath());
+            //System.out.println("Loaded sound asset: " + assetFile.getAbsolutePath());
         }
 
         for (String ass : assetManager.getAssetNames()) {
-            System.out.println("AssetManager.getAssetNames()" + ass);
+            //System.out.println("AssetManager.getAssetNames()" + ass);
         }
     }
 
@@ -107,11 +107,11 @@ public class CustomAssetManager {
         assetManager.finishLoading();
 
         if (assetManager.isLoaded(assetFile.getAbsolutePath(), Music.class)) {
-            System.out.println("Loaded sound asset: " + assetFile.getAbsolutePath());
+            //System.out.println("Loaded sound asset: " + assetFile.getAbsolutePath());
         }
 
         for (String ass : assetManager.getAssetNames()) {
-            System.out.println("AssetManager.getAssetNames()" + ass);
+            //System.out.println("AssetManager.getAssetNames()" + ass);
         }
     }
 
