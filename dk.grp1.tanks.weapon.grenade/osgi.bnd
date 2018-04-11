@@ -1,0 +1,3 @@
+Bundle-Activator: dk.grp1.tanks.weapon.grenade.internal.GrenadeActivator
+Bundle-Category: weapon
+

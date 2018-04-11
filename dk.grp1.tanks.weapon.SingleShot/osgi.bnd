@@ -1,0 +1,2 @@
+Bundle-Activator: ${bundle.namespace}.internal.SingleShotActivator
+Bundle-Category: weapon
