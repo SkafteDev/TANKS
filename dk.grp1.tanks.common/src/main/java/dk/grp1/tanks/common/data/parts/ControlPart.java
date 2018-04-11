@@ -21,6 +21,7 @@ public class ControlPart implements IEntityPart {
     @Override
     public void processPart(Entity entity, GameData gameData, World world) {
         controlVector = new Vector2D(rotation.getX(),rotation.getY());
+        controlVector.unitVector();
         if (right()) {
             // go right
             controlVector.multiplyWithConstant(speed);
@@ -29,7 +30,7 @@ public class ControlPart implements IEntityPart {
             // go left
             controlVector.multiplyWithConstant(-1*speed);
         }
-        if (!left() && !right()){
+        if (left() == right()){
             controlVector = new Vector2D(0,0);
         }
     }
