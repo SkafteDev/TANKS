@@ -2,6 +2,7 @@ package dk.grp1.tanks.core.internal;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
@@ -92,6 +93,11 @@ public class Game implements ApplicationListener, IEventCallback {
 
     private void setupAssetManager() {
         this.assetManager = new CustomAssetManager(Gdx.files.getLocalStoragePath());
+        assetManager.loadMusicAsset(this.getClass(), "backgroundMusic.wav");
+         Music bgMusic = assetManager.getMusicAsset(this.getClass(),"backgroundMusic.wav");
+         bgMusic.setLooping(true);
+         bgMusic.play();
+
     }
 
     private void restartGame(){
@@ -208,6 +214,7 @@ public class Game implements ApplicationListener, IEventCallback {
                     restartGame();
                 }
         }
+
 
 
     }

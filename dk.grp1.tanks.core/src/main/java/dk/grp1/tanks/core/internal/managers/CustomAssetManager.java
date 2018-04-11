@@ -2,6 +2,7 @@ package dk.grp1.tanks.core.internal.managers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 
 import java.io.File;
@@ -81,6 +82,44 @@ public class CustomAssetManager {
 
 
         Sound sound = null;
+
+        try {
+
+            sound = assetManager.get(tmpFileName);
+
+        } catch (NullPointerException ex) {
+            System.out.println("The sound asset: " + fileName + ", could not be found.");
+        }
+
+        return sound;
+
+        //return Gdx.audio.newSound(Gdx.files.absolute(tmpFileName.getAbsolutePath()));
+    }
+
+    public void loadMusicAsset(Class clazz, String fileName) {
+        if(tempFileMap.containsKey(clazz.getSimpleName()+fileName))
+            return;
+
+        File assetFile = createTempFileFromBundle(clazz, fileName);
+
+        assetManager.load(assetFile.getAbsolutePath(), Music.class);
+
+        assetManager.finishLoading();
+
+        if (assetManager.isLoaded(assetFile.getAbsolutePath(), Music.class)) {
+            System.out.println("Loaded sound asset: " + assetFile.getAbsolutePath());
+        }
+
+        for (String ass : assetManager.getAssetNames()) {
+            System.out.println("AssetManager.getAssetNames()" + ass);
+        }
+    }
+
+    public Music getMusicAsset(Class clazz, String fileName) {
+        String tmpFileName = tempFileMap.get(clazz.getSimpleName()+fileName);
+
+
+        Music sound = null;
 
         try {
 
