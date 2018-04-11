@@ -4,6 +4,7 @@ import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.data.parts.*;
+import dk.grp1.tanks.common.events.SoundEvent;
 import dk.grp1.tanks.common.services.IWeapon;
 import dk.grp1.tanks.common.utils.Vector2D;
 
@@ -13,6 +14,8 @@ public class AirstrikeWeapon implements IWeapon {
     private final String iconPath = "airstrike_bomb.png";
     private final String texturePath = "airstrike_flare.png";
     private final String explosionTexturePath = "explosion.png";
+    private final String shootSoundPath = "FlareSound.mp3";
+    private final String explosionSoundPath = "";
     private final int explosionTextureFrameRows = 6;
     private final int explosionTextureFrameCols = 8;
 
@@ -49,6 +52,9 @@ public class AirstrikeWeapon implements IWeapon {
         airstrike.add(new DamagePart(7,25));
         airstrike.add(new TexturePart(this.texturePath));
         airstrike.add(new ExplosionTexturePart(explosionTextureFrameCols,explosionTextureFrameRows,explosionTexturePath));
+        SoundPart sound = new SoundPart(shootSoundPath, explosionSoundPath);
+        airstrike.add(sound);
+        gameData.getEventManager().addEvent(new SoundEvent(airstrike, shootSoundPath));
         world.addEntity(airstrike);
     }
 }
