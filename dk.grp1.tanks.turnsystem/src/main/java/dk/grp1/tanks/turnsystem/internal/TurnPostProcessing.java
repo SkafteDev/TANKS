@@ -51,7 +51,7 @@ public class TurnPostProcessing implements IPostEntityProcessingService, IEventC
                 return turnPart.getMyTurnNumber() - t1.getMyTurnNumber();
             }
         });
-        
+
         //If only one turnpart exists, return out as it is not possible to change the turn.
         if (turnParts.size() == 1) {
             return;
@@ -71,9 +71,6 @@ public class TurnPostProcessing implements IPostEntityProcessingService, IEventC
             if (turnPart.getMyTurnNumber() == getLastTurn()) {
                 index = turnParts.indexOf(turnPart);
             }
-        }
-        if (index == -1) {
-            return;
         }
 
         int nextIndex = ((index + 1) % turnParts.size());
