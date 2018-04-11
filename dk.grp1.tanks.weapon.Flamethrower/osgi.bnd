@@ -1,0 +1,2 @@
+Bundle-Activator: ${bundle.namespace}.internal.FlamethrowerActivator
+Bundle-Category: weapon

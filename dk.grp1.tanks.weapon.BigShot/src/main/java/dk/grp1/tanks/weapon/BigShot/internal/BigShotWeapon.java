@@ -52,7 +52,7 @@ public class BigShotWeapon implements IWeapon {
         bs.add(new DamagePart(10,20));
         bs.add(new TexturePart(this.texturePath));
         bs.add(new ExplosionTexturePart(explosionTextureFrameCols,explosionTextureFrameRows,explosionTexturePath));
-        SoundPart sounds = new SoundPart("boom.mp3","party_horn.mp3");
+        SoundPart sounds = new SoundPart("boom.mp3","explosion.mp3");
         bs.add(sounds);
         gameData.getEventManager().addEvent(new SoundEvent(bs,sounds.getShootSoundPath()));
         world.addEntity(bs);
