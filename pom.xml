@@ -71,6 +71,7 @@
     <module>dk.grp1.tanks.commands</module>
     <module>dk.grp1.tanks.weapon.MadCat</module>
     <module>dk.grp1.tanks.weapon.Airstrike</module>
+    <module>dk.grp1.tanks.weapon.Flamethrower</module>
   </modules>
 
   <build>
