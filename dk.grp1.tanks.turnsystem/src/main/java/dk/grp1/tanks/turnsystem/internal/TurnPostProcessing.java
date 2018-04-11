@@ -38,18 +38,20 @@ public class TurnPostProcessing implements IPostEntityProcessingService, IEventC
         }
 
         List<TurnPart> turnParts = new ArrayList<>();
-        Collections.sort(turnParts, new Comparator<TurnPart>() {
-            @Override
-            public int compare(TurnPart turnPart, TurnPart t1) {
-                return turnPart.getMyTurnNumber() - t1.getMyTurnNumber();
-            }
-        });
+
         for (Entity entity : world.getEntities()) {
             TurnPart turnPart = entity.getPart(TurnPart.class);
             if (turnPart != null) {
                 turnParts.add(turnPart);
             }
         }
+        Collections.sort(turnParts, new Comparator<TurnPart>() {
+            @Override
+            public int compare(TurnPart turnPart, TurnPart t1) {
+                return turnPart.getMyTurnNumber() - t1.getMyTurnNumber();
+            }
+        });
+        
         //If only one turnpart exists, return out as it is not possible to change the turn.
         if (turnParts.size() == 1) {
             return;
