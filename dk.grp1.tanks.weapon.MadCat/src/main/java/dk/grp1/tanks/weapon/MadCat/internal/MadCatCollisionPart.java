@@ -44,7 +44,7 @@ public class MadCatCollisionPart extends CollisionPart {
             MadCat cat = new MadCat();
 
             PositionPart parrentPos = parent.getPart(PositionPart.class);
-            cat.add(new PositionPart(parrentPos.getX(), parrentPos.getY()+5, parrentPos.getDirectionInRadians()));
+            cat.add(new PositionPart(parrentPos.getX(), parrentPos.getY()+6, parrentPos.getDirectionInRadians()));
             Vector2D acc = new Vector2D(i,6);
             acc.multiplyWithConstant(20);
             cat.add(new MovementPart(acc, 10000));
@@ -52,7 +52,7 @@ public class MadCatCollisionPart extends CollisionPart {
             cat.add(new CirclePart(parrentPos.getX(), parrentPos.getY(), 3));
             cat.add(new PhysicsPart(30, -90.82f));
             cat.add(new CollisionPart(true, 0));
-            cat.add(new DamagePart(5, 20));
+            cat.add(new DamagePart(5, 5));
             cat.add(parent.getPart(TexturePart.class));
             cat.add(parent.getPart(ExplosionTexturePart.class));
             SoundPart soundPart = parent.getPart(SoundPart.class);
