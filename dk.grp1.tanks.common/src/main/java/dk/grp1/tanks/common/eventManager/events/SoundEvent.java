@@ -1,4 +1,4 @@
-package dk.grp1.tanks.common.events;
+package dk.grp1.tanks.common.eventManager.events;
 
 import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.eventManager.events.Event;

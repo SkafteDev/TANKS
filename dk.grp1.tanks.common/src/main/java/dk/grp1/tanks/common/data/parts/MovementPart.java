@@ -30,7 +30,8 @@ public class MovementPart implements IEntityPart {
     /**
      * changes velocity based on gravity from physicspart and controls
      * and updates pos based on velocity
-     * @param entity the entity to move
+     *
+     * @param entity   the entity to move
      * @param gameData game data
      */
     public void processPart(Entity entity, GameData gameData, World world) {
@@ -50,13 +51,16 @@ public class MovementPart implements IEntityPart {
         }
 
         CollisionPart collisionPart = entity.getPart(CollisionPart.class);
-        if (collisionPart != null && collisionPart.isHitGameMap()){ // If hitting map
-            ControlPart controls = entity.getPart(ControlPart.class);
-            if (controls != null) {
-                // set velocity the amount specified by the controlpart
-                setVelocity(controls.getControlVector());
-            } else {
-                setVelocity(getVelocity().getX(),0);
+        if (collisionPart != null && collisionPart.isHitGameMap()) { // If hitting map
+            if (getVelocity().getY() < 0) {
+                ControlPart controls = entity.getPart(ControlPart.class);
+                if (controls != null) {
+                    // set velocity the amount specified by the controlpart
+                    setVelocity(controls.getControlVector());
+                } else {
+
+                    setVelocity(getVelocity().getX(), 0);
+                }
             }
 
 
@@ -68,7 +72,7 @@ public class MovementPart implements IEntityPart {
         position.setDirectionInRadians(getVelocity().getAngle());
         // and circle centre
         CirclePart circlePart = entity.getPart(CirclePart.class);
-        if(circlePart != null) {
+        if (circlePart != null) {
             circlePart.setCentreX(position.getX());
             circlePart.setCentreY(position.getY());
         }
@@ -77,6 +81,7 @@ public class MovementPart implements IEntityPart {
 
     /**
      * adds a vector to the velocity vector
+     *
      * @param velocity
      */
     private void addVelocity(Vector2D velocity) {

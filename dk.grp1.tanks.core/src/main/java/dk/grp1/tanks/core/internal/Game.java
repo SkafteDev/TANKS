@@ -15,7 +15,7 @@ import com.badlogic.gdx.utils.ShortArray;
 import dk.grp1.tanks.common.data.*;
 import dk.grp1.tanks.common.data.parts.*;
 import dk.grp1.tanks.common.eventManager.IEventCallback;
-import dk.grp1.tanks.common.events.SoundEvent;
+import dk.grp1.tanks.common.eventManager.events.SoundEvent;
 import dk.grp1.tanks.common.services.*;
 import dk.grp1.tanks.common.eventManager.events.Event;
 import dk.grp1.tanks.common.eventManager.events.ExplosionAnimationEvent;

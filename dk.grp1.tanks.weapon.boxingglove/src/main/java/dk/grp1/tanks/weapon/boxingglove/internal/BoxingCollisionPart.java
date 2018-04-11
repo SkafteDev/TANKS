@@ -1,26 +1,17 @@
-package dk.grp1.tanks.common.data.parts;
+package dk.grp1.tanks.weapon.boxingglove.internal;
 
 import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.World;
-import dk.grp1.tanks.common.eventManager.events.Event;
-import dk.grp1.tanks.common.eventManager.events.ExplosionAnimationEvent;
-import dk.grp1.tanks.common.eventManager.events.ExplosionEvent;
-import dk.grp1.tanks.common.eventManager.events.MapDestructionEvent;
-import dk.grp1.tanks.common.eventManager.events.SoundEvent;
+import dk.grp1.tanks.common.data.parts.*;
+import dk.grp1.tanks.common.eventManager.events.*;
 import dk.grp1.tanks.common.utils.Vector2D;
 
-/**
- * Created by danie on 12-03-2018.
- */
-public class CollisionPart implements IEntityPart {
+import java.util.Collection;
 
-    private boolean canCollide;
-    private boolean isHitEntity;
-    private boolean isHitGameMap;
-    private float timeSinceLastCollision;
-    private float minTimeBetweenCollision;
-
+public class BoxingCollisionPart extends CollisionPart {
+    private final float radius;
+    private final float force;
 
     /**
      * Creates a collision part for an entity
@@ -28,14 +19,13 @@ public class CollisionPart implements IEntityPart {
      * @param canCollide
      * @param minTimeBetweenCollision
      */
-    public CollisionPart(boolean canCollide, float minTimeBetweenCollision) {
-        this.canCollide = canCollide;
-        this.minTimeBetweenCollision = minTimeBetweenCollision;
-        this.isHitEntity = false;
-        this.isHitGameMap = false;
-        this.timeSinceLastCollision = 0;
+    public BoxingCollisionPart(boolean canCollide, float minTimeBetweenCollision, float radius, float force) {
+        super(canCollide, minTimeBetweenCollision);
+        this.radius = radius;
+        this.force = force;
     }
 
+    @Override
     public void processPart(Entity entity, GameData gameData, World world) {
         PositionPart positionPart = entity.getPart(PositionPart.class);
         DamagePart damagePart = entity.getPart(DamagePart.class);
@@ -49,6 +39,7 @@ public class CollisionPart implements IEntityPart {
             }
             Event explosionEvent = new ExplosionEvent(entity, new Vector2D(positionPart.getX(), positionPart.getY()), damagePart.getExplosionRadius());
             Event mapDestructionEvent = new MapDestructionEvent(entity, new Vector2D(positionPart.getX(), positionPart.getY()), damagePart.getExplosionRadius());
+            Event pushEvent = new PushEvent(entity,new Vector2D(positionPart.getX(), positionPart.getY()), force , radius);
             SoundPart soundPart = entity.getPart(SoundPart.class);
             if(soundPart != null){
                 Event soundEvent = new SoundEvent(entity,soundPart.getOnHitSoundPath());
@@ -57,6 +48,7 @@ public class CollisionPart implements IEntityPart {
             }
             gameData.getEventManager().addEvent(explosionEvent);
             gameData.getEventManager().addEvent(mapDestructionEvent);
+            gameData.getEventManager().addEvent(pushEvent);
 
 
             world.removeEntity(entity);
@@ -65,50 +57,6 @@ public class CollisionPart implements IEntityPart {
         }
     }
 
-
-    public boolean isHitGameMap() {
-        return isHitGameMap;
-    }
-
-    public void setHitGameMap(boolean hitGameMap) {
-        isHitGameMap = hitGameMap;
-    }
-
-    /**
-     * returns if the entity can collide
-     *
-     * @return boolean
-     */
-    public boolean canCollide() {
-        return canCollide;
-    }
-
-    /**
-     * Sets if the entity can collide
-     *
-     * @param canCollide boolean
-     */
-    public void setCanCollide(boolean canCollide) {
-        this.canCollide = canCollide;
-    }
-
-    /**
-     * returns if the entity is hit
-     *
-     * @return
-     */
-    public boolean isHitEntity() {
-        return isHitEntity;
-    }
-
-    /**
-     * sets if the entity is hitEntity
-     *
-     * @param hitEntity
-     */
-    public void setHitEntity(boolean hitEntity) {
-        isHitEntity = hitEntity;
-    }
 
 
 }
