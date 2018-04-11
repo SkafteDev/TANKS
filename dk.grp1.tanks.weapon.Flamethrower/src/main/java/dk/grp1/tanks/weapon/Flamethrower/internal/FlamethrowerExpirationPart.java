@@ -57,7 +57,7 @@ public class FlamethrowerExpirationPart extends ExpirationPart {
         flamethrower.add(new CirclePart(parrentPos.getX(), parrentPos.getY(),2));
         flamethrower.add(new PhysicsPart(30, -90.82f));
         flamethrower.add(new CollisionPart(true,0));
-        flamethrower.add(new DamagePart(3,2));
+        flamethrower.add(new DamagePart(3,1));
         flamethrower.add(new TexturePart("flame.png"));
         flamethrower.add(new ExplosionTexturePart(8,8,"flame_animation.png"));
 
