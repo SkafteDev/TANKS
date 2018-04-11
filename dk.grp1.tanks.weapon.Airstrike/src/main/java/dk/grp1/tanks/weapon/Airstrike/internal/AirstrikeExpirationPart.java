@@ -4,6 +4,7 @@ import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.data.parts.*;
+import dk.grp1.tanks.common.events.SoundEvent;
 import dk.grp1.tanks.common.utils.Vector2D;
 
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ public class AirstrikeExpirationPart extends ExpirationPart {
 
                 world.removeEntity(entity);
             } else {
-                world.addEntity(createAirstrike(entity, gameData.getGameHeight()));
+                world.addEntity(createAirstrike(entity, gameData.getGameHeight(), gameData));
                 numDropped++;
                 setRemainingLifeTime(0.5f);
 
@@ -72,7 +73,7 @@ public class AirstrikeExpirationPart extends ExpirationPart {
         return airstrikes;
     }
 
-    private Airstrike createAirstrike(Entity entity, float gameHeight) {
+    private Airstrike createAirstrike(Entity entity, float gameHeight, GameData gameData) {
         PositionPart flarePos = entity.getPart(PositionPart.class);
 
         float i = flarePos.getX() - 40 + (20 * numDropped);
@@ -88,6 +89,10 @@ public class AirstrikeExpirationPart extends ExpirationPart {
         airstrike.add(new DamagePart(7, 10));
         airstrike.add(new TexturePart("airstrike_bomb.png"));
         airstrike.add(entity.getPart(ExplosionTexturePart.class));
+
+        SoundPart sounds = new SoundPart("airstrike_dropping.mp3","airstrike_explosion.mp3");
+        airstrike.add(sounds);
+        gameData.getEventManager().addEvent(new SoundEvent(airstrike,sounds.getShootSoundPath()));
 
 
         return airstrike;
