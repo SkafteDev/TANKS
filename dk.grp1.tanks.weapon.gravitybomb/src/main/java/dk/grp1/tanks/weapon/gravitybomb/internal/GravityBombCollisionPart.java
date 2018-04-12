@@ -27,8 +27,8 @@ public class GravityBombCollisionPart extends CollisionPart {
                     gravityPull(entity, entity2);
 
                 }
-                makeEvents(entity,gameData);
             }
+            makeEvents(entity,gameData);
             world.removeEntity(entity);
         }
     }
