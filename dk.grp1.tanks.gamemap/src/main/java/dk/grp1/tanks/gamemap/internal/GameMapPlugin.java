@@ -49,7 +49,7 @@ public class GameMapPlugin implements IGamePluginService {
         for (int i = 0; i <= amountOfFunctions; i++) {
             switch (random.nextInt(2)) {
                 case 0:
-                    IGameMapFunction mapFunction1 = new GameMapLinear((random.nextFloat()*2f-1f), predecessor.getEndX(), (predecessor.getEndX() + mapFunctionInterval), predecessor);
+                    IGameMapFunction mapFunction1 = generateLinearMapFunction(predecessor,random, mapFunctionInterval);
                     map.addGameMapFunction(mapFunction1);
                     predecessor = mapFunction1;
                     break;
@@ -60,6 +60,14 @@ public class GameMapPlugin implements IGamePluginService {
                     break;
             }
         }
+    }
+
+    private IGameMapFunction generateLinearMapFunction(IGameMapFunction predecessor, Random random, float mapFunctionInterval) {
+        IGameMapFunction toReturn = new GameMapLinear((random.nextFloat()*2f-1f), predecessor.getEndX(), (predecessor.getEndX() + mapFunctionInterval), predecessor);
+        while(toReturn.getYValue((predecessor.getEndX() + mapFunctionInterval))<= BOTTOMBOUNDARY){
+            toReturn = new GameMapLinear((random.nextFloat()*2f-1f), predecessor.getEndX(), (predecessor.getEndX() + mapFunctionInterval), predecessor);
+        }
+        return toReturn;
     }
 
     private IGameMapFunction generateRandomFirstFunction(GameData gameData, float mapFunctionInterval) {
