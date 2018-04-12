@@ -15,6 +15,7 @@ import com.badlogic.gdx.utils.ShortArray;
 import dk.grp1.tanks.common.data.*;
 import dk.grp1.tanks.common.data.parts.*;
 import dk.grp1.tanks.common.eventManager.IEventCallback;
+import dk.grp1.tanks.common.eventManager.events.ShakeEvent;
 import dk.grp1.tanks.common.eventManager.events.SoundEvent;
 import dk.grp1.tanks.common.services.*;
 import dk.grp1.tanks.common.eventManager.events.Event;
@@ -129,6 +130,7 @@ public class Game implements ApplicationListener, IEventCallback {
 
         gameData.getEventManager().register(ExplosionAnimationEvent.class,this);
         gameData.getEventManager().register(SoundEvent.class,this);
+        gameData.getEventManager().register(ShakeEvent.class,this);
 
 
     }
@@ -295,8 +297,15 @@ public class Game implements ApplicationListener, IEventCallback {
             processExplosionAnimationEvent(event);
         }else if(event instanceof SoundEvent){
             playSounds((SoundEvent) event);
+        } else if (event instanceof ShakeEvent){
+            processShakeEvent(event);
         }
 
+    }
+
+    private void processShakeEvent(Event event) {
+        ShakeEvent shakeEvent = (ShakeEvent) event;
+        shakeConfig(shakeEvent.getIntensity(), 1000f);
     }
 
     private void update() {
@@ -333,7 +342,6 @@ public class Game implements ApplicationListener, IEventCallback {
                 explosionTexturePart.getFrameRows(),
                 explosionAnimationEvent.getExplosionRadius()
         );
-        shakeConfig(explosionAnimationEvent.getExplosionRadius() * 5, 1000f);
         animationsToProcess.add(animationWrapper);
 
     }
