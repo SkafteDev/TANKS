@@ -64,16 +64,22 @@ public class GameMapPlugin implements IGamePluginService {
 
     private IGameMapFunction generateLinearMapFunction(IGameMapFunction predecessor, Random random, float mapFunctionInterval) {
         IGameMapFunction toReturn = new GameMapLinear((random.nextFloat()*2f-1f), predecessor.getEndX(), (predecessor.getEndX() + mapFunctionInterval), predecessor);
-        while(isFunctionExceedingBoundaries(toReturn)){
+        int maxIterations = 100;
+        int iteration = 0;
+        while(isFunctionExceedingBoundaries(toReturn) && maxIterations >= iteration){
             toReturn = new GameMapLinear((random.nextFloat()*2f-1f), predecessor.getEndX(), (predecessor.getEndX() + mapFunctionInterval), predecessor);
+            iteration++;
         }
         return toReturn;
     }
 
     private IGameMapFunction generateSinMapFunction(IGameMapFunction predecessor, Random random, float mapFunctionInterval){
         IGameMapFunction toReturn = new GameMapSin(100f,(1/66f),0,predecessor,predecessor.getEndX(),predecessor.getEndX()+mapFunctionInterval);
-        while(isFunctionExceedingBoundaries(toReturn)){
+        int maxIterations = 100;
+        int iteration = 0;
+        while(isFunctionExceedingBoundaries(toReturn)&& maxIterations >= iteration){
             toReturn = new GameMapSin(random.nextFloat()*100f,(1/66f),0,predecessor,predecessor.getEndX(),predecessor.getEndX()+mapFunctionInterval);
+            iteration++;
         }
         return toReturn;
 
@@ -92,7 +98,7 @@ public class GameMapPlugin implements IGamePluginService {
         Random random = new Random();
         switch (random.nextInt(2)) {
             case 0:
-                return new GameMapLinear(random.nextFloat() * 2f - 1f, BOTTOMBOUNDARY + (random.nextFloat() * TOPBOUNDARY), 0f, mapFunctionInterval);
+                return generateLinearMapFunction(new GameMapLinear(random.nextFloat() * 2f - 1f, BOTTOMBOUNDARY + (random.nextFloat() * TOPBOUNDARY), 0f, 0f),random,mapFunctionInterval);
             case 1:
                 return new GameMapSin(100f, (1 / 66f), 0, gameData.getGameHeight() / 3f, 0f, mapFunctionInterval);
         }
