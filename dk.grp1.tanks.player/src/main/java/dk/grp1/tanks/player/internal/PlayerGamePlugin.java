@@ -11,12 +11,15 @@ import javafx.geometry.Pos;
 
 public class PlayerGamePlugin implements IGamePluginService {
 
+    private int numPlayers = 2;
     private float playerRadius = 10f;
 
     @Override
     public void start(World world, GameData gameData) {
-        Entity player = createPlayer(gameData);
-        world.addEntity(player);
+        
+        for (int i = 0; i < 2; i++) {
+            world.addEntity(createPlayer(gameData));
+        }
     }
 
     private Entity createPlayer(GameData gameData) {
@@ -41,6 +44,7 @@ public class PlayerGamePlugin implements IGamePluginService {
         player.add(new MovementPart(500));
         player.add(new TexturePart("player.png"));
         player.add(new TurnPart());
+        player.add(new ShootingPart());
 
         InventoryPart inventoryPart = new InventoryPart(gameData.getWeapons());
         gameData.addWeaponListener(inventoryPart);
