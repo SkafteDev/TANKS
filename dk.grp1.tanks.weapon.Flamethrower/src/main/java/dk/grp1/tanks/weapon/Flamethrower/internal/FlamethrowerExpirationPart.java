@@ -50,7 +50,7 @@ public class FlamethrowerExpirationPart extends ExpirationPart {
 
         Flamethrower flamethrower = new Flamethrower();
         flamethrower.add(new PositionPart(parrentPos.getX(), parrentPos.getY(), parrentPos.getDirectionInRadians()));
-        float i = (random.nextFloat()*20 + 90) /100;
+        float i = (random.nextFloat()*30 + 85) /100;
         Vector2D accelVector = new Vector2D(direction.getX()*i,direction.getY()*i);
         flamethrower.add(new MovementPart(accelVector, 1000));
         flamethrower.add(new ShapePart());
