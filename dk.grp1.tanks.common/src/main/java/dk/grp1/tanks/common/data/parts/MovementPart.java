@@ -52,7 +52,7 @@ public class MovementPart implements IEntityPart {
 
         CollisionPart collisionPart = entity.getPart(CollisionPart.class);
         if (collisionPart != null && collisionPart.isHitGameMap()) { // If hitting map
-            if (getVelocity().getY() < 0) {
+            if (getVelocity().getY() < 40) {
                 ControlPart controls = entity.getPart(ControlPart.class);
                 if (controls != null) {
                     // set velocity the amount specified by the controlpart
