@@ -25,8 +25,9 @@ public class GravityBombCollisionPart extends CollisionPart {
             for (Entity entity2: world.getEntities()){
                 if (entity != entity2 && hasCollided(entity, entity2)){
                     gravityPull(entity, entity2);
-                    makeEvents(entity,gameData);
+
                 }
+                makeEvents(entity,gameData);
             }
             world.removeEntity(entity);
         }

@@ -19,6 +19,5 @@ public class BoxingGamePlugin implements IGamePluginService {
         for (Entity e : world.getEntities(BoxingGlove.class)) {
             world.removeEntity(e);
         }
-
     }
 }
