@@ -94,9 +94,10 @@ public class Game implements ApplicationListener, IEventCallback {
 
     private void setupAssetManager() {
         this.assetManager = new CustomAssetManager(Gdx.files.getLocalStoragePath());
-        assetManager.loadMusicAsset(this.getClass(), "backgroundMusic2.wav");
-         Music bgMusic = assetManager.getMusicAsset(this.getClass(),"backgroundMusic2.wav");
+        assetManager.loadMusicAsset(this.getClass(), "tron.mp3");
+         Music bgMusic = assetManager.getMusicAsset(this.getClass(),"tron.mp3");
          bgMusic.setLooping(true);
+         bgMusic.setVolume(0.05f);
          bgMusic.play();
 
     }
