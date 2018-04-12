@@ -54,7 +54,7 @@ public class GameMapPlugin implements IGamePluginService {
                     predecessor = mapFunction1;
                     break;
                 case 1:
-                    IGameMapFunction mapFunction2 = new GameMapSin(100f,(1/66f),0,predecessor,predecessor.getEndX(),predecessor.getEndX()+mapFunctionInterval);
+                    IGameMapFunction mapFunction2 = generateSinMapFunction(predecessor,random,mapFunctionInterval);
                     map.addGameMapFunction(mapFunction2);
                     predecessor = mapFunction2;
                     break;
@@ -64,10 +64,28 @@ public class GameMapPlugin implements IGamePluginService {
 
     private IGameMapFunction generateLinearMapFunction(IGameMapFunction predecessor, Random random, float mapFunctionInterval) {
         IGameMapFunction toReturn = new GameMapLinear((random.nextFloat()*2f-1f), predecessor.getEndX(), (predecessor.getEndX() + mapFunctionInterval), predecessor);
-        while(toReturn.getYValue((predecessor.getEndX() + mapFunctionInterval))<= BOTTOMBOUNDARY){
+        while(isFunctionExceedingBoundaries(toReturn)){
             toReturn = new GameMapLinear((random.nextFloat()*2f-1f), predecessor.getEndX(), (predecessor.getEndX() + mapFunctionInterval), predecessor);
         }
         return toReturn;
+    }
+
+    private IGameMapFunction generateSinMapFunction(IGameMapFunction predecessor, Random random, float mapFunctionInterval){
+        IGameMapFunction toReturn = new GameMapSin(100f,(1/66f),0,predecessor,predecessor.getEndX(),predecessor.getEndX()+mapFunctionInterval);
+        while(isFunctionExceedingBoundaries(toReturn)){
+            toReturn = new GameMapSin(random.nextFloat()*100f,(1/66f),0,predecessor,predecessor.getEndX(),predecessor.getEndX()+mapFunctionInterval);
+        }
+        return toReturn;
+
+    }
+
+    private boolean isFunctionExceedingBoundaries(IGameMapFunction toReturn) {
+        for (float i = toReturn.getStartX(); i < toReturn.getEndX(); i+=1f) {
+            if(toReturn.getYValue(i) < BOTTOMBOUNDARY || toReturn.getYValue(i) > TOPBOUNDARY){
+                return true;
+            }
+        }
+        return false;
     }
 
     private IGameMapFunction generateRandomFirstFunction(GameData gameData, float mapFunctionInterval) {
