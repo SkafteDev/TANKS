@@ -22,6 +22,7 @@ import dk.grp1.tanks.common.eventManager.events.ExplosionAnimationEvent;
 import dk.grp1.tanks.common.utils.Vector2D;
 import dk.grp1.tanks.core.internal.GUI.*;
 import dk.grp1.tanks.core.internal.managers.CustomAssetManager;
+import dk.grp1.tanks.core.internal.managers.GameAssetManager;
 import dk.grp1.tanks.core.internal.managers.GameInputProcessor;
 
 import java.io.IOException;
@@ -45,7 +46,7 @@ public class Game implements ApplicationListener, IEventCallback {
     private GameData gameData;
     private ShapeRenderer shapeRenderer;
     private OrthographicCamera camera;
-    private Map<String, Texture> textureMap;
+
     private List<IGuiProcessingService> drawImplementations;
     private SpriteBatch uiSpriteBatch;
     private SpriteBatch animationSpriteBatch;
@@ -61,7 +62,7 @@ public class Game implements ApplicationListener, IEventCallback {
     private CustomAssetManager assetManager;
 
     private List<AnimationWrapper> animationsToProcess;
-    private Map<String, Animation> animationMap;
+
     // Shake Map Config
     private float elapsed;
     private float duration;
@@ -69,6 +70,7 @@ public class Game implements ApplicationListener, IEventCallback {
     private float baseX;
     private float baseY;
 
+    private GameAssetManager gameAssetManager;
 
     public Game(ServiceLoader serviceLoader) {
         this.serviceLoader = serviceLoader;
@@ -121,8 +123,7 @@ public class Game implements ApplicationListener, IEventCallback {
         this.gameData = new GameData();
         gameData.setDisplayHeight(HEIGHT);
         gameData.setDisplayWidth(WIDTH);
-        this.textureMap = new HashMap<>();
-        this.animationMap = new HashMap<>();
+        gameAssetManager = new GameAssetManager();
         this.drawImplementations = new ArrayList<>();
         this.animationsToProcess = new ArrayList<>();
         state = GameState.running;
@@ -262,26 +263,10 @@ public class Game implements ApplicationListener, IEventCallback {
     private void drawBackGround() {
         String path = "background.png";
 
-        if (!textureMap.containsKey(path)) {
-
-            InputStream is = this.getClass().getClassLoader().getResourceAsStream(path);
-            try {
-                Gdx2DPixmap gmp = new Gdx2DPixmap(is, Gdx2DPixmap.GDX2D_FORMAT_RGBA8888);
-                Pixmap pix = new Pixmap(gmp);
-                textureMap.put(path, new Texture(pix));
-                pix.dispose();
-                is.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-
-            }
-        }
-
         SpriteBatch spriteBatch = new SpriteBatch();
         spriteBatch.begin();
         spriteBatch.setProjectionMatrix(camera.combined);
-        Texture t = textureMap.get(path);
+        Texture t = gameAssetManager.checkGetTexture(this.getClass(),path);
 
         spriteBatch.draw(t, 0, 0, gameData.getGameWidth(), gameData.getGameHeight());
         spriteBatch.end();
@@ -448,7 +433,7 @@ public class Game implements ApplicationListener, IEventCallback {
         animationSpriteBatch.begin();
         for (AnimationWrapper animationWrapper : animationsToProcess) {
             animationWrapper.updateStateTime(gameData.getDelta());
-            Animation animation = checkGetAnimation(animationWrapper);
+            Animation animation = gameAssetManager.checkGetAnimation(animationWrapper);
             Vector2D pointOfExplosion = animationWrapper.getPosition();
             TextureRegion currentFrame = animation.getKeyFrame(animationWrapper.getStateTime(), false);
             float animationScale = 6f;
@@ -481,14 +466,14 @@ public class Game implements ApplicationListener, IEventCallback {
 
 
             if (tp != null && pp != null && cp != null) {
-                Texture texture = checkGetTexture(e, tp.getSrcPath());
+                Texture texture = gameAssetManager.checkGetTexture(e.getClass(), tp.getSrcPath());
                 //Sprite sprite = new Sprite(texture);
                 textureSpriteBatch.draw(texture, pp.getX() - cp.getRadius(), pp.getY() - cp.getRadius(), cp.getRadius() * 2, cp.getRadius() * 2);
             }
 
             CannonPart cannonPart = e.getPart(CannonPart.class);
             if (cannonPart != null && pp != null && cp != null) {
-                TextureRegion textureRegion = new TextureRegion(checkGetTexture(e, cannonPart.getTexturePath()));
+                TextureRegion textureRegion = new TextureRegion(gameAssetManager.checkGetTexture(e.getClass(), cannonPart.getTexturePath()));
                 drawCannon(textureSpriteBatch, textureRegion, cannonPart);
             }
 
@@ -508,63 +493,6 @@ public class Game implements ApplicationListener, IEventCallback {
         float rotation = (float) Math.toDegrees(cannonPart.getDirection()) - 90;
         spriteBatch.draw(textureRegion, x, y, originX, originY, width, height, scaleX, scaleY, rotation);
     }
-
-    private Texture checkGetTexture(Entity e, String path) {
-        Texture texture = textureMap.get(path);
-
-        if (texture == null) {
-
-            InputStream is = e.getClass().getClassLoader().getResourceAsStream(
-                    path
-            );
-            try {
-                Gdx2DPixmap gmp = new Gdx2DPixmap(is, Gdx2DPixmap.GDX2D_FORMAT_RGBA8888);
-                Pixmap pix = new Pixmap(gmp);
-                texture = new Texture(pix);
-                textureMap.put(path, texture);
-                pix.dispose();
-                is.close();
-
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-        }
-
-        return texture;
-    }
-
-    private Animation checkGetAnimation(AnimationWrapper animationWrapper) {
-        Animation animation = animationMap.get(animationWrapper.getPath());
-
-        if (animation == null) {
-            InputStream is = animationWrapper.getOrigin().getClass().getClassLoader().getResourceAsStream(animationWrapper.getPath());
-
-            try {
-                Gdx2DPixmap gmp = new Gdx2DPixmap(is, Gdx2DPixmap.GDX2D_FORMAT_RGBA8888);
-                Pixmap pix = new Pixmap(gmp);
-                Texture texture = new Texture(pix);
-                TextureRegion textureRegion = new TextureRegion(texture);
-                TextureRegion[][] tmp = textureRegion.split(texture.getWidth() / animationWrapper.getFrameCols(), texture.getHeight() / animationWrapper.getFrameRows());
-                TextureRegion[] explosionFrames = new TextureRegion[animationWrapper.getFrameCols() * animationWrapper.getFrameRows()];
-                int index = 0;
-                for (int i = 0; i < animationWrapper.getFrameRows(); i++) {
-                    for (int j = 0; j < animationWrapper.getFrameCols(); j++) {
-                        explosionFrames[index++] = tmp[i][j];
-                    }
-                }
-                animation = new Animation(0.025f, explosionFrames);
-                animation.setPlayMode(Animation.PlayMode.NORMAL);
-                animationMap.put(animationWrapper.getPath(), animation);
-
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-
-        }
-
-        return animation;
-    }
-
 
     public void pause() {
 
