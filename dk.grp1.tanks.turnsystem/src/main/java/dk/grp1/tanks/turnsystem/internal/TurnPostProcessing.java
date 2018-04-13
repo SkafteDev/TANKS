@@ -73,7 +73,12 @@ public class TurnPostProcessing implements IPostEntityProcessingService, IEventC
             }
         }
 
+        if (turnParts.size() == 0) {
+            return;
+        }
+
         int nextIndex = ((index + 1) % turnParts.size());
+
 
         //Change the turn number to the next indexes turn number
         TurnPart.setCurrentTurnNumber(turnParts.get(nextIndex).getMyTurnNumber());

@@ -11,18 +11,17 @@ import dk.grp1.tanks.common.services.IGamePluginService;
  */
 public class EnemyGamePlugin implements IGamePluginService {
     private float enemyRadius = 10f;
-
+    private final int AMOUNTOFENEMIES = 2;
     @Override
     public void start(World world, GameData gameData) {
-        Entity enemy = createEnemy(gameData);
-        world.addEntity(enemy);
-        Entity enemy2 = createEnemy(gameData);
-        world.addEntity(enemy2);
+        for (int i = 0; i < AMOUNTOFENEMIES; i++) {
+            world.addEntity(createEnemy(gameData));
+        }
     }
 
     private Entity createEnemy(GameData gameData) {
         Enemy enemy = new Enemy();
-        float centreX = gameData.getGameWidth() * 0.25f + (float)(Math.random()*50);
+        float centreX = (float) (Math.random() * (gameData.getGameWidth()*0.8+gameData.getGameWidth()*0.1));
         float centreY = gameData.getGameHeight();
         PositionPart positionPart = new PositionPart(centreX,centreY, 0);
         float cannonDirection = 3.1415f/2;

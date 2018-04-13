@@ -45,7 +45,7 @@ public class GravityBombWeapon implements IWeapon {
             accelerationVector.multiplyWithConstant(firePower);
             gravityBomb.add(new MovementPart(accelerationVector, 10000));
             gravityBomb.add(new ShapePart());
-            gravityBomb.add(new CirclePart(cannonCentre.getX(),cannonCentre.getY(),7));
+            gravityBomb.add(new CirclePart(cannonCentre.getX(),cannonCentre.getY(),3));
             gravityBomb.add(new PhysicsPart(30, -75f));
             gravityBomb.add(new GravityBombCollisionPart(true, 0));
             gravityBomb.add(new DamagePart(50,10));

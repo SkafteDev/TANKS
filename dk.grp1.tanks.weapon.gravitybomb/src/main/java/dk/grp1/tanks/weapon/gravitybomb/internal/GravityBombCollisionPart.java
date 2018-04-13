@@ -9,6 +9,9 @@ import dk.grp1.tanks.common.utils.Vector2D;
 import javafx.geometry.Pos;
 
 public class GravityBombCollisionPart extends CollisionPart {
+
+    private int hits = 0;
+
     /**
      * Creates a collision part for an entity
      *
@@ -22,12 +25,15 @@ public class GravityBombCollisionPart extends CollisionPart {
     @Override
     public void processPart(Entity entity, GameData gameData, World world){
         if (isHitGameMap() || isHitEntity()){
+
             for (Entity entity2: world.getEntities()){
                 if (entity != entity2 && hasCollided(entity, entity2)){
                     gravityPull(entity, entity2);
-                    makeEvents(entity,gameData);
+                    hits++;
                 }
+
             }
+            makeEvents(entity,gameData);
             world.removeEntity(entity);
         }
     }
@@ -36,12 +42,10 @@ public class GravityBombCollisionPart extends CollisionPart {
         PositionPart positionPart = entity.getPart(PositionPart.class);
         DamagePart damagePart = entity.getPart(DamagePart.class);
         ExplosionTexturePart explosionTexturePart = entity.getPart(ExplosionTexturePart.class);
-        CirclePart circlePart = entity.getPart(CirclePart.class);
 
         if ((this.isHitEntity() || this.isHitGameMap()) && positionPart != null && damagePart != null && explosionTexturePart != null) {
             Event animationEvent = new ExplosionAnimationEvent(entity, new Vector2D(positionPart.getX(), positionPart.getY()), explosionTexturePart, damagePart.getExplosionRadius());
             Event explosionEvent = new ExplosionEvent(entity, new Vector2D(positionPart.getX(), positionPart.getY()), damagePart.getExplosionRadius());
-            Event mapDestructionEvent = new MapDestructionEvent(entity, new Vector2D(positionPart.getX(), positionPart.getY()), damagePart.getExplosionRadius());
             SoundPart soundPart = entity.getPart(SoundPart.class);
             if (soundPart != null) {
                 Event soundEvent = new SoundEvent(entity, soundPart.getOnHitSoundPath());
@@ -49,8 +53,9 @@ public class GravityBombCollisionPart extends CollisionPart {
 
             }
             gameData.getEventManager().addEvent(animationEvent);
-            gameData.getEventManager().addEvent(explosionEvent);
-            //gameData.getEventManager().addEvent(mapDestructionEvent);
+            for (int i = 0; i < hits; i++) { //Damage is proportional with number of enemies hit.
+                gameData.getEventManager().addEvent(explosionEvent);
+            }
         }
     }
 
