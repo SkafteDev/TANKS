@@ -10,6 +10,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * Created by danie on 12-03-2018.
  */
 public class World   {
+
+
     private final Map<String, Entity> entityMap = new ConcurrentHashMap<>();
     private GameMap gameMap;
 
