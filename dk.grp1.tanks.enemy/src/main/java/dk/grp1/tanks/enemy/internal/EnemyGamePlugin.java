@@ -11,7 +11,7 @@ import dk.grp1.tanks.common.services.IGamePluginService;
  */
 public class EnemyGamePlugin implements IGamePluginService {
     private float enemyRadius = 10f;
-    private final int AMOUNTOFENEMIES = 2;
+    private final int AMOUNTOFENEMIES = 1;
     @Override
     public void start(World world, GameData gameData) {
         for (int i = 0; i < AMOUNTOFENEMIES; i++) {

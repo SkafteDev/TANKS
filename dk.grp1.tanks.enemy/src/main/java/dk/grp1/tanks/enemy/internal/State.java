@@ -17,10 +17,10 @@ import java.util.Map;
 
 public class State {
     public World world;
-    public int turn;
+    public String turn;
     public GameData gameData;
 
-    public State(World world, GameData gameData, int turn) {
+    public State(World world, GameData gameData, String turn) {
 
         this.world = world;
         this.gameData = gameData;
@@ -65,8 +65,17 @@ public class State {
 
         for (Entity entity: world.getEntities()
              ) {
-            TurnPart turnpart = entity.getPart(TurnPart.class);
-            if(turnpart.getMyTurnNumber() == this.turn){
+            if(entity.getClass() == Enemy.class && this.turn.equals("MAX")){
+                PositionPart positionPart = entity.getPart(PositionPart.class);
+                float startX = positionPart.getX();
+                float v0 = action.getFirePowerLevel().getFirepoweer();
+                float changeX =(float)( v0*v0 *  Math.sin(2* action.getAim().getAim()));
+                float endX = startX+changeX;
+
+                damageEntities(newState, endX, 50);
+                newState.turn = "MIN";
+            }
+            if(entity.getClass() != Enemy.class && this.turn.equals("MIN")){
                 PositionPart positionPart = entity.getPart(PositionPart.class);
                 float startX = positionPart.getX();
                 float v0 = action.getFirePowerLevel().getFirepoweer();

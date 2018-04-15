@@ -33,9 +33,15 @@ public class GameMapPlugin implements IGamePluginService {
     private GameMap createNewGameMap(GameData gameData) {
         GameMap map = new GameMap(gameData.getGameWidth(), gameData.getGameHeight());
         //Generate map functions
-        generateRandomMap(map, gameData);
-
+        //generateRandomMap(map, gameData);
+        setMapLinear(map, gameData);
         return map;
+    }
+
+    private void setMapLinear(GameMap map, GameData gameData) {
+        IGameMapFunction toReturn = new GameMapLinear(0, 100, 0, gameData.getGameWidth());
+        map.addGameMapFunction(toReturn);
+
     }
 
     private void generateRandomMap(GameMap map, GameData gameData) {

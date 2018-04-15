@@ -44,7 +44,7 @@ public class EnemyProcessingSystem implements IEntityProcessingService {
             inventoryPart.processPart(enemy, gameData, world);
 
             if (lifePart.getCurrentHP() <= 0) {
-                if(turnPart.isMyTurn()) {
+                if (turnPart.isMyTurn()) {
                     turnPart.endMyTurn();
                 }
                 world.removeEntity(enemy);
@@ -54,7 +54,9 @@ public class EnemyProcessingSystem implements IEntityProcessingService {
                 if (!AICONTROLLED) {
                     manualControl(ctrlPart, gameData, world, positionPart);
                 } else {
-                    simpleAIControl(ctrlPart,gameData, movePart, world, positionPart);
+                   // simpleAIControl(ctrlPart, gameData, movePart, world, positionPart);
+                    ctrlPart.setLeft(false);
+                    ctrlPart.setRight(false);
                 }
 
 
@@ -77,13 +79,46 @@ public class EnemyProcessingSystem implements IEntityProcessingService {
             if (!AICONTROLLED) {
                 manualShoot(gameData, turnPart, world, cannonPart, enemy);
             } else {
-                simpleAIShoot(gameData, turnPart, world, cannonPart, enemy);
+                //simpleAIShoot(gameData, turnPart, world, cannonPart, enemy);
+                advancedAIShoot(gameData, turnPart, world, cannonPart, enemy);
             }
 
             turnPart.processPart(enemy, gameData, world);
 
 
         }
+    }
+
+    private void advancedAIShoot(GameData gameData, TurnPart turnPart, World world, CannonPart cannonPart, Entity enemy) {
+        if (turnPart.isMyTurn()) {
+            MovementPart movementPart = enemy.getPart(MovementPart.class);
+            if (!(movementPart.getCurrentSpeed() > 0)) {
+
+                Action action = new Action(FirePowerLevel.FIFTY, AimSetting.RIGHT);
+                shootActionShot(action, world, gameData, cannonPart, enemy);
+
+                turnPart.endMyTurn();
+            }
+        }
+    }
+
+    private void shootActionShot(Action action, World world, GameData gameData, CannonPart cannonPart, Entity enemy) {
+        InventoryPart inventoryPart = enemy.getPart(InventoryPart.class);
+        inventoryPart.processPart(enemy, gameData, world);
+
+
+        cannonPart.setDirection(action.getAim().getAim());
+        cannonPart.processPart(enemy, gameData, world);
+
+        firepower = action.getFirePowerLevel().getFirepoweer();
+
+
+        inventoryPart.getCurrentWeapon().shoot(enemy, gameData, firepower, world);
+        cannonPart.setPreviousFirepower(firepower);
+        cannonPart.setPreviousAngle(cannonPart.getDirection());
+        //gameData.addEvent(new ShootingEvent(enemy, firepower));
+        return;
+
     }
 
     private void simpleAIShoot(GameData gameData, TurnPart turnPart, World world, CannonPart cannonPart, Entity enemy) {
@@ -118,15 +153,15 @@ public class EnemyProcessingSystem implements IEntityProcessingService {
         boolean move = (random.nextDouble() < 0.99);
 
         if (move) {
-            if(!moving){
+            if (!moving) {
                 ctrlPart.setLeft(!goRight);
                 ctrlPart.setRight(goRight);
-            }else {
-                if(positionPart.getX() < 40){
+            } else {
+                if (positionPart.getX() < 40) {
                     ctrlPart.setRight(true);
                     ctrlPart.setLeft(false);
                 }
-                if(positionPart.getX() > gameData.getGameWidth()-40){
+                if (positionPart.getX() > gameData.getGameWidth() - 40) {
                     ctrlPart.setRight(false);
                     ctrlPart.setLeft(true);
                 }
@@ -174,7 +209,7 @@ public class EnemyProcessingSystem implements IEntityProcessingService {
         InventoryPart inventoryPart = enemy.getPart(InventoryPart.class);
         inventoryPart.processPart(enemy, gameData, world);
 
-        if(!inventoryPart.getWeapons().isEmpty()) {
+        if (!inventoryPart.getWeapons().isEmpty()) {
             Random wepRandom = new Random();
             int i = wepRandom.nextInt(inventoryPart.getWeapons().size());
             for (; i > 0; i--) {

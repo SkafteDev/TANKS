@@ -34,8 +34,8 @@ public class GameMapProcessing implements IEventCallback {
 
     @Override
     public void processEvent(Event event) {
-        List<Vector2D> intersectionPoints = calculateIntersectionPointsWithMap(event, world);
-        replacePartsOfMapWithLinearFunctions(intersectionPoints, world, event);
+//        List<Vector2D> intersectionPoints = calculateIntersectionPointsWithMap(event, world);
+//        replacePartsOfMapWithLinearFunctions(intersectionPoints, world, event);
     }
 
     /**

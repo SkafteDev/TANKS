@@ -10,7 +10,7 @@ public class MinimaxAI {
 
     private Entity enemy;
 
-    public Action makeDecision(World world, GameData gameData, int turn, Entity actor){
+    public Action makeDecision(World world, GameData gameData, String turn, Entity actor){
         this. enemy = actor;
         Action bestAction = null;
         float bestUtiltity =0;
@@ -33,7 +33,7 @@ public class MinimaxAI {
             return state.getUtility(enemy);
         }
         float value = Float.MAX_VALUE;
-        for (Map.Entry<Action,State> entry: state.getSuccessors()
+        for (Map.Entry<Action,State> entry: state.getSuccessors().entrySet()
              ) {
             value = min(value, maxValue(entry.getValue()));
         }
@@ -45,7 +45,7 @@ public class MinimaxAI {
             return state.getUtility(enemy);
         }
         float value = Float.MIN_VALUE;
-        for (Map.Entry<Action,State> entry: state.getSuccessors()
+        for (Map.Entry<Action,State> entry: state.getSuccessors().entrySet()
                 ) {
             value = max(value, maxValue(entry.getValue()));
         }
