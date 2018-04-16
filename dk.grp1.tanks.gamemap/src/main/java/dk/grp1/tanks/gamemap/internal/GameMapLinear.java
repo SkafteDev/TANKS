@@ -25,6 +25,9 @@ public class GameMapLinear implements IGameMapFunction {
 
         this.a = a;
         this.b = b;
+        if (endX <= startX){
+            throw new IllegalArgumentException("endX must be greater than startX ");
+        }
         this.startX = startX;
         this.endX = endX;
     }
