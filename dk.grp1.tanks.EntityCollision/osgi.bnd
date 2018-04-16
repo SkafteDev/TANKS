@@ -1,5 +1,1 @@
-#-----------------------------------------------------------------
-# Use this file to add customized Bnd instructions for the bundle
-#-----------------------------------------------------------------
-
-Bundle-Activator: ${bundle.namespace}.internal.EntityCollisionActivator
+Bundle-Activator: dk.grp1.tanks.EntityCollision.internal.EntityCollisionActivator
