@@ -36,7 +36,7 @@ public interface IGameMapFunction {
     List<Float> getYValues(List<Float> xValues);
 
     /**
-     * Checks if the given x value is within this functions range
+     * Checks if the given x value is within this functions range. The start value IS within the range. The end value IS NOT.
      * @param x
      * @return
      */

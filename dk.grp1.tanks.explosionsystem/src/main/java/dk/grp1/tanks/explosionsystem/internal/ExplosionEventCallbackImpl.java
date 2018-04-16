@@ -9,49 +9,46 @@ import dk.grp1.tanks.common.eventManager.events.Event;
 import dk.grp1.tanks.common.eventManager.events.ExplosionEvent;
 import dk.grp1.tanks.common.services.IPostEntityProcessingService;
 
-public class ExplosionPostProcessingSystem implements IPostEntityProcessingService, IEventCallback {
+public class ExplosionEventCallbackImpl implements IEventCallback {
 
     private GameData gameData;
     private World world;
 
-    public ExplosionPostProcessingSystem(GameData gameData, World world) {
+    public ExplosionEventCallbackImpl(GameData gameData, World world) {
+        if(gameData == null || world == null){
+            throw new IllegalArgumentException("GameData or world cannot be null");
+        }
         this.gameData = gameData;
         this.world = world;
     }
 
     @Override
     public void processEvent(Event event) {
-        for (Entity ent: world.getEntities()) {
+        if(event instanceof ExplosionEvent) {
+            for (Entity ent : world.getEntities()) {
 
-            if(isInExplosion(event, ent)){
-                LifePart lp = ent.getPart(LifePart.class);
-                if(lp != null) {
-                    lp.removeHP(((DamagePart) event.getSource().getPart(DamagePart.class)).getDamage());
-
+                if (isInExplosion(event, ent)) {
+                    LifePart lp = ent.getPart(LifePart.class);
+                    if (lp != null) {
+                        lp.removeHP(((DamagePart) event.getSource().getPart(DamagePart.class)).getDamage());
+                    }
                 }
             }
-
-
-
+        } else if (event == null){
+            throw new IllegalArgumentException("Event cannot be null");
         }
-    }
-
-    @Override
-    public void postProcess(World world, GameData gameData) {
-
     }
 
     private boolean isInExplosion(Event evnt, Entity ent) {
         ExplosionEvent exEvnt = (ExplosionEvent) evnt;
-        PositionPart positionPart = ent.getPart(PositionPart.class);
         CirclePart circlePart = ent.getPart(CirclePart.class);
 
         if(circlePart == null) {
             return false;
         }
 
-        float distX = exEvnt.getPointOfCollision().getX() - positionPart.getX();
-        float distY = exEvnt.getPointOfCollision().getY() - positionPart.getY();
+        float distX = exEvnt.getPointOfCollision().getX() - circlePart.getCentreX();
+        float distY = exEvnt.getPointOfCollision().getY() - circlePart.getCentreY();
         float distance = (float)(Math.sqrt(distX*distX + distY*distY));
         return distance < (exEvnt.getExplosionRadius()+circlePart.getRadius());
         }

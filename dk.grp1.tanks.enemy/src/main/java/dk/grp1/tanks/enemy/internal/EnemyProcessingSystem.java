@@ -208,7 +208,7 @@ public class EnemyProcessingSystem implements IEntityProcessingService {
     }
 
     /**
-     * Sets the cannon o match the direction of the target, while maintaining a 45 degree angle
+     * Sets the cannon to match the direction of the target, while maintaining a 45 degree angle
      *
      * @param cannonPart
      * @param enemy
