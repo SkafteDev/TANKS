@@ -13,7 +13,6 @@ import java.util.*;
 
 public class WeaponProcessingSystem implements IEntityProcessingService {
 
-    private WeaponFactory wepFac = new WeaponFactory();
 
     @Override
     public void process(World world, GameData gameData) {
