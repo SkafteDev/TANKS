@@ -105,7 +105,7 @@ public class EntityCollisionPostProcessingTest {
         Assert.assertFalse(collisionPart2.isHitEntity());
     }
 
-    @org.junit.Test
+    @org.junit.Test(expected = IllegalArgumentException.class)
     public void processCollisionNullInput(){
         IPostEntityProcessingService entityCollisionProcessing = new EntityCollisionPostProcessingSystem();
         World world = null;
