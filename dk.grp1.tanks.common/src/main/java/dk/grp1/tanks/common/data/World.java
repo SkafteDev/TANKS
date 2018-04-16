@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class World   {
 
 
-    private final Map<String, Entity> entityMap = new ConcurrentHashMap<>();
+    private Map<String, Entity> entityMap = new ConcurrentHashMap<>();
     private GameMap gameMap;
 
     /**

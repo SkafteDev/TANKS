@@ -17,4 +17,15 @@ public class Action {
     public AimSetting getAim() {
         return aim;
     }
+
+    @Override
+    public String toString(){
+        StringBuilder builder = new StringBuilder();
+        builder.append("Aim:");
+        builder.append(aim.getAim());
+        builder.append("\n");
+        builder.append("FirePower:");
+        builder.append(firePowerLevel.getFirepoweer());
+        return builder.toString();
+    }
 }

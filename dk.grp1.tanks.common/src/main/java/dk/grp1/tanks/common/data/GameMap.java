@@ -14,6 +14,9 @@ public class GameMap {
     private float GAMEHEIGHT;
     private GameMapFunctionComparator comparator;
 
+    public GameMap(){
+
+    }
 
     /**
      *

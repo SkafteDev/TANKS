@@ -94,7 +94,9 @@ public class EnemyProcessingSystem implements IEntityProcessingService {
             MovementPart movementPart = enemy.getPart(MovementPart.class);
             if (!(movementPart.getCurrentSpeed() > 0)) {
 
-                Action action = new Action(FirePowerLevel.FIFTY, AimSetting.RIGHT);
+                //Action action = new Action(FirePowerLevel.FIFTY, AimSetting.RIGHT);
+                MinimaxAI aiSystem = new MinimaxAI();
+                Action action = aiSystem.makeDecision(world,gameData,"MAX", enemy);
                 shootActionShot(action, world, gameData, cannonPart, enemy);
 
                 turnPart.endMyTurn();
