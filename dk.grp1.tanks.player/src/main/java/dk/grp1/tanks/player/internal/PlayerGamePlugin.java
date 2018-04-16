@@ -56,6 +56,8 @@ public class PlayerGamePlugin implements IGamePluginService {
     public void stop(World world, GameData gameData) {
         for (Entity player : world.getEntities(Player.class)) {
             world.removeEntity(player);
+            gameData.removeWeponListener(player.getPart(InventoryPart.class));
         }
+
     }
 }
