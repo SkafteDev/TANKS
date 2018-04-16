@@ -84,11 +84,17 @@ public class GameMapLinear implements IGameMapFunction {
 
     @Override
     public void setEndX(float value) {
+        if(value <= startX){
+            throw new IllegalArgumentException("End X must be greater than startX");
+        }
         this.endX = value;
     }
 
     @Override
     public void setStartX(float value) {
+        if(value >= endX){
+            throw new IllegalArgumentException("StartX must be less than EndX");
+        }
         this.startX = value;
     }
 

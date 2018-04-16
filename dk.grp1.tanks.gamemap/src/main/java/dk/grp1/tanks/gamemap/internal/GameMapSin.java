@@ -20,6 +20,9 @@ public class GameMapSin implements IGameMapFunction {
     }
 
     public GameMapSin(double amplitude, double angularFrequency, float phaseShift, float shiftConstant, float startX, float endX) {
+        if(startX >= endX){
+            throw new IllegalArgumentException("StartX must be less than endX");
+        }
         this.amplitude = amplitude;
         this.angularFrequency = angularFrequency;
         this.phaseShift = phaseShift;
@@ -39,6 +42,10 @@ public class GameMapSin implements IGameMapFunction {
      */
     public GameMapSin(double amplitude,double angularFrequency, float phaseShift, IGameMapFunction sucessorFn, float startX, float endX){
         this(amplitude,angularFrequency,phaseShift,0,startX,endX);
+        if(sucessorFn == null){
+                throw new IllegalArgumentException("Successorfunction must not be null");
+
+        }
         this.shiftConstant = (float) (-amplitude*Math.sin(angularFrequency*sucessorFn.getEndX()+phaseShift)+sucessorFn.getYValue(sucessorFn.getEndX()));
         }
     @Override
@@ -48,6 +55,9 @@ public class GameMapSin implements IGameMapFunction {
 
     @Override
     public float getYValue(float xValue) {
+        if(!isWithin(xValue)){
+            throw new IllegalArgumentException("xValue must be within range of function");
+        }
         return (float) (amplitude * Math.sin((angularFrequency * xValue + phaseShift)) + shiftConstant);
     }
 
@@ -75,21 +85,31 @@ public class GameMapSin implements IGameMapFunction {
 
     @Override
     public void setEndX(float value) {
+        if(value <= startX){
+            throw new IllegalArgumentException("End X must be greater than startX");
+        }
         this.endX = value;
     }
 
     @Override
     public void setStartX(float value) {
+        if(value >= endX){
+            throw new IllegalArgumentException("StartX must be less than EndX");
+        }
         this.startX = value;
     }
 
     @Override
     public boolean existsOnlyWithinRange(float startX, float endX) {
-        return (this.startX > startX && this.endX < endX);
+        return (this.startX >= startX && this.endX <= endX);
     }
 
     @Override
     public List<IGameMapFunction> splitInTwoWithNewRanges(float rangeOneStartX, float rangeOneEndX, float rangeTwoStartX, float rangeTwoEndX) {
+        if( rangeOneStartX < this.startX || rangeOneStartX > rangeOneEndX ||
+                rangeOneEndX > rangeTwoStartX || rangeTwoStartX > rangeTwoEndX || rangeTwoEndX > this.endX){
+            throw new IllegalArgumentException("The ranges must be within the range of the original function");
+        }
         List<IGameMapFunction> splitGameMapFunctions = new ArrayList<>();
         splitGameMapFunctions.add(new GameMapSin(this.amplitude,this.angularFrequency,this.phaseShift,this.shiftConstant,rangeOneStartX,rangeOneEndX));
         splitGameMapFunctions.add(new GameMapSin(this.amplitude,this.angularFrequency,this.phaseShift,this.shiftConstant,rangeTwoStartX,rangeTwoEndX));
