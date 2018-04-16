@@ -9,6 +9,9 @@ import dk.grp1.tanks.common.data.World;
  */
 public class TexturePart implements IEntityPart {
 
+    public TexturePart(){
+
+    }
     private String srcPath;
 
     /**

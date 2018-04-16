@@ -10,6 +10,9 @@ public class ExplosionTexturePart implements IEntityPart {
     private int frameRows;
     private String srcPath;
 
+    public ExplosionTexturePart(){
+
+    }
     /**
      *
      * @param frameCols

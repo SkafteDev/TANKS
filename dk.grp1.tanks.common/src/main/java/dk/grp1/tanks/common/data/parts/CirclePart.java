@@ -13,6 +13,9 @@ public class CirclePart implements IEntityPart {
     private float centreY;
     private float radius;
 
+    public CirclePart(){
+
+    }
     public CirclePart(float centreX, float centreY, float radius) {
         this.centreX = centreX;
         this.centreY = centreY;

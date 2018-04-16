@@ -3,12 +3,15 @@ package dk.grp1.tanks.common.data.parts;
 import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.World;
+import dk.grp1.tanks.common.eventManager.events.ExplosionEvent;
 
 public class ExpirationPart implements IEntityPart{
 
     private float remainingLifeTime;
 
+    public ExpirationPart(){
 
+    }
 
     /**
      * returns the remaining time until expiration

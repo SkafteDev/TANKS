@@ -10,6 +10,9 @@ public class SoundPart implements IEntityPart {
     private String shootSoundPath;
     private String onHitSoundPath;
 
+    public SoundPart(){
+
+    }
     public SoundPart(String shootSoundPath, String onHitSoundPath){
 
         this.shootSoundPath = shootSoundPath;

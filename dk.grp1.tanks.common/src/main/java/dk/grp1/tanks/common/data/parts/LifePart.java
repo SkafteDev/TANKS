@@ -12,6 +12,10 @@ public class LifePart implements IEntityPart {
     private float maxHP;
     private float currentHP;
 
+    public LifePart(){
+
+    }
+
     public void processPart(Entity entity, GameData gameData, World world) {
 
     }

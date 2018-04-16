@@ -26,6 +26,10 @@ public class CannonPart implements IEntityPart{
     private float previousAngle;
     private boolean increase = true;
 
+    public CannonPart(){
+
+    }
+
     public CannonPart(float jointX, float jointY, float direction, float width, float length, String texturePath) {
         this.jointX = jointX;
         this.jointY = jointY;

@@ -18,6 +18,9 @@ public class CollisionPart implements IEntityPart {
     private float minTimeBetweenCollision;
 
 
+    public CollisionPart(){
+
+    }
     /**
      * Creates a collision part for an entity
      *

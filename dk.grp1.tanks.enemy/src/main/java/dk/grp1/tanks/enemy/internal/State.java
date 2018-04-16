@@ -12,6 +12,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -33,6 +34,53 @@ public class State {
     private static Object cloneObject(Object obj) {
         try {
             Object clone = obj.getClass().newInstance();
+            if (obj.getClass().getDeclaredFields().length == 0) {
+                for (Field field : obj.getClass().getSuperclass().getDeclaredFields()) {
+                    field.setAccessible(true);
+                    if (field.get(obj) == null || Modifier.isFinal(field.getModifiers())) {
+                        continue;
+                    }
+                    if (field.getType().isPrimitive() || field.getType().equals(String.class)
+                            || (field.getType().getSuperclass() != null && field.getType().getSuperclass().equals(Number.class))
+                            || field.getType().equals(Boolean.class)) {
+                        field.set(clone, field.get(obj));
+                    } else {
+                        Object childObj = field.get(obj);
+                        if (childObj == obj) {
+                            field.set(clone, clone);
+                        } else if (childObj.getClass().equals((GameData.class))) {
+                            continue;
+                        } else if (childObj.getClass().equals((Object[].class))) {
+                            field.set(clone, Arrays.copyOf((Object[]) field.get(obj), ((Object[]) field.get(obj)).length));
+                        } else if (childObj.getClass().equals(HashMap.class)) {
+                            Map<Object, Object> newMap = new HashMap<>();
+                            for (Object entry : ((HashMap) field.get(obj)).entrySet()
+                                    ) {
+                                Map.Entry mapEntry = (Map.Entry) entry;
+
+                                newMap.put(mapEntry.getKey(), cloneObject(mapEntry.getValue()));
+
+
+                            }
+                            field.set(clone, newMap);
+                        } else if (childObj.getClass().equals(ConcurrentHashMap.class)) {
+                            Map<Object, Object> newMap = new ConcurrentHashMap<>();
+                            for (Object entry : ((ConcurrentHashMap) field.get(obj)).entrySet()
+                                    ) {
+                                Map.Entry mapEntry = (Map.Entry) entry;
+
+                                newMap.put(mapEntry.getKey(), cloneObject(mapEntry.getValue()));
+
+
+                            }
+                            field.set(clone, newMap);
+                        } else {
+                            field.set(clone, cloneObject(field.get(obj)));
+
+                        }
+                    }
+                }
+            }
             for (Field field : obj.getClass().getDeclaredFields()) {
                 field.setAccessible(true);
                 if (field.get(obj) == null || Modifier.isFinal(field.getModifiers())) {
@@ -46,13 +94,20 @@ public class State {
                     Object childObj = field.get(obj);
                     if (childObj == obj) {
                         field.set(clone, clone);
-                    } else if (childObj.getClass().equals((GameData.class))){
+                    } else if (childObj.getClass().equals((GameData.class))) {
                         continue;
-                    }else if(childObj.getClass().equals((Object[].class))) {
+                    } else if (childObj.getClass().equals((Object[].class))) {
                         field.set(clone, Arrays.copyOf((Object[]) field.get(obj), ((Object[]) field.get(obj)).length));
-                    } else if (childObj.getClass().equals(Map.class)) {
+                    } else if (childObj.getClass().equals(HashMap.class)) {
                         Map<Object, Object> newMap = new HashMap<>();
-                        newMap.putAll((Map) field.get(obj));
+                        for (Object entry : ((HashMap) field.get(obj)).entrySet()
+                                ) {
+                            Map.Entry mapEntry = (Map.Entry) entry;
+
+                            newMap.put(mapEntry.getKey(), cloneObject(mapEntry.getValue()));
+
+
+                        }
                         field.set(clone, newMap);
                     } else if (childObj.getClass().equals(ConcurrentHashMap.class)) {
                         Map<Object, Object> newMap = new ConcurrentHashMap<>();
@@ -60,7 +115,7 @@ public class State {
                                 ) {
                             Map.Entry mapEntry = (Map.Entry) entry;
 
-                            newMap.put(cloneObject(mapEntry.getKey()), cloneObject(mapEntry.getValue()));
+                            newMap.put(mapEntry.getKey(), cloneObject(mapEntry.getValue()));
 
 
                         }
@@ -78,23 +133,48 @@ public class State {
     }
 
     public boolean isTerminal() {
-        return world.getEntities().size() < 2 || depth > 5;
+        if (world.getEntities().size() < 2) {
+            return true;
+        }
+        if (depth > 1) {
+            return true;
+        }
+        for (Entity entity : world.getEntities()) {
+            LifePart life = entity.getPart(LifePart.class);
+            if (life.getCurrentHP() == 0) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public float getUtility(Entity enemy) {
-        if (world.getEntities().size() == 0) {
-            return 0;
-        }
-        if (world.getEntities().size() == 1) {
-            if (world.getEntities().contains(enemy)) {
-                return 1;
-            } else {
-                return -1;
-            }
-        } else {
+        boolean atLeatOneDead = false;
+        float toReturn = 0;
+        for (Entity entity : world.getEntities()) {
             LifePart life = enemy.getPart(LifePart.class);
-            return life.getCurrentHP() / life.getMaxHP();
+            if (life.getCurrentHP() == 0) {
+                atLeatOneDead = true;
+                if (entity.getClass().equals(Enemy.class)) {
+                    toReturn += -1;
+                } else {
+                    toReturn += 1;
+                }
+            }
         }
+        if (!atLeatOneDead) {
+            for (Entity entity : world.getEntities()) {
+                if (entity.getClass().equals(Enemy.class)) {
+                    LifePart life = entity.getPart(LifePart.class);
+                    toReturn += life.getCurrentHP() / life.getMaxHP();
+                }else{
+                    LifePart life = entity.getPart(LifePart.class);
+                    toReturn -= life.getCurrentHP() / life.getMaxHP();
+                }
+            }
+
+        }
+        return toReturn;
     }
 
     public Map<Action, State> getSuccessors() {
@@ -121,7 +201,7 @@ public class State {
                 float v0 = action.getFirePowerLevel().getFirepoweer();
                 float aim = action.getAim().getAim();
                 float grav = physicsPart.getGravity();
-                float changeX = (float) ((v0 * v0 * Math.sin(2 * aim)) / grav);
+                float changeX = (float) ((v0 * v0 * Math.sin(2 * aim)) / 90.82f);
                 float endX = startX + changeX;
 
                 damageEntities(newState, endX, 50);
@@ -136,7 +216,7 @@ public class State {
                 float v0 = action.getFirePowerLevel().getFirepoweer();
                 float aim = action.getAim().getAim();
                 float grav = physicsPart.getGravity();
-                float changeX = (float) ((v0 * v0 * Math.sin(2 * aim)) / grav);
+                float changeX = (float) ((v0 * v0 * Math.sin(2 * aim)) / 90.82f);
                 float endX = startX + changeX;
 
                 damageEntities(newState, endX, 50);
@@ -157,6 +237,7 @@ public class State {
             if (positionPart.getX() > endX - 25 && positionPart.getX() < endX + 25) {
                 LifePart life = ent.getPart(LifePart.class);
                 life.removeHP(i);
+
             }
         }
     }
@@ -165,14 +246,14 @@ public class State {
     public String toString() {
         StringBuilder builder = new StringBuilder();
 
-        if(world == null){
+        if (world == null) {
             return "State world null";
         }
         for (Entity entity : world.getEntities()) {
             LifePart life = entity.getPart(LifePart.class);
             builder.append(entity.toString());
             builder.append(":");
-            if(life != null)
+            if (life != null)
                 builder.append(life.getCurrentHP());
             builder.append("\n");
         }

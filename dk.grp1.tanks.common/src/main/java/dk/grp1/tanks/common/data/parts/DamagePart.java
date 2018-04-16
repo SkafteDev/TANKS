@@ -8,6 +8,9 @@ public class DamagePart implements IEntityPart {
     private float explosionRadius;
     private float damage;
 
+    public DamagePart(){
+
+    }
     /**
      *
      * @param explosionRadius

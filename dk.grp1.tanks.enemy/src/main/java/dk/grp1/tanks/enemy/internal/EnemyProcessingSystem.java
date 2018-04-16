@@ -57,6 +57,8 @@ public class EnemyProcessingSystem implements IEntityProcessingService {
                    // simpleAIControl(ctrlPart, gameData, movePart, world, positionPart);
                     ctrlPart.setLeft(false);
                     ctrlPart.setRight(false);
+                    ctrlPart.setRotation(world.getGameMap().getDirectionVector(new Vector2D(positionPart.getX(), positionPart.getY())));
+
                 }
 
 
@@ -97,7 +99,7 @@ public class EnemyProcessingSystem implements IEntityProcessingService {
                 //Action action = new Action(FirePowerLevel.FIFTY, AimSetting.RIGHT);
                 MinimaxAI aiSystem = new MinimaxAI();
                 Action action = aiSystem.makeDecision(world,gameData,"MAX", enemy);
-                shootActionShot(action, world, gameData, cannonPart, enemy);
+                   shootActionShot(action, world, gameData, cannonPart, enemy);
 
                 turnPart.endMyTurn();
             }

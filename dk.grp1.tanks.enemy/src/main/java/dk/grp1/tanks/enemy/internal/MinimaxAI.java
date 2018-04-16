@@ -13,7 +13,7 @@ public class MinimaxAI {
     public Action makeDecision(World world, GameData gameData, String turn, Entity actor){
         this. enemy = actor;
         Action bestAction = null;
-        float bestUtiltity =0;
+        float bestUtiltity = -Float.MAX_VALUE;
         State state = new State(world, gameData,turn);
 
         Map<Action, State> succ = state.getSuccessors();
@@ -25,6 +25,7 @@ public class MinimaxAI {
                 bestUtiltity = utility;
             }
         }
+        System.out.println(bestAction + "::" + bestUtiltity);
         return bestAction;
     }
 
