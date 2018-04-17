@@ -13,8 +13,21 @@ public class GameMapPluginTest {
         World world = new World();
         GameData gd = new GameData();
         GameMapPlugin plugin = new GameMapPlugin();
+        Assert.assertTrue(world.getGameMap() == null);
         plugin.start(world,gd);
         Assert.assertTrue(world.getGameMap() != null);
+        Assert.assertFalse(world.getGameMap().getGameMapFunctions().isEmpty());
+
+    }
+
+    @Test
+    public void testStop(){
+        World world = new World();
+        GameData gd = new GameData();
+        GameMapPlugin plugin = new GameMapPlugin();
+        plugin.start(world,gd);
+        plugin.stop(world,gd);
+        Assert.assertTrue(world.getGameMap().getGameMapFunctions().isEmpty());
 
     }
 }
