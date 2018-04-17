@@ -25,6 +25,7 @@ public class CannonPart implements IEntityPart{
     private float previousFirepower;
     private float previousAngle;
     private boolean increase = true;
+    private float increasingFactor;
 
     public CannonPart(float jointX, float jointY, float direction, float width, float length, String texturePath) {
         this.jointX = jointX;
@@ -35,6 +36,7 @@ public class CannonPart implements IEntityPart{
         this.width = width;
         this.texturePath = texturePath;
         this.updateShape(); // Updates the shape of the cannon. Otherwise the cannon's vertices is null.
+        this.increasingFactor = 65; //this is the deafault increasing factor. this can be changes through the set method.
     }
 
     /**
@@ -84,9 +86,9 @@ public class CannonPart implements IEntityPart{
         float time = gameData.getDelta();
 
         if (increase) {
-            firepower = (firepower + (time * 65 / 100 * maxFirepower));
+            firepower += (time * increasingFactor * maxFirepower / 100);
         } else {
-            firepower = (firepower - (time * 65 / 100 * maxFirepower));
+            firepower -= (time * increasingFactor * maxFirepower / 100);
         }
 
         if (1 < firepower/maxFirepower) { //percentage of max firepower
@@ -100,6 +102,10 @@ public class CannonPart implements IEntityPart{
         }
 
         return this.firepower;
+    }
+
+    public void setIncreasingFactor(float factor){
+        this.increasingFactor = factor;
     }
 
     @Override
@@ -174,7 +180,11 @@ public class CannonPart implements IEntityPart{
     }
 
     public void setFirepower(float firepower) {
-        this.firepower = firepower;
+        if (firepower > maxFirepower){
+            this.firepower = maxFirepower;
+        } else {
+            this.firepower = firepower;
+        }
     }
 
     public String getTexturePath() {
