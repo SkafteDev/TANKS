@@ -109,8 +109,8 @@ public class GameMapProcessing implements IEventCallback {
         //Calc y value for end point on startFunc. Calc y value for start point on endFunc.x
 
         Vector2D leftFuncPoint = new Vector2D(rangeOneEndX, leftFunc.getYValue(rangeOneEndX));
-        Vector2D leftFlatLinearPoint = new Vector2D(flatLinear.getStartX() + 0.01f, flatLinear.getYValue(flatLinear.getStartX() + 0.01f));
-        Vector2D rightFlatLinearPoint = new Vector2D(flatLinear.getEndX() - 0.01f, flatLinear.getYValue(flatLinear.getEndX() - 0.01f));
+        Vector2D leftFlatLinearPoint = new Vector2D(flatLinear.getStartX() + 0.001f, flatLinear.getYValue(flatLinear.getStartX() + 0.001f));
+        Vector2D rightFlatLinearPoint = new Vector2D(flatLinear.getEndX() - 0.001f, flatLinear.getYValue(flatLinear.getEndX() - 0.001f));
         Vector2D rightFuncPoint = new Vector2D(rangeTwoStartX, rightFunc.getYValue(rangeTwoStartX));
 
         createLinearEdges(gameMap, rangeOneEndX, rangeTwoStartX, flatLinear, leftFuncPoint, leftFlatLinearPoint, rightFlatLinearPoint, rightFuncPoint);

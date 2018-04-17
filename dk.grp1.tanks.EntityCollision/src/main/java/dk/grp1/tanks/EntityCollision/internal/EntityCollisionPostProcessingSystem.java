@@ -12,7 +12,7 @@ public class EntityCollisionPostProcessingSystem implements IPostEntityProcessin
     @Override
     public void postProcess(World world, GameData gameData) {
     if(world == null) {
-        return;
+        throw new IllegalArgumentException("World is null");
     }
         for (Entity entity1: world.getEntities()) {
             for (Entity entity2: world.getEntities()) {

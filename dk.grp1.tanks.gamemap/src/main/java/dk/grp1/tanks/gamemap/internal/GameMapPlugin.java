@@ -98,7 +98,7 @@ public class GameMapPlugin implements IGamePluginService {
         Random random = new Random();
         switch (random.nextInt(2)) {
             case 0:
-                return generateLinearMapFunction(new GameMapLinear(random.nextFloat() * 2f - 1f, BOTTOMBOUNDARY + (random.nextFloat() * TOPBOUNDARY), 0f, 0f),random,mapFunctionInterval);
+                return generateLinearMapFunction(new GameMapLinear(random.nextFloat() * 2f - 1f, BOTTOMBOUNDARY + (random.nextFloat() * TOPBOUNDARY), 0f, 1f),random,mapFunctionInterval);
             case 1:
                 return new GameMapSin(100f, (1 / 66f), 0, gameData.getGameHeight() / 3f, 0f, mapFunctionInterval);
         }
@@ -110,6 +110,8 @@ public class GameMapPlugin implements IGamePluginService {
     public void stop(World world, GameData gameData) {
         System.out.println("Map stopped");
         gameData.getEventManager().unRegister(MapDestructionEvent.class, eventCallback);
-        world.setGameMap(null);
+        if(world.getGameMap() != null){
+            world.getGameMap().getGameMapFunctions().clear();
+        }
     }
 }
