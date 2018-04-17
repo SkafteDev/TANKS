@@ -15,8 +15,13 @@ import java.util.ArrayList;
 public class MapCollisionProcessing implements IPostEntityProcessingService {
     @Override
     public void postProcess(World world, GameData gameData) {
+        if(world == null || gameData == null){
+            throw new IllegalArgumentException("World or gamedata is null");
+        }
         GameMap gameMap = world.getGameMap();
-
+        if(gameMap == null){
+            throw new IllegalStateException("GameMap does not exist");
+        }
         for (Entity entity : world.getEntities()) {
             CollisionPart collisionPart = entity.getPart(CollisionPart.class);
             if (collisionPart != null && collisionPart.canCollide()) {
@@ -47,16 +52,15 @@ public class MapCollisionProcessing implements IPostEntityProcessingService {
     }
 
     private void circleThreePointMapCollision(GameMap gameMap, Entity entity) {
-        PositionPart positionPart = entity.getPart(PositionPart.class);
         CollisionPart collisionPart = entity.getPart(CollisionPart.class);
         CirclePart circlePart = entity.getPart(CirclePart.class);
 
-        if (positionPart != null && collisionPart != null && circlePart != null) {
+        if (collisionPart != null && circlePart != null) {
 
-            float x = positionPart.getX();
-            float y = positionPart.getY();
+            float x = circlePart.getCentreX();
+            float y = circlePart.getCentreY();
             float radius = circlePart.getRadius();
-            float gameMapHeight = gameMap.getHeight(new Vector2D(positionPart.getX(),positionPart.getY()));
+            float gameMapHeight = gameMap.getHeight(new Vector2D(circlePart.getCentreX(),circlePart.getCentreY()));
 
             ArrayList<Float> xCordinates = new ArrayList<>();
             xCordinates.add(0f);
