@@ -1,6 +1,5 @@
 package dk.grp1.tanks.gamemap.internal;
 
-import com.sun.tools.internal.xjc.model.CEnumConstant;
 import dk.grp1.tanks.common.data.IGameMapFunction;
 import dk.grp1.tanks.common.utils.Vector2D;
 
