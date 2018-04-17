@@ -54,7 +54,7 @@ public class GameMapLinear implements IGameMapFunction {
 
     @Override
     public float getYValue(float xValue) {
-        if(!isWithin(xValue)){
+        if(xValue < startX || xValue > endX){
             throw new IllegalArgumentException("xValue must be within the function range");
         }
         return a * xValue + b;

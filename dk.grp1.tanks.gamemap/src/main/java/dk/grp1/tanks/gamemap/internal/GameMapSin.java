@@ -55,7 +55,7 @@ public class GameMapSin implements IGameMapFunction {
 
     @Override
     public float getYValue(float xValue) {
-        if(!isWithin(xValue)){
+        if(xValue < startX || xValue > endX){
             throw new IllegalArgumentException("xValue must be within range of function");
         }
         return (float) (amplitude * Math.sin((angularFrequency * xValue + phaseShift)) + shiftConstant);
