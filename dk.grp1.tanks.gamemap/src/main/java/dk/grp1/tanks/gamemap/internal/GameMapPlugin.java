@@ -5,6 +5,7 @@ import dk.grp1.tanks.common.data.GameMap;
 import dk.grp1.tanks.common.data.IGameMapFunction;
 import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.eventManager.IEventCallback;
+import dk.grp1.tanks.common.eventManager.events.GameMapChangedEvent;
 import dk.grp1.tanks.common.eventManager.events.MapDestructionEvent;
 import dk.grp1.tanks.common.services.IGamePluginService;
 
@@ -20,6 +21,7 @@ public class GameMapPlugin implements IGamePluginService {
         world.setGameMap(createNewGameMap(gameData));
         eventCallback =  new GameMapProcessing(gameData,world);
         gameData.getEventManager().register(MapDestructionEvent.class, eventCallback);
+        gameData.getEventManager().addEvent(new GameMapChangedEvent(null));
         System.out.println("Created a new game map");
     }
 
@@ -110,6 +112,7 @@ public class GameMapPlugin implements IGamePluginService {
     public void stop(World world, GameData gameData) {
         System.out.println("Map stopped");
         gameData.getEventManager().unRegister(MapDestructionEvent.class, eventCallback);
+        gameData.getEventManager().addEvent(new GameMapChangedEvent(null));
         if(world.getGameMap() != null){
             world.getGameMap().getGameMapFunctions().clear();
         }

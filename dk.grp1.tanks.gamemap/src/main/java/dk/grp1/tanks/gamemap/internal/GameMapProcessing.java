@@ -6,6 +6,7 @@ import dk.grp1.tanks.common.data.IGameMapFunction;
 import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.eventManager.IEventCallback;
 import dk.grp1.tanks.common.eventManager.events.Event;
+import dk.grp1.tanks.common.eventManager.events.GameMapChangedEvent;
 import dk.grp1.tanks.common.eventManager.events.MapDestructionEvent;
 import dk.grp1.tanks.common.services.INonEntityProcessingService;
 import dk.grp1.tanks.common.utils.Vector2D;
@@ -34,8 +35,12 @@ public class GameMapProcessing implements IEventCallback {
 
     @Override
     public void processEvent(Event event) {
-        List<Vector2D> intersectionPoints = calculateIntersectionPointsWithMap(event, world);
-        replacePartsOfMapWithLinearFunctions(intersectionPoints, world, event);
+
+        if(event instanceof MapDestructionEvent) {
+            List<Vector2D> intersectionPoints = calculateIntersectionPointsWithMap(event, world);
+            replacePartsOfMapWithLinearFunctions(intersectionPoints, world, event);
+            gameData.getEventManager().addEvent(new GameMapChangedEvent(event.getSource()));
+        }
     }
 
     /**

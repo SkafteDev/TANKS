@@ -16,7 +16,9 @@ public class OutOfBoundsProcessingSystem implements IPostEntityProcessingService
 
     @Override
     public void postProcess(World world, GameData gameData) {
-
+        if(world == null || gameData == null){
+            throw new IllegalArgumentException("World or gamedata is null");
+        }
         //Mark the entities to be removed
         for (Entity entity : world.getEntities()) {
             PositionPart positionPart = entity.getPart(PositionPart.class);
