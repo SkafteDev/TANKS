@@ -1,8 +1,6 @@
 package dk.grp1.tanks.common.data;
 
-import com.sun.xml.internal.fastinfoset.algorithm.UUIDEncodingAlgorithm;
 import dk.grp1.tanks.common.data.parts.IEntityPart;
-import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.ArrayList;
