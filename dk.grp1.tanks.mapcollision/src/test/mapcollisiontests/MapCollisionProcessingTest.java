@@ -12,7 +12,7 @@ import java.util.List;
 public class MapCollisionProcessingTest {
 
     @org.junit.Test
-    public void postProcessTestWithCollision(){
+    public void postProcessTestWithCollisionAboveMap(){
         IPostEntityProcessingService iPostEntityProcessingService = new MapCollisionProcessing();
         World world = new World();
         GameData gameData = new GameData();
@@ -25,7 +25,29 @@ public class MapCollisionProcessingTest {
         //Create Entity
         Entity entity = new TestEntity();
         entity.add(new CollisionPart(true,0f));
-        entity.add(new CirclePart(50,52,5));
+        entity.add(new CirclePart(50,54,5));
+        world.addEntity(entity);
+
+        iPostEntityProcessingService.postProcess(world,gameData);
+        CollisionPart collisionPart = entity.getPart(CollisionPart.class);
+
+        Assert.assertTrue(collisionPart.isHitGameMap());
+    }
+    @org.junit.Test
+    public void postProcessTestWithCollisionBelowMap(){
+        IPostEntityProcessingService iPostEntityProcessingService = new MapCollisionProcessing();
+        World world = new World();
+        GameData gameData = new GameData();
+        //Create GameMap
+        IGameMapFunction gameMapFunction = new MapFunctionTest();
+        GameMap gameMap = new GameMap(500,500);
+        gameMap.addGameMapFunction(gameMapFunction);
+        world.setGameMap(gameMap);
+
+        //Create Entity
+        Entity entity = new TestEntity();
+        entity.add(new CollisionPart(true,0f));
+        entity.add(new CirclePart(50,10,5));
         world.addEntity(entity);
 
         iPostEntityProcessingService.postProcess(world,gameData);

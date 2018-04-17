@@ -63,15 +63,15 @@ public class MapCollisionProcessing implements IPostEntityProcessingService {
             float gameMapHeight = gameMap.getHeight(new Vector2D(circlePart.getCentreX(),circlePart.getCentreY()));
 
             ArrayList<Float> xCordinates = new ArrayList<>();
-            xCordinates.add(0f);
+            xCordinates.add(x);
 
             for (int i = 1; i < 5; i++) {
-                xCordinates.add(-1 * (i * radius / 5));
-                xCordinates.add((i * radius / 5));
+                xCordinates.add(-1 * (i * radius / 5)+x);
+                xCordinates.add((i * radius / 5)+x);
             }
 
             for (float c : xCordinates) {
-                float checkY = calculateYCordinate(c, radius) + y;
+                float checkY = calculateYCordinate(c, radius,x,y);
                 if (checkY <= gameMapHeight) {
                     collisionPart.setHitGameMap(true);
                     return;
@@ -82,7 +82,10 @@ public class MapCollisionProcessing implements IPostEntityProcessingService {
         }
     }
 
-    private float calculateYCordinate(float x, float radius) {
-        return (float) (-1 * Math.sqrt(-1 * Math.pow(x, 2) + Math.pow(radius, 2)));
+    private float calculateYCordinate(float xValue, float radius,float centerX, float centerY) {
+        float toSqrt = (-(centerX*centerX)+ 2 * xValue * centerX + (radius*radius) - (xValue*xValue));
+        return (float) (centerY - Math.sqrt(toSqrt));
+
+        //return (float) (-1 * Math.sqrt(-1 * Math.pow(x, 2) + Math.pow(radius, 2)));
     }
 }
