@@ -33,7 +33,7 @@ public class GameMapNegHalfCircl {
     @Test
     public void testGetStartX() {
         float startX = 0;
-        GameMapNegativeHalfCircle map = new GameMapNegativeHalfCircle(10, 20, 15, 5, 5);
+        GameMapNegativeHalfCircle map = new GameMapNegativeHalfCircle(startX, 20, 15, 5, 5);
         Assert.assertEquals(map.getStartX(), startX, 0.005);
     }
 
@@ -49,9 +49,8 @@ public class GameMapNegHalfCircl {
 
     @org.junit.Test(expected = IllegalArgumentException.class)
     public void testGetYValueOutsideRange() {
-        float startX = 0;
         float mapHeight = 100;
-        GameMapNegativeHalfCircle map = new GameMapNegativeHalfCircle(0, mapHeight, startX, 20);
+        GameMapNegativeHalfCircle map = new GameMapNegativeHalfCircle(10, 20, 15, 5, 5);
         Assert.assertEquals(map.getYValue(-2), mapHeight, 0.005);
 
 
@@ -59,79 +58,85 @@ public class GameMapNegHalfCircl {
 
     @org.junit.Test(expected = IllegalArgumentException.class)
     public void testGetYValueOutsideRange2() {
-        float startX = 0;
         float mapHeight = 100;
-        GameMapNegativeHalfCircle map = new GameMapNegativeHalfCircle(0, mapHeight, startX, 20);
+        GameMapNegativeHalfCircle map = new GameMapNegativeHalfCircle(10, 20, 15, 5, 5);
         Assert.assertEquals(map.getYValue(30), mapHeight, 0.005);
 
 
     }
 
-    @org.junit.Test
-    public void testGetYValueTiltedMap() {
-        float startX = 0;
-        float mapHeight = 100;
-        float inclination = 2.5f;
-        GameMapNegativeHalfCircle map = new GameMapNegativeHalfCircle(inclination, mapHeight, startX, 500);
-        Assert.assertEquals(map.getYValue(0), mapHeight, 0.005);
-        Assert.assertEquals(map.getYValue(10), 10 * inclination + mapHeight, 0.005);
-        Assert.assertEquals(map.getYValue(50), 50 * inclination + mapHeight, 0.005);
-        Assert.assertEquals(map.getYValue(300), 300 * inclination + mapHeight, 0.005);
-        Assert.assertEquals(map.getYValue(499), 499 * inclination + mapHeight, 0.005);
+    @Test
+    public void testGetYValueAtStartBoundary() {
+        GameMapNegativeHalfCircle map = new GameMapNegativeHalfCircle(10, 20, 15, 5, 5);
+        Assert.assertEquals(map.getYValue(10), 5, 0.005);
+
+
+    }
+
+    @Test
+    public void testGetYValueAtEndBoundary() {
+        GameMapNegativeHalfCircle map = new GameMapNegativeHalfCircle(10, 20, 15, 5, 5);
+        Assert.assertEquals(map.getYValue(20), 5, 0.005);
 
 
     }
 
     @org.junit.Test
     public void testGetEndX() {
-        float startX = 0;
-        float endX = 300;
-        GameMapNegativeHalfCircle map = new GameMapNegativeHalfCircle(0, 100, startX, endX);
-        Assert.assertEquals(map.getEndX(), endX, 0.005);
+        GameMapNegativeHalfCircle map = new GameMapNegativeHalfCircle(10, 20, 15, 5, 5);
+        Assert.assertEquals(map.getEndX(), 20, 0.005);
     }
 
     @org.junit.Test(expected = IllegalArgumentException.class)
     public void testCreateStartXgreaterThanEndX() {
         float startX = 100;
         float endX = 20;
-        GameMapNegativeHalfCircle map = new GameMapNegativeHalfCircle(0, 100, startX, endX);
+        GameMapNegativeHalfCircle map = new GameMapNegativeHalfCircle(startX, endX, 15, 5, 5);
     }
 
     @org.junit.Test(expected = IllegalArgumentException.class)
     public void testCreateStartXEqualToEndX() {
         float startX = 100;
         float endX = startX;
-        GameMapNegativeHalfCircle map = new GameMapNegativeHalfCircle(0, 100, startX, endX);
+        GameMapNegativeHalfCircle map = new GameMapNegativeHalfCircle(startX, endX, 15, 5, 5);
     }
 
 
     @org.junit.Test
-    public void testGetYValuesTiltedMap() {
-        float startX = 0;
-        float mapHeight = 100;
-        float inclination = 2.5f;
-        GameMapNegativeHalfCircle map = new GameMapNegativeHalfCircle(inclination, mapHeight, startX, 500);
-        List<Float> xValues = new ArrayList<>();
-        xValues.add(0f);
-        xValues.add(10f);
-        xValues.add(50f);
-        xValues.add(300f);
-        xValues.add(499f);
-        List<Float> yvalues = map.getYValues(xValues);
-        Assert.assertEquals(yvalues.get(0), xValues.get(0) * inclination + mapHeight, 0.005);
-        Assert.assertEquals(yvalues.get(1), xValues.get(1) * inclination + mapHeight, 0.005);
-        Assert.assertEquals(yvalues.get(2), xValues.get(2) * inclination + mapHeight, 0.005);
-        Assert.assertEquals(yvalues.get(3), xValues.get(3) * inclination + mapHeight, 0.005);
-        Assert.assertEquals(yvalues.get(4), xValues.get(4) * inclination + mapHeight, 0.005);
+    public void testGetYValuesCircleMap() {
+        float startX = 10;
+        float a = 15;
 
+        GameMapNegativeHalfCircle map = new GameMapNegativeHalfCircle(startX, 20, 15, 5, 5);
+        List<Float> xValues = new ArrayList<>();
+        xValues.add(startX);
+        xValues.add(startX+2);
+        xValues.add(startX+5);
+        xValues.add(startX+7);
+        xValues.add(startX+9);
+        List<Float> yvalues = map.getYValues(xValues);
+        Assert.assertEquals(getCricleYValue(xValues.get(0)), yvalues.get(0), 0.005);
+        Assert.assertEquals(yvalues.get(1), getCricleYValue(xValues.get(1)), 0.005);
+        Assert.assertEquals(yvalues.get(2), getCricleYValue(xValues.get(2)), 0.005);
+        Assert.assertEquals(yvalues.get(3), getCricleYValue(xValues.get(3)), 0.005);
+        Assert.assertEquals(yvalues.get(4), getCricleYValue(xValues.get(4)), 0.005);
 
     }
+
+    private float getCricleYValue(float x) {
+        float a = 15;
+        float b = 5;
+        float r = 5;
+        float y = (float) (b - Math.sqrt(-(a*a) + 2 * a * x + r * r - (x * x)));
+        return y;
+    }
+
 
     @org.junit.Test
     public void testIsWithinIsWithin() {
         float startX = 10;
         float endX = 20;
-        GameMapNegativeHalfCircle map = new GameMapNegativeHalfCircle(0, 100, startX, endX);
+        GameMapNegativeHalfCircle map = new GameMapNegativeHalfCircle(startX, 20, 15, 5, 5);
         Assert.assertTrue(map.isWithin(15));
     }
 
@@ -139,7 +144,7 @@ public class GameMapNegHalfCircl {
     public void testIsWithinIsNotWithin() {
         float startX = 10;
         float endX = 20;
-        GameMapNegativeHalfCircle map = new GameMapNegativeHalfCircle(0, 100, startX, endX);
+        GameMapNegativeHalfCircle map = new GameMapNegativeHalfCircle(startX, 20, 15, 5, 5);
         Assert.assertFalse(map.isWithin(25));
     }
 
@@ -147,7 +152,7 @@ public class GameMapNegHalfCircl {
     public void testIsWithinEdge1() {
         float startX = 10;
         float endX = 20;
-        GameMapNegativeHalfCircle map = new GameMapNegativeHalfCircle(0, 100, startX, endX);
+        GameMapNegativeHalfCircle map = new GameMapNegativeHalfCircle(startX, 20, 15, 5, 5);
         Assert.assertTrue(map.isWithin(10));
     }
 
@@ -155,16 +160,16 @@ public class GameMapNegHalfCircl {
     public void testIsWithinEdge2() {
         float startX = 10;
         float endX = 20;
-        GameMapNegativeHalfCircle map = new GameMapNegativeHalfCircle(0, 100, startX, endX);
+        GameMapNegativeHalfCircle map = new GameMapNegativeHalfCircle(startX, 20, 15, 5, 5);
         Assert.assertFalse(map.isWithin(20));
     }
 
     @org.junit.Test
     public void testSetEndX() {
-        float startX = 0;
-        float endX = 300;
-        GameMapNegativeHalfCircle map = new GameMapNegativeHalfCircle(0, 100, startX, endX);
-        float newEndX = 20;
+        float startX = 50;
+        float endX = 65;
+        GameMapNegativeHalfCircle map = new GameMapNegativeHalfCircle(startX, endX, 15, 5, 50);
+        float newEndX = 60;
         map.setEndX(newEndX);
         Assert.assertEquals(map.getEndX(), newEndX, 0.005);
     }
@@ -173,7 +178,7 @@ public class GameMapNegHalfCircl {
     public void testSetEndXLessThanStartX() {
         float startX = 0;
         float endX = 300;
-        GameMapNegativeHalfCircle map = new GameMapNegativeHalfCircle(0, 100, startX, endX);
+        GameMapNegativeHalfCircle map = new GameMapNegativeHalfCircle(startX, endX, 15, 5, 5);
         float newEndX = -5;
         map.setEndX(newEndX);
         Assert.assertEquals(map.getEndX(), newEndX, 0.005);
@@ -181,19 +186,29 @@ public class GameMapNegHalfCircl {
 
     @org.junit.Test
     public void testSetStartX() {
-        float startX = 0;
-        float endX = 300;
-        GameMapNegativeHalfCircle map = new GameMapNegativeHalfCircle(0, 100, startX, endX);
+        float startX = 10;
+        float endX = 60;
+        GameMapNegativeHalfCircle map = new GameMapNegativeHalfCircle(startX, endX, 15, 5, 50);
         float newStartX = 20;
         map.setStartX(newStartX);
         Assert.assertEquals(map.getStartX(), newStartX, 0.005);
     }
 
+   @Test(expected = IllegalArgumentException.class)
+   public void testSetStartXTooFarAway(){
+       float startX = 10;
+       float endX = 20;
+       GameMapNegativeHalfCircle map = new GameMapNegativeHalfCircle(startX, endX, 15, 5, 5);
+       float newStartX = 30;
+       map.setStartX(newStartX);
+       Assert.assertEquals(map.getStartX(), newStartX, 0.005);
+   }
+
     @org.junit.Test(expected = IllegalArgumentException.class)
     public void testSetStartXGreaterThanEndX() {
         float startX = 0;
         float endX = 300;
-        GameMapNegativeHalfCircle map = new GameMapNegativeHalfCircle(0, 100, startX, endX);
+        GameMapNegativeHalfCircle map = new GameMapNegativeHalfCircle(startX, endX, 15, 5, 5);
         float newStartX = 400;
         map.setStartX(newStartX);
         Assert.assertEquals(map.getStartX(), newStartX, 0.005);
@@ -203,7 +218,7 @@ public class GameMapNegHalfCircl {
     public void testIsOnlyWithin() {
         float startX = 10;
         float endX = 20;
-        GameMapNegativeHalfCircle map = new GameMapNegativeHalfCircle(0, 100, startX, endX);
+        GameMapNegativeHalfCircle map = new GameMapNegativeHalfCircle(startX, endX, 15, 5, 5);
         Assert.assertTrue(map.existsOnlyWithinRange(5, 25));
     }
 
@@ -211,7 +226,7 @@ public class GameMapNegHalfCircl {
     public void testIsOnlyWithinWithOut() {
         float startX = 10;
         float endX = 20;
-        GameMapNegativeHalfCircle map = new GameMapNegativeHalfCircle(0, 100, startX, endX);
+        GameMapNegativeHalfCircle map = new GameMapNegativeHalfCircle(startX, endX, 15, 5, 5);
         Assert.assertFalse(map.existsOnlyWithinRange(5, 8));
     }
 
@@ -219,7 +234,7 @@ public class GameMapNegHalfCircl {
     public void testIsOnlyWithinHalfOverlap() {
         float startX = 10;
         float endX = 20;
-        GameMapNegativeHalfCircle map = new GameMapNegativeHalfCircle(0, 100, startX, endX);
+        GameMapNegativeHalfCircle map = new GameMapNegativeHalfCircle(startX, endX, 15, 5, 5);
         Assert.assertFalse(map.existsOnlyWithinRange(5, 15));
     }
 
@@ -227,7 +242,7 @@ public class GameMapNegHalfCircl {
     public void testIsOnlyWithinOverlap() {
         float startX = 10;
         float endX = 20;
-        GameMapNegativeHalfCircle map = new GameMapNegativeHalfCircle(0, 100, startX, endX);
+        GameMapNegativeHalfCircle map = new GameMapNegativeHalfCircle(startX, endX, 15, 5, 5);
         Assert.assertTrue(map.existsOnlyWithinRange(10, 20));
     }
 
@@ -235,7 +250,7 @@ public class GameMapNegHalfCircl {
     public void testIsOnlyWithinEdge1() {
         float startX = 10;
         float endX = 20;
-        GameMapNegativeHalfCircle map = new GameMapNegativeHalfCircle(0, 100, startX, endX);
+        GameMapNegativeHalfCircle map = new GameMapNegativeHalfCircle(startX, endX, 15, 5, 5);
         Assert.assertTrue(map.existsOnlyWithinRange(10, 30));
     }
 
@@ -243,7 +258,7 @@ public class GameMapNegHalfCircl {
     public void testIsOnlyWithinEdge2() {
         float startX = 10;
         float endX = 20;
-        GameMapNegativeHalfCircle map = new GameMapNegativeHalfCircle(0, 100, startX, endX);
+        GameMapNegativeHalfCircle map = new GameMapNegativeHalfCircle(startX, endX, 15, 5, 5);
         Assert.assertTrue(map.existsOnlyWithinRange(5, 20));
     }
 
@@ -251,7 +266,7 @@ public class GameMapNegHalfCircl {
     public void testSplitIntoNewRangesPerfect() {
         float startX = 10;
         float endX = 20;
-        GameMapNegativeHalfCircle map = new GameMapNegativeHalfCircle(0, 100, startX, endX);
+        GameMapNegativeHalfCircle map = new GameMapNegativeHalfCircle(startX, endX, 15, 5, 5);
         List<IGameMapFunction> splits = map.splitInTwoWithNewRanges(10, 15, 15, 20);
         Assert.assertEquals(2, splits.size());
         Assert.assertEquals(startX, splits.get(0).getStartX(), 0.001);
@@ -268,7 +283,7 @@ public class GameMapNegHalfCircl {
     public void testSplitIntoNewRangesRangesSubsetTheFunction() {
         float startX = 12;
         float endX = 18;
-        GameMapNegativeHalfCircle map = new GameMapNegativeHalfCircle(100, 100, 10, 20);
+        GameMapNegativeHalfCircle map = new GameMapNegativeHalfCircle(startX, endX, 15, 5, 5);
         List<IGameMapFunction> splits = map.splitInTwoWithNewRanges(12, 15, 15, 18);
         Assert.assertEquals(2, splits.size());
         Assert.assertEquals(startX, splits.get(0).getStartX(), 0.001);
@@ -285,7 +300,7 @@ public class GameMapNegHalfCircl {
     public void testSplitIntoNewRangesRangesSuperSetTheFunction() {
         float startX = 8;
         float endX = 22;
-        GameMapNegativeHalfCircle map = new GameMapNegativeHalfCircle(100, 100, 10, 20);
+        GameMapNegativeHalfCircle map = new GameMapNegativeHalfCircle(10, 20, 15, 5, 5);
         List<IGameMapFunction> splits = map.splitInTwoWithNewRanges(8, 15, 15, 22);
         Assert.assertEquals(2, splits.size());
         Assert.assertEquals(startX, splits.get(0).getStartX(), 0.001);
@@ -303,7 +318,7 @@ public class GameMapNegHalfCircl {
     public void testSplitIntoNewRangesNotConnect() {
         float startX = 10;
         float endX = 20;
-        GameMapNegativeHalfCircle map = new GameMapNegativeHalfCircle(100, 100, 10, 20);
+        GameMapNegativeHalfCircle map = new GameMapNegativeHalfCircle(startX, endX, 15, 5, 5);
         List<IGameMapFunction> splits = map.splitInTwoWithNewRanges(10, 12, 17, 20);
         Assert.assertEquals(2, splits.size());
         Assert.assertEquals(startX, splits.get(0).getStartX(), 0.001);
@@ -319,4 +334,4 @@ public class GameMapNegHalfCircl {
 
 }
 
-}
+
