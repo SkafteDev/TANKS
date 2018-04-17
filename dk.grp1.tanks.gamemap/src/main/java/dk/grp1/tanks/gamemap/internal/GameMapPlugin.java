@@ -110,6 +110,8 @@ public class GameMapPlugin implements IGamePluginService {
     public void stop(World world, GameData gameData) {
         System.out.println("Map stopped");
         gameData.getEventManager().unRegister(MapDestructionEvent.class, eventCallback);
-        world.setGameMap(null);
+        if(world.getGameMap() != null){
+            world.getGameMap().getGameMapFunctions().clear();
+        }
     }
 }
