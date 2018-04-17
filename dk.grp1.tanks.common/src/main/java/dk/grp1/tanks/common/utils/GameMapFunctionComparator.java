@@ -9,7 +9,7 @@ public class GameMapFunctionComparator implements Comparator<IGameMapFunction> {
     @Override
     public int compare(IGameMapFunction current, IGameMapFunction other) {
 
-        if(other == null && current == null){
+        if(other == null || current == null){
             return -1;
         }
         if(current.getStartX() < other.getStartX()){
