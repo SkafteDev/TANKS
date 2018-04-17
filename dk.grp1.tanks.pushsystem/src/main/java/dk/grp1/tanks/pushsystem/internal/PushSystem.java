@@ -58,6 +58,7 @@ public class PushSystem implements IEventCallback {
             float distance = (float) (Math.sqrt(distX * distX + distY * distY));
             return distance < (exEvnt.getPushRadius() + circlePart.getRadius());
         }
+        return false;
     }
 
     private Vector2D getPushDirection(Entity ent, PushEvent evnt){
