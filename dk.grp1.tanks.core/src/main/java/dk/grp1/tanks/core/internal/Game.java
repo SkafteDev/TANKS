@@ -121,8 +121,6 @@ public class Game implements ApplicationListener, IEventCallback {
     private void initGame() {
         this.world = new World();
         this.gameData = new GameData();
-        gameData.setDisplayHeight(HEIGHT);
-        gameData.setDisplayWidth(WIDTH);
         gameAssetManager = new GameAssetManager();
         this.drawImplementations = new ArrayList<>();
         this.animationsToProcess = new ArrayList<>();
