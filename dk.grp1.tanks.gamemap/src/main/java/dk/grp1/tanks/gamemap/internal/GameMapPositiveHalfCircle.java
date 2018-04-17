@@ -24,7 +24,7 @@ public class GameMapPositiveHalfCircle implements IGameMapFunction {
 
 
         float distanceToEnd = Math.abs(endX - center.getX());
-        if (radius < (distanceToEnd)){
+        if (radius - (distanceToEnd) < -0.001f){
             throw new IllegalArgumentException("Radius cannot be shorter than distance from centre to end");
         }
 
