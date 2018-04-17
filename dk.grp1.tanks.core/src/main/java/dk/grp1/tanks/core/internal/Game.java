@@ -15,11 +15,8 @@ import com.badlogic.gdx.utils.ShortArray;
 import dk.grp1.tanks.common.data.*;
 import dk.grp1.tanks.common.data.parts.*;
 import dk.grp1.tanks.common.eventManager.IEventCallback;
-import dk.grp1.tanks.common.eventManager.events.ShakeEvent;
-import dk.grp1.tanks.common.eventManager.events.SoundEvent;
+import dk.grp1.tanks.common.eventManager.events.*;
 import dk.grp1.tanks.common.services.*;
-import dk.grp1.tanks.common.eventManager.events.Event;
-import dk.grp1.tanks.common.eventManager.events.ExplosionAnimationEvent;
 import dk.grp1.tanks.common.utils.Vector2D;
 import dk.grp1.tanks.core.internal.GUI.*;
 import dk.grp1.tanks.core.internal.managers.CustomAssetManager;
@@ -59,6 +56,7 @@ public class Game implements ApplicationListener, IEventCallback {
     private PolygonSprite gameMapPolySprite;
     private PolygonSpriteBatch polySpriteBatch;
     private TextureRegion textureRegion;
+    private Boolean shouldUpdateMap;
 
     private CustomAssetManager assetManager;
 
@@ -133,6 +131,7 @@ public class Game implements ApplicationListener, IEventCallback {
         gameData.getEventManager().register(ExplosionAnimationEvent.class,this);
         gameData.getEventManager().register(SoundEvent.class,this);
         gameData.getEventManager().register(ShakeEvent.class,this);
+        gameData.getEventManager().register(GameMapChangedEvent.class,this);
 
 
     }
@@ -285,6 +284,8 @@ public class Game implements ApplicationListener, IEventCallback {
             playSounds((SoundEvent) event);
         } else if (event instanceof ShakeEvent){
             processShakeEvent(event);
+        } else if (event instanceof GameMapChangedEvent){
+            shouldUpdateMap = true;
         }
 
     }
@@ -342,7 +343,12 @@ public class Game implements ApplicationListener, IEventCallback {
         }
 
         if (!DEBUG) {
-            gameMapPolySprite = new PolygonSprite(convertGameMapToPolyRegion(gameMap));
+
+            if (gameMapPolySprite == null || shouldUpdateMap == true ) {
+                gameMapPolySprite = new PolygonSprite(convertGameMapToPolyRegion(gameMap));
+                shouldUpdateMap = false;
+            }
+
             polySpriteBatch.begin();
             polySpriteBatch.setProjectionMatrix(camera.combined);
             gameMapPolySprite.draw(polySpriteBatch);
