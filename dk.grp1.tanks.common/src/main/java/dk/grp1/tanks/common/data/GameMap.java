@@ -124,7 +124,7 @@ public class GameMap {
             }
         }
 
-        float minDifference = ownPosition.getY();
+        float minDifference = Float.MAX_VALUE;
         float y = -1f;
         for (Float yValue : yValues) {
             if(minDifference > Math.abs(ownPosition.getY() - yValue)){
