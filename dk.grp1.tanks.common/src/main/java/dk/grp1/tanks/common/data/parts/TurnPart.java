@@ -7,68 +7,23 @@ import dk.grp1.tanks.common.eventManager.events.EndTurnEvent;
 
 public class TurnPart implements IEntityPart {
 
-    private static int turnPartCount;
-    private int myTurnNumber;
-    private static int currentTurnNumber;
-
-    private float turnDuration = 30f;
-    private float turnTimeRemaining = turnDuration;
-
-    private boolean turnEndRequested;
+    private boolean myTurn;
     public TurnPart(){
-        myTurnNumber = turnPartCount++;
+
 
     }
-
-    public static void setCurrentTurnNumber(int currentTurnNumber) {
-        TurnPart.currentTurnNumber = currentTurnNumber;
-    }
-    public static int getCurrentTurnNumber() {
-       return currentTurnNumber;
-    }
-    public static int getTurnPartCount() {
-        return turnPartCount;
-    }
-
-    public float getTurnDuration() {
-        return turnDuration;
-    }
-
-    public static void resetPart(){
-        currentTurnNumber = 0;
-        turnPartCount = 0;
-    }
-
 
     @Override
     public void processPart(Entity entity, GameData gameData, World world) {
-        if(isMyTurn()) {
-            turnTimeRemaining -= gameData.getDelta();
-            if (turnTimeRemaining < 0 ||turnEndRequested) {
-                gameData.getEventManager().addEvent(new EndTurnEvent(entity));
-                turnTimeRemaining = turnDuration;
-                turnEndRequested = false;
-            }
-        }
+
     }
+
 
     public boolean isMyTurn() {
-        return currentTurnNumber == myTurnNumber;
+        return myTurn;
     }
 
-    public float getTurnTimeRemaining(){
-        return turnTimeRemaining;
-    }
-
-    public int getMyTurnNumber() {
-        return myTurnNumber;
-    }
-
-    public void endMyTurn(){
-        turnEndRequested = true;
-    }
-
-    public boolean getEndMyTurn() {
-        return turnEndRequested;
+    public void setMyTurn(boolean myTurn) {
+        this.myTurn = myTurn;
     }
 }

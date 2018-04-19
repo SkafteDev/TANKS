@@ -7,6 +7,7 @@ import dk.grp1.tanks.common.data.parts.TurnPart;
 import dk.grp1.tanks.common.eventManager.IEventCallback;
 import dk.grp1.tanks.common.eventManager.events.EndTurnEvent;
 import dk.grp1.tanks.common.services.IGamePluginService;
+import dk.grp1.tanks.common.services.ITurnManager;
 
 public class TurnGamePlugin implements IGamePluginService {
 
@@ -17,13 +18,14 @@ public class TurnGamePlugin implements IGamePluginService {
 
     @Override
     public void start(World world, GameData gameData) {
-
+        (( TurnManager) callback).setGameData(gameData);
+        gameData.setTurnManager((ITurnManager) callback);
         gameData.getEventManager().register(EndTurnEvent.class, callback);
     }
 
     @Override
     public void stop(World world, GameData gameData) {
-        TurnPart.resetPart();
+
         gameData.getEventManager().unRegister(EndTurnEvent.class, callback);
 
     }
