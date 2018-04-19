@@ -16,6 +16,9 @@ public class PlayerGamePlugin implements IGamePluginService {
 
     @Override
     public void start(World world, GameData gameData) {
+        if(world == null ||gameData==null){
+            throw new IllegalArgumentException("World or Gamedata is null");
+        }
         
         for (int i = 0; i < numPlayers; i++) {
             world.addEntity(createPlayer(gameData));
@@ -54,6 +57,9 @@ public class PlayerGamePlugin implements IGamePluginService {
 
     @Override
     public void stop(World world, GameData gameData) {
+        if(world == null ||gameData==null){
+            throw new IllegalArgumentException("World or Gamedata is null");
+        }
         for (Entity player : world.getEntities(Player.class)) {
             world.removeEntity(player);
             gameData.removeWeponListener(player.getPart(InventoryPart.class));
