@@ -14,20 +14,47 @@ public class GameMapPositiveHalfCircle implements IGameMapFunction {
     private float radius;
 
     public GameMapPositiveHalfCircle(float startX, float endX, float centerX, float centerY, float radius) {
+        this (startX, endX, new Vector2D(centerX, centerY), radius);
+    }
+
+    public GameMapPositiveHalfCircle(float startX, float endX, Vector2D center, float radius) {
+        if (center == null){
+            throw new IllegalArgumentException("Vector to centre may not be null");
+        }
+
+
+        float distanceToEnd = Math.abs(endX - center.getX());
+        if (radius - (distanceToEnd) < -0.001f){
+            throw new IllegalArgumentException("Radius cannot be shorter than distance from centre to end");
+        }
+
+        float distanceFromStart = Math.abs(center.getX() - center.getX());
+        if (radius < (distanceFromStart)){
+            throw new IllegalArgumentException("Radius cannot be shorter than distance from start to centre");
+        }
+
+        if (startX > endX){
+            throw new IllegalArgumentException("StartX cannot be greater than endX");
+        }
+
         this.startX = startX;
         this.endX = endX;
-        this.centerX = centerX;
-        this.centerY = centerY;
+        this.centerX = center.getX();
+        this.centerY = center.getY();
         this.radius = radius;
     }
 
     @Override
     public float getStartX() {
+
         return startX;
     }
 
     @Override
     public float getYValue(float xValue) {
+        if (xValue < startX || xValue > endX){
+            throw new IllegalArgumentException("X value must be within the function's bounds");
+        }
         return (float) (centerY + Math.sqrt(-(Math.pow(centerX,2))+ 2 * xValue * centerX + Math.pow(radius,2) - Math.pow(xValue,2)));
     }
 
@@ -55,17 +82,23 @@ public class GameMapPositiveHalfCircle implements IGameMapFunction {
 
     @Override
     public void setEndX(float value) {
+        if (value < startX){
+            throw new IllegalArgumentException("End point must be greater than start point");
+        }
         this.endX = value;
     }
 
     @Override
     public void setStartX(float value) {
+        if (value > endX){
+            throw new IllegalArgumentException("Start point must be less than end point");
+        }
         this.startX = value;
     }
 
     @Override
     public boolean existsOnlyWithinRange(float startX, float endX) {
-        return (this.startX > startX && this.endX < endX);
+        return (this.startX >= startX && this.endX <= endX);
     }
 
     @Override

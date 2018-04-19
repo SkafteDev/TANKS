@@ -14,6 +14,9 @@ public class EnemyGamePlugin implements IGamePluginService {
     private final int AMOUNTOFENEMIES = 2;
     @Override
     public void start(World world, GameData gameData) {
+        if(world ==  null || gameData == null){
+            throw new IllegalArgumentException("World or gamedata is null");
+        }
         for (int i = 0; i < AMOUNTOFENEMIES; i++) {
             world.addEntity(createEnemy(gameData));
         }
@@ -50,9 +53,13 @@ public class EnemyGamePlugin implements IGamePluginService {
 
     @Override
     public void stop(World world, GameData gameData) {
+        if(world ==  null || gameData == null){
+            throw new IllegalArgumentException("World or gamedata is null");
+        }
         for (Entity enemy : world.getEntities(Enemy.class)) {
             world.removeEntity(enemy);
             gameData.removeWeponListener(enemy.getPart(InventoryPart.class));
         }
+
     }
 }
