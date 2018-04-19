@@ -253,9 +253,45 @@ public class GameMapProcessing implements IEventCallback {
             for (Float xValue : intersectionXValuesPositive) {
                 intersectionPoints.add(new Vector2D(xValue, positiveHalf.getYValue(xValue)));
             }
+        } else if(intersectionXValuesNegative.size() + intersectionXValuesPositive.size() > 2){
+            addAppropriateIntersectionPoints(intersectionPoints, negativeHalf, positiveHalf, intersectionXValuesPositive, intersectionXValuesNegative);
+
         }
 
         return intersectionPoints;
+    }
+
+    private void addAppropriateIntersectionPoints(List<Vector2D> intersectionPoints, IGameMapFunction negativeHalf, IGameMapFunction positiveHalf, List<Float> intersectionXValuesPositive, List<Float> intersectionXValuesNegative) {
+        //Find the biggest spread in x-values
+        float x1 = 0;
+        float x2 = 0;
+        float y1 = 0;
+        float y2 = 0;
+        float dist = 0;
+        float xFormer = intersectionXValuesNegative.get(0);
+        for (Float x : intersectionXValuesNegative) {
+               float dist2 = Math.abs(xFormer - x);
+                if(dist2 > dist){
+                    dist = dist2;
+                    x1 = xFormer;
+                    x2 = x;
+                    y1 = negativeHalf.getYValue(x1);
+                    y2 = negativeHalf.getYValue(x2);
+                }
+        }
+        xFormer = intersectionXValuesPositive.get(0);
+        for (Float x : intersectionXValuesPositive) {
+            float dist2 = Math.abs(xFormer - x);
+            if(dist2 > dist){
+                dist = dist2;
+                x1 = xFormer;
+                x2 = x;
+                y1 = positiveHalf.getYValue(x1);
+                y2 = positiveHalf.getYValue(x2);
+            }
+        }
+        intersectionPoints.add(new Vector2D(x1,y1));
+        intersectionPoints.add(new Vector2D(x2,y2));
     }
 
     private float intersect(IGameMapFunction mapFunction, IGameMapFunction halfCircle, float acceptInterval, float rangeStart, float rangeEnd) {

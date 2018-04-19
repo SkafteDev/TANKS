@@ -1,49 +1,35 @@
 package maptests;
 
 import dk.grp1.tanks.common.data.IGameMapFunction;
-import dk.grp1.tanks.gamemap.internal.GameMapLinear;
+import dk.grp1.tanks.gamemap.internal.GameMapSin;
 import org.junit.Assert;
 
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Test;
 
-public class GameMapLinearTest {
+public class GameMapSinTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testCreateNull(){
-        GameMapLinear map = new GameMapLinear(0, 0,1,null);
+        GameMapSin map = new GameMapSin(1,1,1,null,10,20);
 
     }
     @Test
     public void testGetStartX() {
         float startX = 0;
-        GameMapLinear map = new GameMapLinear(0, 100, startX, 500);
+        GameMapSin map = new GameMapSin(1,1,1,1,startX,20);
         Assert.assertEquals(map.getStartX(), startX, 0.005);
     }
 
-    @org.junit.Test
-    public void testGetYValueFlatMap() {
-        float startX = 0;
-        float mapHeight = 100;
-        GameMapLinear map = new GameMapLinear(0, mapHeight, startX, 500);
-        Assert.assertEquals(map.getYValue(0), mapHeight, 0.005);
-        Assert.assertEquals(map.getYValue(10), mapHeight, 0.005);
-        Assert.assertEquals(map.getYValue(50), mapHeight, 0.005);
-        Assert.assertEquals(map.getYValue(300), mapHeight, 0.005);
-        Assert.assertEquals(map.getYValue(499), mapHeight, 0.005);
 
-
-    }
 
     @org.junit.Test(expected = IllegalArgumentException.class)
     public void testGetYValueOutsideRange() {
         float startX = 0;
         float mapHeight = 100;
-        GameMapLinear map = new GameMapLinear(0, mapHeight, startX, 20);
-        Assert.assertEquals(map.getYValue(-2), mapHeight, 0.005);
-
-
+        GameMapSin map = new GameMapSin(100,1,1,1,startX,20);
+        Assert.assertEquals(map.getYValue(-2), -83.14709848, 0.005);
 
     }
 
@@ -51,7 +37,7 @@ public class GameMapLinearTest {
     public void testGetYValueOutsideRange2() {
         float startX = 0;
         float mapHeight = 100;
-        GameMapLinear map = new GameMapLinear(0, mapHeight, startX, 20);
+        GameMapSin map = new GameMapSin(1,1,1,1,startX,20);
         Assert.assertEquals(map.getYValue(30), mapHeight, 0.005);
 
 
@@ -59,16 +45,18 @@ public class GameMapLinearTest {
     }
 
     @org.junit.Test
-    public void testGetYValueTiltedMap() {
+    public void testGetYValue() {
         float startX = 0;
-        float mapHeight = 100;
-        float inclination = 2.5f;
-        GameMapLinear map = new GameMapLinear(inclination, mapHeight, startX, 500);
-        Assert.assertEquals(map.getYValue(0), mapHeight, 0.005);
-        Assert.assertEquals(map.getYValue(10), 10 * inclination + mapHeight, 0.005);
-        Assert.assertEquals(map.getYValue(50), 50 * inclination + mapHeight, 0.005);
-        Assert.assertEquals(map.getYValue(300), 300 * inclination + mapHeight, 0.005);
-        Assert.assertEquals(map.getYValue(499), 499 * inclination + mapHeight, 0.005);
+        float amp = 100;
+        float angFreq = 1;
+        float phaseShift = 1;
+        float phaseConst=1;
+        GameMapSin map = new GameMapSin(amp,angFreq,phaseShift,phaseConst,startX,500);
+        Assert.assertEquals(map.getYValue(0), 85.14709848, 0.005);
+        Assert.assertEquals(map.getYValue(10),-98.99902066, 0.005);
+        Assert.assertEquals(map.getYValue(50), 68.02291758, 0.005);
+        Assert.assertEquals(map.getYValue(300), -54.87640496, 0.005);
+        Assert.assertEquals(map.getYValue(499), -45.77718053, 0.005);
 
 
     }
@@ -76,32 +64,47 @@ public class GameMapLinearTest {
     @org.junit.Test
     public void testGetEndX() {
         float startX = 0;
+        float amp = 100;
+        float angFreq = 1;
+        float phaseShift = 1;
+        float phaseConst=1;
         float endX = 300;
-        GameMapLinear map = new GameMapLinear(0, 100, startX, endX);
+        GameMapSin map = new GameMapSin(amp,angFreq,phaseShift,phaseConst,startX,endX);
         Assert.assertEquals(map.getEndX(), endX, 0.005);
     }
 
     @org.junit.Test(expected = IllegalArgumentException.class)
     public void testCreateStartXgreaterThanEndX() {
         float startX = 100;
-        float endX = 20;
-        GameMapLinear map = new GameMapLinear(0, 100, startX, endX);
+        float amp = 100;
+        float angFreq = 1;
+        float phaseShift = 1;
+        float phaseConst=1;
+        float endX = 50;
+        GameMapSin map = new GameMapSin(amp,angFreq,phaseShift,phaseConst,startX,endX);
     }
 
     @org.junit.Test(expected = IllegalArgumentException.class)
     public void testCreateStartXEqualToEndX() {
-        float startX = 100;
-        float endX = startX;
-        GameMapLinear map = new GameMapLinear(0, 100, startX, endX);
+        float startX = 300;
+        float amp = 100;
+        float angFreq = 1;
+        float phaseShift = 1;
+        float phaseConst=1;
+        float endX = 300;
+        GameMapSin map = new GameMapSin(amp,angFreq,phaseShift,phaseConst,startX,endX);
     }
 
 
     @org.junit.Test
     public void testGetYValuesTiltedMap() {
         float startX = 0;
-        float mapHeight = 100;
-        float inclination = 2.5f;
-        GameMapLinear map = new GameMapLinear(inclination, mapHeight, startX, 500);
+        float amp = 100;
+        float angFreq = 1;
+        float phaseShift = 1;
+        float phaseConst=1;
+        float endX = 500;
+        GameMapSin map = new GameMapSin(amp,angFreq,phaseShift,phaseConst,startX,endX);
         List<Float> xValues = new ArrayList<>();
         xValues.add(0f);
         xValues.add(10f);
@@ -109,61 +112,84 @@ public class GameMapLinearTest {
         xValues.add(300f);
         xValues.add(499f);
         List<Float> yvalues = map.getYValues(xValues);
-        Assert.assertEquals(yvalues.get(0), xValues.get(0) * inclination + mapHeight, 0.005);
-        Assert.assertEquals(yvalues.get(1), xValues.get(1) * inclination + mapHeight, 0.005);
-        Assert.assertEquals(yvalues.get(2), xValues.get(2) * inclination + mapHeight, 0.005);
-        Assert.assertEquals(yvalues.get(3), xValues.get(3) * inclination + mapHeight, 0.005);
-        Assert.assertEquals(yvalues.get(4), xValues.get(4) * inclination + mapHeight, 0.005);
-
+        Assert.assertEquals(yvalues.get(0), 85.14709848, 0.005);
+        Assert.assertEquals(yvalues.get(1),-98.99902066, 0.005);
+        Assert.assertEquals(yvalues.get(2), 68.02291758, 0.005);
+        Assert.assertEquals(yvalues.get(3), -54.87640496, 0.005);
+        Assert.assertEquals(yvalues.get(4), -45.77718053, 0.005);
 
     }
 
     @org.junit.Test
     public void testIsWithinIsWithin() {
         float startX = 10;
+        float amp = 100;
+        float angFreq = 1;
+        float phaseShift = 1;
+        float phaseConst=1;
         float endX = 20;
-        GameMapLinear map = new GameMapLinear(0, 100, startX, endX);
+        GameMapSin map = new GameMapSin(amp,angFreq,phaseShift,phaseConst,startX,endX);
         Assert.assertTrue(map.isWithin(15));
     }
     @org.junit.Test
     public void testIsWithinIsNotWithin() {
         float startX = 10;
+        float amp = 100;
+        float angFreq = 1;
+        float phaseShift = 1;
+        float phaseConst=1;
         float endX = 20;
-        GameMapLinear map = new GameMapLinear(0, 100, startX, endX);
+        GameMapSin map = new GameMapSin(amp,angFreq,phaseShift,phaseConst,startX,endX);
         Assert.assertFalse(map.isWithin(25));
     }
 
     @org.junit.Test
     public void testIsWithinEdge1() {
         float startX = 10;
+        float amp = 100;
+        float angFreq = 1;
+        float phaseShift = 1;
+        float phaseConst=1;
         float endX = 20;
-        GameMapLinear map = new GameMapLinear(0, 100, startX, endX);
+        GameMapSin map = new GameMapSin(amp,angFreq,phaseShift,phaseConst,startX,endX);
         Assert.assertTrue(map.isWithin(10));
     }
 
     @org.junit.Test
     public void testIsWithinEdge2() {
-        float startX = 10;
+        float startX = 0;
+        float amp = 100;
+        float angFreq = 1;
+        float phaseShift = 1;
+        float phaseConst=1;
         float endX = 20;
-        GameMapLinear map = new GameMapLinear(0, 100, startX, endX);
+        GameMapSin map = new GameMapSin(amp,angFreq,phaseShift,phaseConst,startX,endX);
         Assert.assertFalse(map.isWithin(20));
     }
 
     @org.junit.Test
     public void testSetEndX() {
         float startX = 0;
-        float endX = 300;
-        GameMapLinear map = new GameMapLinear(0, 100, startX, endX);
+        float amp = 100;
+        float angFreq = 1;
+        float phaseShift = 1;
+        float phaseConst=1;
+        float endX = 200;
+        GameMapSin map = new GameMapSin(amp,angFreq,phaseShift,phaseConst,startX,endX);
         float newEndX = 20;
         map.setEndX(newEndX);
         Assert.assertEquals(map.getEndX(), newEndX, 0.005);
     }
 
-    @org.junit.Test(expected = IllegalArgumentException.class)
+    @org.junit.Test(expected=IllegalArgumentException.class)
     public void testSetEndXLessThanStartX() {
         float startX = 0;
-        float endX = 300;
-        GameMapLinear map = new GameMapLinear(0, 100, startX, endX);
+        float amp = 100;
+        float angFreq = 1;
+        float phaseShift = 1;
+        float phaseConst=1;
+        float endX = 200;
+        GameMapSin map = new GameMapSin(amp,angFreq,phaseShift,phaseConst,startX,endX);
         float newEndX = -5;
         map.setEndX(newEndX);
         Assert.assertEquals(map.getEndX(), newEndX, 0.005);
@@ -172,19 +198,27 @@ public class GameMapLinearTest {
     @org.junit.Test
     public void testSetStartX() {
         float startX = 0;
-        float endX = 300;
-        GameMapLinear map = new GameMapLinear(0, 100, startX, endX);
-        float newStartX = 20;
+        float amp = 100;
+        float angFreq = 1;
+        float phaseShift = 1;
+        float phaseConst=1;
+        float endX = 20;
+        GameMapSin map = new GameMapSin(amp,angFreq,phaseShift,phaseConst,startX,endX);
+        float newStartX = 10;
         map.setStartX(newStartX);
         Assert.assertEquals(map.getStartX(), newStartX, 0.005);
     }
 
-    @org.junit.Test(expected = IllegalArgumentException.class)
-    public void testSetStartXGreaterThanEndX() {
+    @Test(expected = IllegalArgumentException.class)
+    public void testSetStartXGreaterThanEndX(){
         float startX = 0;
-        float endX = 300;
-        GameMapLinear map = new GameMapLinear(0, 100, startX, endX);
-        float newStartX = 400;
+        float amp = 100;
+        float angFreq = 1;
+        float phaseShift = 1;
+        float phaseConst=1;
+        float endX = 20;
+        GameMapSin map = new GameMapSin(amp,angFreq,phaseShift,phaseConst,startX,endX);
+        float newStartX = 25;
         map.setStartX(newStartX);
         Assert.assertEquals(map.getStartX(), newStartX, 0.005);
     }
@@ -192,56 +226,84 @@ public class GameMapLinearTest {
     @Test
     public void testIsOnlyWithin(){
         float startX = 10;
+        float amp = 100;
+        float angFreq = 1;
+        float phaseShift = 1;
+        float phaseConst=1;
         float endX = 20;
-        GameMapLinear map = new GameMapLinear(0, 100, startX, endX);
+        GameMapSin map = new GameMapSin(amp,angFreq,phaseShift,phaseConst,startX,endX);
         Assert.assertTrue(map.existsOnlyWithinRange(5,25));
     }
 
     @Test
     public void testIsOnlyWithinWithOut(){
         float startX = 10;
+        float amp = 100;
+        float angFreq = 1;
+        float phaseShift = 1;
+        float phaseConst=1;
         float endX = 20;
-        GameMapLinear map = new GameMapLinear(0, 100, startX, endX);
+        GameMapSin map = new GameMapSin(amp,angFreq,phaseShift,phaseConst,startX,endX);
         Assert.assertFalse(map.existsOnlyWithinRange(5,8));
     }
 
     @Test
     public void testIsOnlyWithinHalfOverlap(){
         float startX = 10;
+        float amp = 100;
+        float angFreq = 1;
+        float phaseShift = 1;
+        float phaseConst=1;
         float endX = 20;
-        GameMapLinear map = new GameMapLinear(0, 100, startX, endX);
+        GameMapSin map = new GameMapSin(amp,angFreq,phaseShift,phaseConst,startX,endX);
         Assert.assertFalse(map.existsOnlyWithinRange(5,15));
     }
 
     @Test
     public void testIsOnlyWithinOverlap(){
         float startX = 10;
+        float amp = 100;
+        float angFreq = 1;
+        float phaseShift = 1;
+        float phaseConst=1;
         float endX = 20;
-        GameMapLinear map = new GameMapLinear(0, 100, startX, endX);
+        GameMapSin map = new GameMapSin(amp,angFreq,phaseShift,phaseConst,startX,endX);
         Assert.assertTrue(map.existsOnlyWithinRange(10,20));
     }
 
     @Test
     public void testIsOnlyWithinEdge1(){
         float startX = 10;
+        float amp = 100;
+        float angFreq = 1;
+        float phaseShift = 1;
+        float phaseConst=1;
         float endX = 20;
-        GameMapLinear map = new GameMapLinear(0, 100, startX, endX);
+        GameMapSin map = new GameMapSin(amp,angFreq,phaseShift,phaseConst,startX,endX);
         Assert.assertTrue(map.existsOnlyWithinRange(10,30));
     }
 
     @Test
     public void testIsOnlyWithinEdge2(){
         float startX = 10;
+        float amp = 100;
+        float angFreq = 1;
+        float phaseShift = 1;
+        float phaseConst=1;
         float endX = 20;
-        GameMapLinear map = new GameMapLinear(0, 100, startX, endX);
+        GameMapSin map = new GameMapSin(amp,angFreq,phaseShift,phaseConst,startX,endX);
         Assert.assertTrue(map.existsOnlyWithinRange(5,20));
     }
 
     @Test
     public void testSplitIntoNewRangesPerfect(){
         float startX = 10;
+        float amp = 100;
+        float angFreq = 1;
+        float phaseShift = 1;
+        float phaseConst=1;
         float endX = 20;
-        GameMapLinear map = new GameMapLinear(0, 100, startX, endX);
+        GameMapSin map = new GameMapSin(amp,angFreq,phaseShift,phaseConst,startX,endX);
         List<IGameMapFunction> splits = map.splitInTwoWithNewRanges(10,15,15,20);
         Assert.assertEquals(2, splits.size());
         Assert.assertEquals(startX, splits.get(0).getStartX(), 0.001);
@@ -257,8 +319,12 @@ public class GameMapLinearTest {
     @Test
     public void testSplitIntoNewRangesRangesSubsetTheFunction(){
         float startX = 12;
-        float endX = 18;
-        GameMapLinear map = new GameMapLinear(100, 100, 10, 20);
+        float amp = 100;
+        float angFreq = 1;
+        float phaseShift = 1;
+        float phaseConst=1;
+        float endX =18;
+        GameMapSin map = new GameMapSin(amp,angFreq,phaseShift,phaseConst,10,20);
         List<IGameMapFunction> splits = map.splitInTwoWithNewRanges(12,15,15,18);
         Assert.assertEquals(2, splits.size());
         Assert.assertEquals(startX, splits.get(0).getStartX(), 0.001);
@@ -274,8 +340,12 @@ public class GameMapLinearTest {
     @Test(expected = IllegalArgumentException.class)
     public void testSplitIntoNewRangesRangesSuperSetTheFunction(){
         float startX = 8;
+        float amp = 100;
+        float angFreq = 1;
+        float phaseShift = 1;
+        float phaseConst=1;
         float endX = 22;
-        GameMapLinear map = new GameMapLinear(100, 100, 10, 20);
+        GameMapSin map = new GameMapSin(amp,angFreq,phaseShift,phaseConst,10,20);
         List<IGameMapFunction> splits = map.splitInTwoWithNewRanges(8,15,15,22);
         Assert.assertEquals(2, splits.size());
         Assert.assertEquals(startX, splits.get(0).getStartX(), 0.001);
@@ -292,8 +362,12 @@ public class GameMapLinearTest {
     @Test
     public void testSplitIntoNewRangesNotConnect(){
         float startX = 10;
+        float amp = 100;
+        float angFreq = 1;
+        float phaseShift = 1;
+        float phaseConst=1;
         float endX = 20;
-        GameMapLinear map = new GameMapLinear(100, 100, 10, 20);
+        GameMapSin map = new GameMapSin(amp,angFreq,phaseShift,phaseConst,startX,endX);
         List<IGameMapFunction> splits = map.splitInTwoWithNewRanges(10,12,17,20);
         Assert.assertEquals(2, splits.size());
         Assert.assertEquals(startX, splits.get(0).getStartX(), 0.001);
