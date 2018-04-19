@@ -14,6 +14,25 @@ public class AnimationWrapper {
     private float explosionRadius;
 
     public AnimationWrapper(Vector2D position, String path, Entity origin, int frameCols, int frameRows, float explosionRadius) {
+        if(position == null){
+            throw new IllegalArgumentException("Position Vector is null");
+        }
+        if(path == null){
+            throw new IllegalArgumentException("Path is null");
+        }
+        if(origin == null){
+            throw new IllegalArgumentException("Origin entity is null");
+        }
+        if(frameCols < 0){
+            throw new IllegalArgumentException("Frame Cols must be positive");
+        }
+        if(frameRows < 0){
+            throw new IllegalArgumentException("Frame Rows must be positive");
+        }
+        if(explosionRadius < 0){
+            throw new IllegalArgumentException("Explosion Radius must be positive");
+        }
+
         this.explosionRadius = explosionRadius;
         this.position = position;
         this.path = path;
