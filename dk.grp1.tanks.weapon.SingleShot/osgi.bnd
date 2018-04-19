@@ -1,2 +1,2 @@
-Bundle-Activator: ${bundle.namespace}.internal.SingleShotActivator
+Bundle-Activator: dk.grp1.tanks.weapon.SingleShot.internal.SingleShotActivator
 Bundle-Category: weapon
