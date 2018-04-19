@@ -14,18 +14,26 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class GameData {
 
-    private final int GAMEWIDTH = 800;
-    private final int GAMEHEIGHT = 600;
+    private int GAMEWIDTH = 800;
+    private int GAMEHEIGHT = 600;
 
     private float delta;
-    private int displayWidth;
-    private int displayHeight;
     private Boolean shouldEndTurn = false;
     private final GameKeys keys = new GameKeys();
 //    private List<Event> events = new CopyOnWriteArrayList<>();
     private List<IWeapon> gameWeapons = new ArrayList<>();
     private List<IWeaponListener> weaponListeners = new ArrayList<>();
     private EventManager eventManager = new EventManager();
+
+    public GameData(int gameWidth, int gameHeight){
+        this.GAMEWIDTH = gameWidth;
+        this.GAMEHEIGHT = gameHeight;
+    }
+
+    public GameData(){
+        this.GAMEWIDTH = 800;
+        this.GAMEHEIGHT = 600;
+    }
 
     public Boolean shouldEndTurn() {
         return shouldEndTurn;
@@ -59,8 +67,8 @@ public class GameData {
         return delta;
     }
 
-    public void setDisplayWidth(int width) {
-        this.displayWidth = width;
+    public void setGameWidth(int width) {
+        this.GAMEWIDTH = width;
     }
 
     public float getGameWidth() {
@@ -75,8 +83,8 @@ public class GameData {
 //            return displayWidth;
 //        }
 
-    public void setDisplayHeight(int height) {
-        this.displayHeight = height;
+    public void setGameHeight(int height) {
+        this.GAMEHEIGHT = height;
     }
 
     public EventManager getEventManager() {

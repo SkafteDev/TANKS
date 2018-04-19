@@ -97,9 +97,8 @@ public class Vector2D {
      * @return
      */
     public float getAngle(Vector2D other) {
-        Vector2D i = other;
 
-        float v = Vector2D.dot(this, other)/(this.length()*i.length());
+        float v = Vector2D.dot(this, other)/(this.length()*other.length());
 
         float radians = (float) Math.acos(v);
 
