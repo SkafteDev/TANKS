@@ -50,7 +50,6 @@ public class CollisionPart implements IEntityPart {
             if(soundPart != null){
                 Event soundEvent = new SoundEvent(entity,soundPart.getOnHitSoundPath());
                 gameData.getEventManager().addEvent(soundEvent);
-
             }
             gameData.getEventManager().addEvent(explosionEvent);
             gameData.getEventManager().addEvent(mapDestructionEvent);
