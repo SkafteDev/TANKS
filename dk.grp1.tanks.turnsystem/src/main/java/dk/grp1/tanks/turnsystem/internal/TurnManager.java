@@ -4,6 +4,7 @@ import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.data.parts.LifePart;
+import dk.grp1.tanks.common.data.parts.MovementPart;
 import dk.grp1.tanks.common.data.parts.TurnPart;
 import dk.grp1.tanks.common.eventManager.IEventCallback;
 import dk.grp1.tanks.common.eventManager.events.EndTurnEvent;
@@ -19,7 +20,7 @@ public class TurnManager implements ITurnManager, IPostEntityProcessingService, 
     private float timeRemaining = 30;
     private ArrayList<Entity> entities;
     private Entity currentEntity;
-    private GameData gameData;
+    private Boolean wantToEndTurn = false;
 
     public TurnManager() {
         this.entities = new ArrayList<>();
@@ -28,28 +29,29 @@ public class TurnManager implements ITurnManager, IPostEntityProcessingService, 
     @Override
     public void processEvent(Event event) {
         if (event instanceof EndTurnEvent) {
-            System.out.println("End Turn Event");
             EndTurnEvent endTurnEvent = (EndTurnEvent) event;
             Entity source = endTurnEvent.getSource();
 
             if (source != null) {
-                if (entities.contains(source)) {
-                    System.out.println("Entity exists");
-                    timeRemaining = 30;
-                    int nextIndex = 0;
-                    int index = entities.indexOf(source);
-                    System.out.println("List size :" + entities.size());
-                    if (index != entities.size() - 1) {
-                        nextIndex = index + 1;
-                    }
-                    System.out.println("Next index: " + nextIndex);
-                    selectNextEntity(nextIndex);
-                }
+                System.out.println("Want to End turn");
+                wantToEndTurn = true;
             }
         }
     }
 
-    private void selectNextEntity(int nextIndex) {
+    private void selectNextEntity(Entity source) {
+
+        if (!entities.contains(source)) {
+            System.out.println("Does not contain source");
+            return;
+        }
+        timeRemaining = 30;
+        int nextIndex = 0;
+        int index = entities.indexOf(source);
+        if (index != entities.size() - 1) {
+            nextIndex = index + 1;
+        }
+
         for (Entity entity : entities) {
             TurnPart turnPart = entity.getPart(TurnPart.class);
             if (turnPart != null) {
@@ -74,32 +76,54 @@ public class TurnManager implements ITurnManager, IPostEntityProcessingService, 
             register(entity);
         }
 
-        for (Entity entity : entities) {
-            LifePart lifePart = entity.getPart(LifePart.class);
-            if (lifePart != null){
-                if (lifePart.getCurrentHP() <= 0){
-                    // slet fra entities
+        unRegisterEntities(gameData);
+
+        if (wantToEndTurn){
+            if (anythingMoves(world)){
+                TurnPart turnPart = currentEntity.getPart(TurnPart.class);
+                if (turnPart != null){
+                    turnPart.setMyTurn(false);
                 }
+                return;
             }
+            selectNextEntity(currentEntity);
+            wantToEndTurn = false;
         }
 
         timeRemaining -= gameData.getDelta();
+
         if (timeRemaining < 0) {
-            this.gameData.getEventManager().addEvent(new EndTurnEvent(currentEntity));
+            gameData.getEventManager().addEvent(new EndTurnEvent(currentEntity));
         }
 
     }
 
+    private void unRegisterEntities(GameData gameData) {
+        List<Entity> entitiesToRemove = new ArrayList<>();
+        for (Entity entity : entities) {
+            LifePart lifePart = entity.getPart(LifePart.class);
+            TurnPart turnPart = entity.getPart(TurnPart.class);
+            if (lifePart != null && turnPart != null) {
+                if (lifePart.getCurrentHP() <= 0 && !turnPart.isMyTurn()) {
+                    entitiesToRemove.add(entity);
+                }
+            }
+        }
 
-    @Override
-    public void register(Entity entity) {
+        for (Entity entity : entitiesToRemove) {
+            unRegister(entity, gameData);
+        }
+    }
+
+
+    private void register(Entity entity) {
         if (entity == null) {
             throw new IllegalArgumentException("Entity is null");
         }
         TurnPart turnPart = entity.getPart(TurnPart.class);
 
         if (turnPart != null) {
-            if (entities.size() == 0) {
+            if (entities.isEmpty()) {
                 turnPart.setMyTurn(true);
                 currentEntity = entity;
             }
@@ -109,8 +133,8 @@ public class TurnManager implements ITurnManager, IPostEntityProcessingService, 
         }
     }
 
-    @Override
-    public void unRegister(Entity entity) {
+
+    private void unRegister(Entity entity, GameData gameData) {
         if (entity == null) {
             throw new IllegalArgumentException("Entity is null");
         }
@@ -125,9 +149,15 @@ public class TurnManager implements ITurnManager, IPostEntityProcessingService, 
         }
     }
 
-    @Override
-    public void setGameData(GameData gameData) {
-        this.gameData = gameData;
+    private boolean anythingMoves(World world) {
+        for (Entity e : world.getEntities()
+                ) {
+            MovementPart movPart = e.getPart(MovementPart.class);
+            if (movPart.getCurrentSpeed() > 0f) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override

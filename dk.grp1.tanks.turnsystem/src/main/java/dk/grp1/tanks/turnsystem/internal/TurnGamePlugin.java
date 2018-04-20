@@ -18,7 +18,6 @@ public class TurnGamePlugin implements IGamePluginService {
 
     @Override
     public void start(World world, GameData gameData) {
-        (( TurnManager) callback).setGameData(gameData);
         gameData.setTurnManager((ITurnManager) callback);
         gameData.getEventManager().register(EndTurnEvent.class, callback);
     }

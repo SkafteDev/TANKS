@@ -9,7 +9,7 @@ public class TurnPart implements IEntityPart {
 
     private boolean myTurn;
     public TurnPart(){
-
+        myTurn = false;
 
     }
 
