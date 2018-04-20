@@ -75,6 +75,7 @@
     <module>dk.grp1.tanks.pushsystem</module>
     <module>dk.grp1.tanks.weapon.gravitybomb</module>
     <module>dk.grp1.tanks.weapon.Flamethrower</module>
+    <module>dk.grp1.tanks.weapon.ElVicto</module>
   </modules>
 
   <build>
