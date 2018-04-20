@@ -22,7 +22,6 @@ public class PlayerGamePlugin implements IGamePluginService {
         
         for (int i = 0; i < numPlayers; i++) {
             Entity player = createPlayer(gameData);
-            gameData.getTurnManager().register(player);
             world.addEntity(player);
         }
     }
@@ -64,7 +63,7 @@ public class PlayerGamePlugin implements IGamePluginService {
         }
         for (Entity player : world.getEntities(Player.class)) {
             world.removeEntity(player);
-            gameData.getTurnManager().unRegister(player);
+
             gameData.removeWeponListener(player.getPart(InventoryPart.class));
         }
 

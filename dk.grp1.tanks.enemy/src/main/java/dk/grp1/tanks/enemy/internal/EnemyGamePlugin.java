@@ -19,7 +19,6 @@ public class EnemyGamePlugin implements IGamePluginService {
         }
         for (int i = 0; i < AMOUNTOFENEMIES; i++) {
             Entity enemy = createEnemy(gameData);
-            gameData.getTurnManager().register(enemy);
             world.addEntity(enemy);
         }
     }
@@ -60,7 +59,7 @@ public class EnemyGamePlugin implements IGamePluginService {
         }
         for (Entity enemy : world.getEntities(Enemy.class)) {
             world.removeEntity(enemy);
-            gameData.getTurnManager().unRegister(enemy);
+
             gameData.removeWeponListener(enemy.getPart(InventoryPart.class));
         }
 
