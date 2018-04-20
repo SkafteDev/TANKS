@@ -17,7 +17,7 @@ public class State {
         this.entity = entity;
     }
 
-    public List<State> getSuccessor(){
+    public List<State> getSuccessors(){
         throw new UnsupportedOperationException("Get successor not supported");
     }
 
