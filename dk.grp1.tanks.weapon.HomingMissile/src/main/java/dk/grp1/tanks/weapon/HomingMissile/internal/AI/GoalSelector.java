@@ -5,7 +5,19 @@ import dk.grp1.tanks.common.data.World;
 
 public class GoalSelector implements IGoalSelector{
 
-    public State calculateGoalState(World world, Entity origin){
+    private final World world;
+    private final Entity origin;
+    private final float explosionRadius;
+
+    public GoalSelector(World world, Entity origin, float explosionRadius){
+
+        this.world = world;
+        this.origin = origin;
+        this.explosionRadius = explosionRadius;
+    }
+
+    public State calculateGoalState(){
+
         throw new UnsupportedOperationException();
     }
 }
