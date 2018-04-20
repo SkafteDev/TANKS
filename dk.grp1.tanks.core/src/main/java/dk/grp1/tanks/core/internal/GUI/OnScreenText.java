@@ -79,8 +79,8 @@ public class OnScreenText implements IGuiProcessingService {
             TurnPart turn = e.getPart(TurnPart.class);
 
             if (turn != null && turn.isMyTurn()) {
-                turnText += turn.getMyTurnNumber();
-                timeText += Math.floor(turn.getTurnTimeRemaining() * 10) / 10f;
+//                turnText += turn.getMyTurnNumber();
+                timeText += Math.floor(gameData.getTurnManager().getTimeRemaining() * 10) / 10f;
             }
 
         }

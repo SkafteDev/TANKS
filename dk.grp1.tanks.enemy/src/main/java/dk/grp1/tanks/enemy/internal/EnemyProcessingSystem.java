@@ -5,6 +5,7 @@ import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.GameKeys;
 import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.data.parts.*;
+import dk.grp1.tanks.common.eventManager.events.EndTurnEvent;
 import dk.grp1.tanks.common.services.IEntityProcessingService;
 import dk.grp1.tanks.common.utils.Vector2D;
 
@@ -45,7 +46,7 @@ public class EnemyProcessingSystem implements IEntityProcessingService {
 
             if (lifePart.getCurrentHP() <= 0) {
                 if(turnPart.isMyTurn()) {
-                    turnPart.endMyTurn();
+                    gameData.getEventManager().addEvent(new EndTurnEvent(enemy));
                 }
                 world.removeEntity(enemy);
             }
@@ -91,7 +92,7 @@ public class EnemyProcessingSystem implements IEntityProcessingService {
             MovementPart movementPart = enemy.getPart(MovementPart.class);
             if (!(movementPart.getCurrentSpeed() > 0)) {
                 shootLessThanPerfectShot(gameData, world, cannonPart, enemy);
-                turnPart.endMyTurn();
+                gameData.getEventManager().addEvent(new EndTurnEvent(enemy));
             }
         }
 
@@ -100,7 +101,7 @@ public class EnemyProcessingSystem implements IEntityProcessingService {
     private void manualShoot(GameData gameData, TurnPart turnPart, World world, CannonPart cannonPart, Entity enemy) {
         if (gameData.getKeys().isPressed(GameKeys.SHIFT) && turnPart.isMyTurn()) {
             shootPerfectShot(gameData, world, cannonPart, enemy);
-            turnPart.endMyTurn();
+            gameData.getEventManager().addEvent(new EndTurnEvent(enemy));
         }
     }
 

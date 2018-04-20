@@ -17,18 +17,18 @@ public final class RoundEndService
 
     @Override
     public boolean isRoundOver(World world) {
-
-        int count = 0;
-        for (Entity entity : world.getEntities()
-                ) {
-            TurnPart turnPart = entity.getPart(TurnPart.class);
-            if (turnPart != null) {
-                count++;
-            }
-
-        }
-
-        return count <= 1;
+        return false;
+//        int count = 0;
+//        for (Entity entity : world.getEntities()
+//                ) {
+//            TurnPart turnPart = entity.getPart(TurnPart.class);
+//            if (turnPart != null) {
+//                count++;
+//            }
+//
+//        }
+//
+//        return count <= 1;
     }
 
     @Override

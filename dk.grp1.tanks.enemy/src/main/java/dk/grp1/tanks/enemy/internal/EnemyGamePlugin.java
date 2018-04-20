@@ -18,7 +18,9 @@ public class EnemyGamePlugin implements IGamePluginService {
             throw new IllegalArgumentException("World or gamedata is null");
         }
         for (int i = 0; i < AMOUNTOFENEMIES; i++) {
-            world.addEntity(createEnemy(gameData));
+            Entity enemy = createEnemy(gameData);
+            gameData.getTurnManager().register(enemy);
+            world.addEntity(enemy);
         }
     }
 
@@ -58,6 +60,7 @@ public class EnemyGamePlugin implements IGamePluginService {
         }
         for (Entity enemy : world.getEntities(Enemy.class)) {
             world.removeEntity(enemy);
+            gameData.getTurnManager().unRegister(enemy);
             gameData.removeWeponListener(enemy.getPart(InventoryPart.class));
         }
 
