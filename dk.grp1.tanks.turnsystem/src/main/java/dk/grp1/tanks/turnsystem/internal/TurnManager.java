@@ -76,7 +76,13 @@ public class TurnManager implements ITurnManager, IPostEntityProcessingService, 
             register(entity);
         }
 
-        unRegisterEntities(gameData);
+        for (Entity entity : entities) {
+            TurnPart turnPart = entity.getPart(TurnPart.class);
+            if (turnPart != null){
+                System.out.println(entity.toString() + " : " + turnPart.isMyTurn());
+            }
+        }
+        System.out.println("\n");
 
         if (wantToEndTurn){
             if (anythingMoves(world)){
@@ -84,11 +90,14 @@ public class TurnManager implements ITurnManager, IPostEntityProcessingService, 
                 if (turnPart != null){
                     turnPart.setMyTurn(false);
                 }
+                unRegisterEntities(gameData);
                 return;
             }
             selectNextEntity(currentEntity);
             wantToEndTurn = false;
         }
+
+        unRegisterEntities(gameData);
 
         timeRemaining -= gameData.getDelta();
 

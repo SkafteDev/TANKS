@@ -49,6 +49,7 @@ public class PlayerProcessingSystem implements IEntityProcessingService {
             } else {
                 ctrlPart.setLeft(false);
                 ctrlPart.setRight(false);
+                // There is a null pointer Exception here
                 ctrlPart.setRotation(world.getGameMap().getDirectionVector(new Vector2D(positionPart.getX(), positionPart.getY())));
             }
 
