@@ -31,7 +31,7 @@ public class AStar implements ITreeSearch{
     }
 
     private float getHeuristicValue(State state){
-        return Vector2D.sumVectors(state.getEntityPosition(),goalState.getEntityPosition()).length();
+        return Vector2D.subtractVectors(state.getEntityPosition(),goalState.getEntityPosition()).length();
     }
 
     private Node extractLowest(){
@@ -51,9 +51,6 @@ public class AStar implements ITreeSearch{
     private boolean isGoalState(State state){
         boolean inRangeX = Math.abs(goalState.getEntityPosition().getX() - state.getEntityPosition().getX()) < GOALRANGE;
         boolean inRangeY = Math.abs(goalState.getEntityPosition().getY() - state.getEntityPosition().getY()) < GOALRANGE;
-        if(inRangeX && inRangeY){
-            return true;
-        }
-        return false;
+        return inRangeX && inRangeY;
     }
 }
