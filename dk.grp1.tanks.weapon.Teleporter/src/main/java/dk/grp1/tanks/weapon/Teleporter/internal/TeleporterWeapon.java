@@ -49,7 +49,7 @@ public class TeleporterWeapon implements IWeapon {
         wep.add(new MovementPart(accelerationVector, 10000));
         wep.add(new ShapePart());
         wep.add(new CirclePart(cannonCentre.getX(),cannonCentre.getY(),2));
-        wep.add(new DamagePart(0,0));
+        //wep.add(new DamagePart(0,0));
         wep.add(new PhysicsPart(30, -90.82f));
         wep.add(new TeleportCollisionPart(true,0, actor));
         wep.add(new TexturePart(this.texturePath));
