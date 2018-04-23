@@ -7,10 +7,10 @@ import java.util.List;
 
 public class AStar implements ITreeSearch{
 
+    private final float GOALRANGE = 0.5f;
     private List<Node> fringe;
     private State initialState;
     private State goalState;
-
     public AStar(State initialState, State goalState) {
         this.initialState = initialState;
         this.goalState = goalState;
@@ -18,18 +18,42 @@ public class AStar implements ITreeSearch{
     }
 
     public List<Node> search(){
-        throw new UnsupportedOperationException();
+        fringe.add(new Node(null,initialState,getHeuristicValue(initialState)));
+        while (!fringe.isEmpty()){
+            Node node = extractLowest();
+            if(isGoalState(node.getState())){
+                return node.getPath();
+            }
+            List<Node> children = node.expand();
+            fringe.addAll(children);
+        }
+        return null;
     }
 
     private float getHeuristicValue(State state){
-        throw new UnsupportedOperationException();
+        return Vector2D.sumVectors(state.getEntityPosition(),goalState.getEntityPosition()).length();
     }
 
     private Node extractLowest(){
-        throw new UnsupportedOperationException();
+        Node lowest = null;
+        for (Node node : fringe) {
+            if(lowest == null){
+                lowest = node;
+                continue;
+            }
+            if(lowest.getEstimatedTotalCost() > node.getEstimatedTotalCost()){
+                lowest = node;
+            }
+        }
+        return lowest;
     }
 
     private boolean isGoalState(State state){
-        throw new UnsupportedOperationException();
+        boolean inRangeX = Math.abs(goalState.getEntityPosition().getX() - state.getEntityPosition().getX()) < GOALRANGE;
+        boolean inRangeY = Math.abs(goalState.getEntityPosition().getY() - state.getEntityPosition().getY()) < GOALRANGE;
+        if(inRangeX && inRangeY){
+            return true;
+        }
+        return false;
     }
 }
