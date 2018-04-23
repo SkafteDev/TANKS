@@ -10,7 +10,7 @@ import dk.grp1.tanks.common.utils.Vector2D;
 
 public class HomingMissileWeapon implements IWeapon {
 
-    private final String name = "Big Shot";
+    private final String name = "Homing Missile";
     private final String description = "Fires a single big shot";
     private final String iconPath = "bigshot.png";
     private final String shootSoundPath= "boom.mp3";
