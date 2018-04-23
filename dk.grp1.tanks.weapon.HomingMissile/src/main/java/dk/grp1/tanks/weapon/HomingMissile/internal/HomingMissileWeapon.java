@@ -14,7 +14,7 @@ public class HomingMissileWeapon implements IWeapon {
     private final String description = "Fires a single big shot";
     private final String iconPath = "bigshot.png";
     private final String shootSoundPath= "boom.mp3";
-    private final String texturePath = "bigshot.png";
+    private final String texturePath = "homingmissile.png";
     private final String explosionTexturePath = "explosion.png";
     private final int explosionTextureFrameRows = 6;
     private final int explosionTextureFrameCols = 8;
@@ -51,7 +51,7 @@ public class HomingMissileWeapon implements IWeapon {
         wep.add(new DamagePart(4,10));
         wep.add(new TexturePart(this.texturePath));
         wep.add(new ExplosionTexturePart(explosionTextureFrameCols,explosionTextureFrameRows,explosionTexturePath));
-        SoundPart sounds = new SoundPart("missile.mp3","boom.mp3");
+        SoundPart sounds = new SoundPart("boom.mp3","boom.mp3");
         wep.add(sounds);
         gameData.getEventManager().addEvent(new SoundEvent(wep,sounds.getShootSoundPath()));
 
