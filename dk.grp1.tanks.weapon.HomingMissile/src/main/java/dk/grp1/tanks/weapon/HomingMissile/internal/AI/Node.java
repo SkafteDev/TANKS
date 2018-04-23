@@ -1,5 +1,6 @@
 package dk.grp1.tanks.weapon.HomingMissile.internal.AI;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Node {
@@ -40,7 +41,12 @@ public class Node {
     }
 
     public List<Node> getPath(){
-        throw new UnsupportedOperationException();
+        List<Node> path = new ArrayList<>();
+        path.add(this);
+        for(Node currentParent = this.parent; currentParent != null; currentParent = currentParent.getParent()){
+            path.add(currentParent);
+        }
+        return path;
     }
 
     public float getEstimatedTotalCost() {
