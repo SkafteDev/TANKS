@@ -90,7 +90,7 @@ public class TurnManager implements ITurnManager, IPostEntityProcessingService, 
                 if (turnPart != null){
                     turnPart.setMyTurn(false);
                 }
-                unRegisterEntities(gameData);
+                //unRegisterEntities(gameData);
                 return;
             }
             selectNextEntity(currentEntity);

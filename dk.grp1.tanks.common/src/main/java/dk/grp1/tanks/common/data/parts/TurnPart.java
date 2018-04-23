@@ -8,6 +8,9 @@ import dk.grp1.tanks.common.eventManager.events.EndTurnEvent;
 public class TurnPart implements IEntityPart {
 
     private boolean myTurn;
+
+    private static float timeRemaining;
+
     public TurnPart(){
         myTurn = false;
 
