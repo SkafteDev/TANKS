@@ -78,6 +78,7 @@
     <module>dk.grp1.tanks.weapon.ElVicto</module>
     <module>dk.grp1.tanks.weapon.HomingMissile</module>
     <module>dk.grp1.tanks.weapon.Earthquake</module>
+  <module>dk.grp1.tanks.weapon.holysheep</module>
   </modules>
 
   <build>
