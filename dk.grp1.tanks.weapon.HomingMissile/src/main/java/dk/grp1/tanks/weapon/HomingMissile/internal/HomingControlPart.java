@@ -35,9 +35,12 @@ public class HomingControlPart implements IEntityPart {
     private void setNewDirection(Entity entity) {
         PositionPart positionPart = entity.getPart(PositionPart.class);
         MovementPart movementPart = entity.getPart(MovementPart.class);
-
-
-
+        if(positionPart == null || movementPart == null){
+            return;
+        }
+        Vector2D nextPoint = path.get(goingToIndex);
+        Vector2D directionVector = new Vector2D(nextPoint.getX()-positionPart.getX(), nextPoint.getY()-positionPart.getY());
+        movementPart.setVelocity(directionVector);
     }
 
     private boolean isPastPoint(Entity entity) {
