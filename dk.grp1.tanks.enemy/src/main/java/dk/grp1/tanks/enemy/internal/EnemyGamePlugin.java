@@ -10,8 +10,20 @@ import dk.grp1.tanks.common.services.IGamePluginService;
  * Created by danie on 12-03-2018.
  */
 public class EnemyGamePlugin implements IGamePluginService {
+
+
     private float enemyRadius = 10f;
-    private final int AMOUNTOFENEMIES = 2;
+    private final int AMOUNTOFENEMIES;
+
+    public EnemyGamePlugin(){
+        AMOUNTOFENEMIES = 0;
+    }
+
+    public EnemyGamePlugin(int amountOfEnemies){
+        AMOUNTOFENEMIES = amountOfEnemies;
+    }
+
+
     @Override
     public void start(World world, GameData gameData) {
         if(world ==  null || gameData == null){
