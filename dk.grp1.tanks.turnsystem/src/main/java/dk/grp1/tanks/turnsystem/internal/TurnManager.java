@@ -26,6 +26,12 @@ public class TurnManager implements IRoundService, IPostEntityProcessingService,
         this.entities = new ArrayList<>();
     }
 
+    public void start(){
+        entities = new ArrayList<>();
+        wantToEndTurn = false;
+        currentEntity = null;
+    }
+
     @Override
     public void processEvent(Event event) {
         if (event instanceof EndTurnEvent) {
@@ -90,37 +96,37 @@ public class TurnManager implements IRoundService, IPostEntityProcessingService,
                 if (turnPart != null){
                     turnPart.setMyTurn(false);
                 }
-                //unRegisterEntities(gameData);
+               // unRegisterDeadEntities(gameData);
                 return;
             }
             selectNextEntity(currentEntity);
             wantToEndTurn = false;
         }
 
-        unRegisterEntities(gameData);
-
+        unRegisterDeadEntities();
+        System.out.println("Unregister Entities");
         timeRemaining -= gameData.getDelta();
 
-        if (timeRemaining < 0) {
+        if (timeRemaining <= 0) {
             gameData.getEventManager().addEvent(new EndTurnEvent(currentEntity));
         }
 
     }
 
-    private void unRegisterEntities(GameData gameData) {
+    private void unRegisterDeadEntities() {
         List<Entity> entitiesToRemove = new ArrayList<>();
         for (Entity entity : entities) {
             LifePart lifePart = entity.getPart(LifePart.class);
             TurnPart turnPart = entity.getPart(TurnPart.class);
             if (lifePart != null && turnPart != null) {
-                if (lifePart.getCurrentHP() <= 0 && !turnPart.isMyTurn()) {
+                if (lifePart.getCurrentHP() <= 0) {
                     entitiesToRemove.add(entity);
                 }
             }
         }
 
         for (Entity entity : entitiesToRemove) {
-            unRegister(entity, gameData);
+            unRegister(entity);
         }
     }
 
@@ -143,7 +149,7 @@ public class TurnManager implements IRoundService, IPostEntityProcessingService,
     }
 
 
-    private void unRegister(Entity entity, GameData gameData) {
+    private void unRegister(Entity entity) {
         if (entity == null) {
             throw new IllegalArgumentException("Entity is null");
         }
@@ -151,7 +157,7 @@ public class TurnManager implements IRoundService, IPostEntityProcessingService,
             TurnPart turnPart = entity.getPart(TurnPart.class);
             if (turnPart != null) {
                 if (turnPart.isMyTurn()) {
-                    gameData.getEventManager().addEvent(new EndTurnEvent(entity));
+                    selectNextEntity(entity);
                 }
                 entities.remove(entity);
             }
@@ -170,7 +176,9 @@ public class TurnManager implements IRoundService, IPostEntityProcessingService,
     }
 
     @Override
-    public boolean isRoundOver(World world) {
+    public boolean isRoundOver(World world)
+    {
+
         return (entities.size() <= 1);
     }
 
@@ -180,7 +188,8 @@ public class TurnManager implements IRoundService, IPostEntityProcessingService,
             return null;
         }
         if (!entities.isEmpty()){
-            return entities.get(0);
+            Entity winner = entities.get(0);
+            return winner;
         }
         return null;
     }

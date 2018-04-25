@@ -10,12 +10,13 @@ import dk.grp1.tanks.common.services.IRoundService;
 public class TurnGamePlugin implements IGamePluginService {
 
     private IEventCallback callback;
-    public TurnGamePlugin(IEventCallback callback) {
-        this.callback = callback;
+    public TurnGamePlugin() {
     }
 
     @Override
     public void start(World world, GameData gameData) {
+        callback = TurnActivator.getInstance();
+        TurnActivator.getInstance().start();
         gameData.setTurnManager((IRoundService) callback);
         gameData.getEventManager().register(EndTurnEvent.class, callback);
     }
