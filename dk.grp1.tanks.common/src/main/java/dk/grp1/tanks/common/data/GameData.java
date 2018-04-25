@@ -1,14 +1,12 @@
 package dk.grp1.tanks.common.data;
 
 import dk.grp1.tanks.common.eventManager.EventManager;
-import dk.grp1.tanks.common.eventManager.events.Event;
-import dk.grp1.tanks.common.services.ITurnManager;
+import dk.grp1.tanks.common.services.IRoundService;
 import dk.grp1.tanks.common.services.IWeapon;
 import dk.grp1.tanks.common.services.IWeaponListener;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Created by danie on 12-03-2018.
@@ -25,7 +23,7 @@ public class GameData {
     private List<IWeapon> gameWeapons = new ArrayList<>();
     private List<IWeaponListener> weaponListeners = new ArrayList<>();
     private EventManager eventManager = new EventManager();
-    private ITurnManager turnManager;
+    private IRoundService turnManager;
 
     public GameData(int gameWidth, int gameHeight){
         this.GAMEWIDTH = gameWidth;
@@ -69,11 +67,11 @@ public class GameData {
         return GAMEHEIGHT;
     }
 
-    public ITurnManager getTurnManager() {
+    public IRoundService getTurnManager() {
         return turnManager;
     }
 
-    public void setTurnManager(ITurnManager turnManager) {
+    public void setTurnManager(IRoundService turnManager) {
         this.turnManager = turnManager;
     }
 

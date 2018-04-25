@@ -10,11 +10,11 @@ import dk.grp1.tanks.common.eventManager.IEventCallback;
 import dk.grp1.tanks.common.eventManager.events.EndTurnEvent;
 import dk.grp1.tanks.common.eventManager.events.Event;
 import dk.grp1.tanks.common.services.IPostEntityProcessingService;
-import dk.grp1.tanks.common.services.ITurnManager;
+import dk.grp1.tanks.common.services.IRoundService;
 
 import java.util.*;
 
-public class TurnManager implements ITurnManager, IPostEntityProcessingService, IEventCallback {
+public class TurnManager implements IRoundService, IPostEntityProcessingService, IEventCallback {
 
     private float roundDuration = 30;
     private float timeRemaining = 30;
@@ -167,6 +167,22 @@ public class TurnManager implements ITurnManager, IPostEntityProcessingService, 
             }
         }
         return false;
+    }
+
+    @Override
+    public boolean isRoundOver(World world) {
+        return (entities.size() <= 1);
+    }
+
+    @Override
+    public Entity getRoundWinner(World world) {
+        if (!isRoundOver(world)) {
+            return null;
+        }
+        if (!entities.isEmpty()){
+            return entities.get(0);
+        }
+        return null;
     }
 
     @Override

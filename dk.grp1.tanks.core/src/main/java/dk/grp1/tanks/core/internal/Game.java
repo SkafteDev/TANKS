@@ -23,12 +23,8 @@ import dk.grp1.tanks.core.internal.managers.CustomAssetManager;
 import dk.grp1.tanks.core.internal.managers.GameAssetManager;
 import dk.grp1.tanks.core.internal.managers.GameInputProcessor;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static com.badlogic.gdx.math.MathUtils.random;
 
@@ -236,7 +232,7 @@ public class Game implements ApplicationListener, IEventCallback {
     private void drawWinScreen() {
         IGUIEntityProcessingService winDrawer = new WinScreenGUI();
 
-        for (IRoundEndService service : serviceLoader.getRoundEndServices()
+        for (IRoundService service : serviceLoader.getRoundEndServices()
                 ) {
             uiSpriteBatch.setProjectionMatrix(camera.combined);
             winDrawer.drawEntity(service.getRoundWinner(world), gameData, uiSpriteBatch);
@@ -292,12 +288,11 @@ public class Game implements ApplicationListener, IEventCallback {
             postEntityProcessingService.postProcess(world, gameData);
         }
 
-        for (IRoundEndService service : serviceLoader.getRoundEndServices()) {
-            if (service.isRoundOver(world)) {
+        if (gameData.getTurnManager() != null){
+            if (gameData.getTurnManager().isRoundOver(world)) {
                 state = GameState.notRunning;
             }
         }
-
 
         gameData.getKeys().update();
 

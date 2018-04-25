@@ -1,9 +1,6 @@
 package dk.grp1.tanks.roundendsystem.internal;
 
-import java.util.Dictionary;
-import java.util.Properties;
-
-import dk.grp1.tanks.common.services.IRoundEndService;
+import dk.grp1.tanks.common.services.IRoundService;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
@@ -26,7 +23,7 @@ public final class RoundEndActivator
         System.out.println( "REGISTER dk.grp1.tanks.roundendsystem.ExampleService" );
 
         // Register our example service implementation in the OSGi service registry
-        bc.registerService( IRoundEndService.class.getName(), new RoundEndService(), null );
+     //   bc.registerService( IRoundService.class.getName(), new RoundService(), null );
     }
 
     /**

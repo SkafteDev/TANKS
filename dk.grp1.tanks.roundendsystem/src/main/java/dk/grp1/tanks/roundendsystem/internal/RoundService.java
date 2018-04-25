@@ -3,17 +3,13 @@ package dk.grp1.tanks.roundendsystem.internal;
 import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.data.parts.TurnPart;
-import dk.grp1.tanks.common.services.IRoundEndService;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import dk.grp1.tanks.common.services.IRoundService;
 
 /**
  * Internal implementation of our example OSGi service
  */
-public final class RoundEndService
-        implements IRoundEndService {
+public final class RoundService
+        implements IRoundService {
 
     @Override
     public boolean isRoundOver(World world) {
@@ -45,6 +41,11 @@ public final class RoundEndService
         }
         return null;
 
+    }
+
+    @Override
+    public float getTimeRemaining() {
+        return 0;
     }
 }
 
