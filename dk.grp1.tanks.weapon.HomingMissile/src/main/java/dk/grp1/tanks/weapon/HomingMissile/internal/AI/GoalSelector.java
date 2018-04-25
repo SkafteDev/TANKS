@@ -40,7 +40,7 @@ public class GoalSelector implements IGoalSelector{
         for (int i = 0; i < vertices.size(); i++) {
             int count = 0;
             float x = vertices.get(i).getX();
-            float y = vertices.get(i).getY() + 1;
+            float y = vertices.get(i).getY() + 5;
             for (Entity entity : world.getEntities()) {
                 if (isClose(entity, x, y) && entity != origin) {
                     count++;
@@ -64,13 +64,12 @@ public class GoalSelector implements IGoalSelector{
     }
 
     private boolean isClose(Entity entity, float x, float y) {
-        PositionPart positionPart = entity.getPart(PositionPart.class);
         CirclePart circlePart = entity.getPart(CirclePart.class);
         DamagePart dmg = homingMissile.getPart(DamagePart.class);
         float radius = dmg.getExplosionRadius();
-        if (circlePart != null && positionPart != null) {
-            float distX = x - positionPart.getX();
-            float distY = y - positionPart.getY();
+        if (circlePart != null ) {
+            float distX = x - circlePart.getCentreX();
+            float distY = y - circlePart.getCentreY();
             float distance = (float) (Math.sqrt(distX * distX + distY * distY));
             return distance < radius + circlePart.getRadius();
         }else{

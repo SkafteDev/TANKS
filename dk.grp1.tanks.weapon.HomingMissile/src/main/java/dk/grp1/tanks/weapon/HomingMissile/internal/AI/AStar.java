@@ -84,6 +84,7 @@ public class AStar implements ITreeSearch{
                 lowest = node;
             }
         }
+        fringe.remove(lowest);
         return lowest;
     }
 

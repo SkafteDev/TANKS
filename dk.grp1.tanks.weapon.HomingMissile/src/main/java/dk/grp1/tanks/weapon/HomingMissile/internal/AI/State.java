@@ -148,7 +148,7 @@ public class State {
     private boolean isValid(){
         CirclePart circlePart = this.getEntity().getPart(CirclePart.class);
         if (circlePart != null) {
-            return gameMap.getHeight(this.getEntityPosition())< this.getEntityPosition().getY() + circlePart.getRadius() + 1f;
+            return gameMap.getHeight(this.getEntityPosition())< this.getEntityPosition().getY() -( circlePart.getRadius() + 1f);
 
         }
         return false;

@@ -6,6 +6,7 @@ import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.data.parts.IEntityPart;
 import dk.grp1.tanks.common.data.parts.MovementPart;
 import dk.grp1.tanks.common.data.parts.PositionPart;
+import dk.grp1.tanks.common.eventManager.events.ExplosionEvent;
 import dk.grp1.tanks.common.utils.Vector2D;
 
 import java.util.List;
@@ -25,11 +26,17 @@ public class HomingControlPart implements IEntityPart {
     }
     @Override
     public void processPart(Entity entity, GameData gameData, World world) {
-        System.out.println("controlpart processed");
         if(isPastPoint(entity)){
-            if(goingToIndex< path.size() -1)
-                goingToIndex++;
+            goingToIndex++;
+            if(goingToIndex >= path.size()){
+                gameData.getEventManager().addEvent(new ExplosionEvent(entity,path.get(path.size()-1),20));
+                world.removeEntity(entity);
+                return;
+            }
             setNewDirection(entity);
+
+
+
             System.out.println("Is past point. Calculated new direction. index: " + goingToIndex);
         }
 
