@@ -48,7 +48,7 @@ public class GameMapPlugin implements IGamePluginService {
         //System.out.println("Amount of functions: " + amountOfFunctions + " Map function interval: " + mapFunctionInterval);
         IGameMapFunction predecessor = generateRandomFirstFunction(gameData, mapFunctionInterval);
         map.addGameMapFunction(predecessor);
-        for (int i = 0; i <= amountOfFunctions; i++) {
+        for (int i = 1; i < amountOfFunctions; i++) {
             switch (random.nextInt(2)) {
                 case 0:
                     IGameMapFunction mapFunction1 = generateLinearMapFunction(predecessor,random, mapFunctionInterval);
