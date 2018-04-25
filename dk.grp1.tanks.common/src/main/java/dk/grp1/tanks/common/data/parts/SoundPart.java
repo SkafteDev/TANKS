@@ -4,12 +4,16 @@ import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.data.parts.IEntityPart;
+import dk.grp1.tanks.common.eventManager.events.SoundEvent;
 
 public class SoundPart implements IEntityPart {
 
     private String shootSoundPath;
     private String onHitSoundPath;
 
+    public SoundPart(){
+
+    }
     public SoundPart(String shootSoundPath, String onHitSoundPath){
 
         this.shootSoundPath = shootSoundPath;

@@ -51,6 +51,9 @@ public class GoalSelector implements IGoalSelector{
                 bestExplosion = new Vector2D(x, y);
             }
         }
+        System.out.println(bestExplosion);
+        System.out.println(bestCount);
+
         Entity newMissile = (Entity) cloneObject(homingMissile);
         PositionPart newPos = newMissile.getPart(PositionPart.class);
         newPos.setX(bestExplosion.getX());
@@ -80,7 +83,7 @@ public class GoalSelector implements IGoalSelector{
         try {
             Object clone = obj.getClass().newInstance();
             if (obj.getClass().getDeclaredFields().length == 0) {
-                for (Field field : obj.getClass().getSuperclass().getDeclaredFields()) {
+                for (Field field : obj.getClass().getSuperclass().getSuperclass().getDeclaredFields()) {
                     field.setAccessible(true);
                     if (field.get(obj) == null || Modifier.isFinal(field.getModifiers())) {
                         continue;

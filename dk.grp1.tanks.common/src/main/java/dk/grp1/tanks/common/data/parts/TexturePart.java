@@ -11,6 +11,9 @@ public class TexturePart implements IEntityPart {
 
     private String srcPath;
 
+    public TexturePart(){
+
+    }
     /**
      * Creates a new texture part with a given source path
      * @param srcPath String

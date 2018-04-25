@@ -12,7 +12,9 @@ public class ControlPart implements IEntityPart {
     private float speed;
     private Vector2D rotation;
 
+    public ControlPart(){
 
+    }
 
     public ControlPart(float speed){
         this.speed = speed;

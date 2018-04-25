@@ -10,6 +10,9 @@ public class PhysicsPart implements IEntityPart {
     private float gravity;
     private Vector2D gravityVector;
 
+    public PhysicsPart(){
+
+    }
     /**
      * Instantiate a PhysicsPart
      *
