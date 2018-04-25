@@ -22,12 +22,16 @@ public class HomingControlPart implements IEntityPart {
 
     public HomingControlPart(List<Vector2D> path){
         this.path = path;
-        goingToIndex = path.size()-1;
+        goingToIndex = path.size()-2;
 
     }
 
     @Override
     public void processPart(Entity entity, GameData gameData, World world) {
+        if(firstTime){
+            setNewDirection(entity);
+            firstTime = false;
+        }
         if(isPastPoint(entity)){
             goingToIndex--;
             if(goingToIndex <=1){
@@ -61,7 +65,7 @@ public class HomingControlPart implements IEntityPart {
             movementPart.setVelocity(directionVector);
         }else {
             Vector2D dir = directionVector.unitVector();
-            dir.multiplyWithConstant(200);
+            dir.multiplyWithConstant(50);
             movementPart.setVelocity(dir);
         }
 
@@ -73,7 +77,7 @@ public class HomingControlPart implements IEntityPart {
         Vector2D goingTo = path.get(goingToIndex);
         Vector2D velocity = movementPart.getVelocity();
         if(movementPart.getVelocity().getX() == 0 && movementPart.getVelocity().getY() == 0){
-            return true;
+            return false;
         }
         if(movementPart.getVelocity().getX() == 0){
             return positionPart.getY()* norm(velocity.getY()) >= goingTo.getY()* norm(velocity.getY());

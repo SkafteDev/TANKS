@@ -46,12 +46,11 @@ public class HomingMissileWeapon implements IWeapon {
         wep.add(new PositionPart(cannonCentre.getX(),cannonCentre.getY(), cannonPart.getDirection()));
         Vector2D accelerationVector = cannonPart.getDirectionVector();
         accelerationVector.multiplyWithConstant(0);
-        wep.add(new MovementPart(accelerationVector, 10000));
         wep.add(new ShapePart());
         wep.add(new CirclePart(cannonCentre.getX(),cannonCentre.getY(),2));
         wep.add(new PhysicsPart(30, -0f));
-        wep.add(new CollisionPart(true,0));
-        wep.add(new DamagePart(4,10));
+        wep.add(new CollisionPart(false,0));
+        wep.add(new DamagePart(20,10));
         wep.add(new TexturePart(this.texturePath));
         wep.add(new ExplosionTexturePart(explosionTextureFrameCols,explosionTextureFrameRows,explosionTexturePath));
         SoundPart sounds = new SoundPart("boom.mp3","boom.mp3");
@@ -66,7 +65,7 @@ public class HomingMissileWeapon implements IWeapon {
         List<Vector2D> path = ai.searchPoints();
         System.out.println("ASTAR COMPLETE");
         System.out.println(path.toString());
-        wep.add(new HomingControlPart(path));
+        wep.add(new HomingMovementPart(path));
 
         world.addEntity(wep);
     }

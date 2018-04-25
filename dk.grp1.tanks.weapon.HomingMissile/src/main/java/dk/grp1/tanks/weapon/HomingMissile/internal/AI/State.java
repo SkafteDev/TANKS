@@ -15,11 +15,17 @@ public class State {
 
     private GameMap gameMap;
     private Entity entity;
-    private final float precision = 5f;
+    private final float precision = 2f;
+    private final Vector2D entityPosition;
 
     public State(GameMap gameMap, Entity entity) {
         this.gameMap = gameMap;
         this.entity = entity;
+        CirclePart circlePart = this.entity.getPart(CirclePart.class);
+        if (circlePart == null) {
+            throw new NullPointerException("PositionPart is null");
+        }
+        entityPosition = new Vector2D(circlePart.getCentreX(),circlePart.getCentreY());
     }
 
 
@@ -78,12 +84,7 @@ public class State {
      * @return
      */
     public Vector2D getEntityPosition(){
-        CirclePart circlePart = this.entity.getPart(CirclePart.class);
-        if (circlePart == null) {
-            throw new NullPointerException("PositionPart is null");
-        }
-
-        return new Vector2D(circlePart.getCentreX(),circlePart.getCentreY());
+        return entityPosition;
     }
 
     @Override

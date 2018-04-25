@@ -7,7 +7,7 @@ import java.util.List;
 
 public class AStar implements ITreeSearch{
 
-    private final float GOALRANGE = 5f;
+    private final float GOALRANGE = 3f;
     private List<Node> fringe;
     private State initialState;
     private State goalState;
