@@ -10,4 +10,6 @@ public interface ITreeSearch {
      * @return The path as a list of nodes, or null if no path was found
      */
     public List<Node> search();
+
+    public List<Vector2D> searchPoints();
 }
