@@ -45,7 +45,7 @@ public class HomingMissileWeapon implements IWeapon {
         Vector2D cannonCentre = cannonPart.getMuzzleFaceCentre();
         wep.add(new PositionPart(cannonCentre.getX(),cannonCentre.getY(), cannonPart.getDirection()));
         Vector2D accelerationVector = cannonPart.getDirectionVector();
-        accelerationVector.multiplyWithConstant(firePower);
+        accelerationVector.multiplyWithConstant(0);
         wep.add(new MovementPart(accelerationVector, 10000));
         wep.add(new ShapePart());
         wep.add(new CirclePart(cannonCentre.getX(),cannonCentre.getY(),2));

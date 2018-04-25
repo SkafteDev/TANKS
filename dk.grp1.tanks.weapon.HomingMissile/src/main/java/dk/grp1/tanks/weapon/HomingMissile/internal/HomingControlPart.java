@@ -28,10 +28,6 @@ public class HomingControlPart implements IEntityPart {
 
     @Override
     public void processPart(Entity entity, GameData gameData, World world) {
-        if(firstTime){
-            setNewDirection(entity);
-            firstTime = false;
-        }
         if(isPastPoint(entity)){
             goingToIndex--;
             if(goingToIndex <=1){
@@ -65,7 +61,7 @@ public class HomingControlPart implements IEntityPart {
             movementPart.setVelocity(directionVector);
         }else {
             Vector2D dir = directionVector.unitVector();
-            dir.multiplyWithConstant(20);
+            dir.multiplyWithConstant(200);
             movementPart.setVelocity(dir);
         }
 
@@ -76,10 +72,12 @@ public class HomingControlPart implements IEntityPart {
         MovementPart movementPart = entity.getPart(MovementPart.class);
         Vector2D goingTo = path.get(goingToIndex);
         Vector2D velocity = movementPart.getVelocity();
-
-        if(Math.abs(movementPart.getVelocity().getX()) <0.1f){
+        if(movementPart.getVelocity().getX() == 0 && movementPart.getVelocity().getY() == 0){
+            return true;
+        }
+        if(movementPart.getVelocity().getX() == 0){
             return positionPart.getY()* norm(velocity.getY()) >= goingTo.getY()* norm(velocity.getY());
-        }else if(Math.abs(movementPart.getVelocity().getY()) <0.1f){
+        }else if(movementPart.getVelocity().getY()==0){
             return positionPart.getX() * norm(velocity.getX()) >=goingTo.getX()* norm(velocity.getX());
         }else{
            return positionPart.getX() * norm(velocity.getX()) >= path.get(goingToIndex).getX() * norm(velocity.getX()) &&  positionPart.getY() * norm(velocity.getY()) >= path.get(goingToIndex).getY() * norm(velocity.getY());
