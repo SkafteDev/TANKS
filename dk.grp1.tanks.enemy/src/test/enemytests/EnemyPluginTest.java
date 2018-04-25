@@ -10,11 +10,11 @@ public class EnemyPluginTest {
 
     @org.junit.Test
     public void enemyGamePluginStartTest(){
-        IGamePluginService enemyGamePlugin = new EnemyGamePlugin();
+        IGamePluginService enemyGamePlugin = new EnemyGamePlugin(2);
         World world = new World();
         GameData gameData = new GameData();
         enemyGamePlugin.start(world,gameData);
-        Assert.assertFalse(world.getEntities().isEmpty());
+        Assert.assertEquals(2,world.getEntities().size());
     }
     @org.junit.Test(expected = IllegalArgumentException.class)
     public void enemyGamePluginStartTestNullInputWorld(){
