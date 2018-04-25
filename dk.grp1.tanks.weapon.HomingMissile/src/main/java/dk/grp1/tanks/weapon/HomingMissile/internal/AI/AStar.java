@@ -39,7 +39,7 @@ public class AStar implements ITreeSearch{
         List<State> children= node.getState().getSuccessors();
         for (State child : children  ) {
             Node succ = new Node(node,child,getHeuristicValue(child));
-
+            successors.add(succ);
         }
 //        successors = []
 //        children = successor_fn(node.STATE)
