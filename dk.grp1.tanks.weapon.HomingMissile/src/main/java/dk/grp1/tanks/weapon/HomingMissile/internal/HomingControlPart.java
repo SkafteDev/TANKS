@@ -46,17 +46,16 @@ public class HomingControlPart implements IEntityPart {
     private boolean isPastPoint(Entity entity) {
         PositionPart positionPart = entity.getPart(PositionPart.class);
         MovementPart movementPart = entity.getPart(MovementPart.class);
+        Vector2D goingTo = path.get(goingToIndex);
 
         if(movementPart.getVelocity().getX() == 0){
-
-            //Code goes here
+            return norm(positionPart.getX()) >= norm(goingTo.getX());
         }else if(movementPart.getVelocity().getY() == 0){
-            //Code goes here
+            return norm(positionPart.getY()) >= norm(goingTo.getY());
         }else{
            return positionPart.getX() * norm(positionPart.getX()) >= path.get(goingToIndex).getX() * norm(positionPart.getX()) &&  positionPart.getY() * norm(positionPart.getY()) >= path.get(goingToIndex).getY() * norm(positionPart.getY());
         }
 
-        return false;
     }
 
     private float norm(float value){
