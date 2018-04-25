@@ -1,13 +1,12 @@
 package dk.grp1.tanks.common.data;
 
 import dk.grp1.tanks.common.eventManager.EventManager;
-import dk.grp1.tanks.common.eventManager.events.Event;
+import dk.grp1.tanks.common.services.IRoundService;
 import dk.grp1.tanks.common.services.IWeapon;
 import dk.grp1.tanks.common.services.IWeaponListener;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Created by danie on 12-03-2018.
@@ -24,6 +23,7 @@ public class GameData {
     private List<IWeapon> gameWeapons = new ArrayList<>();
     private List<IWeaponListener> weaponListeners = new ArrayList<>();
     private EventManager eventManager = new EventManager();
+    private IRoundService turnManager;
 
     public GameData(int gameWidth, int gameHeight){
         this.GAMEWIDTH = gameWidth;
@@ -42,18 +42,6 @@ public class GameData {
     public void setShouldEndTurn(Boolean shouldEndTurn) {
         this.shouldEndTurn = shouldEndTurn;
     }
-
-    //    public void addEvent(Event e) {
-//        events.add(e);
-//    }
-//
-//    public void removeEvent(Event e) {
-//        events.remove(e);
-//    }
-//
-//    public List<Event> getEvents() {
-//        return events;
-//    }
 
     public GameKeys getKeys() {
         return keys;
@@ -79,9 +67,13 @@ public class GameData {
         return GAMEHEIGHT;
     }
 
-//        public int getDisplayWidth() {
-//            return displayWidth;
-//        }
+    public IRoundService getTurnManager() {
+        return turnManager;
+    }
+
+    public void setTurnManager(IRoundService turnManager) {
+        this.turnManager = turnManager;
+    }
 
     public void setGameHeight(int height) {
         this.GAMEHEIGHT = height;
@@ -90,35 +82,6 @@ public class GameData {
     public EventManager getEventManager() {
         return eventManager;
     }
-
-
-    //        public int getDisplayHeight() {
-//            return displayHeight;
-//        }
-
-//    public <E extends Event> List<Event> getEvents(Class<E> type, String sourceID) {
-//        List<Event> r = new ArrayList<>();
-//        for (Event event : events) {
-//            if (event.getClass().equals(type) && event.getSource().getID().equals(sourceID)) {
-//                r.add(event);
-//            }
-//        }
-//
-//        return r;
-//    }
-//
-//    public <E extends Event> List<Event> getEvents(Class<E>... types) {
-//        List<Event> r = new ArrayList<>();
-//        for (Event event : events) {
-//            for (Class<E> eventType : types) {
-//                if (eventType.isInstance(event)) {
-//                    r.add(event);
-//                }
-//            }
-//        }
-//
-//        return r;
-//    }
 
     public void addWeapon(IWeapon weapon) {
         if (weapon != null) {

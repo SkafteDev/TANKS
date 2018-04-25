@@ -3,7 +3,7 @@ package dk.grp1.tanks.common.services;
 import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.data.World;
 
-public interface IRoundEndService {
+public interface IRoundService {
 
     /**
      * The round is over if no more than one entity with a TurnPart exists
@@ -19,4 +19,7 @@ public interface IRoundEndService {
      * @return
      */
     Entity getRoundWinner(World world);
+
+
+    float getTimeRemaining();
 }

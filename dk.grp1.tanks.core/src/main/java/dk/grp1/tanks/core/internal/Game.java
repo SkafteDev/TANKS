@@ -23,12 +23,8 @@ import dk.grp1.tanks.core.internal.managers.CustomAssetManager;
 import dk.grp1.tanks.core.internal.managers.GameAssetManager;
 import dk.grp1.tanks.core.internal.managers.GameInputProcessor;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static com.badlogic.gdx.math.MathUtils.random;
 
@@ -76,8 +72,6 @@ public class Game implements ApplicationListener, IEventCallback {
         initGame();
 
 
-
-
         LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
         cfg.title = "Tanks";
         cfg.width = WIDTH;
@@ -95,14 +89,14 @@ public class Game implements ApplicationListener, IEventCallback {
     private void setupAssetManager() {
         this.assetManager = new CustomAssetManager(Gdx.files.getLocalStoragePath());
         assetManager.loadMusicAsset(this.getClass(), "tron.mp3");
-         Music bgMusic = assetManager.getMusicAsset(this.getClass(),"tron.mp3");
-         bgMusic.setLooping(true);
-         bgMusic.setVolume(0.05f);
-         bgMusic.play();
+        Music bgMusic = assetManager.getMusicAsset(this.getClass(), "tron.mp3");
+        bgMusic.setLooping(true);
+        bgMusic.setVolume(0.05f);
+        bgMusic.play();
 
     }
 
-    private void restartGame(){
+    private void restartGame() {
         initGame();
         setupGame();
         for (IGamePluginService plugin : serviceLoader.getGamePluginServices()
@@ -126,10 +120,10 @@ public class Game implements ApplicationListener, IEventCallback {
         this.animationsToProcess = new ArrayList<>();
         state = GameState.running;
 
-        gameData.getEventManager().register(ExplosionAnimationEvent.class,this);
-        gameData.getEventManager().register(SoundEvent.class,this);
-        gameData.getEventManager().register(ShakeEvent.class,this);
-        gameData.getEventManager().register(GameMapChangedEvent.class,this);
+        gameData.getEventManager().register(ExplosionAnimationEvent.class, this);
+        gameData.getEventManager().register(SoundEvent.class, this);
+        gameData.getEventManager().register(ShakeEvent.class, this);
+        gameData.getEventManager().register(GameMapChangedEvent.class, this);
 
 
     }
@@ -203,17 +197,16 @@ public class Game implements ApplicationListener, IEventCallback {
         }
 
 
-
     }
 
     private void playSounds(SoundEvent soundEvent) {
 
-        if (soundEvent.getPath() == null){
+        if (soundEvent.getPath() == null) {
             return;
         }
 
-        assetManager.loadSoundAsset(soundEvent.getSource().getClass(),soundEvent.getPath() );
-        Sound sound = assetManager.getSoundAsset(soundEvent.getSource().getClass(),soundEvent.getPath());
+        assetManager.loadSoundAsset(soundEvent.getSource().getClass(), soundEvent.getPath());
+        Sound sound = assetManager.getSoundAsset(soundEvent.getSource().getClass(), soundEvent.getPath());
 
         if (sound != null) {
             float volume = 1.0f;
@@ -236,12 +229,8 @@ public class Game implements ApplicationListener, IEventCallback {
     private void drawWinScreen() {
         IGUIEntityProcessingService winDrawer = new WinScreenGUI();
 
-        for (IRoundEndService service : serviceLoader.getRoundEndServices()
-                ) {
-            uiSpriteBatch.setProjectionMatrix(camera.combined);
-            winDrawer.drawEntity(service.getRoundWinner(world), gameData, uiSpriteBatch);
-
-        }
+        uiSpriteBatch.setProjectionMatrix(camera.combined);
+        winDrawer.drawEntity(gameData.getTurnManager().getRoundWinner(world), gameData, uiSpriteBatch);
 
     }
 
@@ -252,7 +241,7 @@ public class Game implements ApplicationListener, IEventCallback {
         SpriteBatch spriteBatch = new SpriteBatch();
         spriteBatch.begin();
         spriteBatch.setProjectionMatrix(camera.combined);
-        Texture t = gameAssetManager.checkGetTexture(this.getClass(),path);
+        Texture t = gameAssetManager.checkGetTexture(this.getClass(), path);
 
         spriteBatch.draw(t, 0, 0, gameData.getGameWidth(), gameData.getGameHeight());
         spriteBatch.end();
@@ -262,13 +251,13 @@ public class Game implements ApplicationListener, IEventCallback {
     @Override
     public void processEvent(Event event) {
 
-        if (event instanceof ExplosionAnimationEvent){
+        if (event instanceof ExplosionAnimationEvent) {
             processExplosionAnimationEvent(event);
-        }else if(event instanceof SoundEvent){
+        } else if (event instanceof SoundEvent) {
             playSounds((SoundEvent) event);
-        } else if (event instanceof ShakeEvent){
+        } else if (event instanceof ShakeEvent) {
             processShakeEvent(event);
-        } else if (event instanceof GameMapChangedEvent){
+        } else if (event instanceof GameMapChangedEvent) {
             shouldUpdateMap = true;
         }
 
@@ -292,12 +281,11 @@ public class Game implements ApplicationListener, IEventCallback {
             postEntityProcessingService.postProcess(world, gameData);
         }
 
-        for (IRoundEndService service : serviceLoader.getRoundEndServices()) {
-            if (service.isRoundOver(world)) {
+        if (gameData.getTurnManager() != null) {
+            if (gameData.getTurnManager().isRoundOver(world)) {
                 state = GameState.notRunning;
             }
         }
-
 
         gameData.getKeys().update();
 
@@ -328,7 +316,7 @@ public class Game implements ApplicationListener, IEventCallback {
 
         if (!DEBUG) {
 
-            if (gameMapPolySprite == null || shouldUpdateMap == true ) {
+            if (gameMapPolySprite == null || shouldUpdateMap == true) {
                 gameMapPolySprite = new PolygonSprite(convertGameMapToPolyRegion(gameMap));
                 shouldUpdateMap = false;
             }

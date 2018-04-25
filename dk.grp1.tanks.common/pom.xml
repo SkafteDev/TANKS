@@ -22,9 +22,9 @@
 
   <packaging>bundle</packaging>
 
-  <build>
-    <testSourceDirectory>src/test</testSourceDirectory>
-  </build>
+<!--<build>-->
+    <!--<testSourceDirectory>src/test</testSourceDirectory>-->
+  <!--</build>-->
 
   <dependencies>
     <!--

@@ -6,6 +6,7 @@ import dk.grp1.tanks.common.data.GameKeys;
 import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.data.parts.*;
 import dk.grp1.tanks.common.data.parts.PositionPart;
+import dk.grp1.tanks.common.eventManager.events.EndTurnEvent;
 import dk.grp1.tanks.common.services.IEntityProcessingService;
 import dk.grp1.tanks.common.utils.Vector2D;
 
@@ -35,7 +36,7 @@ public class PlayerProcessingSystem implements IEntityProcessingService {
 
             if (lifePart.getCurrentHP() <= 0) {
                 if (turnPart.isMyTurn()) {
-                    turnPart.endMyTurn();
+                    gameData.getEventManager().addEvent(new EndTurnEvent(player));
                 }
                 world.removeEntity(player);
             }
@@ -48,6 +49,7 @@ public class PlayerProcessingSystem implements IEntityProcessingService {
             } else {
                 ctrlPart.setLeft(false);
                 ctrlPart.setRight(false);
+                // There is a null pointer Exception here
                 ctrlPart.setRotation(world.getGameMap().getDirectionVector(new Vector2D(positionPart.getX(), positionPart.getY())));
             }
 
@@ -85,7 +87,7 @@ public class PlayerProcessingSystem implements IEntityProcessingService {
                     cannonPart.setPreviousAngle(cannonPart.getDirection());
                     //timeSinceLastShot += gameData.getDelta();
                     shootingPart.setReadyToShoot(false);
-                    turnPart.endMyTurn();
+                    gameData.getEventManager().addEvent(new EndTurnEvent(player));
                 }
             }
 

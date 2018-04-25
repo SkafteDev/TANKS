@@ -7,8 +7,7 @@ import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.data.parts.*;
-import dk.grp1.tanks.common.services.IWeapon;
-import javafx.geometry.Pos;
+import dk.grp1.tanks.common.services.IRoundService;
 
 public class OnScreenText implements IGuiProcessingService {
     private BitmapFont font = new BitmapFont();
@@ -77,10 +76,10 @@ public class OnScreenText implements IGuiProcessingService {
         for (Entity e : world.getEntities()
                 ) {
             TurnPart turn = e.getPart(TurnPart.class);
-
-            if (turn != null && turn.isMyTurn()) {
-                turnText += turn.getMyTurnNumber();
-                timeText += Math.floor(turn.getTurnTimeRemaining() * 10) / 10f;
+            IRoundService turnManager = gameData.getTurnManager();
+            if (turn != null && turn.isMyTurn() && turnManager != null) {
+//                turnText += turn.getMyTurnNumber();
+                timeText += Math.floor(turnManager.getTimeRemaining() * 10) / 10f;
             }
 
         }

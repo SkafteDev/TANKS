@@ -100,17 +100,17 @@ public class ServiceLoader  {
         return processingServices;
     }
 
-    public List<IRoundEndService> getRoundEndServices() {
-        ArrayList<IRoundEndService> processingServices = new ArrayList<>();
+    public List<IRoundService> getRoundEndServices() {
+        ArrayList<IRoundService> processingServices = new ArrayList<>();
         ServiceReference[] serviceReferences = new ServiceReference[5];
         try {
-            serviceReferences = bundleContext.getAllServiceReferences(IRoundEndService.class.getName(),null);
+            serviceReferences = bundleContext.getAllServiceReferences(IRoundService.class.getName(),null);
         } catch (InvalidSyntaxException e) {
             e.printStackTrace();
         }
         if(serviceReferences != null) {
             for (ServiceReference s : serviceReferences) {
-                processingServices.add((IRoundEndService) bundleContext.getService(s));
+                processingServices.add((IRoundService) bundleContext.getService(s));
             }
         }
         return processingServices;
