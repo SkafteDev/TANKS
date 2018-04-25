@@ -1,5 +1,7 @@
 package dk.grp1.tanks.weapon.HomingMissile.internal.AI;
 
+import dk.grp1.tanks.common.utils.Vector2D;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,9 +38,7 @@ public class Node {
         return state;
     }
 
-    public List<Node> expand(){
-        throw new UnsupportedOperationException();
-    }
+
 
     public List<Node> getPath(){
         List<Node> path = new ArrayList<>();
@@ -48,6 +48,8 @@ public class Node {
         }
         return path;
     }
+
+
 
     public float getEstimatedTotalCost() {
         return heuristic + pathCost;

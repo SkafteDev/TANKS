@@ -24,7 +24,7 @@ public class AStar implements ITreeSearch{
             if(isGoalState(node.getState())){
                 return node.getPath();
             }
-            List<Node> children = node.expand();
+            List<Node> children = expand(node);
             fringe.addAll(children);
         }
         return null;
@@ -32,6 +32,26 @@ public class AStar implements ITreeSearch{
 
     private float getHeuristicValue(State state){
         return Vector2D.subtractVectors(state.getEntityPosition(),goalState.getEntityPosition()).length();
+    }
+
+    public List<Node> expand(Node node){
+        List<Node> successors = new ArrayList<>();
+        List<State> children= node.getState().getSuccessors();
+        for (State child : children  ) {
+            Node succ = new Node(node,child,getHeuristicValue(child));
+
+        }
+//        successors = []
+//        children = successor_fn(node.STATE)
+//        for child in children:
+//        s = Node(node)  # create node for each in state list
+//        s.STATE = child  # e.g. result = 'F' then 'G' from list ['F', 'G']
+//        s.PARENT_NODE = node
+//        s.DEPTH = node.DEPTH + 1
+//        s.HEU = child[0][1]
+//        s.PATHCOST = child[1] + node.PATHCOST
+//        successors = INSERT(s, successors)
+        return successors;
     }
 
     private Node extractLowest(){
