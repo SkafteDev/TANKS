@@ -8,6 +8,8 @@ import dk.grp1.tanks.common.eventManager.events.SoundEvent;
 import dk.grp1.tanks.common.services.IWeapon;
 import dk.grp1.tanks.common.utils.Vector2D;
 
+import java.util.List;
+
 public class HomingMissileWeapon implements IWeapon {
 
     private final String name = "Homing Missile";
@@ -46,7 +48,7 @@ public class HomingMissileWeapon implements IWeapon {
         wep.add(new MovementPart(accelerationVector, 10000));
         wep.add(new ShapePart());
         wep.add(new CirclePart(cannonCentre.getX(),cannonCentre.getY(),2));
-        wep.add(new PhysicsPart(30, -90.82f));
+        wep.add(new PhysicsPart(30, -0f));
         wep.add(new CollisionPart(true,0));
         wep.add(new DamagePart(4,10));
         wep.add(new TexturePart(this.texturePath));
@@ -54,7 +56,6 @@ public class HomingMissileWeapon implements IWeapon {
         SoundPart sounds = new SoundPart("boom.mp3","boom.mp3");
         wep.add(sounds);
         gameData.getEventManager().addEvent(new SoundEvent(wep,sounds.getShootSoundPath()));
-
         world.addEntity(wep);
     }
 }
