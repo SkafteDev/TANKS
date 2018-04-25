@@ -24,7 +24,7 @@ public class ExplosionEventCallbackImpl implements IEventCallback {
 
     @Override
     public void processEvent(Event event) {
-        if(event instanceof ExplosionEvent) {
+        if(event instanceof ExplosionEvent && event.getSource().getPart(DamagePart.class) != null) {
             for (Entity ent : world.getEntities()) {
 
                 if (isInExplosion(event, ent)) {
