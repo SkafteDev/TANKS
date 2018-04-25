@@ -50,13 +50,19 @@ public class HomingControlPart implements IEntityPart {
         }else if(movementPart.getVelocity().getY() == 0){
             //Code goes here
         }else{
-            //Code goes here
+           return positionPart.getX() * norm(positionPart.getX()) >= path.get(goingToIndex).getX() * norm(positionPart.getX()) &&  positionPart.getY() * norm(positionPart.getY()) >= path.get(goingToIndex).getY() * norm(positionPart.getY());
         }
 
         return false;
     }
 
     private float norm(float value){
-        return 1;
+        if(value > 0){
+            return 1;
+        }
+        if(value < 0){
+            return -1;
+        }
+        throw new Error("You cant normalize a value of 0 (Zero)");
     }
 }
