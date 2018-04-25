@@ -7,6 +7,7 @@ import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.eventManager.events.SoundEvent;
 import dk.grp1.tanks.common.services.IWeapon;
 import dk.grp1.tanks.common.utils.Vector2D;
+import dk.grp1.tanks.weapon.HomingMissile.internal.AI.*;
 
 import java.util.List;
 
@@ -56,6 +57,12 @@ public class HomingMissileWeapon implements IWeapon {
         SoundPart sounds = new SoundPart("boom.mp3","boom.mp3");
         wep.add(sounds);
         gameData.getEventManager().addEvent(new SoundEvent(wep,sounds.getShootSoundPath()));
+
+        State initialState = new State(world.getGameMap(),wep);
+        IGoalSelector goalSelector = new GoalSelector(world,gameData,actor,wep);
+        ITreeSearch ai = new AStar(initialState,goalSelector.calculateGoalState());
+        List<Vector2D> path = ai.searchPoints();
+        wep.add(new HomingControlPart(path));
         world.addEntity(wep);
     }
 }
