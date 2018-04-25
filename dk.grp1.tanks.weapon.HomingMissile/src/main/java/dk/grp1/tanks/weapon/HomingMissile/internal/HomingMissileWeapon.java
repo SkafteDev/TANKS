@@ -12,7 +12,7 @@ public class HomingMissileWeapon implements IWeapon {
 
     private final String name = "Homing Missile";
     private final String description = "Fires a single big shot";
-    private final String iconPath = "bigshot.png";
+    private final String iconPath = "homingmissile.png";
     private final String shootSoundPath= "boom.mp3";
     private final String texturePath = "homingmissile.png";
     private final String explosionTexturePath = "explosion.png";
