@@ -30,6 +30,7 @@ public class HomingControlPart implements IEntityPart {
             if(goingToIndex< path.size() -1)
                 goingToIndex++;
             setNewDirection(entity);
+            System.out.println("Is past point. Calculated new direction. index: " + goingToIndex);
         }
 
     }

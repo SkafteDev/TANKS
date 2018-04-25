@@ -66,6 +66,7 @@ public class HomingMissileWeapon implements IWeapon {
         List<Vector2D> path = ai.searchPoints();
         System.out.println("ASTAR COMPLETE");
         wep.add(new HomingControlPart(path));
+
         world.addEntity(wep);
     }
 }

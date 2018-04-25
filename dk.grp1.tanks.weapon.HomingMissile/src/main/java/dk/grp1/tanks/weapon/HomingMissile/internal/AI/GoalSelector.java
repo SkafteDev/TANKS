@@ -42,7 +42,7 @@ public class GoalSelector implements IGoalSelector{
             float x = vertices.get(i).getX();
             float y = vertices.get(i).getY() + 1;
             for (Entity entity : world.getEntities()) {
-                if (isClose(entity, x, y)) {
+                if (isClose(entity, x, y) && entity != origin) {
                     count++;
                 }
             }
@@ -55,9 +55,9 @@ public class GoalSelector implements IGoalSelector{
         System.out.println(bestCount);
 
         Entity newMissile = (Entity) cloneObject(homingMissile);
-        PositionPart newPos = newMissile.getPart(PositionPart.class);
-        newPos.setX(bestExplosion.getX());
-        newPos.setY(bestExplosion.getY());
+        CirclePart newPos = newMissile.getPart(CirclePart.class);
+        newPos.setCentreX(bestExplosion.getX());
+        newPos.setCentreY(bestExplosion.getY());
         State goalState = new State(world.getGameMap(),newMissile);
         return goalState;
 
