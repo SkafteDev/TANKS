@@ -31,6 +31,14 @@ public class TurnManager implements IRoundService, IPostEntityProcessingService,
         wantToEndTurn = false;
         currentEntity = null;
     }
+    public void stop(){
+        for (Entity entity : entities) {
+            TurnPart turnPart = entity.getPart(TurnPart.class);
+            if (turnPart != null) {
+                turnPart.setMyTurn(true);
+            }
+        }
+    }
 
     @Override
     public void processEvent(Event event) {
@@ -39,7 +47,7 @@ public class TurnManager implements IRoundService, IPostEntityProcessingService,
             Entity source = endTurnEvent.getSource();
 
             if (source != null) {
-                System.out.println("Want to End turn");
+
                 wantToEndTurn = true;
             }
         }
@@ -48,7 +56,6 @@ public class TurnManager implements IRoundService, IPostEntityProcessingService,
     private void selectNextEntity(Entity source) {
 
         if (!entities.contains(source)) {
-            System.out.println("Does not contain source");
             return;
         }
         timeRemaining = 30;
@@ -82,21 +89,12 @@ public class TurnManager implements IRoundService, IPostEntityProcessingService,
             register(entity);
         }
 
-        for (Entity entity : entities) {
-            TurnPart turnPart = entity.getPart(TurnPart.class);
-            if (turnPart != null){
-                System.out.println(entity.toString() + " : " + turnPart.isMyTurn());
-            }
-        }
-        System.out.println("\n");
-
         if (wantToEndTurn){
             if (anythingMoves(world)){
                 TurnPart turnPart = currentEntity.getPart(TurnPart.class);
                 if (turnPart != null){
                     turnPart.setMyTurn(false);
                 }
-               // unRegisterDeadEntities(gameData);
                 return;
             }
             selectNextEntity(currentEntity);
@@ -104,7 +102,7 @@ public class TurnManager implements IRoundService, IPostEntityProcessingService,
         }
 
         unRegisterDeadEntities();
-        System.out.println("Unregister Entities");
+
         timeRemaining -= gameData.getDelta();
 
         if (timeRemaining <= 0) {

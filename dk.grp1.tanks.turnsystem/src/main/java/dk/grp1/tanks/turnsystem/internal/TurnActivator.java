@@ -7,7 +7,7 @@ import org.osgi.framework.BundleContext;
 
 public class TurnActivator implements BundleActivator {
 
-    public static TurnManager turnManager;
+    private static TurnManager turnManager;
 
 
     public static TurnManager getInstance(){
