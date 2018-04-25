@@ -3,9 +3,8 @@ package dk.grp1.tanks.weapon.HomingMissile.internal;
 import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.World;
-import dk.grp1.tanks.common.data.parts.IEntityPart;
-import dk.grp1.tanks.common.data.parts.MovementPart;
-import dk.grp1.tanks.common.data.parts.PositionPart;
+import dk.grp1.tanks.common.data.parts.*;
+import dk.grp1.tanks.common.eventManager.events.ExplosionAnimationEvent;
 import dk.grp1.tanks.common.eventManager.events.ExplosionEvent;
 import dk.grp1.tanks.common.utils.Vector2D;
 
@@ -15,21 +14,32 @@ public class HomingControlPart implements IEntityPart {
 
     private List<Vector2D> path;
     private int goingToIndex;
+    private boolean firstTime = true;
 
     public HomingControlPart(){
 
     }
 
     public HomingControlPart(List<Vector2D> path){
-
         this.path = path;
+        goingToIndex = path.size()-1;
+
     }
+
     @Override
     public void processPart(Entity entity, GameData gameData, World world) {
+        if(firstTime){
+            setNewDirection(entity);
+            firstTime = false;
+        }
         if(isPastPoint(entity)){
-            goingToIndex++;
-            if(goingToIndex >= path.size()){
-                gameData.getEventManager().addEvent(new ExplosionEvent(entity,path.get(path.size()-1),20));
+            goingToIndex--;
+            if(goingToIndex <=1){
+                DamagePart dmg = entity.getPart(DamagePart.class);
+                ExplosionTexturePart text = entity.getPart(ExplosionTexturePart.class);
+
+                gameData.getEventManager().addEvent(new ExplosionEvent(entity,path.get(0),dmg.getExplosionRadius()));
+                gameData.getEventManager().addEvent(new ExplosionAnimationEvent(entity,path.get(0),text,dmg.getExplosionRadius()));
                 world.removeEntity(entity);
                 return;
             }
@@ -50,20 +60,29 @@ public class HomingControlPart implements IEntityPart {
         }
         Vector2D nextPoint = path.get(goingToIndex);
         Vector2D directionVector = new Vector2D(nextPoint.getX()-positionPart.getX(), nextPoint.getY()-positionPart.getY());
-        movementPart.setVelocity(directionVector);
+        //
+        if(directionVector.length() < 0.1){
+            movementPart.setVelocity(directionVector);
+        }else {
+            Vector2D dir = directionVector.unitVector();
+            dir.multiplyWithConstant(20);
+            movementPart.setVelocity(dir);
+        }
+
     }
 
     private boolean isPastPoint(Entity entity) {
         PositionPart positionPart = entity.getPart(PositionPart.class);
         MovementPart movementPart = entity.getPart(MovementPart.class);
         Vector2D goingTo = path.get(goingToIndex);
+        Vector2D velocity = movementPart.getVelocity();
 
-        if(movementPart.getVelocity().getX() == 0){
-            return norm(positionPart.getX()) >= norm(goingTo.getX());
-        }else if(movementPart.getVelocity().getY() == 0){
-            return norm(positionPart.getY()) >= norm(goingTo.getY());
+        if(Math.abs(movementPart.getVelocity().getX()) <0.1f){
+            return positionPart.getY()* norm(velocity.getY()) >= goingTo.getY()* norm(velocity.getY());
+        }else if(Math.abs(movementPart.getVelocity().getY()) <0.1f){
+            return positionPart.getX() * norm(velocity.getX()) >=goingTo.getX()* norm(velocity.getX());
         }else{
-           return positionPart.getX() * norm(positionPart.getX()) >= path.get(goingToIndex).getX() * norm(positionPart.getX()) &&  positionPart.getY() * norm(positionPart.getY()) >= path.get(goingToIndex).getY() * norm(positionPart.getY());
+           return positionPart.getX() * norm(velocity.getX()) >= path.get(goingToIndex).getX() * norm(velocity.getX()) &&  positionPart.getY() * norm(velocity.getY()) >= path.get(goingToIndex).getY() * norm(velocity.getY());
         }
 
     }
@@ -72,9 +91,9 @@ public class HomingControlPart implements IEntityPart {
         if(value > 0){
             return 1;
         }
-        if(value < 0){
+         if(value < 0){
             return -1;
         }
-        throw new Error("You cant normalize a value of 0 (Zero)");
+        throw new Error("You cant normalize a value of 0 (Zero) " + value);
     }
 }
