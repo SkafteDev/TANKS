@@ -60,8 +60,11 @@ public class HomingMissileWeapon implements IWeapon {
 
         State initialState = new State(world.getGameMap(),wep);
         IGoalSelector goalSelector = new GoalSelector(world,gameData,actor,wep);
-        ITreeSearch ai = new AStar(initialState,goalSelector.calculateGoalState());
+        State goalState = goalSelector.calculateGoalState();
+        System.out.println("GOAL STATE FOUND " + goalState.getEntityPosition());
+        ITreeSearch ai = new AStar(initialState,goalState);
         List<Vector2D> path = ai.searchPoints();
+        System.out.println("ASTAR COMPLETE");
         wep.add(new HomingControlPart(path));
         world.addEntity(wep);
     }

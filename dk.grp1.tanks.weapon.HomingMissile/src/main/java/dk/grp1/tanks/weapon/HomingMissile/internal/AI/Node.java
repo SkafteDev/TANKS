@@ -18,8 +18,8 @@ public class Node {
         this.parent = parent;
         this.state = state;
         this.heuristic = heuristic;
-        this.depth = parent.getDepth() + 1;
-        this.pathCost = parent.getPathCost();
+        this.depth = parent != null ? parent.getDepth() + 1 : 0;
+        this.pathCost = parent != null ? parent.getPathCost() + 1 : 0;
     }
 
     public int getDepth() {
@@ -39,16 +39,14 @@ public class Node {
     }
 
 
-
-    public List<Node> getPath(){
+    public List<Node> getPath() {
         List<Node> path = new ArrayList<>();
         path.add(this);
-        for(Node currentParent = this.parent; currentParent != null; currentParent = currentParent.getParent()){
+        for (Node currentParent = this.parent; currentParent != null; currentParent = currentParent.getParent()) {
             path.add(currentParent);
         }
         return path;
     }
-
 
 
     public float getEstimatedTotalCost() {

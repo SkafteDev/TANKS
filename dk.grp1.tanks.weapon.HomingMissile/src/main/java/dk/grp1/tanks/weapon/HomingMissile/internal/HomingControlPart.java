@@ -25,8 +25,10 @@ public class HomingControlPart implements IEntityPart {
     }
     @Override
     public void processPart(Entity entity, GameData gameData, World world) {
+        System.out.println("controlpart processed");
         if(isPastPoint(entity)){
-            goingToIndex++;
+            if(goingToIndex< path.size() -1)
+                goingToIndex++;
             setNewDirection(entity);
         }
 
