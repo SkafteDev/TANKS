@@ -17,6 +17,8 @@ public class AStar implements ITreeSearch{
         this.fringe = new ArrayList<>();
     }
 
+
+
     public List<Node> search(){
         fringe.add(new Node(null,initialState,getHeuristicValue(initialState)));
         while (!fringe.isEmpty()){
@@ -28,6 +30,23 @@ public class AStar implements ITreeSearch{
             fringe.addAll(children);
         }
         return null;
+    }
+
+    @Override
+    public List<Vector2D> searchPoints() {
+        List<Node> nodes = search();
+        List<Vector2D> points = new ArrayList<>();
+
+        if (nodes != null) {
+
+            for (Node node : nodes) {
+                points.add(node.getState().getEntityPosition());
+            }
+
+        }
+
+        return points;
+
     }
 
     private float getHeuristicValue(State state){
