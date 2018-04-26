@@ -6,7 +6,7 @@ import java.util.*;
 
 public class AStar implements ITreeSearch{
 
-    private final float GOALRANGE = 2.1f;
+    private final float GOALRANGE = 5.1f;
     private List<Node> fringe;
     private State initialState;
     private State goalState;
@@ -58,10 +58,10 @@ public class AStar implements ITreeSearch{
 
     public List<Node> expand(Node node){
         List<Node> successors = new ArrayList<>();
-        List<State> children= node.getState().getSuccessors();
-        for (State child : children  ) {
+        List<State> children = node.getState().getSuccessors();
+        for (State child : children) {
             Node succ = new Node(node,child,getHeuristicValue(child));
-            if(discoveredPositions.contains(succ)) {
+            if(discoveredPositions.contains(succ) && succ.getEstimatedTotalCost() >= node.getEstimatedTotalCost() ) {
                 continue;
             }
             successors.add(succ);

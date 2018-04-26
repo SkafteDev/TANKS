@@ -15,7 +15,7 @@ public class State {
 
     private GameMap gameMap;
     private Entity entity;
-    private final float precision = 2f;
+    private final float precision = 5f;
     private final Vector2D entityPosition;
 
     public State(GameMap gameMap, Entity entity) {
@@ -75,8 +75,6 @@ public class State {
 
         ArrayList<State> statesToReturn = new ArrayList<>();
         for (State state : stateList) {
-
-
             if (state.isValid()){
                 statesToReturn.add(state);
             }
