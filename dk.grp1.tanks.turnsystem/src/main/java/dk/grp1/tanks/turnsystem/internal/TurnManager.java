@@ -58,7 +58,7 @@ public class TurnManager implements IRoundService, IPostEntityProcessingService,
         if (!entities.contains(source)) {
             return;
         }
-        timeRemaining = 30;
+        timeRemaining = roundDuration;
         int nextIndex = 0;
         int index = entities.indexOf(source);
         if (index != entities.size() - 1) {
