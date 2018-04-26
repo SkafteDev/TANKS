@@ -30,7 +30,7 @@ public class Consumer {
                     }
                     gameData.getEventManager().addEvent(new AIEvent(null,vector2DS));
                    try {
-                        Thread.sleep(2000);
+                        Thread.sleep(100);
                     } catch (InterruptedException e) {
 
                     }
