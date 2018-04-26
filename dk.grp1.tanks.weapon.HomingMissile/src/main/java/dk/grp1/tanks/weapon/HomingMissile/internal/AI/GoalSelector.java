@@ -40,7 +40,7 @@ public class GoalSelector implements IGoalSelector{
         for (int i = 0; i < vertices.size(); i++) {
             int count = 0;
             float x = vertices.get(i).getX();
-            float y = vertices.get(i).getY() + 5;
+            float y = vertices.get(i).getY() + 20;
             for (Entity entity : world.getEntities()) {
                 if (isClose(entity, x, y) && entity != origin) {
                     count++;

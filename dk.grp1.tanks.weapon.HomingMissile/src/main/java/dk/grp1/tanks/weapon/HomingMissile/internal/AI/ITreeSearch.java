@@ -11,5 +11,5 @@ public interface ITreeSearch {
      */
     public List<Node> search();
 
-    public List<Vector2D> searchPoints();
+    public void searchPoints( List<Vector2D> points,Consumer consumer);
 }

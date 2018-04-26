@@ -25,10 +25,7 @@ import dk.grp1.tanks.core.internal.managers.GameInputProcessor;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.badlogic.gdx.math.MathUtils.random;
 
@@ -37,7 +34,7 @@ public class Game implements ApplicationListener, IEventCallback {
     private final int WIDTH = 800;
     private final int HEIGHT = 600;
 
-    private final boolean DEBUG = false;
+    private final boolean DEBUG = true;
     private GameState state;
     private ServiceLoader serviceLoader;
     private World world;
@@ -70,6 +67,7 @@ public class Game implements ApplicationListener, IEventCallback {
     private float baseY;
 
     private GameAssetManager gameAssetManager;
+    private Set<Vector2D> positions;
 
     public Game(ServiceLoader serviceLoader) {
         this.serviceLoader = serviceLoader;
@@ -130,6 +128,7 @@ public class Game implements ApplicationListener, IEventCallback {
         gameData.getEventManager().register(SoundEvent.class,this);
         gameData.getEventManager().register(ShakeEvent.class,this);
         gameData.getEventManager().register(GameMapChangedEvent.class,this);
+        gameData.getEventManager().register(AIEvent.class,this);
 
 
     }
@@ -270,6 +269,9 @@ public class Game implements ApplicationListener, IEventCallback {
             processShakeEvent(event);
         } else if (event instanceof GameMapChangedEvent){
             shouldUpdateMap = true;
+        } else if(event instanceof AIEvent){
+            AIEvent aiEvent = (AIEvent) event;
+            positions = aiEvent.getPositions();
         }
 
     }
@@ -349,6 +351,16 @@ public class Game implements ApplicationListener, IEventCallback {
                 shapeRenderer.line(vector1.getX(), vector1.getY(), vector2.getX(), vector2.getY());
             }
             shapeRenderer.end();
+            if(positions != null && !positions.isEmpty()){
+                Set<Vector2D> positions2 = new HashSet<>(positions);
+                shapeRenderer.setProjectionMatrix(camera.combined);
+                shapeRenderer.setColor(Color.GREEN);
+                shapeRenderer.begin(ShapeRenderer.ShapeType.Point);
+                for (Vector2D position : positions2) {
+                    shapeRenderer.point(position.getX(),position.getY(),0);
+                }
+                shapeRenderer.end();
+            }
         }
     }
 

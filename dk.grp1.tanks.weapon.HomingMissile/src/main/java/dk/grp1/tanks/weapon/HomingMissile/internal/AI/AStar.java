@@ -3,6 +3,7 @@ package dk.grp1.tanks.weapon.HomingMissile.internal.AI;
 import dk.grp1.tanks.common.utils.Vector2D;
 
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class AStar implements ITreeSearch{
 
@@ -11,13 +12,20 @@ public class AStar implements ITreeSearch{
     private State initialState;
     private State goalState;
     private Set<Node> discoveredPositions;
-
+    private Set<Node> discoveredPositionsShared;
 
     public AStar(State initialState, State goalState) {
         this.initialState = initialState;
         this.goalState = goalState;
         this.fringe = new ArrayList<>();
         discoveredPositions = new HashSet<>();
+    }
+    public AStar(State initialState, State goalState, Set<Node> discoveredPositionsShared) {
+        this.initialState = initialState;
+        this.goalState = goalState;
+        this.fringe = new ArrayList<>();
+        discoveredPositions = new HashSet<>();
+        this.discoveredPositionsShared = discoveredPositionsShared;
     }
 
 
@@ -27,6 +35,8 @@ public class AStar implements ITreeSearch{
         while (!fringe.isEmpty()){
             Node node = extractLowest();
             if(isGoalState(node.getState())){
+                System.out.println(discoveredPositions.size());
+                System.out.println(discoveredPositionsShared.size());
                 return node.getPath();
             }
             List<Node> children = expand(node);
@@ -36,20 +46,28 @@ public class AStar implements ITreeSearch{
     }
 
     @Override
-    public List<Vector2D> searchPoints() {
-        List<Node> nodes = search();
-        List<Vector2D> points = new ArrayList<>();
+    public void searchPoints(List<Vector2D> points, Consumer consumer) {
 
-        if (nodes != null) {
 
-            for (Node node : nodes) {
-                points.add(node.getState().getEntityPosition());
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                consumer.startConsuming();
+                List<Node> nodes = search();
+
+                if (nodes != null) {
+
+                    for (Node node : nodes) {
+                        points.add(node.getState().getEntityPosition());
+                    }
+
+                }
+                consumer.stopConsuming();
+
+
             }
-
-        }
-
-        return points;
-
+        });
+        t.start();
     }
 
     private float getHeuristicValue(State state){
@@ -61,11 +79,12 @@ public class AStar implements ITreeSearch{
         List<State> children = node.getState().getSuccessors();
         for (State child : children) {
             Node succ = new Node(node,child,getHeuristicValue(child));
-            if(discoveredPositions.contains(succ) && succ.getEstimatedTotalCost() >= node.getEstimatedTotalCost() ) {
+            if(discoveredPositions.contains(succ)) {
                 continue;
             }
             successors.add(succ);
             discoveredPositions.add(succ);
+            discoveredPositionsShared.add(succ);
         }
 
 //        successors = []

@@ -1,6 +1,7 @@
 package dk.grp1.tanks.weapon.HomingMissile.internal.AI;
 
 import dk.grp1.tanks.common.data.Entity;
+import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.GameMap;
 import dk.grp1.tanks.common.data.parts.CirclePart;
 import dk.grp1.tanks.common.data.parts.PositionPart;
@@ -65,11 +66,11 @@ public class State {
         stateList.add(new State(gameMap,rightEntity));
         stateList.add(new State(gameMap,rightUpEntity));
         stateList.add(new State(gameMap,upEntity));
-        stateList.add(new State(gameMap,leftUpEntity));
+       stateList.add(new State(gameMap,leftUpEntity));
         stateList.add(new State(gameMap,leftEntity));
-        stateList.add(new State(gameMap,leftDownEntity));
+       stateList.add(new State(gameMap,leftDownEntity));
         stateList.add(new State(gameMap,downEntity));
-        stateList.add(new State(gameMap,rightDownEntity));
+       stateList.add(new State(gameMap,rightDownEntity));
 
 
 
@@ -149,7 +150,11 @@ public class State {
     private boolean isValid(){
         CirclePart circlePart = this.getEntity().getPart(CirclePart.class);
         if (circlePart != null) {
-            return gameMap.getHeight(this.getEntityPosition())< this.getEntityPosition().getY() -( circlePart.getRadius() + 1f);
+            if(this.getEntityPosition().getX() > 0 && this.getEntityPosition().getX() < gameMap.getGAMEWIDTH()){
+                if(this.getEntityPosition().getY() > 0 && this.getEntityPosition().getY() < gameMap.getGAMEHEIGHT()) {
+                    return gameMap.getHeight(this.getEntityPosition()) < this.getEntityPosition().getY() - (circlePart.getRadius() + 1f);
+                }
+            }
 
         }
         return false;

@@ -9,6 +9,15 @@ import java.util.List;
 
 public class GameMap {
     private List<IGameMapFunction> gameMapFunctions;
+
+    public float getGAMEWIDTH() {
+        return GAMEWIDTH;
+    }
+
+    public float getGAMEHEIGHT() {
+        return GAMEHEIGHT;
+    }
+
     private float GAMEWIDTH;
     private float GAMEHEIGHT;
     private GameMapFunctionComparator comparator;
