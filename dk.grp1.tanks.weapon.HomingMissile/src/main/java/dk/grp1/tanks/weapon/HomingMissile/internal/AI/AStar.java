@@ -2,8 +2,7 @@ package dk.grp1.tanks.weapon.HomingMissile.internal.AI;
 
 import dk.grp1.tanks.common.utils.Vector2D;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class AStar implements ITreeSearch{
 
@@ -11,10 +10,14 @@ public class AStar implements ITreeSearch{
     private List<Node> fringe;
     private State initialState;
     private State goalState;
+    private Set<Node> discoveredPositions;
+
+
     public AStar(State initialState, State goalState) {
         this.initialState = initialState;
         this.goalState = goalState;
         this.fringe = new ArrayList<>();
+        discoveredPositions = new HashSet<>();
     }
 
 
@@ -58,8 +61,13 @@ public class AStar implements ITreeSearch{
         List<State> children= node.getState().getSuccessors();
         for (State child : children  ) {
             Node succ = new Node(node,child,getHeuristicValue(child));
+            if(discoveredPositions.contains(succ)) {
+                continue;
+            }
             successors.add(succ);
+            discoveredPositions.add(succ);
         }
+
 //        successors = []
 //        children = successor_fn(node.STATE)
 //        for child in children:

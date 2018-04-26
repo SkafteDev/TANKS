@@ -59,6 +59,9 @@ public class State {
         Entity rightDownEntity = copyEntity(this.entity);
         changePosition(rightDownEntity,precision,-precision);
 
+
+
+
         stateList.add(new State(gameMap,rightEntity));
         stateList.add(new State(gameMap,rightUpEntity));
         stateList.add(new State(gameMap,upEntity));
@@ -68,8 +71,12 @@ public class State {
         stateList.add(new State(gameMap,downEntity));
         stateList.add(new State(gameMap,rightDownEntity));
 
+
+
         ArrayList<State> statesToReturn = new ArrayList<>();
         for (State state : stateList) {
+
+
             if (state.isValid()){
                 statesToReturn.add(state);
             }
@@ -79,6 +86,8 @@ public class State {
 
     }
 
+
+
     /**
      * Get the position of the Entity
      * @return
@@ -87,13 +96,6 @@ public class State {
         return entityPosition;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        State state = (State) o;
-        throw new UnsupportedOperationException();
-    }
 
     /**
      * Create a copy of the given Entity
@@ -155,4 +157,19 @@ public class State {
         return false;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        State state = (State) o;
+
+        return getEntityPosition() != null ? Math.abs(getEntityPosition().getX()-state.getEntityPosition().getX()) < 0.001f && Math.abs(getEntityPosition().getY()-state.getEntityPosition().getY()) < 0.001f  : state.getEntityPosition() == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return getEntityPosition() != null ? getEntityPosition().hashCode() : 0;
+    }
 }

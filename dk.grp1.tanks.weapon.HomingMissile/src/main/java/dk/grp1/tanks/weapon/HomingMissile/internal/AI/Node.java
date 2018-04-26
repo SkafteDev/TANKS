@@ -19,11 +19,11 @@ public class Node {
         this.state = state;
         this.heuristic = heuristic;
         this.depth = parent != null ? parent.getDepth() + 1 : 0;
-        this.pathCost = parent != null ? parent.getPathCost() + 1 : 0;
+        this.pathCost = parent != null ? parent.getPathCost() + calculatePathCost() : 0;
     }
 
     private float calculatePathCost() {
-        return Vector2D.subtractVectors(state.getEntityPosition(),parent.getState().getEntityPosition()).length();
+        return Vector2D.subtractVectors(state.getEntityPosition(), parent.getState().getEntityPosition()).length();
     }
 
     public int getDepth() {
@@ -55,5 +55,26 @@ public class Node {
 
     public float getEstimatedTotalCost() {
         return heuristic + pathCost;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Node node = (Node) o;
+
+        if (Math.abs(node.heuristic - heuristic) > 0.001f) return true;
+        return getState() != null ? getState().equals(node.getState()) : node.getState() == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getParent() != null ? getParent().hashCode() : 0;
+        result = 31 * result + (getState() != null ? getState().hashCode() : 0);
+        result = 31 * result + getDepth();
+        result = 31 * result + (getPathCost() != +0.0f ? Float.floatToIntBits(getPathCost()) : 0);
+        result = 31 * result + (heuristic != +0.0f ? Float.floatToIntBits(heuristic) : 0);
+        return result;
     }
 }
