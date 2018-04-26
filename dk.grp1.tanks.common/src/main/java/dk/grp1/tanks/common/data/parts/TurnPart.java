@@ -9,8 +9,6 @@ public class TurnPart implements IEntityPart {
 
     private boolean myTurn;
 
-    private static float timeRemaining;
-
     public TurnPart(){
         myTurn = false;
 
