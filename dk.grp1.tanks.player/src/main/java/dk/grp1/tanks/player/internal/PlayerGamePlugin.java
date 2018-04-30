@@ -11,7 +11,7 @@ import javafx.geometry.Pos;
 
 public class PlayerGamePlugin implements IGamePluginService {
 
-    private int numPlayers = 2;
+    private int numPlayers = 1;
     private float playerRadius = 10f;
 
     @Override
