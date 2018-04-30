@@ -14,6 +14,9 @@ public class InventoryPart implements IEntityPart, IWeaponListener {
     private Map<IWeapon, Integer> weaponAmmo;
     private IWeapon currentWeapon;
 
+    public InventoryPart(){
+
+    }
 
     public InventoryPart(List<IWeapon> weapons) {
         if (weapons == null) {

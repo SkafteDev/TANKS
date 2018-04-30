@@ -18,6 +18,9 @@ public class CollisionPart implements IEntityPart {
     private float minTimeBetweenCollision;
 
 
+    public CollisionPart(){
+
+    }
     /**
      * Creates a collision part for an entity
      *
@@ -50,7 +53,6 @@ public class CollisionPart implements IEntityPart {
             if(soundPart != null){
                 Event soundEvent = new SoundEvent(entity,soundPart.getOnHitSoundPath());
                 gameData.getEventManager().addEvent(soundEvent);
-
             }
             gameData.getEventManager().addEvent(explosionEvent);
             gameData.getEventManager().addEvent(mapDestructionEvent);

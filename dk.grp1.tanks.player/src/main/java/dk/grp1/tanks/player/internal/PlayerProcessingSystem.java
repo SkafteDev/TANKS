@@ -21,6 +21,7 @@ public class PlayerProcessingSystem implements IEntityProcessingService {
         for (Entity player : world.getEntities(Player.class)
                 ) {
 
+
             TurnPart turnPart = player.getPart(TurnPart.class);
             CannonPart cannonPart = player.getPart(CannonPart.class);
             MovementPart movePart = player.getPart(MovementPart.class);
@@ -45,12 +46,16 @@ public class PlayerProcessingSystem implements IEntityProcessingService {
             if (turnPart.isMyTurn()) {
                 ctrlPart.setLeft(gameData.getKeys().isDown(GameKeys.LEFT));
                 ctrlPart.setRight(gameData.getKeys().isDown(GameKeys.RIGHT));
-                ctrlPart.setRotation(world.getGameMap().getDirectionVector(new Vector2D(positionPart.getX(), positionPart.getY())));
+                if (world.getGameMap() != null) {
+                    ctrlPart.setRotation(world.getGameMap().getDirectionVector(new Vector2D(positionPart.getX(), positionPart.getY())));
+                }
             } else {
                 ctrlPart.setLeft(false);
                 ctrlPart.setRight(false);
-                // There is a null pointer Exception here
-                ctrlPart.setRotation(world.getGameMap().getDirectionVector(new Vector2D(positionPart.getX(), positionPart.getY())));
+                if (world.getGameMap() != null) {
+
+                    ctrlPart.setRotation(world.getGameMap().getDirectionVector(new Vector2D(positionPart.getX(), positionPart.getY())));
+                }
             }
 
             //Cannon movement

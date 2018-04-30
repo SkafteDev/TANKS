@@ -1,0 +1,2 @@
+Bundle-Activator: dk.grp1.tanks.weapon.Earthquake.internal.EarthquakeActivator
+Bundle-Category: weapon

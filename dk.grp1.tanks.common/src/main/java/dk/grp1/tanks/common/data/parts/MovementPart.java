@@ -15,6 +15,9 @@ public class MovementPart implements IEntityPart {
 
     private Vector2D velocity;
     private float maxSpeed;
+    public MovementPart(){
+
+    }
 
     public MovementPart(Vector2D velocity, float maxSpeed) {
 
