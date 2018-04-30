@@ -88,6 +88,8 @@ public class TurnManager implements IRoundService, IPostEntityProcessingService,
 
             register(entity);
         }
+        unRegisterMissingEntities(world);
+        unRegisterDeadEntities();
 
         if (wantToEndTurn){
             if (anythingMoves(world)){
@@ -101,7 +103,6 @@ public class TurnManager implements IRoundService, IPostEntityProcessingService,
             wantToEndTurn = false;
         }
 
-        unRegisterDeadEntities();
 
         timeRemaining -= gameData.getDelta();
 
@@ -109,6 +110,19 @@ public class TurnManager implements IRoundService, IPostEntityProcessingService,
             gameData.getEventManager().addEvent(new EndTurnEvent(currentEntity));
         }
 
+    }
+
+    private void unRegisterMissingEntities(World world) {
+        List<Entity> entitiesToRemove = new ArrayList<>();
+        for (Entity entity : entities) {
+            if(!world.getEntities().contains(entity)){
+                entitiesToRemove.add(entity);
+            }
+        }
+
+        for (Entity entity : entitiesToRemove) {
+            unRegister(entity);
+        }
     }
 
     private void unRegisterDeadEntities() {
