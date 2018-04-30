@@ -7,7 +7,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class AStar implements ITreeSearch{
 
-    private final float GOALRANGE = 5.1f;
+    private final float GOALRANGE = 1.1f;
     private List<Node> fringe;
     private State initialState;
     private State goalState;

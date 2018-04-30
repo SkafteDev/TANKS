@@ -21,7 +21,7 @@ public class Node {
         this.depth = parent != null ? parent.getDepth() + 1 : 0;
         this.pathCost = parent != null ? parent.getPathCost() + calculatePathCost() : 0;
     }
-
+  
     private float calculatePathCost() {
         return Vector2D.subtractVectors(state.getEntityPosition(), parent.getState().getEntityPosition()).length();
     }

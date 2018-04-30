@@ -14,7 +14,7 @@ import java.util.Objects;
 
 public class State {
 
-    private final float precision = 5f;
+    private final float precision = 1f;
     private final Vector2D entityPosition;
     private GameMap gameMap;
     private Entity entity;
