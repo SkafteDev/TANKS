@@ -13,8 +13,8 @@ public class HolySheepWeapon implements IWeapon {
 
     private final String iconPath = "holysheep.png";
     private final String texturePath = "holysheep.png";
-    private final String shootSoundPath = "hallelujah.mp3";
-    private final String explosionSoundPath = "Allahu-Akbar.mp3";
+    private final String shootSoundPath = "sheep.mp3";
+    private final String explosionSoundPath = "hallelujah.mp3";
     private final String explosionTexturePath = "explosion.png";
     private final int explosionTextureFrameRows = 6;
     private final int explosionTextureFrameCols = 8;
@@ -55,7 +55,7 @@ public class HolySheepWeapon implements IWeapon {
         }
         controlPart.setRotation(world.getGameMap().getDirectionVector(new Vector2D(cannonCentre.getX(), cannonCentre.getY())));
         holysheep.add(controlPart);
-        holysheep.add(new MovementPart(500));
+        holysheep.add(new MovementPart(new Vector2D(0,1),500));
         holysheep.add(new HolySheepExpirationPart(5 / 200.0f * firePower));
         holysheep.add(new ShapePart());
         holysheep.add(new CirclePart(cannonCentre.getX(),cannonCentre.getY(),5));

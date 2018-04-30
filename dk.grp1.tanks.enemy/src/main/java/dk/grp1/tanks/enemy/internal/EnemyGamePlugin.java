@@ -16,7 +16,7 @@ public class EnemyGamePlugin implements IGamePluginService {
     private final int AMOUNTOFENEMIES;
 
     public EnemyGamePlugin(){
-        AMOUNTOFENEMIES = 0;
+        AMOUNTOFENEMIES = 2;
     }
 
     public EnemyGamePlugin(int amountOfEnemies){
