@@ -69,7 +69,7 @@ public class Node {
 
     @Override
     public int hashCode() {
-        int result = getParent() != null ? getParent().hashCode() : 0;
+        int result = 0;
         result = 31 * result + (getState() != null ? getState().hashCode() : 0);
 
         return result;
