@@ -168,6 +168,13 @@ public class State {
 
     @Override
     public int hashCode() {
-        return getEntityPosition() != null ? getEntityPosition().hashCode() : 0;
+        if (getEntityPosition() == null) {
+            return 0;
+        } else {
+            int hc = 43;
+            hc += 1337 * ((int) getEntityPosition().getX());
+            hc += 7 * ((int) getEntityPosition().getY());
+            return hc;
+        }
     }
 }

@@ -64,7 +64,6 @@ public class Node {
 
         Node node = (Node) o;
 
-        if (Math.abs(node.heuristic - heuristic) > 0.001f) return true;
         return getState() != null ? getState().equals(node.getState()) : node.getState() == null;
     }
 
@@ -72,9 +71,7 @@ public class Node {
     public int hashCode() {
         int result = getParent() != null ? getParent().hashCode() : 0;
         result = 31 * result + (getState() != null ? getState().hashCode() : 0);
-        result = 31 * result + getDepth();
-        result = 31 * result + (getPathCost() != +0.0f ? Float.floatToIntBits(getPathCost()) : 0);
-        result = 31 * result + (heuristic != +0.0f ? Float.floatToIntBits(heuristic) : 0);
+
         return result;
     }
 }
