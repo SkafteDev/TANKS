@@ -88,8 +88,7 @@ public class TurnManager implements IRoundService, IPostEntityProcessingService,
 
             register(entity);
         }
-        unRegisterMissingEntities(world);
-        unRegisterDeadEntities();
+        
 
         if (wantToEndTurn){
             if (anythingMoves(world)){
@@ -102,6 +101,8 @@ public class TurnManager implements IRoundService, IPostEntityProcessingService,
             selectNextEntity(currentEntity);
             wantToEndTurn = false;
         }
+		unRegisterMissingEntities(world);
+        unRegisterDeadEntities();
 
 
         timeRemaining -= gameData.getDelta();
