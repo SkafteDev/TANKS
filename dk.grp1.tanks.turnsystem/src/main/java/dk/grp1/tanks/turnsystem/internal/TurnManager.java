@@ -26,12 +26,13 @@ public class TurnManager implements IRoundService, IPostEntityProcessingService,
         this.entities = new ArrayList<>();
     }
 
-    public void start(){
+    public void start() {
         entities = new ArrayList<>();
         wantToEndTurn = false;
         currentEntity = null;
     }
-    public void stop(){
+
+    public void stop() {
         for (Entity entity : entities) {
             TurnPart turnPart = entity.getPart(TurnPart.class);
             if (turnPart != null) {
@@ -71,7 +72,6 @@ public class TurnManager implements IRoundService, IPostEntityProcessingService,
                 if (entities.indexOf(entity) == nextIndex) {
                     turnPart.setMyTurn(true);
                     currentEntity = entity;
-                    System.out.println(turnPart.isMyTurn());
                 } else {
                     turnPart.setMyTurn(false);
                 }
@@ -88,21 +88,23 @@ public class TurnManager implements IRoundService, IPostEntityProcessingService,
 
             register(entity);
         }
-        
 
-        if (wantToEndTurn){
-            if (anythingMoves(world)){
+
+        if (wantToEndTurn) {
+            if (anythingMoves(world)) {
                 TurnPart turnPart = currentEntity.getPart(TurnPart.class);
-                if (turnPart != null){
+                if (turnPart != null) {
                     turnPart.setMyTurn(false);
                 }
                 return;
             }
+            System.out.println("Select Next Entity");
             selectNextEntity(currentEntity);
             wantToEndTurn = false;
+
         }
-		unRegisterMissingEntities(world);
         unRegisterDeadEntities();
+        unRegisterMissingEntities(world);
 
 
         timeRemaining -= gameData.getDelta();
@@ -116,7 +118,7 @@ public class TurnManager implements IRoundService, IPostEntityProcessingService,
     private void unRegisterMissingEntities(World world) {
         List<Entity> entitiesToRemove = new ArrayList<>();
         for (Entity entity : entities) {
-            if(!world.getEntities().contains(entity)){
+            if (!world.getEntities().contains(entity)) {
                 entitiesToRemove.add(entity);
             }
         }
@@ -189,8 +191,7 @@ public class TurnManager implements IRoundService, IPostEntityProcessingService,
     }
 
     @Override
-    public boolean isRoundOver(World world)
-    {
+    public boolean isRoundOver(World world) {
 
         return (entities.size() <= 1);
     }
@@ -200,7 +201,7 @@ public class TurnManager implements IRoundService, IPostEntityProcessingService,
         if (!isRoundOver(world)) {
             return null;
         }
-        if (!entities.isEmpty()){
+        if (!entities.isEmpty()) {
             Entity winner = entities.get(0);
             return winner;
         }

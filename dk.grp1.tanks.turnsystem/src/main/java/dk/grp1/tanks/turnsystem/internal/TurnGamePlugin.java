@@ -25,6 +25,7 @@ public class TurnGamePlugin implements IGamePluginService {
     public void stop(World world, GameData gameData) {
 
         gameData.getEventManager().unRegister(EndTurnEvent.class, callback);
+        gameData.setTurnManager(null);
 
     }
 }
