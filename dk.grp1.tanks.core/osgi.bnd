@@ -1,1 +1,1 @@
-Bundle-Activator: dk.grp1.tanks.core.internal.ExampleActivator
+Bundle-Activator: dk.grp1.tanks.core.internal.CoreActivator

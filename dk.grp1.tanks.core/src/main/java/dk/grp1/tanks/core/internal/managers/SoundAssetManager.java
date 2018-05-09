@@ -12,13 +12,13 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CustomAssetManager {
+public class SoundAssetManager {
 
     private AssetManager assetManager;
     private Map<String, String> tempFileMap;
     private String localStoragePath;
 
-    public CustomAssetManager(String localStoragePath) {
+    public SoundAssetManager(String localStoragePath) {
         this.assetManager = new AssetManager();
         this.tempFileMap = new HashMap<>();
         this.localStoragePath = localStoragePath;

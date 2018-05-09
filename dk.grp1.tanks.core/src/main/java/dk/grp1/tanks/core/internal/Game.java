@@ -19,7 +19,7 @@ import dk.grp1.tanks.common.eventManager.events.*;
 import dk.grp1.tanks.common.services.*;
 import dk.grp1.tanks.common.utils.Vector2D;
 import dk.grp1.tanks.core.internal.GUI.*;
-import dk.grp1.tanks.core.internal.managers.CustomAssetManager;
+import dk.grp1.tanks.core.internal.managers.SoundAssetManager;
 import dk.grp1.tanks.core.internal.managers.GameAssetManager;
 import dk.grp1.tanks.core.internal.managers.GameInputProcessor;
 
@@ -54,7 +54,7 @@ public class Game implements ApplicationListener, IEventCallback {
     private TextureRegion textureRegion;
     private Boolean shouldUpdateMap;
 
-    private CustomAssetManager assetManager;
+    private SoundAssetManager soundAssetManager;
 
     private List<AnimationWrapper> animationsToProcess;
 
@@ -87,9 +87,9 @@ public class Game implements ApplicationListener, IEventCallback {
     }
 
     private void setupAssetManager() {
-        this.assetManager = new CustomAssetManager(Gdx.files.getLocalStoragePath());
-        assetManager.loadMusicAsset(this.getClass(), "tron.mp3");
-        Music bgMusic = assetManager.getMusicAsset(this.getClass(), "tron.mp3");
+        this.soundAssetManager = new SoundAssetManager(Gdx.files.getLocalStoragePath());
+        soundAssetManager.loadMusicAsset(this.getClass(), "tron.mp3");
+        Music bgMusic = soundAssetManager.getMusicAsset(this.getClass(), "tron.mp3");
         bgMusic.setLooping(true);
         bgMusic.setVolume(0.05f);
         bgMusic.play();
@@ -205,8 +205,8 @@ public class Game implements ApplicationListener, IEventCallback {
             return;
         }
 
-        assetManager.loadSoundAsset(soundEvent.getSource().getClass(), soundEvent.getPath());
-        Sound sound = assetManager.getSoundAsset(soundEvent.getSource().getClass(), soundEvent.getPath());
+        soundAssetManager.loadSoundAsset(soundEvent.getSource().getClass(), soundEvent.getPath());
+        Sound sound = soundAssetManager.getSoundAsset(soundEvent.getSource().getClass(), soundEvent.getPath());
 
         if (sound != null) {
             float volume = 1.0f;
