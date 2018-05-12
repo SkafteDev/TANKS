@@ -63,16 +63,11 @@ public final class ExampleActivator
         }
 
 
-        if (serviceEvent.getType() == ServiceEvent.UNREGISTERING)
-
-        {
+        if (serviceEvent.getType() == ServiceEvent.UNREGISTERING) {
             if (objectClass[0].equalsIgnoreCase(IGamePluginService.class.getCanonicalName())) {
                 IGamePluginService plugin = (IGamePluginService) bc.getService(serviceEvent.getServiceReference());
                 plugin.stop(game.getWorld(), game.getGameData());
 
-            } else if (objectClass[0].equalsIgnoreCase(IWeapon.class.getCanonicalName())) {
-                IWeapon weapon = (IWeapon) bc.getService(serviceEvent.getServiceReference());
-                game.getGameData().removeWeapon(weapon);
             }
         }
     }
