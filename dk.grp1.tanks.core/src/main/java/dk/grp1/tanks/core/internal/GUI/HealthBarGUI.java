@@ -33,6 +33,11 @@ public class HealthBarGUI implements IGuiProcessingService {
 
     }
 
+    @Override
+    public void dispose() {
+
+    }
+
 
     /**
      * Draw and colour a health bar based on entity position and remaining health

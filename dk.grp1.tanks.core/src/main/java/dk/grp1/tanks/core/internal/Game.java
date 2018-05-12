@@ -45,6 +45,7 @@ public class Game implements ApplicationListener, IEventCallback {
     private SpriteBatch uiSpriteBatch;
     private SpriteBatch animationSpriteBatch;
     private SpriteBatch textureSpriteBatch;
+    private IGUIEntityProcessingService winDrawer;
 
 
     //Variables for drawing the game map
@@ -69,6 +70,7 @@ public class Game implements ApplicationListener, IEventCallback {
 
     public Game(ServiceLoader serviceLoader) {
         this.serviceLoader = serviceLoader;
+        gameAssetManager = new GameAssetManager();
         initGame();
 
 
@@ -97,6 +99,10 @@ public class Game implements ApplicationListener, IEventCallback {
     }
 
     private void restartGame() {
+        for (IGuiProcessingService drawImplementation : drawImplementations) {
+            drawImplementation.dispose();
+        }
+        winDrawer.dispose();
         initGame();
         setupGame();
         for (IGamePluginService plugin : serviceLoader.getGamePluginServices()
@@ -115,7 +121,6 @@ public class Game implements ApplicationListener, IEventCallback {
     private void initGame() {
         this.world = new World();
         this.gameData = new GameData();
-        gameAssetManager = new GameAssetManager();
         this.drawImplementations = new ArrayList<>();
         this.animationsToProcess = new ArrayList<>();
         state = GameState.running;
@@ -151,6 +156,8 @@ public class Game implements ApplicationListener, IEventCallback {
 
         textureSpriteBatch = new SpriteBatch();
         textureSpriteBatch.setProjectionMatrix(camera.combined);
+
+        winDrawer = new WinScreenGUI();
 
         drawImplementations.add(new HealthBarGUI());
         drawImplementations.add(new OnScreenText());
@@ -227,7 +234,7 @@ public class Game implements ApplicationListener, IEventCallback {
     }
 
     private void drawWinScreen() {
-        IGUIEntityProcessingService winDrawer = new WinScreenGUI();
+
 
         uiSpriteBatch.setProjectionMatrix(camera.combined);
         winDrawer.drawEntity(gameData.getTurnManager().getRoundWinner(world), gameData, uiSpriteBatch);
