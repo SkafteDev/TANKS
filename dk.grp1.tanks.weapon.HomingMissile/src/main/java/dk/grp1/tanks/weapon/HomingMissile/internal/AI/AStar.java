@@ -7,29 +7,40 @@ import java.util.*;
 public class AStar implements ITreeSearch{
 
     private final float GOALRANGE = 5.1f;
-    private List<Node> fringe;
+    private PriorityQueue<Node> fringe;
     private State initialState;
     private State goalState;
     private Set<Node> discoveredPositions;
 
 
     public AStar(State initialState, State goalState) {
+
+        this.fringe = new PriorityQueue<>(new Comparator<Node>() {
+            @Override
+            public int compare(Node node1, Node node2) {
+                return (int) node1.getEstimatedTotalCost() - (int) node2.getEstimatedTotalCost();
+            }
+        });
         this.initialState = initialState;
         this.goalState = goalState;
-        this.fringe = new ArrayList<>();
         discoveredPositions = new HashSet<>();
     }
 
 
 
     public List<Node> search(){
-        fringe.add(new Node(null,initialState,getHeuristicValue(initialState)));
+
+        Node firstNode = new Node(null, initialState, getHeuristicValue(initialState));
+
+        fringe.add(firstNode);
+
         while (!fringe.isEmpty()){
-            Node node = extractLowest();
-            if(isGoalState(node.getState())){
-                return node.getPath();
+
+            Node lowestNode = fringe.poll();
+            if(isGoalState(lowestNode.getState())){
+                return lowestNode.getPath();
             }
-            List<Node> children = expand(node);
+            List<Node> children = expand(lowestNode);
             fringe.addAll(children);
         }
         return null;
@@ -79,21 +90,6 @@ public class AStar implements ITreeSearch{
 //        s.PATHCOST = child[1] + node.PATHCOST
 //        successors = INSERT(s, successors)
         return successors;
-    }
-
-    private Node extractLowest(){
-        Node lowest = null;
-        for (Node node : fringe) {
-            if(lowest == null){
-                lowest = node;
-                continue;
-            }
-            if(lowest.getEstimatedTotalCost() > node.getEstimatedTotalCost()){
-                lowest = node;
-            }
-        }
-        fringe.remove(lowest);
-        return lowest;
     }
 
     private boolean isGoalState(State state){
