@@ -12,7 +12,7 @@ import org.osgi.framework.ServiceListener;
 /**
  * Extension of the default OSGi bundle activator
  */
-public final class ExampleActivator
+public final class CoreActivator
         implements BundleActivator, ServiceListener {
 
 
