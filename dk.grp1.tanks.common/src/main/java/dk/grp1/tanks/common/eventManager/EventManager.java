@@ -10,13 +10,11 @@ public class EventManager {
 
     private HashMap<Class<? extends Event>, HashSet<IEventCallback>> handlers;
 
-
     public EventManager() {
         this.handlers = new HashMap<>();
 
     }
 
-    // Might contain a failure
     public void register(Class<? extends Event> eventType, IEventCallback callback) {
 
         if (eventType == null || callback == null){
