@@ -54,7 +54,7 @@ public class Node {
 
 
     public float getEstimatedTotalCost() {
-        return heuristic + pathCost;
+        return (heuristic * 5) + pathCost;
     }
 
     @Override
