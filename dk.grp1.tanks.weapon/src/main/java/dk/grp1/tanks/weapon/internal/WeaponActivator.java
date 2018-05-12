@@ -26,7 +26,7 @@ public class WeaponActivator implements BundleActivator {
         for (Bundle bundle : bc.getBundles()) {
             String bundleCat = (String) bundle.getHeaders().get("Bundle-Category");
 
-            if(bundleCat!= null && bundleCat.equals(category) && bundle.getState() == Bundle.ACTIVE){
+            if(bundleCat!= null && bundleCat.equals("weapon") && bundle.getState() == Bundle.ACTIVE){
                 bundle.stop();
             }
         }
