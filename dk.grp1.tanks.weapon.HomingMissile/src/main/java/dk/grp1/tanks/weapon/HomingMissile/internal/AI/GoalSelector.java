@@ -6,6 +6,7 @@ import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.data.parts.CirclePart;
 import dk.grp1.tanks.common.data.parts.DamagePart;
 import dk.grp1.tanks.common.data.parts.PositionPart;
+import dk.grp1.tanks.common.data.parts.TurnPart;
 import dk.grp1.tanks.common.utils.Vector2D;
 import javafx.geometry.Pos;
 
@@ -42,9 +43,12 @@ public class GoalSelector implements IGoalSelector{
             float x = vertices.get(i).getX();
             float y = vertices.get(i).getY() + 5;
             for (Entity entity : world.getEntities()) {
+                TurnPart turnPart = entity.getPart(TurnPart.class);
 
-                if (isClose(entity, x, y) && entity != origin) {
-                    count++;
+                if (turnPart != null) {
+                    if (isClose(entity, x, y) && entity != origin) {
+                        count++;
+                    }
                 }
             }
             if (count > bestCount) {
