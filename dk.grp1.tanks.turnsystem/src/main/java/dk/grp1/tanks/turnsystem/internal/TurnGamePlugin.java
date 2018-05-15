@@ -23,7 +23,7 @@ public class TurnGamePlugin implements IGamePluginService {
 
     @Override
     public void stop(World world, GameData gameData) {
-
+        TurnActivator.getInstance().stop();
         gameData.getEventManager().unRegister(EndTurnEvent.class, callback);
         TurnActivator.getInstance().stop();
         gameData.setTurnManager(null);
