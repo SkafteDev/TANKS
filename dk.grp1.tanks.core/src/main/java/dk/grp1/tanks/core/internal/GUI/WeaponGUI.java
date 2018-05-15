@@ -40,6 +40,11 @@ public class WeaponGUI implements IGuiProcessingService {
         }
     }
 
+    @Override
+    public void dispose() {
+        font.dispose();
+    }
+
     private void weaponText(Entity entity, InventoryPart inventoryPart, SpriteBatch batch) {
         String weaponText;
 

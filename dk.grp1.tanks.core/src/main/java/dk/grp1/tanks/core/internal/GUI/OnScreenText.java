@@ -32,6 +32,11 @@ public class OnScreenText implements IGuiProcessingService {
         }
     }
 
+    @Override
+    public void dispose() {
+        font.dispose();
+    }
+
     private void firepowerText(Entity entity, SpriteBatch batch) {
         font.getData().scaleX = 0.5f;
         font.getData().scaleY = 0.5f;
