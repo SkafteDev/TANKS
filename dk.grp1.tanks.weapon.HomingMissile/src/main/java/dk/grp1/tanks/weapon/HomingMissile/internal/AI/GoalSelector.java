@@ -42,6 +42,7 @@ public class GoalSelector implements IGoalSelector{
             float x = vertices.get(i).getX();
             float y = vertices.get(i).getY() + 5;
             for (Entity entity : world.getEntities()) {
+
                 if (isClose(entity, x, y) && entity != origin) {
                     count++;
                 }
@@ -51,8 +52,6 @@ public class GoalSelector implements IGoalSelector{
                 bestExplosion = new Vector2D(x, y);
             }
         }
-        System.out.println(bestExplosion);
-        System.out.println(bestCount);
 
         Entity newMissile = (Entity) cloneObject(homingMissile);
         CirclePart newPos = newMissile.getPart(CirclePart.class);

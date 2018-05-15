@@ -32,6 +32,9 @@ public class TurnManager implements IRoundService, IPostEntityProcessingService,
         currentEntity = null;
     }
 
+    /**
+     * All
+     */
     public void stop() {
         for (Entity entity : entities) {
             TurnPart turnPart = entity.getPart(TurnPart.class);
@@ -114,6 +117,11 @@ public class TurnManager implements IRoundService, IPostEntityProcessingService,
 
     }
 
+    /**
+     * Unregister entities that are missing, which means entities that are out of bounds, from the Turn Manager
+     * @param world
+     */
+
     private void unRegisterMissingEntities(World world) {
         List<Entity> entitiesToRemove = new ArrayList<>();
         for (Entity entity : entities) {
@@ -127,6 +135,9 @@ public class TurnManager implements IRoundService, IPostEntityProcessingService,
         }
     }
 
+    /**
+     * Unregister entities that are dead from the Turn Manager
+     */
     private void unRegisterDeadEntities() {
         List<Entity> entitiesToRemove = new ArrayList<>();
         for (Entity entity : entities) {
@@ -144,7 +155,10 @@ public class TurnManager implements IRoundService, IPostEntityProcessingService,
         }
     }
 
-
+    /**
+     * Register a given Entity to the Turn Manager
+     * @param entity
+     */
     private void register(Entity entity) {
         if (entity == null) {
             throw new IllegalArgumentException("Entity is null");
@@ -162,7 +176,10 @@ public class TurnManager implements IRoundService, IPostEntityProcessingService,
         }
     }
 
-
+    /**
+     * Unregister a given Entity from the Turn Manager
+     * @param entity
+     */
     private void unRegister(Entity entity) {
         if (entity == null) {
             throw new IllegalArgumentException("Entity is null");
@@ -178,6 +195,11 @@ public class TurnManager implements IRoundService, IPostEntityProcessingService,
         }
     }
 
+    /**
+     * Checks if anything moves in world
+     * @param world
+     * @return True if there is movement
+     */
     private boolean anythingMoves(World world) {
         for (Entity e : world.getEntities()
                 ) {

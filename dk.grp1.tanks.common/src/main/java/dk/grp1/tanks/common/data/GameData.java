@@ -89,7 +89,7 @@ public class GameData {
             for (IWeaponListener listener : weaponListeners) {
                 listener.weaponAdded(weapon, this);
             }
-            System.out.println("Weapon added!");
+
         }
     }
 
@@ -99,7 +99,7 @@ public class GameData {
             for (IWeaponListener listener : weaponListeners) {
                 listener.weaponRemoved(weapon, this);
             }
-            System.out.println("Weapon removed!");
+
         }
     }
 

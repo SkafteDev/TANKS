@@ -44,10 +44,6 @@ public class HomingControlPart implements IEntityPart {
                 return;
             }
             setNewDirection(entity);
-
-
-
-            System.out.println("Is past point. Calculated new direction. index: " + goingToIndex);
         }
 
     }
