@@ -20,6 +20,9 @@ public interface IRoundService {
      */
     Entity getRoundWinner(World world);
 
-
+    /**
+     * Get the time remaining of the given round
+     * @return
+     */
     float getTimeRemaining();
 }
