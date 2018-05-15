@@ -98,7 +98,6 @@ public class TurnManager implements IRoundService, IPostEntityProcessingService,
                 }
                 return;
             }
-            System.out.println("Select Next Entity");
             selectNextEntity(currentEntity);
             wantToEndTurn = false;
 
