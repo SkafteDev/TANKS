@@ -32,6 +32,8 @@ public class EnemyProcessingSystem implements IEntityProcessingService {
 
         for (Entity enemy : world.getEntities(Enemy.class)
                 ) {
+
+            //Create references to all parts
             TurnPart turnPart = enemy.getPart(TurnPart.class);
             CannonPart cannonPart = enemy.getPart(CannonPart.class);
             MovementPart movePart = enemy.getPart(MovementPart.class);
@@ -44,6 +46,7 @@ public class EnemyProcessingSystem implements IEntityProcessingService {
             InventoryPart inventoryPart = enemy.getPart(InventoryPart.class);
             inventoryPart.processPart(enemy, gameData, world);
 
+            //Am I dead
             if (lifePart.getCurrentHP() <= 0) {
                 if(turnPart.isMyTurn()) {
                     gameData.getEventManager().addEvent(new EndTurnEvent(enemy));
@@ -51,6 +54,7 @@ public class EnemyProcessingSystem implements IEntityProcessingService {
                 world.removeEntity(enemy);
             }
 
+            // AI or Human control
             if (turnPart.isMyTurn()) {
                 if (!AICONTROLLED) {
                     manualControl(ctrlPart, gameData, world, positionPart);
@@ -65,7 +69,7 @@ public class EnemyProcessingSystem implements IEntityProcessingService {
                 ctrlPart.setRotation(world.getGameMap().getDirectionVector(new Vector2D(positionPart.getX(), positionPart.getY())));
             }
 
-
+            //Process parts in order
             physicsPart.processPart(enemy, gameData, world);
             ctrlPart.processPart(enemy, gameData, world);
             collisionPart.processPart(enemy, gameData, world);
@@ -75,6 +79,7 @@ public class EnemyProcessingSystem implements IEntityProcessingService {
             cannonPart.processPart(enemy, gameData, world);
 
 
+            //Manual or AI shoot
             if (!AICONTROLLED) {
                 manualShoot(gameData, turnPart, world, cannonPart, enemy);
             } else {
@@ -87,6 +92,14 @@ public class EnemyProcessingSystem implements IEntityProcessingService {
         }
     }
 
+    /**
+     * Fires a non-perfect shot, once I stop moving
+     * @param gameData
+     * @param turnPart
+     * @param world
+     * @param cannonPart
+     * @param enemy
+     */
     private void simpleAIShoot(GameData gameData, TurnPart turnPart, World world, CannonPart cannonPart, Entity enemy) {
         if (turnPart.isMyTurn()) {
             MovementPart movementPart = enemy.getPart(MovementPart.class);
@@ -98,6 +111,14 @@ public class EnemyProcessingSystem implements IEntityProcessingService {
 
     }
 
+    /**
+     * Shoots a perfect shoot upon keyboard command
+     * @param gameData
+     * @param turnPart
+     * @param world
+     * @param cannonPart
+     * @param enemy
+     */
     private void manualShoot(GameData gameData, TurnPart turnPart, World world, CannonPart cannonPart, Entity enemy) {
         if (gameData.getKeys().isPressed(GameKeys.SHIFT) && turnPart.isMyTurn()) {
             shootPerfectShot(gameData, world, cannonPart, enemy);
@@ -105,12 +126,27 @@ public class EnemyProcessingSystem implements IEntityProcessingService {
         }
     }
 
+    /**
+     * Manual movement from A and D keys
+     * @param ctrlPart
+     * @param gameData
+     * @param world
+     * @param positionPart
+     */
     private void manualControl(ControlPart ctrlPart, GameData gameData, World world, PositionPart positionPart) {
         ctrlPart.setLeft(gameData.getKeys().isDown(GameKeys.A));
         ctrlPart.setRight(gameData.getKeys().isDown(GameKeys.D));
         ctrlPart.setRotation(world.getGameMap().getDirectionVector(new Vector2D(positionPart.getX(), positionPart.getY())));
     }
 
+    /**
+     * random movement
+     * @param ctrlPart
+     * @param gameData
+     * @param movementPart
+     * @param world
+     * @param positionPart
+     */
     private void simpleAIControl(ControlPart ctrlPart, GameData gameData, MovementPart movementPart, World world, PositionPart positionPart) {
         Random random = new Random();
         boolean moving = movementPart.getCurrentSpeed() > 0;
@@ -143,7 +179,13 @@ public class EnemyProcessingSystem implements IEntityProcessingService {
         }
     }
 
-
+    /**
+     * Fire a shot that is guaranteed to hit
+     * @param gameData
+     * @param world
+     * @param cannonPart
+     * @param enemy
+     */
     private void shootPerfectShot(GameData gameData, World world, CannonPart cannonPart, Entity enemy) {
 
         InventoryPart inventoryPart = enemy.getPart(InventoryPart.class);
@@ -170,6 +212,13 @@ public class EnemyProcessingSystem implements IEntityProcessingService {
         }
     }
 
+    /**
+     * Selects a random weapon and fires a shot that might miss
+     * @param gameData
+     * @param world
+     * @param cannonPart
+     * @param enemy
+     */
     private void shootLessThanPerfectShot(GameData gameData, World world, CannonPart cannonPart, Entity enemy) {
 
         InventoryPart inventoryPart = enemy.getPart(InventoryPart.class);
@@ -196,7 +245,7 @@ public class EnemyProcessingSystem implements IEntityProcessingService {
                 Random random = new Random();
                 float modification1 = random.nextFloat() / 10f;
                 float modification2 = random.nextFloat() / 10f;
-                firepower = firepower * (1 + modification1) * (1 - modification2);
+                firepower = firepower * (1 + modification1) * (1 - modification2); //randomizes the firepower
 
 
                 inventoryPart.getCurrentWeapon().shoot(enemy, gameData, firepower, world);
@@ -225,6 +274,14 @@ public class EnemyProcessingSystem implements IEntityProcessingService {
         }
     }
 
+    /**
+     * Calculates the firepower required to guarantee a hit on the target
+     * @param myPosition
+     * @param otherPosition
+     * @param gravity
+     * @param angle
+     * @return
+     */
     private float initialVelocity(CannonPart myPosition, PositionPart otherPosition,
                                   float gravity, float angle) {
         float velocity;
