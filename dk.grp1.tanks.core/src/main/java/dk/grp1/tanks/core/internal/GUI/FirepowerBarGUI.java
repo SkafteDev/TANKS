@@ -35,6 +35,12 @@ public class FirepowerBarGUI implements IGuiProcessingService {
 
     }
 
+    /**
+     * Draw the firepower bar.
+     * @param entity
+     * @param cannonPart
+     * @param batch
+     */
     private void firepowerBar(Entity entity, CannonPart cannonPart, SpriteBatch batch) {
         pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.CYAN);

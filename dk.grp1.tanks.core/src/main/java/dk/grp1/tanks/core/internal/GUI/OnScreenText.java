@@ -56,6 +56,11 @@ public class OnScreenText implements IGuiProcessingService {
 //        this.camera = camera;
 //    }
 
+    /**
+     * Draw the angle of the cannon
+     * @param entity
+     * @param batch
+     */
     private void angleText(Entity entity, SpriteBatch batch) {
         font.getData().scaleX = 0.5f;
         font.getData().scaleY = 0.5f;
@@ -71,7 +76,12 @@ public class OnScreenText implements IGuiProcessingService {
 
     }
 
-
+    /**
+     * Draw the name of the entity that are allowed to make a move
+     * @param world
+     * @param gameData
+     * @param batch
+     */
     private void turnText(World world, GameData gameData, SpriteBatch batch) {
         font.getData().scaleX = 0.5f;
         font.getData().scaleY = 0.5f;
