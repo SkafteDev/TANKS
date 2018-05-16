@@ -10,9 +10,7 @@ import dk.grp1.tanks.common.eventManager.events.EndTurnEvent;
 import dk.grp1.tanks.common.services.IEntityProcessingService;
 import dk.grp1.tanks.common.utils.Vector2D;
 
-/**
- * Created by danie on 12-03-2018.
- */
+
 public class PlayerProcessingSystem implements IEntityProcessingService {
 
     @Override
@@ -21,7 +19,7 @@ public class PlayerProcessingSystem implements IEntityProcessingService {
         for (Entity player : world.getEntities(Player.class)
                 ) {
 
-
+            //instantiate all the parts
             TurnPart turnPart = player.getPart(TurnPart.class);
             CannonPart cannonPart = player.getPart(CannonPart.class);
             MovementPart movePart = player.getPart(MovementPart.class);
@@ -35,6 +33,7 @@ public class PlayerProcessingSystem implements IEntityProcessingService {
             InventoryPart inventoryPart = player.getPart(InventoryPart.class);
             inventoryPart.processPart(player, gameData, world);
 
+            //Am I dead?
             if (lifePart.getCurrentHP() <= 0) {
                 if (turnPart.isMyTurn()) {
                     gameData.getEventManager().addEvent(new EndTurnEvent(player));
@@ -42,7 +41,7 @@ public class PlayerProcessingSystem implements IEntityProcessingService {
                 world.removeEntity(player);
             }
 
-
+            //Moves if it is my turn
             if (turnPart.isMyTurn()) {
                 ctrlPart.setLeft(gameData.getKeys().isDown(GameKeys.LEFT));
                 ctrlPart.setRight(gameData.getKeys().isDown(GameKeys.RIGHT));
@@ -74,6 +73,7 @@ public class PlayerProcessingSystem implements IEntityProcessingService {
                 shootingPart.setReadyToShoot(true);
             }
 
+            //Cycle weapons
             if (turnPart.isMyTurn()) {
                 if (gameData.getKeys().isPressed(GameKeys.N_1)) {
                     inventoryPart.nextWeapon();
@@ -82,20 +82,23 @@ public class PlayerProcessingSystem implements IEntityProcessingService {
                 }
             }
 
+            //Shoots if it is my turn and I have pressed space and I have a weapon selected
             if (turnPart.isMyTurn()) {
                 if (shootingPart.isReadyToShoot() && !gameData.getKeys().isDown(GameKeys.SPACE) && inventoryPart.getCurrentWeapon() != null) {
                     //gameData.getEventManager().addEvent(new SoundEvent(player, inventoryPart.getCurrentWeapon().getShootSoundPath()));
                     inventoryPart.getCurrentWeapon().shoot(player, gameData, shootingPart.getFirepower(), world);
                     //inventoryPart.decreaseAmmo();
                     cannonPart.setFirepower(0);
-                    cannonPart.setPreviousFirepower(shootingPart.getFirepower());
-                    cannonPart.setPreviousAngle(cannonPart.getDirection());
+                    cannonPart.setPreviousFirepower(shootingPart.getFirepower()); //Saves the firepower of the shot
+                    cannonPart.setPreviousAngle(cannonPart.getDirection());       //Saves the angle of the shot
                     //timeSinceLastShot += gameData.getDelta();
                     shootingPart.setReadyToShoot(false);
                     gameData.getEventManager().addEvent(new EndTurnEvent(player));
                 }
             }
 
+
+            //Process all the parts in order
             turnPart.processPart(player, gameData, world);
             physicsPart.processPart(player, gameData, world);
             ctrlPart.processPart(player, gameData, world);
