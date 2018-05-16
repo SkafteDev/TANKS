@@ -12,6 +12,9 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * A class that wraps the LibGDX AssetManager API. Supports OSGi bundles.
+ */
 public class SoundAssetManager {
 
     private AssetManager assetManager;
@@ -36,7 +39,6 @@ public class SoundAssetManager {
         String filePath = this.localStoragePath;
         try {
             tempFile = new File(filePath+"/"+ clazz.getSimpleName()+fileName);
-            //System.out.println("Writing temp file to " + tempFile.getAbsolutePath());
 
             try (FileOutputStream fos = new FileOutputStream(tempFile)){
                 byte[] buffer = new byte[8 * 1024];
@@ -46,7 +48,6 @@ public class SoundAssetManager {
                 }
             }
 
-            //System.out.println("TempFile: " + tempFile.getAbsolutePath());
             // Store the file-name/type and the tempFile-path for later lookup
             // Replacing backslashes with forward-slashes for compatibility issues in LibGDX AssetManager.
             tempFileMap.put(clazz.getSimpleName()+fileName, tempFile.getAbsolutePath().replace("\\", "/"));
@@ -58,6 +59,11 @@ public class SoundAssetManager {
         return tempFile;
     }
 
+    /**
+     * Loads a sound (short duration clip) with the given file name from the class' class-path.
+     * @param clazz
+     * @param fileName
+     */
     public void loadSoundAsset(Class clazz, String fileName) {
         if(tempFileMap.containsKey(clazz.getSimpleName()+fileName))
             return;
@@ -66,20 +72,18 @@ public class SoundAssetManager {
 
         assetManager.load(assetFile.getAbsolutePath(), Sound.class);
 
+        // Has to be called in order to instruct the asset manager to actually load the added files.
         assetManager.finishLoading();
-
-        if (assetManager.isLoaded(assetFile.getAbsolutePath(), Sound.class)) {
-            //System.out.println("Loaded sound asset: " + assetFile.getAbsolutePath());
-        }
-
-        for (String ass : assetManager.getAssetNames()) {
-            //System.out.println("AssetManager.getAssetNames()" + ass);
-        }
     }
 
+    /**
+     * Gets the given file name as a Sound. The class is associated to which class path, the sound initially was loaded from.
+     * @param clazz
+     * @param fileName
+     * @return
+     */
     public Sound getSoundAsset(Class clazz, String fileName) {
         String tmpFileName = tempFileMap.get(clazz.getSimpleName()+fileName);
-
 
         Sound sound = null;
 
@@ -92,10 +96,13 @@ public class SoundAssetManager {
         }
 
         return sound;
-
-        //return Gdx.audio.newSound(Gdx.files.absolute(tmpFileName.getAbsolutePath()));
     }
 
+    /**
+     * Loads Music (long duration clip) with the given file name from the class' class-path.
+     * @param clazz
+     * @param fileName
+     */
     public void loadMusicAsset(Class clazz, String fileName) {
         if(tempFileMap.containsKey(clazz.getSimpleName()+fileName))
             return;
@@ -104,20 +111,18 @@ public class SoundAssetManager {
 
         assetManager.load(assetFile.getAbsolutePath(), Music.class);
 
+        // Has to be called in order to instruct the asset manager to actually load the added files.
         assetManager.finishLoading();
-
-        if (assetManager.isLoaded(assetFile.getAbsolutePath(), Music.class)) {
-            //System.out.println("Loaded sound asset: " + assetFile.getAbsolutePath());
-        }
-
-        for (String ass : assetManager.getAssetNames()) {
-            //System.out.println("AssetManager.getAssetNames()" + ass);
-        }
     }
 
+    /**
+     * Gets the given file name as Music. The class is associated to which class path, the sound initially was loaded from.
+     * @param clazz
+     * @param fileName
+     * @return
+     */
     public Music getMusicAsset(Class clazz, String fileName) {
         String tmpFileName = tempFileMap.get(clazz.getSimpleName()+fileName);
-
 
         Music sound = null;
 
@@ -130,7 +135,5 @@ public class SoundAssetManager {
         }
 
         return sound;
-
-        //return Gdx.audio.newSound(Gdx.files.absolute(tmpFileName.getAbsolutePath()));
     }
 }
