@@ -23,6 +23,7 @@ public class Node {
     }
 
     private float calculatePathCost() {
+        // The path cost is the distance traveled from the parent to this node.
         return Vector2D.subtractVectors(state.getEntityPosition(), parent.getState().getEntityPosition()).length();
     }
 

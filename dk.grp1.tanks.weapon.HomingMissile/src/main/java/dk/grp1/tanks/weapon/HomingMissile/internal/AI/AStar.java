@@ -15,6 +15,7 @@ public class AStar implements ITreeSearch{
 
     public AStar(State initialState, State goalState) {
 
+
         this.fringe = new PriorityQueue<>(new Comparator<Node>() {
             @Override
             public int compare(Node node1, Node node2) {

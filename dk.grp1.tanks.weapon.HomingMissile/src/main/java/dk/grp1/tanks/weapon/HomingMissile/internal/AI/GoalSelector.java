@@ -40,10 +40,14 @@ public class GoalSelector implements IGoalSelector{
         List<Vector2D> vertices = world.getGameMap().getVertices(0, gameData.getGameWidth(), numberOfPoints);
         Vector2D bestExplosion =  null;
         int bestCount = 0;
+
+        // Check the value of a bunch of points
         for (int i = 0; i < vertices.size(); i++) {
             int count = 0;
             float x = vertices.get(i).getX();
             float y = vertices.get(i).getY() + 5;
+
+            // Check how many enemies are hit, if exploded at this point
             for (Entity entity : world.getEntities()) {
                 TurnPart turnPart = entity.getPart(TurnPart.class);
 
@@ -53,6 +57,8 @@ public class GoalSelector implements IGoalSelector{
                     }
                 }
             }
+
+            // Keep the one that hits the most enemies
             if (count > bestCount) {
                 bestCount = count;
                 bestExplosion = new Vector2D(x, y);
@@ -83,6 +89,11 @@ public class GoalSelector implements IGoalSelector{
     }
 
 
+    /**
+     * Clones an object using the javal reflection API
+     * @param obj
+     * @return
+     */
     private static Object cloneObject(Object obj) {
         try {
             Object clone = obj.getClass().newInstance();

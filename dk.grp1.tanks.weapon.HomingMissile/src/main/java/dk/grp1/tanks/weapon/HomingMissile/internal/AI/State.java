@@ -108,6 +108,8 @@ public class State {
         }
 
         Entity newEntity = new HomingMissile() {};
+
+        // We only care about the position of the entity
         newEntity.add(new CirclePart(circlePart.getCentreX(),circlePart.getCentreY(),circlePart.getRadius()));
         return newEntity;
     }
