@@ -21,7 +21,7 @@ public class WeaponEntityPartPriority {
             priority = 1;
         } else if (part.getClass().isInstance(MovementPart.class)) {
             priority = 10;
-        }
+        } // add new prioritized parts here
 
         return new PriorityWrapper<>(priority, part);
     }

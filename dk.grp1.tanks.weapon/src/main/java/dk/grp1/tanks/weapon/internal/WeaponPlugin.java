@@ -16,10 +16,9 @@ public class WeaponPlugin implements IGamePluginService {
     @Override
     public void stop(World world, GameData gameData) {
 
-        for (Entity e: world.getEntities(Projectile.class)
-             ) {
+        // removes all projectiles (every entity from every weapon bundle)
+        for (Entity e: world.getEntities(Projectile.class)) {
             world.removeEntity(e);
-
         }
 
     }

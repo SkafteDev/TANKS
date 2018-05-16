@@ -23,6 +23,7 @@ public class WeaponActivator implements BundleActivator {
     public void stop(BundleContext bc) throws Exception {
         System.out.println("STOPPING dk.grp1.tanks.weapon");
 
+        // Stops all bundles within the "weapon" category
         for (Bundle bundle : bc.getBundles()) {
             String bundleCat = (String) bundle.getHeaders().get("Bundle-Category");
 
