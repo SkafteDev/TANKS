@@ -85,6 +85,11 @@ public class CannonPart implements IEntityPart{
 
     }
 
+    /**
+     * Calculates the firepower, based on time
+     * @param gameData
+     * @return
+     */
     public float calculateFirepower(GameData gameData){
         float time = gameData.getDelta();
 

@@ -42,8 +42,16 @@ public interface IGameMapFunction {
      */
     boolean isWithin(float x);
 
+    /**
+     * Sets the end X
+     * @param value
+     */
     void setEndX(float value);
 
+    /**
+     * Sets the start X
+     * @param value
+     */
     void setStartX(float value);
 
     /**

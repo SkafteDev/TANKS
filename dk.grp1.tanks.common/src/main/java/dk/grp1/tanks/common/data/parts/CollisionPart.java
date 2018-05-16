@@ -64,11 +64,18 @@ public class CollisionPart implements IEntityPart {
         }
     }
 
-
+    /**
+     * Returns if the entity has hit the gameMap
+     * @return
+     */
     public boolean isHitGameMap() {
         return isHitGameMap;
     }
 
+    /**
+     * Sets if the entity has hit the gameMap
+     * @param hitGameMap
+     */
     public void setHitGameMap(boolean hitGameMap) {
         isHitGameMap = hitGameMap;
     }

@@ -19,11 +19,18 @@ public class TurnPart implements IEntityPart {
 
     }
 
-
+    /**
+     * Returns if it is the entity's turn
+     * @return
+     */
     public boolean isMyTurn() {
         return myTurn;
     }
 
+    /**
+     * Sets if it is the entity's turn
+     * @param myTurn
+     */
     public void setMyTurn(boolean myTurn) {
         this.myTurn = myTurn;
     }

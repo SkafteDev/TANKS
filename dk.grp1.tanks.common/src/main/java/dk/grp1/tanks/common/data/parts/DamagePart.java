@@ -12,7 +12,7 @@ public class DamagePart implements IEntityPart {
 
     }
     /**
-     *
+     * Constructs an DamagePart used to indicate dmg and radius of explosion for the entity.
      * @param explosionRadius
      * @param damage
      */
@@ -22,7 +22,7 @@ public class DamagePart implements IEntityPart {
     }
 
     /**
-     *
+     * Returns the radius of explosion
      * @return
      */
     public float getExplosionRadius() {
@@ -30,7 +30,7 @@ public class DamagePart implements IEntityPart {
     }
 
     /**
-     *
+     * sets the radius of explosion
      * @param explosionRadius
      */
     public void setExplosionRadius(float explosionRadius) {
@@ -38,7 +38,7 @@ public class DamagePart implements IEntityPart {
     }
 
     /**
-     *
+     * returns the damage the explosion will cause
      * @return
      */
     public float getDamage() {
@@ -46,7 +46,7 @@ public class DamagePart implements IEntityPart {
     }
 
     /**
-     *
+     * sets the damage the explosion will cause
      * @param damage
      */
     public void setDamage(float damage) {
@@ -55,6 +55,6 @@ public class DamagePart implements IEntityPart {
 
     @Override
     public void processPart(Entity entity, GameData gameData, World world) {
-
+        //Nothing to process
     }
 }

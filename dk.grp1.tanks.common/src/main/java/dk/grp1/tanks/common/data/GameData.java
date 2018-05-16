@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by danie on 12-03-2018.
+ * GameData contains data about the game. This also means a lot of accessor functions and mutator functions.
  */
 public class GameData {
 
@@ -19,7 +19,6 @@ public class GameData {
     private float delta;
     private Boolean shouldEndTurn = false;
     private final GameKeys keys = new GameKeys();
-//    private List<Event> events = new CopyOnWriteArrayList<>();
     private List<IWeapon> gameWeapons = new ArrayList<>();
     private List<IWeaponListener> weaponListeners = new ArrayList<>();
     private EventManager eventManager = new EventManager();
