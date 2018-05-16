@@ -26,12 +26,14 @@ public class TeleportCollisionPart extends CollisionPart {
     @Override
     public void processPart(Entity entity, GameData gameData, World world) {
 
+        // if collision is detected, move parent to the entity location
         if (this.isHitGameMap()){
             PositionPart parentPos = parent.getPart(PositionPart.class);
             PositionPart projPos = entity.getPart(PositionPart.class);
             parentPos.setX(projPos.getX());
             parentPos.setY(projPos.getY());
 
+            // fire explosion, sound, shake and animation events
             Event explosionEvent = new ExplosionEvent(entity, new Vector2D(projPos.getX(), projPos.getY()), 10);
             Event shakeEvent = new ShakeEvent(entity,10 * 5);
             SoundPart soundPart = entity.getPart(SoundPart.class);

@@ -43,6 +43,7 @@ public class EarthquakeWeapon implements IWeapon {
         for (Entity entity : world.getEntities()) {
             test.add(entity);
         }
+        // spawn a entity on top of every player and enemy on the map
         for (Entity entity : test) {
             CannonPart cannonPart = actor.getPart(CannonPart.class);
             Earthquake wep = new Earthquake();

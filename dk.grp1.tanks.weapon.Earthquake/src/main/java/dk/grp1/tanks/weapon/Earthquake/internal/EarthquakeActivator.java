@@ -9,6 +9,7 @@ public class EarthquakeActivator implements BundleActivator {
 
     @Override
     public void start(BundleContext bundleContext) throws Exception {
+        System.out.println( "STARTING dk.grp1.tanks.weapon.Earthquake" );
         bundleContext.registerService(IGamePluginService.class.getName(), new EarthquakePlugin(), null);
     }
 
