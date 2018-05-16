@@ -19,6 +19,12 @@ public class FirepowerBarGUI implements IGuiProcessingService {
     private float xOffSet = 20;
     private float yOffSet = -5;
 
+    /**
+     * Draws a Fire power bar next to each entity that has a CannonPart
+     * @param world current game world and entities
+     * @param gameData
+     * @param spriteBatch spriteBatch with camera set
+     */
     @Override
     public void draw(World world, GameData gameData, SpriteBatch spriteBatch) {
         for (Entity entity : world.getEntities()) {

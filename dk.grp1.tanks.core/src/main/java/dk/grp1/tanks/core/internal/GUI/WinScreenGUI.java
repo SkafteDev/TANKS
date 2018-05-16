@@ -12,6 +12,12 @@ public class WinScreenGUI implements IGUIEntityProcessingService  {
     private BitmapFont.TextBounds textBounds;
 
 
+    /**
+     * Draws the winner of the game on the screen
+     * @param entity
+     * @param gameData
+     * @param batch
+     */
     @Override
     public void drawEntity(Entity entity,GameData gameData, SpriteBatch batch) {
         font.getData().scaleX = 2f;

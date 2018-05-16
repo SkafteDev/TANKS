@@ -29,6 +29,12 @@ public class WeaponGUI implements IGuiProcessingService {
     private float weaponIconHeight = 15;
 
 
+    /**
+     * Draw, for the current selected weapon of each entity, the weapon icon and text
+     * @param world current game world and entities
+     * @param gameData
+     * @param batch
+     */
     @Override
     public void draw(World world, GameData gameData, SpriteBatch batch) {
         for (Entity entity : world.getEntities()) {
@@ -101,12 +107,10 @@ public class WeaponGUI implements IGuiProcessingService {
         spriteBatch.begin();
         Texture t = textureMap.get(path);
 
-            PositionPart positionPart = entity.getPart(PositionPart.class);
-            spriteBatch.draw(t, positionPart.getX() + weaponIconWidth/2, textYvalue-weaponIconHeight/8,
-                    weaponIconWidth, weaponIconHeight);
-            spriteBatch.end();
-            //t.dispose();
-
+        PositionPart positionPart = entity.getPart(PositionPart.class);
+        spriteBatch.draw(t, positionPart.getX() + weaponIconWidth/2, textYvalue-weaponIconHeight/8,
+                weaponIconWidth, weaponIconHeight);
+        spriteBatch.end();
     }
 
 }

@@ -37,6 +37,11 @@ public class OnScreenText implements IGuiProcessingService {
         font.dispose();
     }
 
+    /**
+     * Draws the fire power text
+     * @param entity
+     * @param batch
+     */
     private void firepowerText(Entity entity, SpriteBatch batch) {
         font.getData().scaleX = 0.5f;
         font.getData().scaleY = 0.5f;
@@ -50,11 +55,6 @@ public class OnScreenText implements IGuiProcessingService {
         batch.end();
 
     }
-
-//    @Override
-//    public void setCam(OrthographicCamera camera) {
-//        this.camera = camera;
-//    }
 
     /**
      * Draw the angle of the cannon
@@ -88,12 +88,10 @@ public class OnScreenText implements IGuiProcessingService {
         String turnText = "Turn: ";
         String timeText = "Remaining time of turn: ";
 
-        for (Entity e : world.getEntities()
-                ) {
+        for (Entity e : world.getEntities()) {
             TurnPart turn = e.getPart(TurnPart.class);
             IRoundService turnManager = gameData.getTurnManager();
             if (turn != null && turn.isMyTurn() && turnManager != null) {
-//                turnText += turn.getMyTurnNumber();
                 timeText += Math.floor(turnManager.getTimeRemaining() * 10) / 10f;
             }
 
