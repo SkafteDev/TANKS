@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-/**
- * This class represents a mathematical two-dimentional vector
- */
 public class Vector2D {
     private float x;
     private float y;
@@ -16,34 +13,19 @@ public class Vector2D {
         this.y = y;
     }
 
-    /**
-     * Returns the x-component of the vector
-     * @return
-     */
     public float getX() {
         return this.x;
     }
 
-    /**
-     * Returns the y-component of the vector
-     * @return
-     */
     public float getY() {
         return this.y;
     }
 
-    /**
-     * Sets the x-component of the vector
-     * @return
-     */
     public void setX(float x) {
         this.x = x;
     }
 
-    /**
-     * Sets the y-component of the vector
-     * @return
-     */
+
     public void setY(float y) {
         this.y = y;
     }
@@ -80,16 +62,16 @@ public class Vector2D {
 
 
     /**
-     * Rotates the vector 90 degrees, so that a vector pointing downward will now point up
-     * @return the rotated vector
+     * Rotate this vector 90 degrees
+     * @return
      */
     public Vector2D rotate90degrees() {
         return new Vector2D(-y+0.0f, x);
     }
 
     /**
-     * Rotate the vector 90 degrees such that a vector pointing right will now point left
-     * @return the rotated vector
+     * Rotate this vector 90 degrees Clockwise
+     * @return
      */
     public Vector2D rotateClockwise90degrees() {
         return new Vector2D(y, -x+0.0f);
