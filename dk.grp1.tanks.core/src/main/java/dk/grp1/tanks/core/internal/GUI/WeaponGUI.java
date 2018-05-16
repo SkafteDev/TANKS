@@ -45,6 +45,12 @@ public class WeaponGUI implements IGuiProcessingService {
         font.dispose();
     }
 
+    /**
+     * Draw the name of the current selected weapon.
+     * @param entity
+     * @param inventoryPart
+     * @param batch
+     */
     private void weaponText(Entity entity, InventoryPart inventoryPart, SpriteBatch batch) {
         String weaponText;
 
@@ -63,7 +69,12 @@ public class WeaponGUI implements IGuiProcessingService {
         batch.end();
     }
 
-
+    /**
+     * Draw the icon of the current selected weapon
+     * @param entity
+     * @param inventoryPart
+     * @param spriteBatch
+     */
     private void drawWeaponIcon(Entity entity, InventoryPart inventoryPart, SpriteBatch spriteBatch){
 
         IWeapon weapon = inventoryPart.getCurrentWeapon();

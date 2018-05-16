@@ -233,39 +233,6 @@ public class Vector2D {
     }
 
     /**
-     * Projects a normal vector onto a list of vectors and returns an array of points where the point at index 0 is the minimum projection point and the point at index 1 is the maximum.
-     * @param normal
-     * @param shapeVectors
-     * @return
-     */
-    public static Point[] projectAndGetMinMax(Vector2D normal, List<Vector2D> shapeVectors) {
-        Point[] minMax = new Point[2]; // Index0 is min, Index1 is max
-
-        // Initialize min and max to first element
-        Vector2D projection = shapeVectors.get(0).projectOnto(normal);
-        minMax[0] = new Point(projection.getX(), projection.getY());
-        minMax[1] = new Point(projection.getX(), projection.getY());
-
-        for (int i = 1; i < shapeVectors.size(); i++) {
-            projection = shapeVectors.get(i).projectOnto(normal);
-            float x = projection.getX();
-            float y = projection.getY();
-
-            Point p = new Point(x, y);
-
-            if (p.compareTo(minMax[0]) < 0) {
-                // We got a new minimum point
-                minMax[0] = p;
-            } else if (p.compareTo(minMax[1]) > 0) {
-                // We got a new maximum point
-                minMax[1] = p;
-            }
-        }
-
-        return minMax;
-    }
-
-    /**
      * Instantiate a vector by subtracting two given vectors
      * @param a
      * @param b

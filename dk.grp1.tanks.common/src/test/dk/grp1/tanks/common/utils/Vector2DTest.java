@@ -197,21 +197,6 @@ public class Vector2DTest {
     }
 
     @Test
-    public void projectAndGetMinMax() {
-        Vector2D normal = new Vector2D(-4, 1);
-        List<Vector2D> shapeVectors = new ArrayList<>();
-        shapeVectors.add(new Vector2D(1, 5));
-        shapeVectors.add(new Vector2D(3, 2));
-        shapeVectors.add(new Vector2D(3, 1));
-        shapeVectors.add(new Vector2D(0, 1));
-
-        Point[] expResult = new Point[]{ new Point(-0.23529412f, 0.05882353f), new Point(2.5882354f, -0.64705884f) };
-        Point[] result = Vector2D.projectAndGetMinMax(normal, shapeVectors);
-
-        assertArrayEquals(expResult, result);
-    }
-
-    @Test
     public void subtractVectors() {
         Vector2D vectorOne = new Vector2D(5, 10);
         Vector2D vectorTwo = new Vector2D(10, 5);
