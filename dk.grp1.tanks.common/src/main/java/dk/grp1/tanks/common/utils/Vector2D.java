@@ -232,6 +232,12 @@ public class Vector2D {
         return normals;
     }
 
+    /**
+     * Projects a normal vector onto a list of vectors and returns an array of points where the point at index 0 is the minimum projection point and the point at index 1 is the maximum.
+     * @param normal
+     * @param shapeVectors
+     * @return
+     */
     public static Point[] projectAndGetMinMax(Vector2D normal, List<Vector2D> shapeVectors) {
         Point[] minMax = new Point[2]; // Index0 is min, Index1 is max
 
