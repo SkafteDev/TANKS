@@ -35,7 +35,7 @@ public class GravityBombCollisionPart extends CollisionPart {
             for (Entity entity2: world.getEntities()){
                 if (entity != entity2 && hasCollided(entity, entity2)){
                     gravityPull(entity, entity2);
-                    hits++;
+                    hits++; //damage scales off hits
                 }
 
             }
@@ -54,11 +54,12 @@ public class GravityBombCollisionPart extends CollisionPart {
         DamagePart damagePart = entity.getPart(DamagePart.class);
         ExplosionTexturePart explosionTexturePart = entity.getPart(ExplosionTexturePart.class);
 
+        //Explode if collision with map or entity
         if ((this.isHitEntity() || this.isHitGameMap()) && positionPart != null && damagePart != null && explosionTexturePart != null) {
             Event animationEvent = new ExplosionAnimationEvent(entity, new Vector2D(positionPart.getX(), positionPart.getY()), explosionTexturePart, damagePart.getExplosionRadius());
             Event explosionEvent = new ExplosionEvent(entity, new Vector2D(positionPart.getX(), positionPart.getY()), damagePart.getExplosionRadius());
             SoundPart soundPart = entity.getPart(SoundPart.class);
-            if (soundPart != null) {
+            if (soundPart != null) { //play sound if there is a sound part
                 Event soundEvent = new SoundEvent(entity, soundPart.getOnHitSoundPath());
                 gameData.getEventManager().addEvent(soundEvent);
 
