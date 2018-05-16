@@ -188,6 +188,7 @@ public class CannonPart implements IEntityPart{
     }
 
     public void setFirepower(float firepower) {
+        //if firepower larger than max set firepower to max
         if (firepower > maxFirepower){
             this.firepower = maxFirepower;
         } else {

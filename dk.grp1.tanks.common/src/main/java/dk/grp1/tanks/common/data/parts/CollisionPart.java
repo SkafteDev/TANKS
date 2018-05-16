@@ -34,16 +34,20 @@ public class CollisionPart implements IEntityPart {
     }
 
     public void processPart(Entity entity, GameData gameData, World world) {
+        // get parts
         PositionPart positionPart = entity.getPart(PositionPart.class);
         DamagePart damagePart = entity.getPart(DamagePart.class);
         ExplosionTexturePart explosionTexturePart = entity.getPart(ExplosionTexturePart.class);
         CirclePart circlePart = entity.getPart(CirclePart.class);
 
+        // if map or entity is hit
         if ((this.isHitEntity() || this.isHitGameMap()) && positionPart != null && damagePart != null) {
             if(explosionTexturePart != null) {
                 Event animationEvent = new ExplosionAnimationEvent(entity, new Vector2D(positionPart.getX(), positionPart.getY()), explosionTexturePart, damagePart.getExplosionRadius());
-                gameData.getEventManager().addEvent(animationEvent);
+                gameData.getEventManager().addEvent(animationEvent); // fire animation event
             }
+
+            //create and fire events
             Event explosionEvent = new ExplosionEvent(entity, new Vector2D(positionPart.getX(), positionPart.getY()), damagePart.getExplosionRadius());
             Event mapDestructionEvent = new MapDestructionEvent(entity, new Vector2D(positionPart.getX(), positionPart.getY()), damagePart.getExplosionRadius());
             Event shakeEvent = new ShakeEvent(entity,damagePart.getExplosionRadius() * 5);
@@ -59,6 +63,8 @@ public class CollisionPart implements IEntityPart {
 
 
             world.removeEntity(entity);
+
+            // if entity is below map, it's pushed up
         } else if(this.isHitGameMap() && positionPart != null && circlePart != null && world.getGameMap().getHeight(new Vector2D(positionPart.getX(),positionPart.getY()))-2f > positionPart.getY()-circlePart.getRadius()){
             positionPart.setY(positionPart.getY()+3f);
         }

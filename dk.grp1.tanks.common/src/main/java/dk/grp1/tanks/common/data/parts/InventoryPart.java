@@ -34,10 +34,18 @@ public class InventoryPart implements IEntityPart, IWeaponListener {
         }
     }
 
+    /**
+     * sets the current weapon to the given weapon
+     * @param weapon
+     */
     public void setCurrentWeapon(IWeapon weapon) {
         this.currentWeapon = weapon;
     }
 
+    /**
+     * sets the weapon to the index given
+     * @param i
+     */
     public void setCurrentWeapon(int i) {
         this.currentWeapon = weapons.get(i);
     }
@@ -66,6 +74,10 @@ public class InventoryPart implements IEntityPart, IWeaponListener {
     }
 
 
+    /**
+     * sets current weapon to the next in the list
+     * @return
+     */
     public IWeapon nextWeapon() {
         if (weapons.size() != 0) {
             int i = weapons.indexOf(this.currentWeapon);
@@ -86,6 +98,10 @@ public class InventoryPart implements IEntityPart, IWeaponListener {
     }
 
 
+    /**
+     * sets the current weapon to previous in the list
+     * @return
+     */
     public IWeapon previousWeapon() {
         if (weapons.size() != 0) {
             int i = weapons.indexOf(this.currentWeapon);
@@ -105,12 +121,20 @@ public class InventoryPart implements IEntityPart, IWeaponListener {
         return this.currentWeapon;
     }
 
+    /**
+     * add weapon to List of weapons
+     * @param weapon
+     */
     private void addWeapon(IWeapon weapon) {
         if (!weapons.contains(weapon)) {
             this.weapons.add(weapon);
         }
     }
 
+    /**
+     * remove weapon from List of weapons
+     * @param weapon
+     */
     private void removeWeapon(IWeapon weapon) {
         this.weapons.remove(weapon);
         nextWeapon();

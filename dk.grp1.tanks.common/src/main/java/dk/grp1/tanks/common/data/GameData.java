@@ -82,6 +82,10 @@ public class GameData {
         return eventManager;
     }
 
+    /**
+     * add weapon to the gameData and notify observers
+     * @param weapon
+     */
     public void addWeapon(IWeapon weapon) {
         if (weapon != null) {
             this.gameWeapons.add(weapon);
@@ -92,6 +96,10 @@ public class GameData {
         }
     }
 
+    /**
+     * remove weapon from gameData and notify observers
+     * @param weapon
+     */
     public void removeWeapon(IWeapon weapon) {
         if (weapon != null) {
             this.gameWeapons.remove(weapon);

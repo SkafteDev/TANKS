@@ -24,15 +24,15 @@ public class ControlPart implements IEntityPart {
     public void processPart(Entity entity, GameData gameData, World world) {
         controlVector = new Vector2D(rotation.getX(),rotation.getY());
         controlVector.unitVector();
-        if (right()) {
+        if (right()) { // left is pressed
             // go right
             controlVector.multiplyWithConstant(speed);
         }
-        if (left()) {
+        if (left()) { // right is pressed
             // go left
             controlVector.multiplyWithConstant(-1*speed);
         }
-        if (left() == right()){
+        if (left() == right()){ // both left and right is pressed
             controlVector = new Vector2D(0,0);
         }
     }
