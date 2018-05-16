@@ -8,9 +8,6 @@ import org.osgi.framework.ServiceReference;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by danie on 12-03-2018.
- */
 public class ServiceLoader  {
     private BundleContext bundleContext;
     private List<IPostEntityProcessingService> postEntityProcessingServices;

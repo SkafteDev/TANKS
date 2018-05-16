@@ -6,7 +6,6 @@ import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.World;
 
 public interface IGuiProcessingService {
-
     /**
      * Draws data on the screen
      * @param world current game world and entities

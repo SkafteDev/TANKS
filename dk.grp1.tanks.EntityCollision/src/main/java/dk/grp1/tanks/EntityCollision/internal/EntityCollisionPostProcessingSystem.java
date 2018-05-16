@@ -28,7 +28,12 @@ public class EntityCollisionPostProcessingSystem implements IPostEntityProcessin
         }
     }
 
-
+    /**
+     * Calculates if 2 entities has collided
+     * @param entity1
+     * @param entity2
+     * @return
+     */
     private boolean hasCollided(Entity entity1, Entity entity2){
         CirclePart circlePart1 = entity1.getPart(CirclePart.class);
         CirclePart circlePart2 = entity2.getPart(CirclePart.class);

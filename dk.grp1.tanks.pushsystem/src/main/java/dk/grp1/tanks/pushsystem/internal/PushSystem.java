@@ -39,6 +39,12 @@ public class PushSystem implements IEventCallback {
         }
     }
 
+    /**
+     * Pushes an entity in a direction, by changing the movement part and physics part variables.
+     * @param ent
+     * @param dir
+     * @param force
+     */
     private void push(Entity ent, Vector2D dir, float force){
         MovementPart movementPart = ent.getPart(MovementPart.class);
         PhysicsPart physicsPart = ent.getPart(PhysicsPart.class);
@@ -48,6 +54,12 @@ public class PushSystem implements IEventCallback {
         movementPart.setVelocity(dir);
     }
 
+    /**
+     * Checks if an entity is in the explosion
+     * @param evnt
+     * @param ent
+     * @return
+     */
     private boolean isInExplosion(Event evnt, Entity ent) {
         PushEvent exEvnt = (PushEvent) evnt;
         PositionPart positionPart = ent.getPart(PositionPart.class);
@@ -61,6 +73,12 @@ public class PushSystem implements IEventCallback {
         return false;
     }
 
+    /**
+     * Gets the direction of where the push should be
+     * @param ent
+     * @param evnt
+     * @return
+     */
     private Vector2D getPushDirection(Entity ent, PushEvent evnt){
         PositionPart positionPart = ent.getPart(PositionPart.class);
 
