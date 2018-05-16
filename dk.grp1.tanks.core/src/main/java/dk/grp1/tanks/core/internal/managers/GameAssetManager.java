@@ -22,6 +22,11 @@ public class GameAssetManager {
         textureMap = new HashMap<>();
     }
 
+    /**
+     * checks if animation is retrieved and/or returns the required animation
+     * @param animationWrapper
+     * @return
+     */
     public Animation checkGetAnimation(AnimationWrapper animationWrapper) {
         Animation animation = animationMap.get(animationWrapper.getPath());
 
@@ -54,6 +59,12 @@ public class GameAssetManager {
         return animation;
     }
 
+    /**
+     * checks if texture is retrieved and/or returns the required texture
+     * @param objectClass
+     * @param path
+     * @return
+     */
     public Texture checkGetTexture(Class objectClass, String path) {
         Texture texture = textureMap.get(path);
 

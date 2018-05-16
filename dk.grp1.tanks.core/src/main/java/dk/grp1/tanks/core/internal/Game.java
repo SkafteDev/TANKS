@@ -98,6 +98,9 @@ public class Game implements ApplicationListener, IEventCallback {
 
     }
 
+    /**
+     * resets the game to begin a new game
+     */
     private void restartGame() {
         for (IGuiProcessingService drawImplementation : drawImplementations) {
             drawImplementation.dispose();

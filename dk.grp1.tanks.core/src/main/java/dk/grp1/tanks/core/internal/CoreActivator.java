@@ -54,19 +54,20 @@ public final class CoreActivator
     public void serviceChanged(ServiceEvent serviceEvent) {
         String[] objectClass = (String[]) serviceEvent.getServiceReference().getProperty("objectClass");
 
+        // if service is registered
         if (serviceEvent.getType() == ServiceEvent.REGISTERED) {
             if (objectClass[0].equalsIgnoreCase(IGamePluginService.class.getCanonicalName())) {
                 IGamePluginService plugin = (IGamePluginService) bc.getService(serviceEvent.getServiceReference());
-                plugin.start(game.getWorld(), game.getGameData());
+                plugin.start(game.getWorld(), game.getGameData()); // start IGamePlugin
 
             }
         }
 
-
+        // if service is unregistering
         if (serviceEvent.getType() == ServiceEvent.UNREGISTERING) {
             if (objectClass[0].equalsIgnoreCase(IGamePluginService.class.getCanonicalName())) {
                 IGamePluginService plugin = (IGamePluginService) bc.getService(serviceEvent.getServiceReference());
-                plugin.stop(game.getWorld(), game.getGameData());
+                plugin.stop(game.getWorld(), game.getGameData()); // stop IGamePlugin
 
             }
         }
