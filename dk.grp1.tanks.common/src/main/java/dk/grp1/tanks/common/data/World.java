@@ -29,6 +29,11 @@ public class World   {
         this.gameMap = gameMap;
     }
 
+    /**
+     * Adds an entity to the world
+     * @param entity
+     * @return
+     */
     public String addEntity(Entity entity) {
         entityMap.put(entity.getID(), entity);
         return entity.getID();
@@ -37,15 +42,29 @@ public class World   {
     public void removeEntity(String entityID) {
         entityMap.remove(entityID);
     }
-
+    /**
+     * Removes an entity to the world
+     * @param entity
+     * @return
+     */
     public void removeEntity(Entity entity) {
         entityMap.remove(entity.getID());
     }
 
+    /**
+     * Gets all entities in the world
+     * @return
+     */
     public Collection<Entity> getEntities() {
         return entityMap.values();
     }
 
+    /**
+     * Gets all entities of a given type in the world
+     * @param entityTypes
+     * @param <E>
+     * @return
+     */
     public <E extends Entity> List<Entity> getEntities(Class<E>... entityTypes) {
         List<Entity> r = new ArrayList<>();
         for (Entity e : getEntities()) {
@@ -58,6 +77,11 @@ public class World   {
         return r;
     }
 
+    /**
+     * Gets an entity in the world based on it's id
+     * @param ID
+     * @return
+     */
     public Entity getEntity(String ID) {
         return entityMap.get(ID);
     }

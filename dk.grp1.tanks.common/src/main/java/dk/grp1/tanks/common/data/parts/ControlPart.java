@@ -42,18 +42,31 @@ public class ControlPart implements IEntityPart {
         this.rotation = rotation.unitVector();
     }
 
+    /**
+     * Returns the value of left. Left is whether or not moving left has been requested.
+     * @return
+     */
     public boolean left() {
         return left;
     }
-
+    /**
+     * Sets the value of left.  Left is whether or not moving left has been requested.
+     * @return
+     */
     public void setLeft(boolean left) {
         this.left = left;
     }
-
+    /**
+     * Returns the value of right.  right is whether or not moving right has been requested.
+     * @return
+     */
     public boolean right() {
         return right;
     }
-
+    /**
+     * sets the value of right.  right is whether or not moving right has been requested.
+     * @return
+     */
     public void setRight(boolean right) {
         this.right = right;
     }

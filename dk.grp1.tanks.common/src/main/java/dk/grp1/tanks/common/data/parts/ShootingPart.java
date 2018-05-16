@@ -7,7 +7,7 @@ import dk.grp1.tanks.common.data.World;
 public class ShootingPart implements IEntityPart {
 
     private float timeSinceLastShot;
-    float firepower;
+    private float firepower;
     private boolean isReadyToShoot;
 
     public ShootingPart() {
@@ -21,26 +21,49 @@ public class ShootingPart implements IEntityPart {
 
     }
 
+    /**
+     * Returns time since last shot
+     * @return
+     */
     public float getTimeSinceLastShot() {
         return timeSinceLastShot;
     }
 
+    /**
+     * Sets the time since last shot
+     * @param timeSinceLastShot
+     */
     public void setTimeSinceLastShot(float timeSinceLastShot) {
         this.timeSinceLastShot = timeSinceLastShot;
     }
 
+    /**
+     * Returns the firepower
+     * @return
+     */
     public float getFirepower() {
         return firepower;
     }
 
+    /**
+     * Sets the firepower
+     * @param firepower
+     */
     public void setFirepower(float firepower) {
         this.firepower = firepower;
     }
 
+    /**
+     * Returns if the entity is ready to shoot
+     * @return
+     */
     public boolean isReadyToShoot() {
         return isReadyToShoot;
     }
-
+    /**
+     * Sets if the entity is ready to shoot
+     * @return
+     */
     public void setReadyToShoot(boolean readyToShoot) {
         isReadyToShoot = readyToShoot;
     }

@@ -8,9 +8,7 @@ import javafx.geometry.Pos;
 
 import javax.naming.ldap.Control;
 
-/**
- * Created by danie on 12-03-2018.
- */
+
 public class MovementPart implements IEntityPart {
 
     private Vector2D velocity;

@@ -26,7 +26,7 @@ public class ExplosionTexturePart implements IEntityPart {
     }
 
     /**
-     *
+     * Returns the amount of frame columns in the animation sprite sheet.
      * @return
      */
     public int getFrameCols() {
@@ -34,7 +34,7 @@ public class ExplosionTexturePart implements IEntityPart {
     }
 
     /**
-     *
+     * Returns the amount of frame rows in the animation sprite sheet.
      * @return
      */
     public int getFrameRows() {
@@ -42,7 +42,7 @@ public class ExplosionTexturePart implements IEntityPart {
     }
 
     /**
-     *
+     * returns the path to the resources containing the animation sprite sheet.
      * @return
      */
     public String getSrcPath() {

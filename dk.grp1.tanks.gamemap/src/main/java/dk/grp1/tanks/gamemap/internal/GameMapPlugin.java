@@ -11,6 +11,9 @@ import dk.grp1.tanks.common.services.IGamePluginService;
 
 import java.util.Random;
 
+/**
+ * GameMapPlugin starts and stops the gameMap. This means creating new maps, and registrering map destruction on start and removing them on stop.
+ */
 public class GameMapPlugin implements IGamePluginService {
     private final float BOTTOMBOUNDARY = 30f;
     private final float TOPBOUNDARY = 400f;
@@ -27,7 +30,7 @@ public class GameMapPlugin implements IGamePluginService {
 
 
     /**
-     * Creates a simple square map
+     * Creates a random new map.
      *
      * @param gameData
      * @return
@@ -36,10 +39,14 @@ public class GameMapPlugin implements IGamePluginService {
         GameMap map = new GameMap(gameData.getGameWidth(), gameData.getGameHeight());
         //Generate map functions
         generateRandomMap(map, gameData);
-
         return map;
     }
 
+    /**
+     * Generates a new random gameMap, and tries to constrain itself within the TOPBOUNDARY and BOTTOMBOUNDARY
+     * @param map
+     * @param gameData
+     */
     private void generateRandomMap(GameMap map, GameData gameData) {
         Random random = new Random();
         int amountOfFunctions = random.nextInt(10); //Prevent 0 functions
@@ -64,6 +71,13 @@ public class GameMapPlugin implements IGamePluginService {
         }
     }
 
+    /**
+     * Generates a new Linear map function based on its predecessor. Retries until function is not exceeding boundaries or a 100 times, to not get stuck in an infinite loop.
+     * @param predecessor
+     * @param random
+     * @param mapFunctionInterval
+     * @return
+     */
     private IGameMapFunction generateLinearMapFunction(IGameMapFunction predecessor, Random random, float mapFunctionInterval) {
         IGameMapFunction toReturn = new GameMapLinear((random.nextFloat()*2f-1f), predecessor.getEndX(), (predecessor.getEndX() + mapFunctionInterval), predecessor);
         int maxIterations = 100;
@@ -75,6 +89,13 @@ public class GameMapPlugin implements IGamePluginService {
         return toReturn;
     }
 
+    /**
+     * Generates a new Sine map function based on its predecessor. Retries until function is not exceeding boundaries or a 100 times, to not get stuck in an infinite loop.
+     * @param predecessor
+     * @param random
+     * @param mapFunctionInterval
+     * @return
+     */
     private IGameMapFunction generateSinMapFunction(IGameMapFunction predecessor, Random random, float mapFunctionInterval){
         IGameMapFunction toReturn = new GameMapSin(100f,(1/66f),0,predecessor,predecessor.getEndX(),predecessor.getEndX()+mapFunctionInterval);
         int maxIterations = 100;
@@ -87,6 +108,11 @@ public class GameMapPlugin implements IGamePluginService {
 
     }
 
+    /**
+     * Checks if the function is exceeding the TOPBOUNDARY or the BOTTOMBOUNDARY
+     * @param toReturn
+     * @return
+     */
     private boolean isFunctionExceedingBoundaries(IGameMapFunction toReturn) {
         for (float i = toReturn.getStartX(); i < toReturn.getEndX(); i+=1f) {
             if(toReturn.getYValue(i) < BOTTOMBOUNDARY || toReturn.getYValue(i) > TOPBOUNDARY){
@@ -96,6 +122,12 @@ public class GameMapPlugin implements IGamePluginService {
         return false;
     }
 
+    /**
+     * Generates a random first function
+     * @param gameData
+     * @param mapFunctionInterval
+     * @return
+     */
     private IGameMapFunction generateRandomFirstFunction(GameData gameData, float mapFunctionInterval) {
         Random random = new Random();
         switch (random.nextInt(2)) {

@@ -6,9 +6,7 @@ import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.eventManager.events.*;
 import dk.grp1.tanks.common.utils.Vector2D;
 
-/**
- * Created by danie on 12-03-2018.
- */
+
 public class CollisionPart implements IEntityPart {
 
     private boolean canCollide;
@@ -66,11 +64,18 @@ public class CollisionPart implements IEntityPart {
         }
     }
 
-
+    /**
+     * Returns if the entity has hit the gameMap
+     * @return
+     */
     public boolean isHitGameMap() {
         return isHitGameMap;
     }
 
+    /**
+     * Sets if the entity has hit the gameMap
+     * @param hitGameMap
+     */
     public void setHitGameMap(boolean hitGameMap) {
         isHitGameMap = hitGameMap;
     }

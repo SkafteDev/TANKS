@@ -25,12 +25,19 @@ public class SoundPart implements IEntityPart {
 
     }
 
+    /**
+     * Returns the path to the resource containing the sound of shooting
+     * @return
+     */
     public String getShootSoundPath() {
         return shootSoundPath;
     }
 
 
-
+    /**
+     * Returns the path to the resource containing the sound of impact
+     * @return
+     */
     public String getOnHitSoundPath() {
         return onHitSoundPath;
     }
