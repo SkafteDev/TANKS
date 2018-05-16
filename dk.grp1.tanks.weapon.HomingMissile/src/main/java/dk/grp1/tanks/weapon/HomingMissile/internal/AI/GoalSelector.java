@@ -34,6 +34,8 @@ public class GoalSelector implements IGoalSelector{
         this.homingMissile = homingMissile;
     }
 
+
+    @Override
     public State calculateGoalState() {
         List<Vector2D> vertices = world.getGameMap().getVertices(0, gameData.getGameWidth(), numberOfPoints);
         Vector2D bestExplosion =  null;

@@ -6,10 +6,14 @@ import java.util.List;
 
 public interface ITreeSearch {
     /**
-     * Searches for the optimal path
+     * Searches for a path to a goal state
      * @return The path as a list of nodes, or null if no path was found
      */
     public List<Node> search();
 
+    /**
+     * Searches for a path to a goal state.
+     * @return the path as a list of coordinates
+     */
     public List<Vector2D> searchPoints();
 }

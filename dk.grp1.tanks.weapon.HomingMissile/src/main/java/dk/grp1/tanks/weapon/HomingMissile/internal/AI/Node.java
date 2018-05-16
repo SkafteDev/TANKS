@@ -43,6 +43,10 @@ public class Node {
     }
 
 
+    /**
+     * Returns the path from this node to the root node in the search tree (the initial state)
+     * @return
+     */
     public List<Node> getPath() {
         List<Node> path = new ArrayList<>();
         path.add(this);
@@ -53,6 +57,10 @@ public class Node {
     }
 
 
+    /**
+     * Get the weighted sum of the heuristic function and the actual path cost to this node.
+     * @return
+     */
     public float getEstimatedTotalCost() {
         return (heuristic * 5) + pathCost;
     }

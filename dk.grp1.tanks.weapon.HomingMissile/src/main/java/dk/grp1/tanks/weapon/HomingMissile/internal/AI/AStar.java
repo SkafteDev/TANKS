@@ -28,6 +28,7 @@ public class AStar implements ITreeSearch{
 
 
 
+    @Override
     public List<Node> search(){
 
         Node firstNode = new Node(null, initialState, getHeuristicValue(initialState));
@@ -67,7 +68,7 @@ public class AStar implements ITreeSearch{
         return Vector2D.subtractVectors(state.getEntityPosition(),goalState.getEntityPosition()).length();
     }
 
-    public List<Node> expand(Node node){
+    private List<Node> expand(Node node){
         List<Node> successors = new ArrayList<>();
         List<State> children = node.getState().getSuccessors();
         for (State child : children) {
