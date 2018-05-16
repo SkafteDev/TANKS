@@ -39,36 +39,28 @@ public class BouncyBallMovementPart extends MovementPart {
 
         BouncyBallCollisionPart bouncyBallCollisionPart = entity.getPart(BouncyBallCollisionPart.class);
 
+        // if the entity has collision with the map
         if (bouncyBallCollisionPart != null && bouncyBallCollisionPart.isHitGameMap()) {
             bouncyBallCollisionPart.updateBouncingVector(this.getVelocity());
             this.setVelocity(bouncyBallCollisionPart.getBouncingVector());
             bouncyBallCollisionPart.setHitGameMap(false);
             DamagePart damagePart = entity.getPart(DamagePart.class);
 
+            // on collision, fire an explosion and associated events
             ExplosionTexturePart explosionTexturePart = entity.getPart(ExplosionTexturePart.class);
-
             if (damagePart != null && explosionTexturePart != null) {
-
                 Event explosionEvent = new ExplosionEvent(entity, new Vector2D(positionPart.getX(), positionPart.getY()), damagePart.getExplosionRadius());
-
                 Event mapDestructionEvent = new MapDestructionEvent(entity, new Vector2D(positionPart.getX(), positionPart.getY()), damagePart.getExplosionRadius());
-
                 Event animationEvent = new ExplosionAnimationEvent(entity, new Vector2D(positionPart.getX(), positionPart.getY()), explosionTexturePart, damagePart.getExplosionRadius());
-
                 SoundPart soundPart = entity.getPart(SoundPart.class);
-                if(soundPart != null){
-                    Event soundEvent = new SoundEvent(entity,soundPart.getOnHitSoundPath());
+                if (soundPart != null) {
+                    Event soundEvent = new SoundEvent(entity, soundPart.getOnHitSoundPath());
                     gameData.getEventManager().addEvent(soundEvent);
 
                 }
-
                 gameData.getEventManager().addEvent(explosionEvent);
-
                 gameData.getEventManager().addEvent(animationEvent);
-
                 gameData.getEventManager().addEvent(mapDestructionEvent);
-
-
             }
 
         }
