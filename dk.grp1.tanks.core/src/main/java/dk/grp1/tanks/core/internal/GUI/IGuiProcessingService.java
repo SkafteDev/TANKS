@@ -15,8 +15,15 @@ public interface IGuiProcessingService {
     void draw(World world, GameData gameData, SpriteBatch spriteBatch);
 
     /**
-     * Dispose should be called when the class should never be used again
+     * Draws data on the screen
+     * @param world current game world and entities
+     * @param gameData
+     * @param spriteBatch spriteBatch with camera set
+     */
+    void draw(World world, GameData gameData, SpriteBatch spriteBatch);
+
+    /**
+     * Dispose any active textures, fonts, etc.
      */
     void dispose();
-
 }
