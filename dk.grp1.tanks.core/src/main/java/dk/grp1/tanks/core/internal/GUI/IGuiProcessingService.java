@@ -7,14 +7,6 @@ import dk.grp1.tanks.common.data.World;
 
 public interface IGuiProcessingService {
     /**
-     * Draws a gui element
-     * @param world
-     * @param gameData
-     * @param spriteBatch
-     */
-    void draw(World world, GameData gameData, SpriteBatch spriteBatch);
-
-    /**
      * Draws data on the screen
      * @param world current game world and entities
      * @param gameData
