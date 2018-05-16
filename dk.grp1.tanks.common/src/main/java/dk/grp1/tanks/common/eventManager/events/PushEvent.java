@@ -3,6 +3,9 @@ package dk.grp1.tanks.common.eventManager.events;
 import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.utils.Vector2D;
 
+/**
+ * A push event marks that an entity should be pushed
+ */
 public class PushEvent extends Event {
 
     private Vector2D pointOfExplosion;
