@@ -28,13 +28,16 @@ public class AirstrikeExpirationPart extends ExpirationPart {
         if (getRemainingLifeTime() <= 0) {
 
             if (isDropping) {
-
+                // remove invisible entity
                 world.removeEntity(entity);
             } else {
+                // add dropping entity
                 world.addEntity(createAirstrike(entity, gameData.getGameHeight(), gameData));
                 numDropped++;
+                // increase lifetime until next drop
                 setRemainingLifeTime(0.5f);
 
+                //if all entities are dropped, flip bool
                 if (numDropped == 5) {
                     this.isDropping = true;
                     setRemainingLifeTime(2);
@@ -43,7 +46,7 @@ public class AirstrikeExpirationPart extends ExpirationPart {
         }
     }
 
-
+    /* // originally made to create all airstrikes at once
     private ArrayList<Airstrike> createAirstrikes(Entity entity, float gameHeight) {
         ArrayList<Airstrike> airstrikes = new ArrayList<>();
 
@@ -71,8 +74,15 @@ public class AirstrikeExpirationPart extends ExpirationPart {
         }
 
         return airstrikes;
-    }
+    }*/
 
+    /**
+     * returns a dropping entity with attributes from parent
+     * @param entity
+     * @param gameHeight
+     * @param gameData
+     * @return
+     */
     private Airstrike createAirstrike(Entity entity, float gameHeight, GameData gameData) {
         PositionPart flarePos = entity.getPart(PositionPart.class);
 

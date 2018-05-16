@@ -38,6 +38,10 @@ public class AirstrikeCollisionPart extends CollisionPart {
         return this.bouncingVector;
     }
 
+    /**
+     * updates thje bouncing vector in the given location based on the direction vector
+     * @param vector
+     */
     public void updateBouncingVector(Vector2D vector) {
         Vector2D n = mapNormalVector; // quick maths
         if (n == null){

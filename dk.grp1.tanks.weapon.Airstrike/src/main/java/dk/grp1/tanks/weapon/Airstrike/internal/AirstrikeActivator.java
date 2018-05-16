@@ -7,6 +7,7 @@ import org.osgi.framework.BundleContext;
 public class AirstrikeActivator implements BundleActivator {
     @Override
     public void start(BundleContext bundleContext) throws Exception {
+        System.out.println( "STARTING dk.grp1.tanks.weapon.Airstrike" );
         bundleContext.registerService(IGamePluginService.class.getName(), new AirstrikePlugin(), null);
     }
 
