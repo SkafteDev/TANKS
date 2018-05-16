@@ -39,6 +39,12 @@ public class ExplosionEventCallbackImpl implements IEventCallback {
         }
     }
 
+    /**
+     * Checks if an entity is in the explosion
+     * @param evnt
+     * @param ent
+     * @return
+     */
     private boolean isInExplosion(Event evnt, Entity ent) {
         ExplosionEvent exEvnt = (ExplosionEvent) evnt;
         CirclePart circlePart = ent.getPart(CirclePart.class);
