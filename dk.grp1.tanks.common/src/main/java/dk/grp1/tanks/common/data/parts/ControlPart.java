@@ -12,7 +12,9 @@ public class ControlPart implements IEntityPart {
     private float speed;
     private Vector2D rotation;
 
+    public ControlPart(){
 
+    }
 
     public ControlPart(float speed){
         this.speed = speed;
@@ -22,15 +24,15 @@ public class ControlPart implements IEntityPart {
     public void processPart(Entity entity, GameData gameData, World world) {
         controlVector = new Vector2D(rotation.getX(),rotation.getY());
         controlVector.unitVector();
-        if (right()) {
+        if (right()) { // left is pressed
             // go right
             controlVector.multiplyWithConstant(speed);
         }
-        if (left()) {
+        if (left()) { // right is pressed
             // go left
             controlVector.multiplyWithConstant(-1*speed);
         }
-        if (left() == right()){
+        if (left() == right()){ // both left and right is pressed
             controlVector = new Vector2D(0,0);
         }
     }
@@ -40,18 +42,31 @@ public class ControlPart implements IEntityPart {
         this.rotation = rotation.unitVector();
     }
 
+    /**
+     * Returns the value of left. Left is whether or not moving left has been requested.
+     * @return
+     */
     public boolean left() {
         return left;
     }
-
+    /**
+     * Sets the value of left.  Left is whether or not moving left has been requested.
+     * @return
+     */
     public void setLeft(boolean left) {
         this.left = left;
     }
-
+    /**
+     * Returns the value of right.  right is whether or not moving right has been requested.
+     * @return
+     */
     public boolean right() {
         return right;
     }
-
+    /**
+     * sets the value of right.  right is whether or not moving right has been requested.
+     * @return
+     */
     public void setRight(boolean right) {
         this.right = right;
     }

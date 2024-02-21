@@ -15,6 +15,6 @@ public class FlamethrowerMovementPart extends MovementPart {
 
     @Override
     public void processPart(Entity entity, GameData gameData, World world) {
-
+        // empty movement part needed to keep turn system on the flamethrower
     }
 }

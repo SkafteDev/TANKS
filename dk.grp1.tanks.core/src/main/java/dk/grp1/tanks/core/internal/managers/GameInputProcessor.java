@@ -5,7 +5,9 @@ import dk.grp1.tanks.common.data.GameData;
 import com.badlogic.gdx.Input.Keys;
 import dk.grp1.tanks.common.data.GameKeys;
 
-
+/**
+ * updates the common game keys from the libGDX notifications
+ */
 public class GameInputProcessor extends InputAdapter {
     private final GameData gameData;
 

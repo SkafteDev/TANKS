@@ -7,8 +7,7 @@ import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.data.parts.*;
-import dk.grp1.tanks.common.services.IWeapon;
-import javafx.geometry.Pos;
+import dk.grp1.tanks.common.services.IRoundService;
 
 public class OnScreenText implements IGuiProcessingService {
     private BitmapFont font = new BitmapFont();
@@ -33,6 +32,16 @@ public class OnScreenText implements IGuiProcessingService {
         }
     }
 
+    @Override
+    public void dispose() {
+        font.dispose();
+    }
+
+    /**
+     * Draws the fire power text
+     * @param entity
+     * @param batch
+     */
     private void firepowerText(Entity entity, SpriteBatch batch) {
         font.getData().scaleX = 0.5f;
         font.getData().scaleY = 0.5f;
@@ -47,11 +56,11 @@ public class OnScreenText implements IGuiProcessingService {
 
     }
 
-//    @Override
-//    public void setCam(OrthographicCamera camera) {
-//        this.camera = camera;
-//    }
-
+    /**
+     * Draw the angle of the cannon
+     * @param entity
+     * @param batch
+     */
     private void angleText(Entity entity, SpriteBatch batch) {
         font.getData().scaleX = 0.5f;
         font.getData().scaleY = 0.5f;
@@ -67,20 +76,23 @@ public class OnScreenText implements IGuiProcessingService {
 
     }
 
-
+    /**
+     * Draw the name of the entity that are allowed to make a move
+     * @param world
+     * @param gameData
+     * @param batch
+     */
     private void turnText(World world, GameData gameData, SpriteBatch batch) {
         font.getData().scaleX = 0.5f;
         font.getData().scaleY = 0.5f;
         String turnText = "Turn: ";
         String timeText = "Remaining time of turn: ";
 
-        for (Entity e : world.getEntities()
-                ) {
+        for (Entity e : world.getEntities()) {
             TurnPart turn = e.getPart(TurnPart.class);
-
-            if (turn != null && turn.isMyTurn()) {
-                turnText += turn.getMyTurnNumber();
-                timeText += Math.floor(turn.getTurnTimeRemaining() * 10) / 10f;
+            IRoundService turnManager = gameData.getTurnManager();
+            if (turn != null && turn.isMyTurn() && turnManager != null) {
+                timeText += Math.floor(turnManager.getTimeRemaining() * 10) / 10f;
             }
 
         }

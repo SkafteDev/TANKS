@@ -1,0 +1,2 @@
+Bundle-Activator: dk.grp1.tanks.weapon.Teleporter.internal.TeleporterActivator
+Bundle-Category: weapon

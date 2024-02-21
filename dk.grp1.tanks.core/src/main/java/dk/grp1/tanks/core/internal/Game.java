@@ -15,21 +15,16 @@ import com.badlogic.gdx.utils.ShortArray;
 import dk.grp1.tanks.common.data.*;
 import dk.grp1.tanks.common.data.parts.*;
 import dk.grp1.tanks.common.eventManager.IEventCallback;
-import dk.grp1.tanks.common.eventManager.events.SoundEvent;
+import dk.grp1.tanks.common.eventManager.events.*;
 import dk.grp1.tanks.common.services.*;
-import dk.grp1.tanks.common.eventManager.events.Event;
-import dk.grp1.tanks.common.eventManager.events.ExplosionAnimationEvent;
 import dk.grp1.tanks.common.utils.Vector2D;
 import dk.grp1.tanks.core.internal.GUI.*;
-import dk.grp1.tanks.core.internal.managers.CustomAssetManager;
+import dk.grp1.tanks.core.internal.managers.SoundAssetManager;
+import dk.grp1.tanks.core.internal.managers.GameAssetManager;
 import dk.grp1.tanks.core.internal.managers.GameInputProcessor;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static com.badlogic.gdx.math.MathUtils.random;
 
@@ -45,11 +40,12 @@ public class Game implements ApplicationListener, IEventCallback {
     private GameData gameData;
     private ShapeRenderer shapeRenderer;
     private OrthographicCamera camera;
-    private Map<String, Texture> textureMap;
+
     private List<IGuiProcessingService> drawImplementations;
     private SpriteBatch uiSpriteBatch;
     private SpriteBatch animationSpriteBatch;
     private SpriteBatch textureSpriteBatch;
+    private IGUIEntityProcessingService winDrawer;
 
 
     //Variables for drawing the game map
@@ -57,11 +53,12 @@ public class Game implements ApplicationListener, IEventCallback {
     private PolygonSprite gameMapPolySprite;
     private PolygonSpriteBatch polySpriteBatch;
     private TextureRegion textureRegion;
+    private Boolean shouldUpdateMap;
 
-    private CustomAssetManager assetManager;
+    private SoundAssetManager soundAssetManager;
 
     private List<AnimationWrapper> animationsToProcess;
-    private Map<String, Animation> animationMap;
+
     // Shake Map Config
     private float elapsed;
     private float duration;
@@ -69,12 +66,12 @@ public class Game implements ApplicationListener, IEventCallback {
     private float baseX;
     private float baseY;
 
+    private GameAssetManager gameAssetManager;
 
     public Game(ServiceLoader serviceLoader) {
         this.serviceLoader = serviceLoader;
+        gameAssetManager = new GameAssetManager();
         initGame();
-
-
 
 
         LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
@@ -92,15 +89,23 @@ public class Game implements ApplicationListener, IEventCallback {
     }
 
     private void setupAssetManager() {
-        this.assetManager = new CustomAssetManager(Gdx.files.getLocalStoragePath());
-        assetManager.loadMusicAsset(this.getClass(), "backgroundMusic2.wav");
-         Music bgMusic = assetManager.getMusicAsset(this.getClass(),"backgroundMusic2.wav");
-         bgMusic.setLooping(true);
-         bgMusic.play();
+        this.soundAssetManager = new SoundAssetManager(Gdx.files.getLocalStoragePath());
+        soundAssetManager.loadMusicAsset(this.getClass(), "tron.mp3");
+        Music bgMusic = soundAssetManager.getMusicAsset(this.getClass(), "tron.mp3");
+        bgMusic.setLooping(true);
+        bgMusic.setVolume(0.05f);
+        bgMusic.play();
 
     }
 
-    private void restartGame(){
+    /**
+     * resets the game to begin a new game
+     */
+    private void restartGame() {
+        for (IGuiProcessingService drawImplementation : drawImplementations) {
+            drawImplementation.dispose();
+        }
+        winDrawer.dispose();
         initGame();
         setupGame();
         for (IGamePluginService plugin : serviceLoader.getGamePluginServices()
@@ -119,16 +124,14 @@ public class Game implements ApplicationListener, IEventCallback {
     private void initGame() {
         this.world = new World();
         this.gameData = new GameData();
-        gameData.setDisplayHeight(HEIGHT);
-        gameData.setDisplayWidth(WIDTH);
-        this.textureMap = new HashMap<>();
-        this.animationMap = new HashMap<>();
         this.drawImplementations = new ArrayList<>();
         this.animationsToProcess = new ArrayList<>();
         state = GameState.running;
 
-        gameData.getEventManager().register(ExplosionAnimationEvent.class,this);
-        gameData.getEventManager().register(SoundEvent.class,this);
+        gameData.getEventManager().register(ExplosionAnimationEvent.class, this);
+        gameData.getEventManager().register(SoundEvent.class, this);
+        gameData.getEventManager().register(ShakeEvent.class, this);
+        gameData.getEventManager().register(GameMapChangedEvent.class, this);
 
 
     }
@@ -157,6 +160,8 @@ public class Game implements ApplicationListener, IEventCallback {
         textureSpriteBatch = new SpriteBatch();
         textureSpriteBatch.setProjectionMatrix(camera.combined);
 
+        winDrawer = new WinScreenGUI();
+
         drawImplementations.add(new HealthBarGUI());
         drawImplementations.add(new OnScreenText());
         drawImplementations.add(new WeaponGUI());
@@ -166,27 +171,13 @@ public class Game implements ApplicationListener, IEventCallback {
 
     private void setupMapDrawingConfig() {
         polySpriteBatch = new PolygonSpriteBatch();
-        String path = "mapTexture.png";
-        InputStream is = this.getClass().getClassLoader().getResourceAsStream(path);
-        Gdx2DPixmap gmp = null;
-        try {
-            gmp = new Gdx2DPixmap(is, Gdx2DPixmap.GDX2D_FORMAT_RGBA8888);
-            is.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Pixmap pix = new Pixmap(gmp);
-        // Pixmap pix = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
-        // pix.setColor(Color.BLUE);
-        // pix.fill();
 
-        gameMapTexture = new Texture(pix);
+        String path = "mapTexture.png";
+
+        gameMapTexture = gameAssetManager.checkGetTexture(this.getClass(), path);
 
         textureRegion = new TextureRegion(gameMapTexture);
-        pix.dispose();
 
-
-        // polySpriteBatch.dispose();
     }
 
     public void resize(int i, int i1) {
@@ -216,17 +207,16 @@ public class Game implements ApplicationListener, IEventCallback {
         }
 
 
-
     }
 
     private void playSounds(SoundEvent soundEvent) {
 
-        if (soundEvent.getPath() == null){
+        if (soundEvent.getPath() == null) {
             return;
         }
 
-        assetManager.loadSoundAsset(soundEvent.getSource().getClass(),soundEvent.getPath() );
-        Sound sound = assetManager.getSoundAsset(soundEvent.getSource().getClass(),soundEvent.getPath());
+        soundAssetManager.loadSoundAsset(soundEvent.getSource().getClass(), soundEvent.getPath());
+        Sound sound = soundAssetManager.getSoundAsset(soundEvent.getSource().getClass(), soundEvent.getPath());
 
         if (sound != null) {
             float volume = 1.0f;
@@ -247,14 +237,10 @@ public class Game implements ApplicationListener, IEventCallback {
     }
 
     private void drawWinScreen() {
-        IGUIEntityProcessingService winDrawer = new WinScreenGUI();
 
-        for (IRoundEndService service : serviceLoader.getRoundEndServices()
-                ) {
-            uiSpriteBatch.setProjectionMatrix(camera.combined);
-            winDrawer.drawEntity(service.getRoundWinner(world), gameData, uiSpriteBatch);
 
-        }
+        uiSpriteBatch.setProjectionMatrix(camera.combined);
+        winDrawer.drawEntity(gameData.getTurnManager().getRoundWinner(world), gameData, uiSpriteBatch);
 
     }
 
@@ -262,26 +248,10 @@ public class Game implements ApplicationListener, IEventCallback {
     private void drawBackGround() {
         String path = "background.png";
 
-        if (!textureMap.containsKey(path)) {
-
-            InputStream is = this.getClass().getClassLoader().getResourceAsStream(path);
-            try {
-                Gdx2DPixmap gmp = new Gdx2DPixmap(is, Gdx2DPixmap.GDX2D_FORMAT_RGBA8888);
-                Pixmap pix = new Pixmap(gmp);
-                textureMap.put(path, new Texture(pix));
-                pix.dispose();
-                is.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-
-            }
-        }
-
         SpriteBatch spriteBatch = new SpriteBatch();
         spriteBatch.begin();
         spriteBatch.setProjectionMatrix(camera.combined);
-        Texture t = textureMap.get(path);
+        Texture t = gameAssetManager.checkGetTexture(this.getClass(), path);
 
         spriteBatch.draw(t, 0, 0, gameData.getGameWidth(), gameData.getGameHeight());
         spriteBatch.end();
@@ -291,12 +261,21 @@ public class Game implements ApplicationListener, IEventCallback {
     @Override
     public void processEvent(Event event) {
 
-        if (event instanceof ExplosionAnimationEvent){
+        if (event instanceof ExplosionAnimationEvent) {
             processExplosionAnimationEvent(event);
-        }else if(event instanceof SoundEvent){
+        } else if (event instanceof SoundEvent) {
             playSounds((SoundEvent) event);
+        } else if (event instanceof ShakeEvent) {
+            processShakeEvent(event);
+        } else if (event instanceof GameMapChangedEvent) {
+            shouldUpdateMap = true;
         }
 
+    }
+
+    private void processShakeEvent(Event event) {
+        ShakeEvent shakeEvent = (ShakeEvent) event;
+        shakeConfig(shakeEvent.getIntensity(), 1000f);
     }
 
     private void update() {
@@ -312,12 +291,11 @@ public class Game implements ApplicationListener, IEventCallback {
             postEntityProcessingService.postProcess(world, gameData);
         }
 
-        for (IRoundEndService service : serviceLoader.getRoundEndServices()) {
-            if (service.isRoundOver(world)) {
+        if (gameData.getTurnManager() != null) {
+            if (gameData.getTurnManager().isRoundOver(world)) {
                 state = GameState.notRunning;
             }
         }
-
 
         gameData.getKeys().update();
 
@@ -333,7 +311,6 @@ public class Game implements ApplicationListener, IEventCallback {
                 explosionTexturePart.getFrameRows(),
                 explosionAnimationEvent.getExplosionRadius()
         );
-        shakeConfig(explosionAnimationEvent.getExplosionRadius() * 5, 1000f);
         animationsToProcess.add(animationWrapper);
 
     }
@@ -348,7 +325,12 @@ public class Game implements ApplicationListener, IEventCallback {
         }
 
         if (!DEBUG) {
-            gameMapPolySprite = new PolygonSprite(convertGameMapToPolyRegion(gameMap));
+
+            if (gameMapPolySprite == null || shouldUpdateMap == true) {
+                gameMapPolySprite = new PolygonSprite(convertGameMapToPolyRegion(gameMap));
+                shouldUpdateMap = false;
+            }
+
             polySpriteBatch.begin();
             polySpriteBatch.setProjectionMatrix(camera.combined);
             gameMapPolySprite.draw(polySpriteBatch);
@@ -448,7 +430,7 @@ public class Game implements ApplicationListener, IEventCallback {
         animationSpriteBatch.begin();
         for (AnimationWrapper animationWrapper : animationsToProcess) {
             animationWrapper.updateStateTime(gameData.getDelta());
-            Animation animation = checkGetAnimation(animationWrapper);
+            Animation animation = gameAssetManager.checkGetAnimation(animationWrapper);
             Vector2D pointOfExplosion = animationWrapper.getPosition();
             TextureRegion currentFrame = animation.getKeyFrame(animationWrapper.getStateTime(), false);
             float animationScale = 6f;
@@ -481,14 +463,14 @@ public class Game implements ApplicationListener, IEventCallback {
 
 
             if (tp != null && pp != null && cp != null) {
-                Texture texture = checkGetTexture(e, tp.getSrcPath());
+                Texture texture = gameAssetManager.checkGetTexture(e.getClass(), tp.getSrcPath());
                 //Sprite sprite = new Sprite(texture);
                 textureSpriteBatch.draw(texture, pp.getX() - cp.getRadius(), pp.getY() - cp.getRadius(), cp.getRadius() * 2, cp.getRadius() * 2);
             }
 
             CannonPart cannonPart = e.getPart(CannonPart.class);
             if (cannonPart != null && pp != null && cp != null) {
-                TextureRegion textureRegion = new TextureRegion(checkGetTexture(e, cannonPart.getTexturePath()));
+                TextureRegion textureRegion = new TextureRegion(gameAssetManager.checkGetTexture(e.getClass(), cannonPart.getTexturePath()));
                 drawCannon(textureSpriteBatch, textureRegion, cannonPart);
             }
 
@@ -508,63 +490,6 @@ public class Game implements ApplicationListener, IEventCallback {
         float rotation = (float) Math.toDegrees(cannonPart.getDirection()) - 90;
         spriteBatch.draw(textureRegion, x, y, originX, originY, width, height, scaleX, scaleY, rotation);
     }
-
-    private Texture checkGetTexture(Entity e, String path) {
-        Texture texture = textureMap.get(path);
-
-        if (texture == null) {
-
-            InputStream is = e.getClass().getClassLoader().getResourceAsStream(
-                    path
-            );
-            try {
-                Gdx2DPixmap gmp = new Gdx2DPixmap(is, Gdx2DPixmap.GDX2D_FORMAT_RGBA8888);
-                Pixmap pix = new Pixmap(gmp);
-                texture = new Texture(pix);
-                textureMap.put(path, texture);
-                pix.dispose();
-                is.close();
-
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-        }
-
-        return texture;
-    }
-
-    private Animation checkGetAnimation(AnimationWrapper animationWrapper) {
-        Animation animation = animationMap.get(animationWrapper.getPath());
-
-        if (animation == null) {
-            InputStream is = animationWrapper.getOrigin().getClass().getClassLoader().getResourceAsStream(animationWrapper.getPath());
-
-            try {
-                Gdx2DPixmap gmp = new Gdx2DPixmap(is, Gdx2DPixmap.GDX2D_FORMAT_RGBA8888);
-                Pixmap pix = new Pixmap(gmp);
-                Texture texture = new Texture(pix);
-                TextureRegion textureRegion = new TextureRegion(texture);
-                TextureRegion[][] tmp = textureRegion.split(texture.getWidth() / animationWrapper.getFrameCols(), texture.getHeight() / animationWrapper.getFrameRows());
-                TextureRegion[] explosionFrames = new TextureRegion[animationWrapper.getFrameCols() * animationWrapper.getFrameRows()];
-                int index = 0;
-                for (int i = 0; i < animationWrapper.getFrameRows(); i++) {
-                    for (int j = 0; j < animationWrapper.getFrameCols(); j++) {
-                        explosionFrames[index++] = tmp[i][j];
-                    }
-                }
-                animation = new Animation(0.025f, explosionFrames);
-                animation.setPlayMode(Animation.PlayMode.NORMAL);
-                animationMap.put(animationWrapper.getPath(), animation);
-
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-
-        }
-
-        return animation;
-    }
-
 
     public void pause() {
 

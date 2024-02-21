@@ -4,11 +4,16 @@ import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.data.parts.*;
-import dk.grp1.tanks.common.eventManager.events.*;
+import dk.grp1.tanks.common.eventManager.events.Event;
+import dk.grp1.tanks.common.eventManager.events.ExplosionAnimationEvent;
+import dk.grp1.tanks.common.eventManager.events.ExplosionEvent;
+import dk.grp1.tanks.common.eventManager.events.SoundEvent;
 import dk.grp1.tanks.common.utils.Vector2D;
-import javafx.geometry.Pos;
 
 public class GravityBombCollisionPart extends CollisionPart {
+
+    private int hits = 0; //damage increases based on number of entities hit
+
     /**
      * Creates a collision part for an entity
      *
@@ -19,41 +24,60 @@ public class GravityBombCollisionPart extends CollisionPart {
         super(canCollide, minTimeBetweenCollision);
     }
 
+    /**
+     * Processes gravity bomb collision
+     * @param entity
+     * @param gameData
+     * @param world
+     */
     @Override
     public void processPart(Entity entity, GameData gameData, World world){
         if (isHitGameMap() || isHitEntity()){
+
             for (Entity entity2: world.getEntities()){
                 if (entity != entity2 && hasCollided(entity, entity2)){
                     gravityPull(entity, entity2);
-                    makeEvents(entity,gameData);
+                    hits++; //damage scales off hits
                 }
+
             }
+            makeEvents(entity,gameData);
             world.removeEntity(entity);
         }
     }
 
+    /**
+     * Create explosion events, but no map destruction event
+     * @param entity
+     * @param gameData
+     */
     private void makeEvents(Entity entity, GameData gameData) {
         PositionPart positionPart = entity.getPart(PositionPart.class);
         DamagePart damagePart = entity.getPart(DamagePart.class);
         ExplosionTexturePart explosionTexturePart = entity.getPart(ExplosionTexturePart.class);
-        CirclePart circlePart = entity.getPart(CirclePart.class);
 
+        //Explode if collision with map or entity
         if ((this.isHitEntity() || this.isHitGameMap()) && positionPart != null && damagePart != null && explosionTexturePart != null) {
             Event animationEvent = new ExplosionAnimationEvent(entity, new Vector2D(positionPart.getX(), positionPart.getY()), explosionTexturePart, damagePart.getExplosionRadius());
             Event explosionEvent = new ExplosionEvent(entity, new Vector2D(positionPart.getX(), positionPart.getY()), damagePart.getExplosionRadius());
-            Event mapDestructionEvent = new MapDestructionEvent(entity, new Vector2D(positionPart.getX(), positionPart.getY()), damagePart.getExplosionRadius());
             SoundPart soundPart = entity.getPart(SoundPart.class);
-            if (soundPart != null) {
+            if (soundPart != null) { //play sound if there is a sound part
                 Event soundEvent = new SoundEvent(entity, soundPart.getOnHitSoundPath());
                 gameData.getEventManager().addEvent(soundEvent);
 
             }
             gameData.getEventManager().addEvent(animationEvent);
-            gameData.getEventManager().addEvent(explosionEvent);
-            //gameData.getEventManager().addEvent(mapDestructionEvent);
+            for (int i = 0; i < hits; i++) { //Damage is proportional with number of enemies hit.
+                gameData.getEventManager().addEvent(explosionEvent);
+            }
         }
     }
 
+    /**
+     * Moves the position of all hit entities to the explosion's center
+     * @param bullet
+     * @param e
+     */
     private void gravityPull(Entity bullet, Entity e){
         PositionPart positionPart = e.getPart(PositionPart.class);
         PositionPart bulletPos = bullet.getPart(PositionPart.class);
@@ -66,6 +90,12 @@ public class GravityBombCollisionPart extends CollisionPart {
 
     }
 
+    /**
+     * Circle collision of explosion and other entities
+     * @param entity1
+     * @param entity2
+     * @return
+     */
     private boolean hasCollided(Entity entity1, Entity entity2){
         CirclePart circlePart1 = entity1.getPart(CirclePart.class);
         DamagePart damagePart = entity1.getPart(DamagePart.class);

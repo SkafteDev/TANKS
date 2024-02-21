@@ -6,17 +6,12 @@ import dk.grp1.tanks.common.data.GameKeys;
 import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.data.parts.*;
 import dk.grp1.tanks.common.data.parts.PositionPart;
+import dk.grp1.tanks.common.eventManager.events.EndTurnEvent;
 import dk.grp1.tanks.common.services.IEntityProcessingService;
 import dk.grp1.tanks.common.utils.Vector2D;
 
-/**
- * Created by danie on 12-03-2018.
- */
-public class PlayerProcessingSystem implements IEntityProcessingService {
 
-    private float timeSinceLastShot;
-    float firepower = 0;
-    private boolean isReadyToShoot = false;
+public class PlayerProcessingSystem implements IEntityProcessingService {
 
     @Override
     public void process(World world, GameData gameData) {
@@ -24,6 +19,7 @@ public class PlayerProcessingSystem implements IEntityProcessingService {
         for (Entity player : world.getEntities(Player.class)
                 ) {
 
+            //instantiate all the parts
             TurnPart turnPart = player.getPart(TurnPart.class);
             CannonPart cannonPart = player.getPart(CannonPart.class);
             MovementPart movePart = player.getPart(MovementPart.class);
@@ -32,70 +28,83 @@ public class PlayerProcessingSystem implements IEntityProcessingService {
             CollisionPart collisionPart = player.getPart(CollisionPart.class);
             PhysicsPart physicsPart = player.getPart(PhysicsPart.class);
             LifePart lifePart = player.getPart(LifePart.class);
+            ShootingPart shootingPart = player.getPart(ShootingPart.class);
             CirclePart circlePart = player.getPart(CirclePart.class);
             InventoryPart inventoryPart = player.getPart(InventoryPart.class);
             inventoryPart.processPart(player, gameData, world);
 
-            if(lifePart.getCurrentHP() <= 0){
-                if(turnPart.isMyTurn()) {
-                    turnPart.endMyTurn();
+            //Am I dead?
+            if (lifePart.getCurrentHP() <= 0) {
+                if (turnPart.isMyTurn()) {
+                    gameData.getEventManager().addEvent(new EndTurnEvent(player));
                 }
                 world.removeEntity(player);
             }
 
-
-            if(turnPart.isMyTurn()) {
+            //Moves if it is my turn
+            if (turnPart.isMyTurn()) {
                 ctrlPart.setLeft(gameData.getKeys().isDown(GameKeys.LEFT));
                 ctrlPart.setRight(gameData.getKeys().isDown(GameKeys.RIGHT));
-                ctrlPart.setRotation(world.getGameMap().getDirectionVector(new Vector2D(positionPart.getX(), positionPart.getY())));
-            } else{
+                if (world.getGameMap() != null) {
+                    ctrlPart.setRotation(world.getGameMap().getDirectionVector(new Vector2D(positionPart.getX(), positionPart.getY())));
+                }
+            } else {
                 ctrlPart.setLeft(false);
                 ctrlPart.setRight(false);
-                ctrlPart.setRotation(world.getGameMap().getDirectionVector(new Vector2D(positionPart.getX(), positionPart.getY())));
+                if (world.getGameMap() != null) {
+
+                    ctrlPart.setRotation(world.getGameMap().getDirectionVector(new Vector2D(positionPart.getX(), positionPart.getY())));
+                }
             }
 
             //Cannon movement
-            if (gameData.getKeys().isDown(GameKeys.UP)){
-                cannonPart.setDirection(cannonPart.getDirection()+0.02f);
-            } else if (gameData.getKeys().isDown(GameKeys.DOWN)){
-                cannonPart.setDirection(cannonPart.getDirection()-0.02f);
+            if (turnPart.isMyTurn()) {
+                if (gameData.getKeys().isDown(GameKeys.UP)) {
+                    cannonPart.setDirection(cannonPart.getDirection() + 0.02f);
+                } else if (gameData.getKeys().isDown(GameKeys.DOWN)) {
+                    cannonPart.setDirection(cannonPart.getDirection() - 0.02f);
+                }
             }
 
             //Cannon fire cooldown
-            if (gameData.getKeys().isDown(GameKeys.SPACE)
-                    //&& timeSinceLastShot> 1
-                    && turnPart.isMyTurn()
-            ) {
-                firepower = cannonPart.calculateFirepower(gameData);
+            if (gameData.getKeys().isDown(GameKeys.SPACE) && turnPart.isMyTurn()) {
+                shootingPart.setFirepower(cannonPart.calculateFirepower(gameData));
                 //timeSinceLastShot = 0;
-                isReadyToShoot = true;
+                shootingPart.setReadyToShoot(true);
             }
 
-            if (gameData.getKeys().isPressed(GameKeys.N_1)){
-                inventoryPart.nextWeapon();
-            } else if (gameData.getKeys().isPressed(GameKeys.N_2)){
-                inventoryPart.previousWeapon();
+            //Cycle weapons
+            if (turnPart.isMyTurn()) {
+                if (gameData.getKeys().isPressed(GameKeys.N_1)) {
+                    inventoryPart.nextWeapon();
+                } else if (gameData.getKeys().isPressed(GameKeys.N_2)) {
+                    inventoryPart.previousWeapon();
+                }
             }
 
-            if (isReadyToShoot && !gameData.getKeys().isDown(GameKeys.SPACE) && inventoryPart.getCurrentWeapon() != null) {
-                //gameData.getEventManager().addEvent(new SoundEvent(player, inventoryPart.getCurrentWeapon().getShootSoundPath()));
-                inventoryPart.getCurrentWeapon().shoot(player, gameData, firepower, world);
-                //inventoryPart.decreaseAmmo();
-                cannonPart.setFirepower(0);
-                cannonPart.setPreviousFirepower(firepower);
-                cannonPart.setPreviousAngle(cannonPart.getDirection());
-                //timeSinceLastShot += gameData.getDelta();
-                isReadyToShoot = false;
-                turnPart.endMyTurn();
+            //Shoots if it is my turn and I have pressed space and I have a weapon selected
+            if (turnPart.isMyTurn()) {
+                if (shootingPart.isReadyToShoot() && !gameData.getKeys().isDown(GameKeys.SPACE) && inventoryPart.getCurrentWeapon() != null) {
+                    //gameData.getEventManager().addEvent(new SoundEvent(player, inventoryPart.getCurrentWeapon().getShootSoundPath()));
+                    inventoryPart.getCurrentWeapon().shoot(player, gameData, shootingPart.getFirepower(), world);
+                    //inventoryPart.decreaseAmmo();
+                    cannonPart.setFirepower(0);
+                    cannonPart.setPreviousFirepower(shootingPart.getFirepower()); //Saves the firepower of the shot
+                    cannonPart.setPreviousAngle(cannonPart.getDirection());       //Saves the angle of the shot
+                    //timeSinceLastShot += gameData.getDelta();
+                    shootingPart.setReadyToShoot(false);
+                    gameData.getEventManager().addEvent(new EndTurnEvent(player));
+                }
             }
 
 
-            turnPart.processPart(player,gameData,world);
+            //Process all the parts in order
+            turnPart.processPart(player, gameData, world);
             physicsPart.processPart(player, gameData, world);
             ctrlPart.processPart(player, gameData, world);
             collisionPart.processPart(player, gameData, world);
             movePart.processPart(player, gameData, world);
-            cannonPart.setJointY(positionPart.getY() + circlePart.getRadius()/8*3);
+            cannonPart.setJointY(positionPart.getY() + circlePart.getRadius() / 8 * 3);
             cannonPart.setJointX(positionPart.getX());
             cannonPart.processPart(player, gameData, world);
 

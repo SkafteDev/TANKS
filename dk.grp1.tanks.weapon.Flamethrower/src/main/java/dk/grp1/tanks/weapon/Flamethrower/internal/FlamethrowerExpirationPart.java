@@ -34,6 +34,7 @@ public class FlamethrowerExpirationPart extends ExpirationPart {
 
         timeSinceLastShot += gameData.getDelta();
 
+        // if time since last shot has passed, add a flame to the world
         if (timeSinceLastShot >= 0.05){
             Entity e = createFlame(entity);
             world.addEntity(e);
@@ -45,12 +46,17 @@ public class FlamethrowerExpirationPart extends ExpirationPart {
 
     }
 
-    private Flamethrower createFlame(Entity parrent){
-        PositionPart parrentPos = parrent.getPart(PositionPart.class);
+    /**
+     * creates a flame, based on the parent entity
+     * @param parent
+     * @return
+     */
+    private Flamethrower createFlame(Entity parent){
+        PositionPart parrentPos = parent.getPart(PositionPart.class);
 
         Flamethrower flamethrower = new Flamethrower();
         flamethrower.add(new PositionPart(parrentPos.getX(), parrentPos.getY(), parrentPos.getDirectionInRadians()));
-        float i = (random.nextFloat()*20 + 90) /100;
+        float i = (random.nextFloat()*30 + 85) /100;
         Vector2D accelVector = new Vector2D(direction.getX()*i,direction.getY()*i);
         flamethrower.add(new MovementPart(accelVector, 1000));
         flamethrower.add(new ShapePart());

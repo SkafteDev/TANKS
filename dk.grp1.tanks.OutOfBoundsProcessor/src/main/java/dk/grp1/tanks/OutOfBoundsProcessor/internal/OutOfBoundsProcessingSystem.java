@@ -14,9 +14,16 @@ public class OutOfBoundsProcessingSystem implements IPostEntityProcessingService
 
     private HashSet<Entity> entitiesToRemove = new HashSet<>();
 
+    /**
+     * Checks which entities are out of the game's bonudaries and removes them.
+     * @param world
+     * @param gameData
+     */
     @Override
     public void postProcess(World world, GameData gameData) {
-
+        if(world == null || gameData == null){
+            throw new IllegalArgumentException("World or gamedata is null");
+        }
         //Mark the entities to be removed
         for (Entity entity : world.getEntities()) {
             PositionPart positionPart = entity.getPart(PositionPart.class);

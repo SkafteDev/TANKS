@@ -3,25 +3,30 @@ package dk.grp1.tanks.player.internal;
 import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.World;
-import dk.grp1.tanks.common.data.parts.CirclePart;
 import dk.grp1.tanks.common.data.parts.*;
 import dk.grp1.tanks.common.services.IGamePluginService;
-import javafx.geometry.Pos;
 
 
 public class PlayerGamePlugin implements IGamePluginService {
 
+    private int numPlayers = 1;
     private float playerRadius = 10f;
 
     @Override
     public void start(World world, GameData gameData) {
-        Entity player = createPlayer(gameData);
-        world.addEntity(player);
+        if(world == null ||gameData==null){
+            throw new IllegalArgumentException("World or Gamedata is null");
+        }
+        
+        for (int i = 0; i < numPlayers; i++) {
+            Entity player = createPlayer(gameData);
+            world.addEntity(player);
+        }
     }
 
     private Entity createPlayer(GameData gameData) {
         Player player = new Player();
-        float centreX = gameData.getGameWidth()/4f * 3f;
+        float centreX = (float) (Math.random() * (gameData.getGameWidth()*0.8+gameData.getGameWidth()*0.1));
         float centreY = gameData.getGameHeight();
         PositionPart positionPart = new PositionPart(centreX,centreY, 0);
         float cannonDirection = 3.1415f/2;
@@ -41,6 +46,7 @@ public class PlayerGamePlugin implements IGamePluginService {
         player.add(new MovementPart(500));
         player.add(new TexturePart("player.png"));
         player.add(new TurnPart());
+        player.add(new ShootingPart());
 
         InventoryPart inventoryPart = new InventoryPart(gameData.getWeapons());
         gameData.addWeaponListener(inventoryPart);
@@ -50,8 +56,14 @@ public class PlayerGamePlugin implements IGamePluginService {
 
     @Override
     public void stop(World world, GameData gameData) {
+        if(world == null ||gameData==null){
+            throw new IllegalArgumentException("World or Gamedata is null");
+        }
         for (Entity player : world.getEntities(Player.class)) {
             world.removeEntity(player);
+
+            gameData.removeWeponListener(player.getPart(InventoryPart.class));
         }
+
     }
 }

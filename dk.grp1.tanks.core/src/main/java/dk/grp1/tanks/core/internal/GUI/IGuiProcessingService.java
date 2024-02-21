@@ -6,12 +6,16 @@ import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.World;
 
 public interface IGuiProcessingService {
-
-    public void draw(World world, GameData gameData, SpriteBatch spriteBatch);
+    /**
+     * Draws data on the screen
+     * @param world current game world and entities
+     * @param gameData
+     * @param spriteBatch spriteBatch with camera set
+     */
+    void draw(World world, GameData gameData, SpriteBatch spriteBatch);
 
     /**
-     * Sets the camera of this UI processor to match the game's
-     * @param camera
+     * Dispose any active textures, fonts, etc.
      */
-   // public void setCam(OrthographicCamera camera);
+    void dispose();
 }

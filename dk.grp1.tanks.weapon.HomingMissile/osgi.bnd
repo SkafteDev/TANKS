@@ -1,0 +1,2 @@
+Bundle-Activator: dk.grp1.tanks.weapon.HomingMissile.internal.HomingMissileActivator
+Bundle-Category: weapon

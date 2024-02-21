@@ -51,7 +51,7 @@ public class SingleShotWeapon implements IWeapon {
         ss.add(new DamagePart(4,10));
         ss.add(new TexturePart(this.texturePath));
         ss.add(new ExplosionTexturePart(explosionTextureFrameCols,explosionTextureFrameRows,explosionTexturePath));
-        SoundPart sounds = new SoundPart("boom.mp3","boom.mp3");
+        SoundPart sounds = new SoundPart("missile.mp3","boom.mp3");
         ss.add(sounds);
         gameData.getEventManager().addEvent(new SoundEvent(ss,sounds.getShootSoundPath()));
 

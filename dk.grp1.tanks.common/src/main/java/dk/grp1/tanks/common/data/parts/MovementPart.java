@@ -4,17 +4,15 @@ import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.utils.Vector2D;
-import javafx.geometry.Pos;
 
-import javax.naming.ldap.Control;
 
-/**
- * Created by danie on 12-03-2018.
- */
 public class MovementPart implements IEntityPart {
 
     private Vector2D velocity;
     private float maxSpeed;
+    public MovementPart(){
+
+    }
 
     public MovementPart(Vector2D velocity, float maxSpeed) {
 
@@ -52,7 +50,7 @@ public class MovementPart implements IEntityPart {
 
         CollisionPart collisionPart = entity.getPart(CollisionPart.class);
         if (collisionPart != null && collisionPart.isHitGameMap()) { // If hitting map
-            if (getVelocity().getY() < 0) {
+            if (getVelocity().getY() < 40) {
                 ControlPart controls = entity.getPart(ControlPart.class);
                 if (controls != null) {
                     // set velocity the amount specified by the controlpart

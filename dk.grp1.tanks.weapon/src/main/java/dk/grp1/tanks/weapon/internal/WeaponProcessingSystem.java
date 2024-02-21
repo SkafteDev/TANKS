@@ -13,21 +13,22 @@ import java.util.*;
 
 public class WeaponProcessingSystem implements IEntityProcessingService {
 
-    private WeaponFactory wepFac = new WeaponFactory();
 
     @Override
     public void process(World world, GameData gameData) {
 
         for (Entity bullet : world.getEntities(Projectile.class)) {
 
+            // creates a list of parts with priority
             List<PriorityWrapper<IEntityPart>> partPriorities = new ArrayList<>();
-
             for (IEntityPart part : bullet.getParts()) {
                 partPriorities.add(WeaponEntityPartPriority.getPriorityWrapper(part));
             }
 
+            //sort list
             Collections.sort(partPriorities, new PriorityWrapperComparator());
 
+            // process parts in  correct order
             for (PriorityWrapper<IEntityPart> part : partPriorities) {
                 part.getType().processPart(bullet, gameData, world);
             }

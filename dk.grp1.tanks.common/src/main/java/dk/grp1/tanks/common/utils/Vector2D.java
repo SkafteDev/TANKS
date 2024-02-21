@@ -1,17 +1,9 @@
 package dk.grp1.tanks.common.utils;
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author ccl
- */
+
 public class Vector2D {
     private float x;
     private float y;
@@ -69,15 +61,26 @@ public class Vector2D {
     }
 
 
-
+    /**
+     * Rotate this vector 90 degrees
+     * @return
+     */
     public Vector2D rotate90degrees() {
         return new Vector2D(-y+0.0f, x);
     }
 
+    /**
+     * Rotate this vector 90 degrees Clockwise
+     * @return
+     */
     public Vector2D rotateClockwise90degrees() {
         return new Vector2D(y, -x+0.0f);
     }
 
+    /**
+     * Get the length of this vector
+     * @return
+     */
     public float length() {
         float length = (float)Math.sqrt(getX()*getX()+getY()*getY()); // len = sqrt(x²+y²)
         return length;
@@ -97,15 +100,18 @@ public class Vector2D {
      * @return
      */
     public float getAngle(Vector2D other) {
-        Vector2D i = other;
 
-        float v = Vector2D.dot(this, other)/(this.length()*i.length());
+        float v = Vector2D.dot(this, other)/(this.length()*other.length());
 
         float radians = (float) Math.acos(v);
 
         return radians;
     }
 
+    /**
+     * Get the unit vector of this vector
+     * @return
+     */
     public Vector2D unitVector() {
         float length = length();
 
@@ -116,6 +122,11 @@ public class Vector2D {
         return new Vector2D(getX()/length, getY()/length);
     }
 
+    /**
+     * Project a this vector onto the 'other' vector
+     * @param other The other vector
+     * @return
+     */
     public Vector2D projectOnto(Vector2D other) {
 
         // Formula for projecting b (this) onto a (other)
@@ -129,6 +140,12 @@ public class Vector2D {
         return projection;
     }
 
+    /**
+     * The Dot Product for two given Vectors
+     * @param a
+     * @param b
+     * @return
+     */
     public static float dot(Vector2D a, Vector2D b) {
         float dot = a.getX() * b.getX() + a.getY() * b.getY();
 
@@ -155,6 +172,13 @@ public class Vector2D {
         return floatVertices;
     }
 
+    /**
+     * Generates vectors based on x- and y-coordinates.
+     * Requires at least two pairs of coordinates.
+     * @param shapex
+     * @param shapey
+     * @return
+     */
     public static List<Vector2D> getVectors(float[] shapex, float[] shapey) {
         List<Vector2D> vectors = new ArrayList<>();
 
@@ -175,6 +199,13 @@ public class Vector2D {
         return "x: " + this.getX() + ", y: " + getY();
     }
 
+    /**
+     * Generates vectors based on x- and y-coordinates.
+     * The vectors will all begin in origin.
+     * @param shapex
+     * @param shapey
+     * @return
+     */
     public static List<Vector2D> getOriginVectors(float[] shapex, float[] shapey) {
         List<Vector2D> vectors = new ArrayList<>();
 
@@ -186,6 +217,11 @@ public class Vector2D {
         return vectors;
     }
 
+    /**
+     * Generate normal vector from the given list of vectors.
+     * @param vectors
+     * @return
+     */
     public static List<Vector2D> getNormals(List<Vector2D> vectors) {
         List<Vector2D> normals = new ArrayList<>();
 
@@ -196,53 +232,50 @@ public class Vector2D {
         return normals;
     }
 
-    public static Point[] projectAndGetMinMax(Vector2D normal, List<Vector2D> shapeVectors) {
-        Point[] minMax = new Point[2]; // Index0 is min, Index1 is max
-
-        // Initialize min and max to first element
-        Vector2D projection = shapeVectors.get(0).projectOnto(normal);
-        minMax[0] = new Point(projection.getX(), projection.getY());
-        minMax[1] = new Point(projection.getX(), projection.getY());
-
-        for (int i = 1; i < shapeVectors.size(); i++) {
-            projection = shapeVectors.get(i).projectOnto(normal);
-            float x = projection.getX();
-            float y = projection.getY();
-
-            Point p = new Point(x, y);
-
-            if (p.compareTo(minMax[0]) < 0) {
-                // We got a new minimum point
-                minMax[0] = p;
-            } else if (p.compareTo(minMax[1]) > 0) {
-                // We got a new maximum point
-                minMax[1] = p;
-            }
-        }
-
-        return minMax;
-    }
-
+    /**
+     * Instantiate a vector by subtracting two given vectors
+     * @param a
+     * @param b
+     * @return
+     */
     public static Vector2D subtractVectors(Vector2D a, Vector2D b){
         return new Vector2D(a.getX()-b.getX(), a.getY()-b.getY());
     }
 
+    /**
+     * Subtract a vector from this vector
+     * @param otherVector
+     */
     public void subtract(Vector2D otherVector){
         Vector2D newVector = subtractVectors(this, otherVector);
         this.x = newVector.getX();
         this.y = newVector.getY();
     }
 
+    /**
+     * Add a vector to this vector
+     * @param otherVector
+     */
     public void add(Vector2D otherVector) {
         this.setX(this.getX() + otherVector.getX());
         this.setY(this.getY() + otherVector.getY());
 
     }
 
+    /**
+     * Instantiate a new vector by taking the sum of two given vectors
+     * @param a
+     * @param b
+     * @return
+     */
     public static Vector2D sumVectors(Vector2D a, Vector2D b){
         return new Vector2D(a.getX()+b.getX(), a.getY()+b.getY());
     }
 
+    /**
+     * Multiply this vector with a given constant
+     * @param f
+     */
     public void multiplyWithConstant(float f){
         this.x *= f;
         this.y *= f;

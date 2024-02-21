@@ -10,19 +10,34 @@ import dk.grp1.tanks.common.services.IGamePluginService;
  * Created by danie on 12-03-2018.
  */
 public class EnemyGamePlugin implements IGamePluginService {
+
+
     private float enemyRadius = 10f;
+    private final int AMOUNTOFENEMIES;
+
+    public EnemyGamePlugin(){
+        AMOUNTOFENEMIES = 2;
+    }
+
+    public EnemyGamePlugin(int amountOfEnemies){
+        AMOUNTOFENEMIES = amountOfEnemies;
+    }
+
 
     @Override
     public void start(World world, GameData gameData) {
-        Entity enemy = createEnemy(gameData);
-        world.addEntity(enemy);
-        Entity enemy2 = createEnemy(gameData);
-        world.addEntity(enemy2);
+        if(world ==  null || gameData == null){
+            throw new IllegalArgumentException("World or gamedata is null");
+        }
+        for (int i = 0; i < AMOUNTOFENEMIES; i++) {
+            Entity enemy = createEnemy(gameData);
+            world.addEntity(enemy);
+        }
     }
 
     private Entity createEnemy(GameData gameData) {
         Enemy enemy = new Enemy();
-        float centreX = gameData.getGameWidth() * 0.25f + (float)(Math.random()*50);
+        float centreX = (float) (Math.random() * (gameData.getGameWidth()*0.8+gameData.getGameWidth()*0.1));
         float centreY = gameData.getGameHeight();
         PositionPart positionPart = new PositionPart(centreX,centreY, 0);
         float cannonDirection = 3.1415f/2;
@@ -51,8 +66,14 @@ public class EnemyGamePlugin implements IGamePluginService {
 
     @Override
     public void stop(World world, GameData gameData) {
+        if(world ==  null || gameData == null){
+            throw new IllegalArgumentException("World or gamedata is null");
+        }
         for (Entity enemy : world.getEntities(Enemy.class)) {
             world.removeEntity(enemy);
+
+            gameData.removeWeponListener(enemy.getPart(InventoryPart.class));
         }
+
     }
 }

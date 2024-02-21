@@ -34,8 +34,8 @@ public class AirstrikeMovementPart extends MovementPart {
             addVelocity(physicsPart.getGravityVector());
         }
 
+        // Calculate bounce on collision
         AirstrikeCollisionPart airstrikeCollisionPart = entity.getPart(AirstrikeCollisionPart.class);
-
         if (airstrikeCollisionPart != null && airstrikeCollisionPart.isHitGameMap()) {
             airstrikeCollisionPart.updateBouncingVector(this.getVelocity());
             this.setVelocity(airstrikeCollisionPart.getBouncingVector());

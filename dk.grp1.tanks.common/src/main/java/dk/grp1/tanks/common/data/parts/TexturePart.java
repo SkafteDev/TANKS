@@ -4,13 +4,14 @@ import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.World;
 
-/**
- * Created by danie on 12-03-2018.
- */
+
 public class TexturePart implements IEntityPart {
 
     private String srcPath;
 
+    public TexturePart(){
+
+    }
     /**
      * Creates a new texture part with a given source path
      * @param srcPath String

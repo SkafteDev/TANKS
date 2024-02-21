@@ -15,59 +15,48 @@ import java.util.ArrayList;
 public class MapCollisionProcessing implements IPostEntityProcessingService {
     @Override
     public void postProcess(World world, GameData gameData) {
+        if(world == null || gameData == null){
+            throw new IllegalArgumentException("World or gamedata is null");
+        }
         GameMap gameMap = world.getGameMap();
-
+        if(gameMap == null){
+            throw new IllegalStateException("GameMap does not exist");
+        }
         for (Entity entity : world.getEntities()) {
             CollisionPart collisionPart = entity.getPart(CollisionPart.class);
             if (collisionPart != null && collisionPart.canCollide()) {
-                //squareMapCollision(gameMap, entity, gameData);
                 circleThreePointMapCollision(gameMap, entity);
             }
         }
 
     }
 
-    private void squareMapCollision(GameMap gameMap, Entity entity, GameData gameData) {
-        PositionPart positionPart = entity.getPart(PositionPart.class);
-        CollisionPart collisionPart = entity.getPart(CollisionPart.class);
-        CirclePart circlePart = entity.getPart(CirclePart.class);
-
-        if (positionPart != null && collisionPart != null && circlePart != null) {
-            float y = positionPart.getY() - circlePart.getRadius();
-            //Get height of map
-            float height = gameMap.getHeight(new Vector2D(positionPart.getX(),positionPart.getY()));
-            if(y <= height){
-                collisionPart.setHitGameMap(true);
-            } else {
-                collisionPart.setHitGameMap(false);
-            }
-        }
-
-
-    }
-
+    /**
+     * Checks for map collision on several points
+     * @param gameMap
+     * @param entity
+     */
     private void circleThreePointMapCollision(GameMap gameMap, Entity entity) {
-        PositionPart positionPart = entity.getPart(PositionPart.class);
         CollisionPart collisionPart = entity.getPart(CollisionPart.class);
         CirclePart circlePart = entity.getPart(CirclePart.class);
 
-        if (positionPart != null && collisionPart != null && circlePart != null) {
+        if (collisionPart != null && circlePart != null) {
 
-            float x = positionPart.getX();
-            float y = positionPart.getY();
+            float x = circlePart.getCentreX();
+            float y = circlePart.getCentreY();
             float radius = circlePart.getRadius();
-            float gameMapHeight = gameMap.getHeight(new Vector2D(positionPart.getX(),positionPart.getY()));
+            float gameMapHeight = gameMap.getHeight(new Vector2D(circlePart.getCentreX(),circlePart.getCentreY()));
 
             ArrayList<Float> xCordinates = new ArrayList<>();
-            xCordinates.add(0f);
+            xCordinates.add(x);
 
             for (int i = 1; i < 5; i++) {
-                xCordinates.add(-1 * (i * radius / 5));
-                xCordinates.add((i * radius / 5));
+                xCordinates.add(-1 * (i * radius / 5)+x);
+                xCordinates.add((i * radius / 5)+x);
             }
 
             for (float c : xCordinates) {
-                float checkY = calculateYCordinate(c, radius) + y;
+                float checkY = calculateYCordinate(c, radius,x,y);
                 if (checkY <= gameMapHeight) {
                     collisionPart.setHitGameMap(true);
                     return;
@@ -78,7 +67,16 @@ public class MapCollisionProcessing implements IPostEntityProcessingService {
         }
     }
 
-    private float calculateYCordinate(float x, float radius) {
-        return (float) (-1 * Math.sqrt(-1 * Math.pow(x, 2) + Math.pow(radius, 2)));
+    /**
+     * Calculates an y coordinate on a negative half circle
+     * @param xValue
+     * @param radius
+     * @param centerX
+     * @param centerY
+     * @return
+     */
+    private float calculateYCordinate(float xValue, float radius,float centerX, float centerY) {
+        float toSqrt = (-(centerX*centerX)+ 2 * xValue * centerX + (radius*radius) - (xValue*xValue));
+        return (float) (centerY - Math.sqrt(toSqrt));
     }
 }

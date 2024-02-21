@@ -25,13 +25,18 @@ public class MadCatCollisionPart extends CollisionPart {
     public void processPart(Entity entity, GameData gameData, World world) {
         if (isHitGameMap() || isHitEntity()){
             world.removeEntity(entity);
+            // add cat children to world
             for (Entity cat : createCats(entity)) {
                 world.addEntity(cat);
             }
         }
     }
 
-
+    /**
+     * returns a list of entities created inheriting attributes from the parent entity
+     * @param parent
+     * @return
+     */
     private ArrayList<MadCat> createCats(Entity parent) {
         ArrayList<MadCat> cats = new ArrayList<>();
         float i = -1.5f;

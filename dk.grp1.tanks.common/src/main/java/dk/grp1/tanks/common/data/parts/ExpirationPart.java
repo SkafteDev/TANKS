@@ -10,6 +10,7 @@ public class ExpirationPart implements IEntityPart{
 
 
 
+
     /**
      * returns the remaining time until expiration
      * @return
@@ -32,6 +33,6 @@ public class ExpirationPart implements IEntityPart{
 
     @Override
     public void processPart(Entity entity, GameData gameData, World world) {
-
+        setRemainingLifeTime(getRemainingLifeTime()-gameData.getDelta());
     }
 }

@@ -248,10 +248,10 @@ venv.bak/
 .mtj.tmp/
 
 # Package Files #
-*.jar
+*/*.jar
 *.war
 *.ear
-*.zip
+# *.zip
 *.tar.gz
 *.rar
 

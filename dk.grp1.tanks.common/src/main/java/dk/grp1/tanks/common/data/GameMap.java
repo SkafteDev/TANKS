@@ -2,7 +2,6 @@ package dk.grp1.tanks.common.data;
 
 import dk.grp1.tanks.common.utils.GameMapFunctionComparator;
 import dk.grp1.tanks.common.utils.Vector2D;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,8 +9,8 @@ import java.util.List;
 
 public class GameMap {
     private List<IGameMapFunction> gameMapFunctions;
-    private float GAMEWIDTH;
-    private float GAMEHEIGHT;
+    private float gamewidth;
+    private float gameheight;
     private GameMapFunctionComparator comparator;
 
 
@@ -20,8 +19,8 @@ public class GameMap {
      */
     public GameMap(float gameWidth, float gameHeight) {
         gameMapFunctions = new ArrayList<>();
-        this.GAMEHEIGHT = gameHeight;
-        this.GAMEWIDTH = gameWidth;
+        this.gameheight = gameHeight;
+        this.gamewidth = gameWidth;
         this.comparator = new GameMapFunctionComparator();
     }
 
@@ -74,7 +73,7 @@ public class GameMap {
             }
 
         }
-        vertices.add(new Vector2D(GAMEWIDTH,0));
+        vertices.add(new Vector2D(gamewidth,0));
         vertices.add(new Vector2D(0,0));
         return vertices;
     }
@@ -124,7 +123,7 @@ public class GameMap {
             }
         }
 
-        float minDifference = ownPosition.getY();
+        float minDifference = Float.MAX_VALUE;
         float y = -1f;
         for (Float yValue : yValues) {
             if(minDifference > Math.abs(ownPosition.getY() - yValue)){

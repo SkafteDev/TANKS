@@ -20,6 +20,12 @@ public class HealthBarGUI implements IGuiProcessingService {
     private float xOffSet = 2;
     private float yOffSet = 2f;
 
+    /**
+     * Draws a Health bar for every entity that has a LifePart
+     * @param world current game world and entities
+     * @param gameData
+     * @param batch
+     */
     @Override
     public void draw(World world, GameData gameData, SpriteBatch batch) {
         for (Entity entity : world.getEntities()) {
@@ -30,6 +36,11 @@ public class HealthBarGUI implements IGuiProcessingService {
                         circlePart.getRadius(), lifePart.getHealthRatio(), batch);
             }
         }
+
+    }
+
+    @Override
+    public void dispose() {
 
     }
 

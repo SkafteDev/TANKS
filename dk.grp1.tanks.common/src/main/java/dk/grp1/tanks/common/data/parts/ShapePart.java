@@ -15,6 +15,7 @@ public class ShapePart implements IEntityPart {
 
 
     private List<Vector2D> vertices;
+
     public ShapePart() {
         vertices = new ArrayList<>();
     }

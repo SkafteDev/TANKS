@@ -26,6 +26,7 @@ public class BouncyBallCollisionPart extends CollisionPart {
     @Override
     public void processPart(Entity entity, GameData gameData, World world) {
         PositionPart pos = entity.getPart(PositionPart.class);
+        // set the normal vector of the current location
         Vector2D mapDirectionVector = world.getGameMap().getDirectionVector(new Vector2D(pos.getX(), pos.getY()));
         this.mapNormalVector = mapDirectionVector.rotate90degrees();
     }
@@ -34,6 +35,7 @@ public class BouncyBallCollisionPart extends CollisionPart {
         return this.bouncingVector;
     }
 
+    // updates/sets the bouncing vector between the vector and the map normal vector
     public void updateBouncingVector(Vector2D vector) {
         Vector2D n = mapNormalVector; // quick maths
         if (n == null){

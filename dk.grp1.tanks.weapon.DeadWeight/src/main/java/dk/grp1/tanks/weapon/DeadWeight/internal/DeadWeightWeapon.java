@@ -48,7 +48,7 @@ public class DeadWeightWeapon implements IWeapon {
         Vector2D accelerationVector = cannonPart.getDirectionVector();
         accelerationVector.multiplyWithConstant(firePower);
 
-
+        // get locations of all entities. the locations are added to the unique movementpart
         ArrayList<Entity> entities = new ArrayList<>();
         for (Entity e : world.getEntities()) {
             ControlPart controlPart = e.getPart(ControlPart.class);
@@ -57,8 +57,6 @@ public class DeadWeightWeapon implements IWeapon {
             }
         }
         entities.remove(actor);
-
-
         dw.add(new DeadWeightMovementPart(accelerationVector, 10000, entities));
 
         dw.add(new ShapePart());
