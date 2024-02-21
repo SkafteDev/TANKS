@@ -2,7 +2,6 @@ package dk.grp1.tanks.core.internal;
 
 import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.utils.Vector2D;
-import javafx.animation.Animation;
 
 /**
  * class used to wrap and add functionality to the animations

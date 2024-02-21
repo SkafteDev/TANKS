@@ -3,10 +3,12 @@ package dk.grp1.tanks.weapon.Teleporter.internal;
 import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.World;
-import dk.grp1.tanks.common.data.parts.*;
+import dk.grp1.tanks.common.data.parts.CollisionPart;
+import dk.grp1.tanks.common.data.parts.ExplosionTexturePart;
+import dk.grp1.tanks.common.data.parts.PositionPart;
+import dk.grp1.tanks.common.data.parts.SoundPart;
 import dk.grp1.tanks.common.eventManager.events.*;
 import dk.grp1.tanks.common.utils.Vector2D;
-import javafx.geometry.Pos;
 
 public class TeleportCollisionPart extends CollisionPart {
 

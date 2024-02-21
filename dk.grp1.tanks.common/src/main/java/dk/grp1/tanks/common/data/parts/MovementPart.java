@@ -4,9 +4,6 @@ import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.utils.Vector2D;
-import javafx.geometry.Pos;
-
-import javax.naming.ldap.Control;
 
 
 public class MovementPart implements IEntityPart {

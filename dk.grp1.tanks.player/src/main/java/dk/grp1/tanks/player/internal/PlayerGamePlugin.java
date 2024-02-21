@@ -3,10 +3,8 @@ package dk.grp1.tanks.player.internal;
 import dk.grp1.tanks.common.data.Entity;
 import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.World;
-import dk.grp1.tanks.common.data.parts.CirclePart;
 import dk.grp1.tanks.common.data.parts.*;
 import dk.grp1.tanks.common.services.IGamePluginService;
-import javafx.geometry.Pos;
 
 
 public class PlayerGamePlugin implements IGamePluginService {

@@ -5,10 +5,8 @@ import dk.grp1.tanks.common.data.GameData;
 import dk.grp1.tanks.common.data.World;
 import dk.grp1.tanks.common.data.parts.CirclePart;
 import dk.grp1.tanks.common.data.parts.DamagePart;
-import dk.grp1.tanks.common.data.parts.PositionPart;
 import dk.grp1.tanks.common.data.parts.TurnPart;
 import dk.grp1.tanks.common.utils.Vector2D;
-import javafx.geometry.Pos;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
