@@ -18,8 +18,6 @@ A demo of TANKS can be found in *guides/Demo.mp4*.
 
 ## Console
 
-**NB! Use the development branch since the master branch is not up-to-date.**
-
 Open a shell and navigate to the parent folder. Execute the following command:
 ```
 mvn clean install pax:provision
