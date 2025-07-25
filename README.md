@@ -1,5 +1,5 @@
 # TANKS (Tactical Artillery Nuclear Killers in Space)
-The idea for 4th semester project was a turn-based artillery game. The game is inspired by the “Worms” series of games and the online flash game “TANKS”. Players will take turns firing a wide variety of weapons towards their enemies in order to destroy each other. The game contains simple AI controlled enemies and a simple homing missile that uses an implementation of the A* (A-star) algorithm.
+The game is inspired by the “Worms” series of games and the online flash game “TANKS”. Players will take turns firing a wide variety of weapons towards their enemies in order to destroy each other. The game contains simple AI controlled enemies and a simple homing missile that uses an implementation of the A* (A-star) algorithm.
 
 # Requirements
 * Maven >3.6.1
